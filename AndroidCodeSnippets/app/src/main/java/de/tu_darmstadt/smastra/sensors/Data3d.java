@@ -10,42 +10,24 @@ import de.tu_darmstadt.smastra.markers.SmaStraMethod;
  *
  * @author Tobias Welther
  */
-public class Data3d {
+public class Data3d extends Vector3d {
 
     /**
      * The time this data was recorded.
      */
-    private final long time;
+    private long time;
 
     /**
      * The Accuracy of the Data.
      */
-    private final float accuracy;
-
-
-    /**
-     * The x value of the 3d data.
-     */
-    private final float x;
-
-    /**
-     * The y value of the 3d data.
-     */
-    private final float y;
-
-    /**
-     * The z value of the 3d data.
-     */
-    private final float z;
+    private float accuracy;
 
 
     public Data3d(long time, float accuracy, float x, float y, float z) {
+        super(x,y,z);
+
         this.time = time;
         this.accuracy = accuracy;
-
-        this.x = x;
-        this.y = y;
-        this.z = z;
     }
 
 
@@ -55,17 +37,10 @@ public class Data3d {
      * @throws IllegalArgumentException if the array is null or the array does not have 3 entries.
      */
     public Data3d(long time, float accuracy, float[] array){
-        if(array == null || array.length != 3) {
-            throw new IllegalArgumentException("3D data need to be created by an Array with 3 elements! " +
-                    "Found " + (array == null ? "0" : array.length) + " elements.");
-        }
+        super(array);
 
         this.time = time;
         this.accuracy = accuracy;
-
-        this.x = array[0];
-        this.y = array[1];
-        this.z = array[2];
     }
 
     /**
@@ -87,33 +62,6 @@ public class Data3d {
 
 
     /**
-     * Gets the X-Component of the 3D data.
-     * @return the x value.
-     */
-    @SmaStraMethod
-    public float getX() {
-        return x;
-    }
-
-    /**
-     * Gets the Y-Component of the 3D data.
-     * @return the x value.
-     */
-    @SmaStraMethod
-    public float getY() {
-        return y;
-    }
-
-    /**
-     * Gets the Z-Component of the 3D data.
-     * @return the z value.
-     */
-    @SmaStraMethod
-    public float getZ() {
-        return z;
-    }
-
-    /**
      * Gets the Time this was recorded in MS since Linux start.
      * @return the time in MS
      */
@@ -129,48 +77,6 @@ public class Data3d {
     @SmaStraMethod
     public float getAccuracy() {
         return accuracy;
-    }
-
-    /**
-     * Calculates the length of the 3d data.
-     * <br>The length is defined by the Pythagoras law.
-     * @return the length
-     */
-    @SmaStraMethod
-    public float length(){
-        return (float) Math.sqrt(x*x + y*y + z*z);
-    }
-
-
-    /**
-     * The Distance to the other data squared.
-     * @param other to compare against.
-     * @return the distance to the other data as square.
-     *
-     * @throws IllegalStateException if other is null.
-     */
-    @SmaStraMethod
-    public double distanceSquare(Data3d other){
-        if(other == null) throw new IllegalArgumentException("Can not compare Data3d to null.");
-
-        double dist = Math.pow(x-other.x, 2);
-        dist += Math.pow(y-other.y, 2);
-        dist += Math.pow(z-other.z, 2);
-
-        return dist;
-    }
-
-
-    /**
-     * The Distance to the other data.
-     * @param other to compare against.
-     * @return the distance to the other data.
-     *
-     * @throws IllegalStateException if other is null.
-     */
-    @SmaStraMethod
-    public double distance(Data3d other){
-        return Math.sqrt(distanceSquare(other));
     }
 
 }

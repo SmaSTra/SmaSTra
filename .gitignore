@@ -35,6 +35,4 @@ captures/
 ### Android Snippets:
 AndroidCodeSnippets/.idea/*
 AndroidCodeSnippets/gradle/
-AndroidCodeSnippets/gradlew
-AndroidCodeSnippets/gradlew.bat
 *.iml
