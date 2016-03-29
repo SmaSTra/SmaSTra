@@ -107,6 +107,17 @@ public class Vector3d {
 
 
     /**
+     * Creates a vector.
+     * @param original to use.
+     */
+    public Vector3d(Vector3d original) {
+        this.x = original.x;
+        this.y = original.y;
+        this.z = original.z;
+    }
+
+
+    /**
      * Returns the X-Component of the
      */
     public double getX(){
@@ -306,6 +317,19 @@ public class Vector3d {
         z *= m;
         return this;
     }
+    /**
+     * Performs scalar multiplication, multiplying all components with a
+     * scalar.
+     *
+     * @param m The factor
+     * @return the same vector
+     */
+    public Vector3d devide(double m) {
+        x /= m;
+        y /= m;
+        z /= m;
+        return this;
+    }
 
     /**
      * Performs scalar multiplication, multiplying all components with a
@@ -401,4 +425,24 @@ public class Vector3d {
         return this;
     }
 
+
+    /**
+     * Creates a copy of the vector.
+     * @return a copy.
+     */
+    public Vector3d copy(){
+        return new Vector3d(this);
+    }
+
+
+    /**
+     * Squares the Vector.
+     */
+    public Vector3d square() {
+        this.x*=this.x;
+        this.y*=this.y;
+        this.z*=this.z;
+
+        return this;
+    }
 }

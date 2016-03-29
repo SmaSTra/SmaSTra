@@ -2,6 +2,7 @@ package de.tu_darmstadt.smastra.sensors;
 
 import android.hardware.SensorEvent;
 
+import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SmaStraMethod;
 
 /**
@@ -10,6 +11,7 @@ import de.tu_darmstadt.smastra.markers.SmaStraMethod;
  *
  * @author Tobias Welther
  */
+@NeedsOtherClass(Vector3d.class)
 public class Data3d extends Vector3d {
 
     /**
@@ -60,6 +62,17 @@ public class Data3d extends Vector3d {
         this.time = event.timestamp;
     }
 
+    /**
+     * Creates a copy of the original data.
+     * @param original to use.
+     */
+    public Data3d(Data3d original){
+        super(original);
+        
+        this.time = original.time;
+        this.accuracy = original.accuracy;
+    }
+
 
     /**
      * Gets the Time this was recorded in MS since Linux start.
@@ -77,6 +90,16 @@ public class Data3d extends Vector3d {
     @SmaStraMethod
     public float getAccuracy() {
         return accuracy;
+    }
+
+
+    /**
+     * Creates a copy of this.
+     * @return a copy.
+     */
+    @SmaStraMethod
+    public Data3d copy(){
+        return new Data3d(this);
     }
 
 }
