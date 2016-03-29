@@ -318,13 +318,13 @@ public class Vector3d {
         return this;
     }
     /**
-     * Performs scalar multiplication, multiplying all components with a
+     * Performs division,  all components with a
      * scalar.
      *
      * @param m The factor
      * @return the same vector
      */
-    public Vector3d devide(double m) {
+    public Vector3d divide(double m) {
         x /= m;
         y /= m;
         z /= m;

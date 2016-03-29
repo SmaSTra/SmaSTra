@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import de.tu_darmstadt.smastra.markers.Exportable;
 import de.tu_darmstadt.smastra.markers.SmaStraMethod;
-import de.tu_darmstadt.smastra.sensors.Data3d;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 /**
@@ -22,13 +21,13 @@ public class Math3d {
      * @return the mean of the data.
      */
     @SmaStraMethod
-    public static Vector3d mean(Collection<Data3d> toMean){
+    public static Vector3d mean(Collection<? extends  Vector3d> toMean){
         Vector3d result = new Vector3d();
 
         //add the data to the result.
-        for(Data3d data : toMean) result.add(data);
+        for(Vector3d data : toMean) result.add(data);
 
-        return result.devide(toMean.size());
+        return result.divide(toMean.size());
     }
 
 
@@ -38,14 +37,16 @@ public class Math3d {
      * @return the mean of the data.
      */
     @SmaStraMethod
-    public static Vector3d variance(Collection<Data3d> toVariance){
+    public static Vector3d variance(Collection<? extends  Vector3d> toVariance){
         Vector3d result = new Vector3d();
         Vector3d mean = mean(toVariance);
 
         //add the data to the result.
-        for(Data3d data : toVariance) result.add(data.copy().subtract(mean).square());
+        for(Vector3d data : toVariance) {
+            result.add(data.copy().subtract(mean).square());
+        }
 
-        return result.devide(toVariance.size());
+        return result.divide(Math.max(1,toVariance.size()-1));
     }
 
 }
