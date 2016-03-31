@@ -51,7 +51,14 @@ public abstract class SmaSTraTreeExecutor<T> {
                 step();
             }
         }, 50, 50, TimeUnit.MILLISECONDS);
+
+        initSensors();
     }
+
+    /**
+     * Inits all sensors.
+     */
+    protected void initSensors() {}
 
 
     /**

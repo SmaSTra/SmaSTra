@@ -1,6 +1,7 @@
 package de.tu_darmstadt.smastra.base;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 
 import de.tu_darmstadt.smastra.math.Math3d;
 import de.tu_darmstadt.smastra.sensors.AndroidAccelerometerSensor;
@@ -18,6 +19,13 @@ public class DemoTree extends SmaSTraTreeExecutor<Vector3d> {
      */
     public DemoTree(Context context) {
         super(6, context);
+    }
+
+
+    protected void initSensors(){
+        sensor0 = new AndroidAccelerometerSensor(context, SensorManager.SENSOR_DELAY_FASTEST);
+        sensor1 = new AndroidAccelerometerSensor(context, SensorManager.SENSOR_DELAY_FASTEST);
+        sensor2 = new AndroidAccelerometerSensor(context, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
 
@@ -76,7 +84,7 @@ public class DemoTree extends SmaSTraTreeExecutor<Vector3d> {
     private double resultTransform4;
 
     private void transform4(){
-        Vector3d data1 = resultTransform2;
+        Vector3d data1 = resultTransform3;
         resultTransform4 = data1.length();
     }
 
