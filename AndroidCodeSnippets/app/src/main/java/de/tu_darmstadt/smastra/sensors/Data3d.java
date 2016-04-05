@@ -3,7 +3,7 @@ package de.tu_darmstadt.smastra.sensors;
 import android.hardware.SensorEvent;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.SmaStraMethod;
+import de.tu_darmstadt.smastra.markers.Transformation;
 
 /**
  * This class represents a 3-D data entry.
@@ -78,7 +78,7 @@ public class Data3d extends Vector3d {
      * Gets the Time this was recorded in MS since Linux start.
      * @return the time in MS
      */
-    @SmaStraMethod
+    @Transformation
     public long getTime() {
         return time;
     }
@@ -87,7 +87,7 @@ public class Data3d extends Vector3d {
      * The accuracy of the data.
      * @return accuracy
      */
-    @SmaStraMethod
+    @Transformation
     public float getAccuracy() {
         return accuracy;
     }
@@ -97,7 +97,7 @@ public class Data3d extends Vector3d {
      * Creates a copy of this.
      * @return a copy.
      */
-    @SmaStraMethod
+    @Transformation
     public Data3d copy(){
         return new Data3d(this);
     }

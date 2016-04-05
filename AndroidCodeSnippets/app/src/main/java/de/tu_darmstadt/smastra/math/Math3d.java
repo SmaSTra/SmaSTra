@@ -3,7 +3,7 @@ package de.tu_darmstadt.smastra.math;
 import java.util.Collection;
 
 import de.tu_darmstadt.smastra.markers.Exportable;
-import de.tu_darmstadt.smastra.markers.SmaStraMethod;
+import de.tu_darmstadt.smastra.markers.Transformation;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 /**
@@ -21,7 +21,7 @@ public class Math3d {
      * @param vector2 to add
      * @return the result.
      */
-    @SmaStraMethod
+    @Transformation
     public static Vector3d add(Vector3d vector1, Vector3d vector2){
         double x = vector1.getX() + vector2.getX();
         double y = vector1.getY() + vector2.getY();
@@ -36,7 +36,7 @@ public class Math3d {
      * @param vector2 to add
      * @return the result.
      */
-    @SmaStraMethod
+    @Transformation
     public static Vector3d subtract(Vector3d vector1, Vector3d vector2){
         double x = vector1.getX() - vector2.getX();
         double y = vector1.getY() - vector2.getY();
@@ -52,7 +52,7 @@ public class Math3d {
      * @param value to multiply
      * @return the result.
      */
-    @SmaStraMethod
+    @Transformation
     public static Vector3d multiply(Vector3d vector1, double value){
         double x = vector1.getX() * value;
         double y = vector1.getY() * value;
@@ -67,7 +67,7 @@ public class Math3d {
      * @param value to device by.
      * @return the result.
      */
-    @SmaStraMethod
+    @Transformation
     public static Vector3d devide(Vector3d vector1, double value){
         double x = vector1.getX() / value;
         double y = vector1.getY() / value;
@@ -82,7 +82,7 @@ public class Math3d {
      * @param toMean to mean.
      * @return the mean of the data.
      */
-    @SmaStraMethod
+    @Transformation
     public static Vector3d mean(Collection<? extends  Vector3d> toMean){
         Vector3d result = new Vector3d();
 
@@ -98,7 +98,7 @@ public class Math3d {
      * @param toVariance to mean.
      * @return the mean of the data.
      */
-    @SmaStraMethod
+    @Transformation
     public static Vector3d variance(Collection<? extends  Vector3d> toVariance){
         Vector3d result = new Vector3d();
         Vector3d mean = mean(toVariance);

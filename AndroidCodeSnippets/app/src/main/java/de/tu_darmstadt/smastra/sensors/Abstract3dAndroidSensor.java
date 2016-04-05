@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.SmaStraMethod;
+import de.tu_darmstadt.smastra.markers.Transformation;
 
 /**
  * This is the basic class for a sensor.
@@ -68,7 +68,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener {
     /**
      * Starts listening for Sensor data.
      */
-    @SmaStraMethod
+    @Transformation
     public void startListening(){
         sensorManager.registerListener(this, usedSensor, samplingPeriodUs);
     }
@@ -77,7 +77,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener {
     /**
      * Stops listening for data.
      */
-    @SmaStraMethod
+    @Transformation
     public void stopListening(){
         sensorManager.unregisterListener(this);
     }
@@ -87,7 +87,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener {
      * Gets the last Data received.
      * @return the last data.
      */
-    @SmaStraMethod
+    @Transformation
     public Data3d getLastData() {
         return lastData;
     }
