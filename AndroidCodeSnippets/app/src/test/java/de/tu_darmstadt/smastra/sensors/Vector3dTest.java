@@ -2,6 +2,8 @@ package de.tu_darmstadt.smastra.sensors;
 
 import org.junit.Test;
 
+import de.tu_darmstadt.smastra.math.Math3d;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -18,7 +20,7 @@ public class Vector3dTest {
         Data3d sut = new Data3d(0,0,array);
 
         //= 1² + 2² + 2² = 9
-        assertEquals(3, sut.length(), 0.01f);
+        assertEquals(3, Math3d.length(sut), 0.01f);
     }
 
     @Test
@@ -29,7 +31,7 @@ public class Vector3dTest {
         Data3d sut = new Data3d(0,0, array1);
         Data3d data2 = new Data3d(0,0, array2);
 
-        assertEquals(Math.sqrt(3), sut.distance(data2), 0.01);
+        assertEquals(Math.sqrt(3), Math3d.distance(sut,data2), 0.01);
     }
 
     @Test
@@ -40,22 +42,16 @@ public class Vector3dTest {
         Data3d sut = new Data3d(0,0, array1);
         Data3d data2 = new Data3d(0,0, array2);
 
-        assertEquals(3, sut.distanceSquared(data2), 0.01);
+        assertEquals(3, Math3d.distanceSquare(sut,data2), 0.01);
     }
 
-
-    @Test(expected = IllegalArgumentException.class)
-    public void DistanceThrowsErrorIfOtherIsNull() throws Exception{
-        float array1[] = new float[]{1,1,1};
-        new Data3d(0,0, array1).distance(null);
-    }
 
     @Test
     public void SquareWorks(){
         double x = 10;
         double y = 11;
         double z = 12;
-        Vector3d sut = new Vector3d(x,y,z).square();
+        Vector3d sut = Math3d.square(new Vector3d(x,y,z));
 
         assertEquals(x*x, sut.getX(), 0.01);
         assertEquals(y*y, sut.getY(), 0.01);
@@ -67,7 +63,7 @@ public class Vector3dTest {
         double x = -10;
         double y = -11;
         double z = -12;
-        Vector3d sut = new Vector3d(x,y,z).square();
+        Vector3d sut = Math3d.square(new Vector3d(x,y,z));
 
         assertEquals(x*x, sut.getX(), 0.01);
         assertEquals(y*y, sut.getY(), 0.01);
@@ -79,7 +75,7 @@ public class Vector3dTest {
         double x = 10;
         double y = 20;
         double z = 30;
-        Vector3d sut = new Vector3d(x,y,z).subtract(new Vector3d(10,10,10));
+        Vector3d sut = Math3d.subtract(new Vector3d(x,y,z), new Vector3d(10,10,10));
 
         assertEquals(x-10, sut.getX(), 0.01);
         assertEquals(y-10, sut.getY(), 0.01);
@@ -91,7 +87,7 @@ public class Vector3dTest {
         double x = 10;
         double y = 20;
         double z = 30;
-        Vector3d sut = new Vector3d(x,y,z).add(new Vector3d(10,10,10));
+        Vector3d sut = Math3d.add(new Vector3d(x,y,z), new Vector3d(10,10,10));
 
         assertEquals(x+10, sut.getX(), 0.01);
         assertEquals(y+10, sut.getY(), 0.01);
@@ -103,7 +99,7 @@ public class Vector3dTest {
         double x = 10;
         double y = 20;
         double z = 30;
-        Vector3d sut = new Vector3d(x,y,z).multiply(2);
+        Vector3d sut = Math3d.multiply(new Vector3d(x,y,z), 2d);
 
         assertEquals(x*2, sut.getX(), 0.01);
         assertEquals(y*2, sut.getY(), 0.01);
@@ -115,7 +111,7 @@ public class Vector3dTest {
         double x = 10;
         double y = 20;
         double z = 30;
-        Vector3d sut = new Vector3d(x,y,z).divide(2);
+        Vector3d sut = Math3d.divide(new Vector3d(x,y,z) , 2d);
 
         assertEquals(x/2d, sut.getX(), 0.01);
         assertEquals(y/2d, sut.getY(), 0.01);
@@ -136,18 +132,5 @@ public class Vector3dTest {
         assertEquals(z, sut.getZ(), 0.01);
 
         assertNotEquals(original, sut);
-    }
-
-    @Test
-    public void CopyWithNewValues(){
-        double x = 10;
-        double y = 20;
-        double z = 30;
-
-        Vector3d sut = new Vector3d().copy(new Vector3d(x,y,z));
-
-        assertEquals(x, sut.getX(), 0.01);
-        assertEquals(y, sut.getY(), 0.01);
-        assertEquals(z, sut.getZ(), 0.01);
     }
 }

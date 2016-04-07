@@ -85,7 +85,7 @@ public class DemoTree extends SmaSTraTreeExecutor<Vector3d> {
 
     private void transform4(){
         Vector3d data1 = resultTransform3;
-        resultTransform4 = data1.length();
+        resultTransform4 = Math3d.length(data1);
     }
 
     

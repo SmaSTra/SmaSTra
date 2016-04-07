@@ -68,7 +68,7 @@ public class Math3d {
      * @return the result.
      */
     @Transformation
-    public static Vector3d devide(Vector3d vector1, double value){
+    public static Vector3d divide(Vector3d vector1, double value){
         double x = vector1.getX() / value;
         double y = vector1.getY() / value;
         double z = vector1.getZ() / value;
@@ -78,37 +78,62 @@ public class Math3d {
 
 
     /**
-     * The mean of the data passed.
-     * @param toMean to mean.
-     * @return the mean of the data.
+     * Squares a Vector and returns it.
+     * @param toSquare the vector to square.
+     * @return the squared Vector.
      */
     @Transformation
-    public static Vector3d mean(Collection<? extends  Vector3d> toMean){
-        Vector3d result = new Vector3d();
+    public static Vector3d square(Vector3d toSquare) {
+        double x = toSquare.getX()*toSquare.getX();
+        double y = toSquare.getY()*toSquare.getY();
+        double z = toSquare.getZ()*toSquare.getZ();
 
-        //add the data to the result.
-        for(Vector3d data : toMean) result.add(data);
-
-        return result.divide(toMean.size());
+        return new Vector3d(x,y,z);
     }
 
 
     /**
-     * The variance of the data passed.
-     * @param toVariance to mean.
-     * @return the mean of the data.
+     * Gives the Length of the Vector from the origin.
+     * @param vector to use.
+     * @return the length from origin.
      */
     @Transformation
-    public static Vector3d variance(Collection<? extends  Vector3d> toVariance){
-        Vector3d result = new Vector3d();
-        Vector3d mean = mean(toVariance);
-
-        //add the data to the result.
-        for(Vector3d data : toVariance) {
-            result.add(data.copy().subtract(mean).square());
-        }
-
-        return result.divide(Math.max(1,toVariance.size()-1));
+    public static double length(Vector3d vector){
+        return Math.sqrt(lengthSquare(vector));
     }
 
+
+    /**
+     * Gives the Squared Length of the Vector from the origin.
+     * @param vector to use.
+     * @return the squared length from origin.
+     */
+    @Transformation
+    public static double lengthSquare(Vector3d vector){
+        vector = square(vector);
+        return vector.getX() + vector.getY() + vector.getZ();
+    }
+
+    /**
+     * Gives the distance between 2 vectors.
+     * @param vector1 to use.
+     * @param vector2 to use.
+     * @return the distance.
+     */
+    @Transformation
+    public static double distance(Vector3d vector1, Vector3d vector2){
+        return Math.sqrt(distanceSquare(vector1,vector2));
+    }
+
+
+    /**
+     * Gives the squared distance between 2 vectors.
+     * @param vector1 to use.
+     * @param vector2 to use.
+     * @return the distance.
+     */
+    @Transformation
+    public static double distanceSquare(Vector3d vector1, Vector3d vector2){
+        return Math3d.lengthSquare(Math3d.subtract(vector1,vector2));
+    }
 }

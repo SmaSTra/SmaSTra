@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Tobias Welther on 29.03.2016
  */
-public class Math3dTest {
+public class Math3dCollectionTest {
 
 
     /**
@@ -44,7 +44,7 @@ public class Math3dTest {
 
     @Test
     public void testMeanSameValueWorks(){
-        Vector3d mean = Math3d.mean(sameList);
+        Vector3d mean = Math3dCollections.mean(sameList);
 
         assertEquals(1, mean.getX(), 0.001);
         assertEquals(1, mean.getY(), 0.001);
@@ -53,7 +53,7 @@ public class Math3dTest {
 
     @Test
     public void testMeanDifferentValueWorks(){
-        Vector3d mean = Math3d.mean(diffList);
+        Vector3d mean = Math3dCollections.mean(diffList);
 
         assertEquals(1, mean.getX(), 0.001);
         assertEquals(1, mean.getY(), 0.001);
@@ -63,7 +63,7 @@ public class Math3dTest {
 
     @Test
     public void testVarianceSameValueWorks(){
-        Vector3d variance = Math3d.variance(sameList);
+        Vector3d variance = Math3dCollections.variance(sameList);
 
         assertEquals(0, variance.getX(), 0.001);
         assertEquals(0, variance.getY(), 0.001);
@@ -72,7 +72,7 @@ public class Math3dTest {
 
     @Test
     public void testVarianceDifferentValueWorks(){
-        Vector3d variance = Math3d.variance(diffList);
+        Vector3d variance = Math3dCollections.variance(diffList);
 
         double wanted = 2d / (diffList.size()-1);
         assertEquals(wanted, variance.getX(), 0.001);
