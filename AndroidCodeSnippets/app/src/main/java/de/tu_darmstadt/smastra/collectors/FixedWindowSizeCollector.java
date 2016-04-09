@@ -15,7 +15,7 @@ import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
  */
 @Exportable
 @NeedsOtherClass(WindowCollection.class)
-public class FixedWindowCollector <T> implements WindowCollection<T> {
+public class FixedWindowSizeCollector<T> implements WindowCollection<T> {
 
     /**
      * The fixed list to use.
@@ -28,7 +28,7 @@ public class FixedWindowCollector <T> implements WindowCollection<T> {
     private final int size;
 
 
-    public FixedWindowCollector(int size) {
+    public FixedWindowSizeCollector(int size) {
         this.size = size;
     }
 
@@ -39,7 +39,7 @@ public class FixedWindowCollector <T> implements WindowCollection<T> {
      */
     public void addData(T element){
         this.data.add(element);
-        if(data.size() >= size) data.remove(0);
+        if(data.size() > size) data.remove(0);
     }
 
 

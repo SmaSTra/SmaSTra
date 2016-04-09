@@ -13,7 +13,7 @@ public class Input {
     /**
      * The list of input parameters.
      */
-    private final List<Class<?>> parameters = new ArrayList<>();
+    private final Class<?> parameter;
 
     /**
      * The Name of the method.
@@ -21,9 +21,9 @@ public class Input {
     private final String name;
 
 
-    public Input(String name, List<Class<?>> parameters) {
+    public Input(String name, Class<?> parameter) {
         this.name = name;
-        this.parameters.addAll(parameters);
+        this.parameter = parameter;
     }
 
 
@@ -40,7 +40,7 @@ public class Input {
      * Returns the Parameters of the Input.
      * @return parameters.
      */
-    public List<Class<?>> getParameters() {
-        return parameters;
+    public Class<?> getParameter() {
+        return parameter;
     }
 }

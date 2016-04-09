@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
  *
  * @author Tobias Welther
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Transformation {}
+public @interface Transformation {
+    String desctiption() default "None";
+}

@@ -8,21 +8,19 @@ package de.tu_darmstadt.smastra.generator.elements;
 public class Output {
 
     /**
+     * A generic Void output.
+     */
+    public static final Output VOID_OUTPUT = new Output(Void.class);
+
+
+    /**
      * The output parameter.
      */
     private final Class<?> outputParam;
 
 
-    /**
-     * The name of the method.
-     */
-    private final String name;
-
-
-
-    public Output(Class<?> outputParam, String name) {
+    public Output(Class<?> outputParam) {
         this.outputParam = outputParam;
-        this.name = name;
     }
 
 
@@ -32,13 +30,5 @@ public class Output {
      */
     public Class<?> getOutputParam() {
         return outputParam;
-    }
-
-    /**
-     * Returns the name of the method.
-     * @return the name.
-     */
-    public String getName() {
-        return name;
     }
 }

@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  *
  * @author Tobias Welther
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface NeedsOtherClass {
     Class<?>[] value();

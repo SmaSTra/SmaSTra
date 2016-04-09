@@ -9,5 +9,5 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Tobias Welther
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Exportable {}

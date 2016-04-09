@@ -68,7 +68,6 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener {
     /**
      * Starts listening for Sensor data.
      */
-    @Transformation
     public void startListening(){
         sensorManager.registerListener(this, usedSensor, samplingPeriodUs);
     }
@@ -77,7 +76,6 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener {
     /**
      * Stops listening for data.
      */
-    @Transformation
     public void stopListening(){
         sensorManager.unregisterListener(this);
     }
@@ -87,7 +85,6 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener {
      * Gets the last Data received.
      * @return the last data.
      */
-    @Transformation
     public Data3d getLastData() {
         return lastData;
     }

@@ -2,6 +2,7 @@ package de.tu_darmstadt.smastra.math;
 
 import java.util.Collection;
 
+import de.tu_darmstadt.smastra.collectors.WindowCollection;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.Transformation;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
@@ -46,6 +47,27 @@ public class Math3dCollections {
         }
 
         return Math3d.divide(result, Math.max(1,toVariance.size()-1));
+    }
+
+    /**
+     * The mean of the data passed.
+     * @param toMean to mean.
+     * @return the mean of the data.
+     */
+    @Transformation
+    public static Vector3d mean(WindowCollection<? extends  Vector3d> toMean){
+        return mean(toMean.getData());
+    }
+
+
+    /**
+     * The variance of the data passed.
+     * @param toVariance to mean.
+     * @return the mean of the data.
+     */
+    @Transformation
+    public static Vector3d variance(WindowCollection<? extends  Vector3d> toVariance){
+        return variance(toVariance.getData());
     }
 
 }
