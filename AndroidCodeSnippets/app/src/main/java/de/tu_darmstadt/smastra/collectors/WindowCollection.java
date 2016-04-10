@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Tobias Welther
  */
-public interface WindowCollection <T> {
+public interface WindowCollection <T> extends de.tu_darmstadt.smastra.markers.interfaces.Buffer {
 
     /**
      * Adds a new Element to the data.

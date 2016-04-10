@@ -16,7 +16,7 @@ import de.tu_darmstadt.smastra.markers.Transformation;
  * @author Tobias Welther
  */
 @NeedsOtherClass( Data3d.class )
-public abstract class Abstract3dAndroidSensor implements SensorEventListener {
+public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de.tu_darmstadt.smastra.markers.interfaces.Sensor {
 
 
     /**

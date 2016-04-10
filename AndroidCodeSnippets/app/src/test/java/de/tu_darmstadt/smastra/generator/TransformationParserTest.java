@@ -7,6 +7,7 @@ import java.util.Collection;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraClassTransactionParser;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.Transformation;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
@@ -19,6 +20,7 @@ import static junit.framework.Assert.assertTrue;
  * This is a Test for the Transformation Parser class.
  * @author Tobias Welther
  */
+@SkipParsing
 public class TransformationParserTest {
 
 
@@ -43,6 +45,7 @@ public class TransformationParserTest {
 
 
     /* For testMinimal1ParseWorks  */
+    @SkipParsing
     @NeedsOtherClass(TransformationParserTest.class)
     private static class TestClass1 {
 
@@ -72,6 +75,7 @@ public class TransformationParserTest {
 
 
     /* For testMinimal2ParseWorks */
+    @SkipParsing
     private static class TestClass2 {
 
         @Transformation
@@ -111,6 +115,7 @@ public class TransformationParserTest {
 
 
     /* For testParseMultipleMethodsWorks */
+    @SkipParsing
     private static class TestClass3 {
 
         @Transformation
@@ -133,6 +138,7 @@ public class TransformationParserTest {
 
 
     /* For testSkipMethodWithoutAnnotationWorks */
+    @SkipParsing
     private static class TestClass4 {
 
         @Transformation

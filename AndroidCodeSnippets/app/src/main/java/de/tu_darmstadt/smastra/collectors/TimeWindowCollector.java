@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.tu_darmstadt.smastra.markers.Exportable;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 
 /**
@@ -16,7 +15,6 @@ import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
  *
  * @author Tobias Welther
  */
-@Exportable
 @NeedsOtherClass(WindowCollection.class)
 public class TimeWindowCollector <T> implements WindowCollection<T> {
 

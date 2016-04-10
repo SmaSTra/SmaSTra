@@ -14,7 +14,7 @@ import de.tu_darmstadt.smastra.generator.elements.Output;
  *
  * @author Tobias Welther
  */
-public class SmaSTraTransactionBuilder {
+public class SmaSTraTransformationBuilder {
 
     /**
      * The List of the inputs usable.
@@ -55,47 +55,47 @@ public class SmaSTraTransactionBuilder {
 
 
 
-    public SmaSTraTransactionBuilder setDescription(String description) {
+    public SmaSTraTransformationBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public SmaSTraTransactionBuilder setOutput(Output outputs) {
+    public SmaSTraTransformationBuilder setOutput(Output outputs) {
         this.output = outputs;
         return this;
     }
 
-    public SmaSTraTransactionBuilder setMethodName(String methodName) {
+    public SmaSTraTransformationBuilder setMethodName(String methodName) {
         this.methodName = methodName;
         return this;
     }
 
-    public SmaSTraTransactionBuilder setClass(Class<?> clazz) {
+    public SmaSTraTransformationBuilder setClass(Class<?> clazz) {
         this.clazz = clazz;
         return this;
     }
 
-    public SmaSTraTransactionBuilder setStatic(boolean aStatic) {
+    public SmaSTraTransformationBuilder setStatic(boolean aStatic) {
         isStatic = aStatic;
         return this;
     }
 
-    public SmaSTraTransactionBuilder addInput(Input input){
+    public SmaSTraTransformationBuilder addInput(Input input){
         this.inputs.add(input);
         return this;
     }
 
-    public SmaSTraTransactionBuilder addNeededClass(Collection<Class<?>> otherClasses){
+    public SmaSTraTransformationBuilder addNeededClass(Collection<Class<?>> otherClasses){
         this.needsOtherClasses.addAll(otherClasses);
         return this;
     }
 
-    public SmaSTraTransactionBuilder addNeededClass(Class<?>[] otherClasses){
+    public SmaSTraTransformationBuilder addNeededClass(Class<?>[] otherClasses){
         this.needsOtherClasses.addAll(Arrays.asList(otherClasses));
         return this;
     }
 
-    public SmaSTraTransactionBuilder addInputs(Collection<Input> inputs) {
+    public SmaSTraTransformationBuilder addInputs(Collection<Input> inputs) {
         this.inputs.addAll(inputs);
         return this;
     }

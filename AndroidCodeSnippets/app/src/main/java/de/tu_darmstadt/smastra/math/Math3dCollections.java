@@ -12,7 +12,7 @@ import de.tu_darmstadt.smastra.sensors.Vector3d;
  * @author Tobias Welther
  */
 @NeedsOtherClass(Math3d.class)
-public class Math3dCollections {
+public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
 
     /**

@@ -3,7 +3,6 @@ package de.tu_darmstadt.smastra.sensors;
 import android.content.Context;
 import android.hardware.Sensor;
 
-import de.tu_darmstadt.smastra.markers.Exportable;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 
 /**
@@ -11,7 +10,6 @@ import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
  *
  * @author Tobias Welther
  */
-@Exportable
 @NeedsOtherClass({ Data3d.class, Abstract3dAndroidSensor.class })
 public class AndroidAccelerometerSensor extends Abstract3dAndroidSensor {
 

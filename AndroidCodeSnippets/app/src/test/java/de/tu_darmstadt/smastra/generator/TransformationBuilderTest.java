@@ -8,7 +8,7 @@ import java.util.Collection;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransactionBuilder;
+import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationBuilder;
 
 import static junit.framework.Assert.*;
 
@@ -21,18 +21,18 @@ public class TransformationBuilderTest {
 
     @Test(expected = ElementGenerationFailedException.class)
     public void testBuilderThrowsErrorIfEmpty() throws Throwable{
-        new SmaSTraTransactionBuilder().build();
+        new SmaSTraTransformationBuilder().build();
     }
 
 
     @Test(expected = ElementGenerationFailedException.class)
     public void testBuilderThrowsErrorIfNameMissing() throws Throwable{
-        new SmaSTraTransactionBuilder().setClass(this.getClass()).build();
+        new SmaSTraTransformationBuilder().setClass(this.getClass()).build();
     }
 
     @Test(expected = ElementGenerationFailedException.class)
     public void testBuilderThrowsErrorIfClassMissing() throws Throwable{
-        new SmaSTraTransactionBuilder().setMethodName("TEST").build();
+        new SmaSTraTransformationBuilder().setMethodName("TEST").build();
     }
 
 
@@ -45,7 +45,7 @@ public class TransformationBuilderTest {
         Output output = new Output(this.getClass());
         Collection<Class<?>> needsOtherClasses = Arrays.asList(this.getClass(), SmaSTraTransformation.class);
 
-        SmaSTraTransactionBuilder sut = new SmaSTraTransactionBuilder()
+        SmaSTraTransformationBuilder sut = new SmaSTraTransformationBuilder()
             .setMethodName(name)
             .setClass(clazz)
             .setDescription(description)
@@ -72,7 +72,7 @@ public class TransformationBuilderTest {
         Output output = new Output(this.getClass());
         Collection<Class<?>> needsOtherClasses = Arrays.asList(this.getClass(), SmaSTraTransformation.class);
 
-        SmaSTraTransactionBuilder sut = new SmaSTraTransactionBuilder()
+        SmaSTraTransformationBuilder sut = new SmaSTraTransformationBuilder()
             .setMethodName(name)
             .setClass(clazz)
             .setDescription(description)

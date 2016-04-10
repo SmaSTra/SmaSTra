@@ -34,7 +34,7 @@ public class SmaSTraClassTransactionParser {
             if(!hasTransactionAnnotation(method)) continue;
 
             try{
-                SmaSTraTransactionBuilder builder = new SmaSTraTransactionBuilder();
+                SmaSTraTransformationBuilder builder = new SmaSTraTransformationBuilder();
                 builder.setClass(clazz);
                 builder.setMethodName(method.getName());
                 builder.setStatic((method.getModifiers() & 0x8) == 0x8);

@@ -1,8 +1,5 @@
 package de.tu_darmstadt.smastra.math;
 
-import java.util.Collection;
-
-import de.tu_darmstadt.smastra.markers.Exportable;
 import de.tu_darmstadt.smastra.markers.Transformation;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
@@ -11,8 +8,7 @@ import de.tu_darmstadt.smastra.sensors.Vector3d;
  *
  * @author Tobias Welther
  */
-@Exportable
-public class Math3d {
+public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
 
     /**
