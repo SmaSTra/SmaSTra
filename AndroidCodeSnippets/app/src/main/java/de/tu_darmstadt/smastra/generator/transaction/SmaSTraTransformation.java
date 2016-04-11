@@ -14,6 +14,11 @@ import de.tu_darmstadt.smastra.generator.elements.Output;
 public class SmaSTraTransformation {
 
     /**
+     * The Name to use for displaying.
+     */
+    private final String displayName;
+
+    /**
      * The List of the inputs usable.
      */
     private final List<Input> inputs;
@@ -50,7 +55,11 @@ public class SmaSTraTransformation {
 
 
 
-    public SmaSTraTransformation(List<Input> inputs, List<Class<?>> needsOtherClasses, String description, Output output, String methodName, Class<?> clazz, boolean isStatic) {
+    public SmaSTraTransformation(String displayName, List<Input> inputs,
+                                 List<Class<?>> needsOtherClasses, String description,
+                                 Output output, String methodName, Class<?> clazz, boolean isStatic) {
+
+        this.displayName = displayName;
         this.inputs = inputs;
         this.needsOtherClasses = needsOtherClasses;
         this.description = description;
@@ -89,4 +98,7 @@ public class SmaSTraTransformation {
         return description;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
 }

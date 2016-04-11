@@ -27,12 +27,17 @@ public class TransformationBuilderTest {
 
     @Test(expected = ElementGenerationFailedException.class)
     public void testBuilderThrowsErrorIfNameMissing() throws Throwable{
-        new SmaSTraTransformationBuilder().setClass(this.getClass()).build();
+        new SmaSTraTransformationBuilder().setClass(this.getClass()).setDisplayName("Test").build();
     }
 
     @Test(expected = ElementGenerationFailedException.class)
     public void testBuilderThrowsErrorIfClassMissing() throws Throwable{
-        new SmaSTraTransformationBuilder().setMethodName("TEST").build();
+        new SmaSTraTransformationBuilder().setMethodName("TEST").setDisplayName("Test").build();
+    }
+
+    @Test(expected = ElementGenerationFailedException.class)
+    public void testBuilderThrowsErrorIfDisplayNameMissing() throws Throwable{
+        new SmaSTraTransformationBuilder().setMethodName("TEST").setClass(this.getClass()).build();
     }
 
 
@@ -40,6 +45,7 @@ public class TransformationBuilderTest {
     public void testBuilderSettersAndGettersWorkCorrect() throws ElementGenerationFailedException {
         String name = "Test";
         String description = "Something";
+        String displayName = "Test";
         Class<?> clazz = name.getClass();
         Input input = new Input("TEST", this.getClass());
         Output output = new Output(this.getClass());
@@ -49,6 +55,7 @@ public class TransformationBuilderTest {
             .setMethodName(name)
             .setClass(clazz)
             .setDescription(description)
+            .setDisplayName(displayName)
             .addInput(input)
             .setOutput(output)
             .addNeededClass(needsOtherClasses);
@@ -67,6 +74,7 @@ public class TransformationBuilderTest {
     public void testBuilderBuildsCorrectTransaction() throws ElementGenerationFailedException {
         String name = "Test";
         String description = "Something";
+        String displayName = "Test";
         Class<?> clazz = name.getClass();
         Input input = new Input("TEST", this.getClass());
         Output output = new Output(this.getClass());
@@ -76,6 +84,7 @@ public class TransformationBuilderTest {
             .setMethodName(name)
             .setClass(clazz)
             .setDescription(description)
+            .setDisplayName(displayName)
             .addInput(input)
             .setOutput(output)
             .addNeededClass(needsOtherClasses);
@@ -83,6 +92,7 @@ public class TransformationBuilderTest {
         SmaSTraTransformation transaction = sut.build();
         assertEquals(name, transaction.getMethodName());
         assertEquals(description, transaction.getDescription());
+        assertEquals(displayName, transaction.getDisplayName());
         assertEquals(clazz, transaction.getClazz());
         assertEquals(input, transaction.getInputs().get(0));
         assertEquals(output, transaction.getOutput());

@@ -39,6 +39,7 @@ public class SmaSTraClassTransactionParser {
                 builder.setMethodName(method.getName());
                 builder.setStatic((method.getModifiers() & 0x8) == 0x8);
 
+                builder.setDisplayName(readDisplayName(method));
                 builder.setDescription(readDescription(method));
                 builder.setOutput(readOutput(method));
                 builder.addInputs(readInput(method));
@@ -52,6 +53,16 @@ public class SmaSTraClassTransactionParser {
         }
 
         return transactions;
+    }
+
+    /**
+     * Reads the DisplayName from the Method.
+     * @param method th read from.
+     * @return the displayName.
+     */
+    private static String readDisplayName(Method method) {
+        Transformation transformation = method.getAnnotation(Transformation.class);
+        return transformation == null ? null : transformation.value();
     }
 
     /**

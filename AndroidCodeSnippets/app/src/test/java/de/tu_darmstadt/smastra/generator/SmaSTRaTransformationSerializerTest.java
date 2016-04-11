@@ -1,21 +1,18 @@
 package de.tu_darmstadt.smastra.generator;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationBuilder;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationSerializer;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Test for the SmaSTraTransformation Serializer
@@ -30,6 +27,7 @@ public class SmaSTraTransformationSerializerTest {
         SmaSTraTransformation transformation = new SmaSTraTransformationBuilder()
                 .addInput(new Input("arg0",this.getClass()))
                 .setDescription("TEST")
+                .setDisplayName("TEST")
                 .setMethodName("TEST")
                 .setClass(this.getClass())
                 .setOutput(Output.VOID_OUTPUT)
@@ -46,6 +44,7 @@ public class SmaSTraTransformationSerializerTest {
         assertEquals(this.getClass().getCanonicalName(), obj.get("class").getAsString());
         assertEquals("TEST", obj.get("description").getAsString());
         assertEquals("TEST", obj.get("method").getAsString());
+        assertEquals("TEST", obj.get("display").getAsString());
         assertEquals(false, obj.get("static").getAsBoolean());
         assertEquals(Output.VOID_OUTPUT.getOutputParam().getCanonicalName(), obj.get("output").getAsString());
 

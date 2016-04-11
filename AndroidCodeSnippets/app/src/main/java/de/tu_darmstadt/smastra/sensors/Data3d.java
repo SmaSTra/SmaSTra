@@ -78,7 +78,7 @@ public class Data3d extends Vector3d {
      * Gets the Time this was recorded in MS since Linux start.
      * @return the time in MS
      */
-    @Transformation
+    @Transformation("To Time")
     public long getTime() {
         return time;
     }
@@ -87,7 +87,7 @@ public class Data3d extends Vector3d {
      * The accuracy of the data.
      * @return accuracy
      */
-    @Transformation
+    @Transformation("To Accuracy")
     public float getAccuracy() {
         return accuracy;
     }
@@ -97,7 +97,7 @@ public class Data3d extends Vector3d {
      * Creates a copy of this.
      * @return a copy.
      */
-    @Transformation
+    @Transformation("Copy")
     public Data3d copy(){
         return new Data3d(this);
     }

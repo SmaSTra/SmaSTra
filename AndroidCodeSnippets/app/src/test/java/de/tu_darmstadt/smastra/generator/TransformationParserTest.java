@@ -33,6 +33,7 @@ public class TransformationParserTest {
 
         SmaSTraTransformation sut = transactions.iterator().next();
         assertEquals(TestClass1.class, sut.getClazz());
+        assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getMethodName());
         assertEquals(VOID_OUTPUT, sut.getOutput());
         assertEquals("Does Stuff", sut.getDescription());
@@ -49,7 +50,7 @@ public class TransformationParserTest {
     @NeedsOtherClass(TransformationParserTest.class)
     private static class TestClass1 {
 
-        @Transformation(desctiption = "Does Stuff")
+        @Transformation(value = "method1", desctiption = "Does Stuff")
         public void method1(Vector3d vec1){}
 
     }
@@ -64,6 +65,7 @@ public class TransformationParserTest {
 
         SmaSTraTransformation sut = transactions.iterator().next();
         assertEquals(TestClass2.class, sut.getClazz());
+        assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getMethodName());
         assertEquals(Vector3d.class, sut.getOutput().getOutputParam());
         assertEquals("None", sut.getDescription());
@@ -78,7 +80,7 @@ public class TransformationParserTest {
     @SkipParsing
     private static class TestClass2 {
 
-        @Transformation
+        @Transformation("method1")
         public static Vector3d method1(Vector3d vec1){ return null; }
     }
 
@@ -92,6 +94,7 @@ public class TransformationParserTest {
         assertNotNull(sut1);
 
         assertEquals(TestClass3.class, sut1.getClazz());
+        assertEquals("method1", sut1.getDisplayName());
         assertEquals("method1", sut1.getMethodName());
         assertEquals(Vector3d.class, sut1.getOutput().getOutputParam());
         assertEquals("None", sut1.getDescription());
@@ -105,6 +108,7 @@ public class TransformationParserTest {
         assertNotNull(sut2);
 
         assertEquals(TestClass3.class, sut2.getClazz());
+        assertEquals("method2", sut2.getDisplayName());
         assertEquals("method2", sut2.getMethodName());
         assertEquals(VOID_OUTPUT, sut2.getOutput());
         assertEquals("Does Stuff", sut2.getDescription());
@@ -118,10 +122,10 @@ public class TransformationParserTest {
     @SkipParsing
     private static class TestClass3 {
 
-        @Transformation
+        @Transformation("method1")
         public static Vector3d method1(Vector3d vec1){ return null; }
 
-        @Transformation(desctiption = "Does Stuff")
+        @Transformation(value = "method2", desctiption = "Does Stuff")
         public void method2(Vector3d vec1){}
 
     }
@@ -141,7 +145,7 @@ public class TransformationParserTest {
     @SkipParsing
     private static class TestClass4 {
 
-        @Transformation
+        @Transformation("method1")
         public Vector3d method1(Vector3d vec1){ return null; }
 
         public void method2(){}

@@ -51,8 +51,10 @@ public class SmaSTraTransformationBuilder {
      */
     private boolean isStatic = false;
 
-
-
+    /**
+     * The DisplayName to use.
+     */
+    private String displayName;
 
 
     public SmaSTraTransformationBuilder setDescription(String description) {
@@ -100,6 +102,11 @@ public class SmaSTraTransformationBuilder {
         return this;
     }
 
+    public SmaSTraTransformationBuilder setDisplayName(String displayName) {
+        this.displayName = displayName;
+        return this;
+    }
+
 
 
     public List<Input> getInputs() {
@@ -130,6 +137,10 @@ public class SmaSTraTransformationBuilder {
         return isStatic;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
     /**
      * Generates the Transaction.
      *
@@ -139,9 +150,9 @@ public class SmaSTraTransformationBuilder {
     public SmaSTraTransformation build() throws ElementGenerationFailedException {
         if(clazz == null) throw new ElementGenerationFailedException("No class defined.");
         if(methodName == null) throw new ElementGenerationFailedException("No Method-Name defined.");
+        if(displayName == null) throw new ElementGenerationFailedException("No displayName defined.");
 
-        return new SmaSTraTransformation(inputs, needsOtherClasses, description, output,
+        return new SmaSTraTransformation(displayName, inputs, needsOtherClasses, description, output,
                 methodName, clazz, isStatic);
     }
-
 }

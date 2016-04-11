@@ -22,6 +22,7 @@ public class SmaSTraTransformationSerializer implements JsonSerializer<SmaSTraTr
         JsonObject obj = new JsonObject();
         obj.addProperty("type", "transformation");
         obj.addProperty("class", src.getClazz().getCanonicalName());
+        obj.addProperty("display", src.getDisplayName());
         obj.addProperty("method", src.getMethodName());
         obj.addProperty("description", src.getDescription());
         obj.addProperty("static", src.isStatic());

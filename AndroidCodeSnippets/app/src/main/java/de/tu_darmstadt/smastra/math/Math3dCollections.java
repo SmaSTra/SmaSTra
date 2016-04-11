@@ -20,7 +20,7 @@ public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interf
      * @param toMean to mean.
      * @return the mean of the data.
      */
-    @Transformation
+    @Transformation("Vectors mean Collection")
     public static Vector3d mean(Collection<? extends  Vector3d> toMean){
         Vector3d result = new Vector3d();
 
@@ -36,7 +36,7 @@ public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interf
      * @param toVariance to mean.
      * @return the mean of the data.
      */
-    @Transformation
+    @Transformation("Vectors variance Collection")
     public static Vector3d variance(Collection<? extends  Vector3d> toVariance){
         Vector3d result = new Vector3d();
         Vector3d mean = mean(toVariance);
@@ -54,7 +54,7 @@ public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interf
      * @param toMean to mean.
      * @return the mean of the data.
      */
-    @Transformation
+    @Transformation("Vectors mean Window")
     public static Vector3d mean(WindowCollection<? extends  Vector3d> toMean){
         return mean(toMean.getData());
     }
@@ -65,7 +65,7 @@ public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interf
      * @param toVariance to mean.
      * @return the mean of the data.
      */
-    @Transformation
+    @Transformation("Vectors variance Collection")
     public static Vector3d variance(WindowCollection<? extends  Vector3d> toVariance){
         return variance(toVariance.getData());
     }
