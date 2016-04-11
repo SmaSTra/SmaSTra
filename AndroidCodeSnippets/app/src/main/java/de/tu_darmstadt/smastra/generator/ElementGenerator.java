@@ -2,7 +2,6 @@ package de.tu_darmstadt.smastra.generator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 
 import org.reflections.Reflections;
 
@@ -37,10 +36,10 @@ public class ElementGenerator {
     }
 
     /**
-     * Reads the transformations present in the Classloaded.
-     * @return the transformatiaons passed.
+     * Reads the transformations present in the Class loaded.
+     * @return the transformations passed.
      */
-    public Collection<SmaSTraTransformation> readTransformationsFromClasslaoded(){
+    public Collection<SmaSTraTransformation> readTransformationsFromClassloaded(){
         Collection<SmaSTraTransformation> transformations = new HashSet<>();
         Collection<Class<? extends Transformation>> classes = getAllClassesOf(Transformation.class);
         for(Class<?> clazz : classes) {
