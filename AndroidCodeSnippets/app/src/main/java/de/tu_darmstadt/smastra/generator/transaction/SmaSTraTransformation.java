@@ -2,6 +2,7 @@ package de.tu_darmstadt.smastra.generator.transaction;
 
 import java.util.List;
 
+import de.tu_darmstadt.smastra.generator.ElementGenerator;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 
@@ -100,5 +101,9 @@ public class SmaSTraTransformation {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String toJsonString(ElementGenerator generator){
+        return generator.getGson().toJson(this);
     }
 }
