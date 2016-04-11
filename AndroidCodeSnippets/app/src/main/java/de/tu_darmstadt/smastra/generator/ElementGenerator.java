@@ -32,6 +32,7 @@ public class ElementGenerator {
     public ElementGenerator() {
         this.gson = new GsonBuilder()
             .registerTypeAdapter(SmaSTraTransformation.class, new SmaSTraTransformationSerializer())
+            .setPrettyPrinting()
             .create();
     }
 
