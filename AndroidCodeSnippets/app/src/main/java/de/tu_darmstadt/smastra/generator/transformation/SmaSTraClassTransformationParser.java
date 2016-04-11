@@ -1,4 +1,4 @@
-package de.tu_darmstadt.smastra.generator.transaction;
+package de.tu_darmstadt.smastra.generator.transformation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
@@ -18,7 +19,7 @@ import de.tu_darmstadt.smastra.markers.elements.Transformation;
  *
  * @author Tobias Welther
  */
-public class SmaSTraClassTransactionParser {
+public class SmaSTraClassTransformationParser {
 
 
     /**
@@ -28,7 +29,11 @@ public class SmaSTraClassTransactionParser {
      */
     public static Collection<SmaSTraTransformation> readFromClass(Class<?> clazz){
         Collection<SmaSTraTransformation> transformations = new ArrayList<>();
-        if(clazz == null) return transformations;
+
+        //First check if the Class is a Transformation:
+        if(clazz == null || !de.tu_darmstadt.smastra.markers.interfaces.Transformation.class.isAssignableFrom(clazz)) {
+            return transformations;
+        }
 
         //Read all methods:
         for(Method method : clazz.getMethods()){
@@ -44,7 +49,7 @@ public class SmaSTraClassTransactionParser {
                 builder.setDescription(readDescription(method));
                 builder.setOutput(readOutput(method));
                 builder.addInputs(readInput(method));
-                builder.addNeededClass(readNeededClasses(clazz, new HashSet<Class<?>>()));
+                builder.addNeededClass(readNeededClasses(clazz));
 
                 SmaSTraTransformation transaction = builder.build();
                 if(transaction != null) transformations.add(transaction);
@@ -116,21 +121,27 @@ public class SmaSTraClassTransactionParser {
 
     /**
      * Reads the Needed Classes from the Class passed.
-     * <br>This does a recursive Lookup!
+     * <br>This does a iterative Lookup!
      * @param toReadFrom to use.
      * @return the needed Classes.
      */
-    private static Collection<Class<?>> readNeededClasses(Class<?> toReadFrom, Collection<Class<?>> neededClasses){
-        if(neededClasses == null) neededClasses = new HashSet<>();
+    private static Collection<Class<?>> readNeededClasses(Class<?> toReadFrom){
+        Set<Class<?>> neededClasses = new HashSet<>();
 
         NeedsOtherClass annotation = toReadFrom.getAnnotation(NeedsOtherClass.class);
         if(annotation == null) return neededClasses;
 
-        //Do a recursive lookup!
+        //Do a iterative lookup!
         neededClasses.addAll(Arrays.asList(annotation.value()));
-        for(Class<?> clazz : annotation.value()){
-            if(neededClasses.contains(clazz)) continue;
-            readNeededClasses(clazz, neededClasses);
+        int size = 0;
+        while(size != neededClasses.size()){
+            size = neededClasses.size();
+            for(Class<?> clazz : new HashSet<>(neededClasses)){
+                annotation = clazz.getAnnotation(NeedsOtherClass.class);
+                if(annotation == null) continue;
+
+                neededClasses.addAll(Arrays.asList(annotation.value()));
+            }
         }
 
         return neededClasses;

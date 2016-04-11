@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 
 import static junit.framework.Assert.assertFalse;
 
@@ -24,30 +23,32 @@ public class ElementGeneratorTest {
     @Test
     public void testElementsParsingWorks() throws IOException {
         ElementGenerator generator = new ElementGenerator();
-        Collection<SmaSTraTransformation> transformations = generator.readTransformationsFromClassLoaded();
+        Collection<SmaSTraElement> elements = new HashSet<>();
+        elements.addAll(generator.readTransformationsFromClassLoaded());
+        elements.addAll(generator.readSensorsFromClassLoaded());
 
-        assertFalse(transformations.isEmpty());
+        assertFalse(elements.isEmpty());
 
         File srcDir = new File(new File(new File("src"), "main"), "java");
         File targetDir = new File("generated");
         if(!targetDir.exists()) targetDir.mkdir();
 
         int created = 0;
-        for(SmaSTraTransformation transformation : transformations){
-            File tileDir = new File(targetDir, transformation.getDisplayName());
+        for(SmaSTraElement element : elements){
+            File tileDir = new File(targetDir, element.getDisplayName());
 
             //Create Directory:
             if(tileDir.exists()) FileUtils.forceDelete(tileDir);
             tileDir.mkdir();
 
             //Create the File-Listings to copy:
-            List<Class<?>> classesToCopy = new ArrayList<>(transformation.getNeedsOtherClasses());
-            classesToCopy.add(transformation.getClazz());
+            List<Class<?>> classesToCopy = new ArrayList<>(element.getNeededClasses());
+            classesToCopy.add(element.getElementClass());
 
             //Write General File:
             File metaFile = new File(tileDir, "metadata.json");
             try(  PrintWriter out = new PrintWriter( metaFile )  ){
-                out.println( transformation.toJsonString(generator) );
+                out.println( element.toJsonString(generator) );
                 out.flush();
             }
 

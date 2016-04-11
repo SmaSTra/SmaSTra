@@ -1,8 +1,9 @@
-package de.tu_darmstadt.smastra.generator.transaction;
+package de.tu_darmstadt.smastra.generator.transformation;
 
 import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerator;
+import de.tu_darmstadt.smastra.generator.SmaSTraElement;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 
@@ -12,22 +13,12 @@ import de.tu_darmstadt.smastra.generator.elements.Output;
  *
  * @author Tobias Welther
  */
-public class SmaSTraTransformation {
-
-    /**
-     * The Name to use for displaying.
-     */
-    private final String displayName;
+public class SmaSTraTransformation extends SmaSTraElement {
 
     /**
      * The List of the inputs usable.
      */
     private final List<Input> inputs;
-
-    /**
-     * The Other classes needed.
-     */
-    private final List<Class<?>> needsOtherClasses;
 
     /**
      * The Description of the Transaction.
@@ -45,11 +36,6 @@ public class SmaSTraTransformation {
     private final String methodName;
 
     /**
-     * The class the method is located in.
-     */
-    private final Class<?> clazz;
-
-    /**
      * If the method is static.
      */
     private final boolean isStatic;
@@ -60,13 +46,11 @@ public class SmaSTraTransformation {
                                  List<Class<?>> needsOtherClasses, String description,
                                  Output output, String methodName, Class<?> clazz, boolean isStatic) {
 
-        this.displayName = displayName;
+        super(displayName, clazz, needsOtherClasses);
         this.inputs = inputs;
-        this.needsOtherClasses = needsOtherClasses;
         this.description = description;
         this.output = output;
         this.methodName = methodName;
-        this.clazz = clazz;
         this.isStatic = isStatic;
     }
 
@@ -83,16 +67,8 @@ public class SmaSTraTransformation {
         return methodName;
     }
 
-    public Class<?> getClazz() {
-        return clazz;
-    }
-
     public boolean isStatic() {
         return isStatic;
-    }
-
-    public List<Class<?>> getNeedsOtherClasses() {
-        return needsOtherClasses;
     }
 
     public String getDescription() {

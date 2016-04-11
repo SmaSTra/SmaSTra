@@ -1,14 +1,13 @@
-package de.tu_darmstadt.smastra.generator;
+package de.tu_darmstadt.smastra.generator.transformation;
 
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
 
+import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationBuilder;
 
 import static junit.framework.Assert.*;
 
@@ -93,12 +92,12 @@ public class TransformationBuilderTest {
         assertEquals(name, transaction.getMethodName());
         assertEquals(description, transaction.getDescription());
         assertEquals(displayName, transaction.getDisplayName());
-        assertEquals(clazz, transaction.getClazz());
+        assertEquals(clazz, transaction.getElementClass());
         assertEquals(input, transaction.getInputs().get(0));
         assertEquals(output, transaction.getOutput());
 
         //At least check for Needed Classes:
-        for(Class<?> cl : needsOtherClasses) assertTrue(transaction.getNeedsOtherClasses().contains(cl));
+        for(Class<?> cl : needsOtherClasses) assertTrue(transaction.getNeededClasses().contains(cl));
     }
 
 }

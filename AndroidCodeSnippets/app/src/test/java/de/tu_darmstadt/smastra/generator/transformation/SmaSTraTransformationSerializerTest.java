@@ -1,4 +1,4 @@
-package de.tu_darmstadt.smastra.generator;
+package de.tu_darmstadt.smastra.generator.transformation;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationBuilder;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationSerializer;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;

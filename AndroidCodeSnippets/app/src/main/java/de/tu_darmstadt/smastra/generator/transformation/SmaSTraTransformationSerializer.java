@@ -1,4 +1,4 @@
-package de.tu_darmstadt.smastra.generator.transaction;
+package de.tu_darmstadt.smastra.generator.transformation;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,7 +21,7 @@ public class SmaSTraTransformationSerializer implements JsonSerializer<SmaSTraTr
     public JsonElement serialize(SmaSTraTransformation src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
         obj.addProperty("type", "transformation");
-        obj.addProperty("class", src.getClazz().getCanonicalName());
+        obj.addProperty("class", src.getElementClass().getCanonicalName());
         obj.addProperty("display", src.getDisplayName());
         obj.addProperty("method", src.getMethodName());
         obj.addProperty("description", src.getDescription());
@@ -30,7 +30,7 @@ public class SmaSTraTransformationSerializer implements JsonSerializer<SmaSTraTr
 
         //Needs others:
         JsonArray others = new JsonArray();
-        for(Class<?> clazz : src.getNeedsOtherClasses()) others.add(clazz.getCanonicalName());
+        for(Class<?> clazz : src.getNeededClasses()) others.add(clazz.getCanonicalName());
         obj.add("needs", others);
 
 

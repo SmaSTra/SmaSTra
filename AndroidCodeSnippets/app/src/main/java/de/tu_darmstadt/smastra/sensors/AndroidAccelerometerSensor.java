@@ -4,6 +4,8 @@ import android.content.Context;
 import android.hardware.Sensor;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 
 /**
  * An implementation of a sensor for the Accelerometer.
@@ -11,6 +13,7 @@ import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
  * @author Tobias Welther
  */
 @NeedsOtherClass({ Data3d.class, Abstract3dAndroidSensor.class })
+@SensorConfig(displayName = "Accelerometer Sensor", description = "The Accelerometer sensor measuring 3d-Acceleration to the Device")
 public class AndroidAccelerometerSensor extends Abstract3dAndroidSensor {
 
 
@@ -24,5 +27,11 @@ public class AndroidAccelerometerSensor extends Abstract3dAndroidSensor {
      */
     public AndroidAccelerometerSensor(Context context, int samplingPeriodUs) {
         super(context, Sensor.TYPE_ACCELEROMETER, samplingPeriodUs);
+    }
+
+    @Override
+    @SensorOutput
+    public Data3d getLastData() {
+        return super.getLastData();
     }
 }

@@ -8,12 +8,14 @@ import org.reflections.Reflections;
 import java.util.Collection;
 import java.util.HashSet;
 
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraClassSensorParser;
 import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
 import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensorSerializer;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraClassTransactionParser;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationSerializer;
+import de.tu_darmstadt.smastra.generator.transformation.SmaSTraClassTransformationParser;
+import de.tu_darmstadt.smastra.generator.transformation.SmaSTraTransformation;
+import de.tu_darmstadt.smastra.generator.transformation.SmaSTraTransformationSerializer;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
+import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 import de.tu_darmstadt.smastra.markers.interfaces.Transformation;
 
 /**
@@ -53,10 +55,28 @@ public class ElementGenerator {
         for(Class<?> clazz : classes) {
             if (hasSkipAnnotation(clazz)) continue;
 
-            Collection<SmaSTraTransformation> classTransformations = SmaSTraClassTransactionParser.readFromClass(clazz);
+            Collection<SmaSTraTransformation> classTransformations = SmaSTraClassTransformationParser.readFromClass(clazz);
             if (classTransformations != null && !classTransformations.isEmpty()) {
                 transformations.addAll(classTransformations);
             }
+        }
+
+        return transformations;
+    }
+
+
+    /**
+     * Reads the Sensors present in the Class loaded.
+     * @return the Sensors passed.
+     */
+    public Collection<SmaSTraSensor> readSensorsFromClassLoaded(){
+        Collection<SmaSTraSensor> transformations = new HashSet<>();
+        Collection<Class<? extends Sensor>> classes = getAllClassesOf(Sensor.class);
+        for(Class<?> clazz : classes) {
+            if (hasSkipAnnotation(clazz)) continue;
+
+            SmaSTraSensor sensor = SmaSTraClassSensorParser.readFromClass(clazz);
+            if (sensor != null) transformations.add(sensor);
         }
 
         return transformations;

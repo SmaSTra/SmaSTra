@@ -1,11 +1,9 @@
-package de.tu_darmstadt.smastra.generator;
+package de.tu_darmstadt.smastra.generator.transformation;
 
 import org.junit.Test;
 
 import java.util.Collection;
 
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraClassTransactionParser;
-import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.Transformation;
@@ -27,12 +25,12 @@ public class TransformationParserTest {
 
     @Test
     public void testMinimal1ParseWorks(){
-        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransactionParser.readFromClass(TestClass1.class);
+        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransformationParser.readFromClass(TestClass1.class);
 
         assertEquals(1, transactions.size());
 
         SmaSTraTransformation sut = transactions.iterator().next();
-        assertEquals(TestClass1.class, sut.getClazz());
+        assertEquals(TestClass1.class, sut.getElementClass());
         assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getMethodName());
         assertEquals(VOID_OUTPUT, sut.getOutput());
@@ -41,14 +39,14 @@ public class TransformationParserTest {
         assertEquals(Vector3d.class, sut.getInputs().get(0).getParameter());
         assertEquals(false, sut.isStatic());
 
-        assertTrue(sut.getNeedsOtherClasses().contains(TransformationParserTest.class));
+        assertTrue(sut.getNeededClasses().contains(TransformationParserTest.class));
     }
 
 
     /* For testMinimal1ParseWorks  */
     @SkipParsing
     @NeedsOtherClass(TransformationParserTest.class)
-    private static class TestClass1 {
+    private static class TestClass1 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1", desctiption = "Does Stuff")
         public void method1(Vector3d vec1){}
@@ -59,12 +57,12 @@ public class TransformationParserTest {
 
     @Test
     public void testMinimal2ParseWorks(){
-        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransactionParser.readFromClass(TestClass2.class);
+        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransformationParser.readFromClass(TestClass2.class);
 
         assertEquals(1, transactions.size());
 
         SmaSTraTransformation sut = transactions.iterator().next();
-        assertEquals(TestClass2.class, sut.getClazz());
+        assertEquals(TestClass2.class, sut.getElementClass());
         assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getMethodName());
         assertEquals(Vector3d.class, sut.getOutput().getOutputParam());
@@ -72,13 +70,13 @@ public class TransformationParserTest {
         assertEquals(1, sut.getInputs().size());
         assertEquals(Vector3d.class, sut.getInputs().get(0).getParameter());
         assertEquals(true, sut.isStatic());
-        assertTrue(sut.getNeedsOtherClasses().isEmpty());
+        assertTrue(sut.getNeededClasses().isEmpty());
     }
 
 
     /* For testMinimal2ParseWorks */
     @SkipParsing
-    private static class TestClass2 {
+    private static class TestClass2 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1")
         public static Vector3d method1(Vector3d vec1){ return null; }
@@ -86,14 +84,14 @@ public class TransformationParserTest {
 
     @Test
     public void testParseMultipleMethodsWorks(){
-        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransactionParser.readFromClass(TestClass3.class);
+        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransformationParser.readFromClass(TestClass3.class);
 
         assertEquals(2, transactions.size());
 
         SmaSTraTransformation sut1 = getWithName("method1", transactions);
         assertNotNull(sut1);
 
-        assertEquals(TestClass3.class, sut1.getClazz());
+        assertEquals(TestClass3.class, sut1.getElementClass());
         assertEquals("method1", sut1.getDisplayName());
         assertEquals("method1", sut1.getMethodName());
         assertEquals(Vector3d.class, sut1.getOutput().getOutputParam());
@@ -101,13 +99,13 @@ public class TransformationParserTest {
         assertEquals(1, sut1.getInputs().size());
         assertEquals(Vector3d.class, sut1.getInputs().get(0).getParameter());
         assertEquals(true, sut1.isStatic());
-        assertTrue(sut1.getNeedsOtherClasses().isEmpty());
+        assertTrue(sut1.getNeededClasses().isEmpty());
 
 
         SmaSTraTransformation sut2 = getWithName("method2", transactions);
         assertNotNull(sut2);
 
-        assertEquals(TestClass3.class, sut2.getClazz());
+        assertEquals(TestClass3.class, sut2.getElementClass());
         assertEquals("method2", sut2.getDisplayName());
         assertEquals("method2", sut2.getMethodName());
         assertEquals(VOID_OUTPUT, sut2.getOutput());
@@ -120,7 +118,7 @@ public class TransformationParserTest {
 
     /* For testParseMultipleMethodsWorks */
     @SkipParsing
-    private static class TestClass3 {
+    private static class TestClass3 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1")
         public static Vector3d method1(Vector3d vec1){ return null; }
@@ -133,7 +131,7 @@ public class TransformationParserTest {
 
     @Test
     public void testSkipMethodWithoutAnnotationWorks() {
-        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransactionParser.readFromClass(TestClass4.class);
+        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransformationParser.readFromClass(TestClass4.class);
 
         assertEquals(1, transactions.size());
         assertEquals("method1", transactions.iterator().next().getMethodName());
@@ -143,7 +141,25 @@ public class TransformationParserTest {
 
     /* For testSkipMethodWithoutAnnotationWorks */
     @SkipParsing
-    private static class TestClass4 {
+    private static class TestClass4 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
+
+        @Transformation(displayName = "method1")
+        public Vector3d method1(Vector3d vec1){ return null; }
+
+        public void method2(){}
+    }
+
+    @Test
+    public void testClassNotInstanceOfTransformationDoesNotReadIt() {
+        Collection<SmaSTraTransformation> transactions = SmaSTraClassTransformationParser.readFromClass(TestClass5.class);
+        assertEquals(0, transactions.size());
+    }
+
+
+
+    /* For testSkipMethodWithoutAnnotationWorks */
+    @SkipParsing
+    private static class TestClass5 {
 
         @Transformation(displayName = "method1")
         public Vector3d method1(Vector3d vec1){ return null; }
