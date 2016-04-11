@@ -11,7 +11,7 @@ import de.tu_darmstadt.smastra.sensors.Vector3d;
  * This class does math functions with collections of 3d-Data.
  * @author Tobias Welther
  */
-@NeedsOtherClass(Math3d.class)
+@NeedsOtherClass( {Math3d.class, Vector3d.class, WindowCollection.class} )
 public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
 
