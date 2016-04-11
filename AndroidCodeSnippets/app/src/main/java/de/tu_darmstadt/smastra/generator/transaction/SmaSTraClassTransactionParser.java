@@ -11,7 +11,7 @@ import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.Transformation;
 
 /**
  * Parses a class to a bunch of SmaSTra Transactions.
@@ -22,13 +22,13 @@ public class SmaSTraClassTransactionParser {
 
 
     /**
-     * Reads the Transactions from the Class.
+     * Reads the Transformation from the Class.
      * @param clazz to read from.
-     * @return the Transactions
+     * @return the Transformations.
      */
     public static Collection<SmaSTraTransformation> readFromClass(Class<?> clazz){
-        Collection<SmaSTraTransformation> transactions = new ArrayList<>();
-        if(clazz == null) return transactions;
+        Collection<SmaSTraTransformation> transformations = new ArrayList<>();
+        if(clazz == null) return transformations;
 
         //Read all methods:
         for(Method method : clazz.getMethods()){
@@ -47,13 +47,13 @@ public class SmaSTraClassTransactionParser {
                 builder.addNeededClass(readNeededClasses(clazz, new HashSet<Class<?>>()));
 
                 SmaSTraTransformation transaction = builder.build();
-                if(transaction != null) transactions.add(transaction);
+                if(transaction != null) transformations.add(transaction);
             }catch(ElementGenerationFailedException exp){
                 exp.printStackTrace();
             }
         }
 
-        return transactions;
+        return transformations;
     }
 
     /**
@@ -63,7 +63,7 @@ public class SmaSTraClassTransactionParser {
      */
     private static String readDisplayName(Method method) {
         Transformation transformation = method.getAnnotation(Transformation.class);
-        return transformation == null ? null : transformation.value();
+        return transformation == null ? null : transformation.displayName();
     }
 
     /**

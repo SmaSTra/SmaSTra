@@ -8,6 +8,8 @@ import org.reflections.Reflections;
 import java.util.Collection;
 import java.util.HashSet;
 
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensorSerializer;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraClassTransactionParser;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformationSerializer;
@@ -30,8 +32,14 @@ public class ElementGenerator {
 
     public ElementGenerator() {
         this.gson = new GsonBuilder()
+            //Register Serializers:
             .registerTypeAdapter(SmaSTraTransformation.class, new SmaSTraTransformationSerializer())
+            .registerTypeAdapter(SmaSTraSensor.class, new SmaSTraSensorSerializer())
+
+            //Set the Rest of the config:
             .setPrettyPrinting()
+
+            //Finally build:
             .create();
     }
 
@@ -39,7 +47,7 @@ public class ElementGenerator {
      * Reads the transformations present in the Class loaded.
      * @return the transformations passed.
      */
-    public Collection<SmaSTraTransformation> readTransformationsFromClassloaded(){
+    public Collection<SmaSTraTransformation> readTransformationsFromClassLoaded(){
         Collection<SmaSTraTransformation> transformations = new HashSet<>();
         Collection<Class<? extends Transformation>> classes = getAllClassesOf(Transformation.class);
         for(Class<?> clazz : classes) {

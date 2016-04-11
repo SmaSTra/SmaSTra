@@ -7,8 +7,8 @@ import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 
 /**
- * This is the element of the SmaSTra system.
- * It symbolises the root element of the System.
+ * This is the Sensor element of the SmaSTra system.
+ * It is a building component for the GUI.
  *
  * @author Tobias Welther
  */
@@ -45,7 +45,7 @@ public class SmaSTraTransformation {
     private final String methodName;
 
     /**
-     * The Name of the Method.
+     * The class the method is located in.
      */
     private final Class<?> clazz;
 

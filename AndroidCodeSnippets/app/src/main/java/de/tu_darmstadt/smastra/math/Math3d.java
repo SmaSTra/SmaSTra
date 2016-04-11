@@ -1,7 +1,7 @@
 package de.tu_darmstadt.smastra.math;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.Transformation;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 /**
@@ -19,7 +19,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param vector2 to add
      * @return the result.
      */
-    @Transformation("Add Vectors")
+    @Transformation(displayName = "Add Vectors")
     public static Vector3d add(Vector3d vector1, Vector3d vector2){
         double x = vector1.getX() + vector2.getX();
         double y = vector1.getY() + vector2.getY();
@@ -34,7 +34,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param vector2 to add
      * @return the result.
      */
-    @Transformation("Subtract Vectors")
+    @Transformation(displayName = "Subtract Vectors")
     public static Vector3d subtract(Vector3d vector1, Vector3d vector2){
         double x = vector1.getX() - vector2.getX();
         double y = vector1.getY() - vector2.getY();
@@ -50,7 +50,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param value to multiply
      * @return the result.
      */
-    @Transformation("Multiply Vectors")
+    @Transformation(displayName = "Multiply Vectors")
     public static Vector3d multiply(Vector3d vector1, double value){
         double x = vector1.getX() * value;
         double y = vector1.getY() * value;
@@ -65,7 +65,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param value to device by.
      * @return the result.
      */
-    @Transformation("Multiply Vectors")
+    @Transformation(displayName = "Multiply Vectors")
     public static Vector3d divide(Vector3d vector1, double value){
         double x = vector1.getX() / value;
         double y = vector1.getY() / value;
@@ -80,7 +80,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param toSquare the vector to square.
      * @return the squared Vector.
      */
-    @Transformation("Square Vector")
+    @Transformation(displayName = "Square Vector")
     public static Vector3d square(Vector3d toSquare) {
         double x = toSquare.getX()*toSquare.getX();
         double y = toSquare.getY()*toSquare.getY();
@@ -95,7 +95,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param vector to use.
      * @return the length from origin.
      */
-    @Transformation("Vector Length")
+    @Transformation(displayName = "Vector Length")
     public static double length(Vector3d vector){
         return Math.sqrt(lengthSquare(vector));
     }
@@ -106,7 +106,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param vector to use.
      * @return the squared length from origin.
      */
-    @Transformation("Vector squared length")
+    @Transformation(displayName = "Vector squared length")
     public static double lengthSquare(Vector3d vector){
         vector = square(vector);
         return vector.getX() + vector.getY() + vector.getZ();
@@ -118,7 +118,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param vector2 to use.
      * @return the distance.
      */
-    @Transformation("Vectors distance")
+    @Transformation(displayName = "Vectors distance")
     public static double distance(Vector3d vector1, Vector3d vector2){
         return Math.sqrt(distanceSquare(vector1,vector2));
     }
@@ -130,7 +130,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param vector2 to use.
      * @return the distance.
      */
-    @Transformation("Vectors squared distance")
+    @Transformation(displayName = "Vectors squared distance")
     public static double distanceSquare(Vector3d vector1, Vector3d vector2){
         return Math3d.lengthSquare(Math3d.subtract(vector1,vector2));
     }

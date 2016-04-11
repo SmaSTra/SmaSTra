@@ -1,4 +1,4 @@
-package de.tu_darmstadt.smastra.markers;
+package de.tu_darmstadt.smastra.markers.elements;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Transformation {
-    String value();
+    String displayName();
     String desctiption() default "None";
 }

@@ -24,7 +24,7 @@ public class ElementGeneratorTest {
     @Test
     public void testElementsParsingWorks() throws IOException {
         ElementGenerator generator = new ElementGenerator();
-        Collection<SmaSTraTransformation> transformations = generator.readTransformationsFromClassloaded();
+        Collection<SmaSTraTransformation> transformations = generator.readTransformationsFromClassLoaded();
 
         assertFalse(transformations.isEmpty());
 

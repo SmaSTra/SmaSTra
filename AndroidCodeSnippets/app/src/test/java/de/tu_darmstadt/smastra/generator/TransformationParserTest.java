@@ -8,7 +8,7 @@ import de.tu_darmstadt.smastra.generator.transaction.SmaSTraClassTransactionPars
 import de.tu_darmstadt.smastra.generator.transaction.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
-import de.tu_darmstadt.smastra.markers.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.Transformation;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 import static de.tu_darmstadt.smastra.generator.elements.Output.VOID_OUTPUT;
@@ -50,7 +50,7 @@ public class TransformationParserTest {
     @NeedsOtherClass(TransformationParserTest.class)
     private static class TestClass1 {
 
-        @Transformation(value = "method1", desctiption = "Does Stuff")
+        @Transformation(displayName = "method1", desctiption = "Does Stuff")
         public void method1(Vector3d vec1){}
 
     }
@@ -80,7 +80,7 @@ public class TransformationParserTest {
     @SkipParsing
     private static class TestClass2 {
 
-        @Transformation("method1")
+        @Transformation(displayName = "method1")
         public static Vector3d method1(Vector3d vec1){ return null; }
     }
 
@@ -122,10 +122,10 @@ public class TransformationParserTest {
     @SkipParsing
     private static class TestClass3 {
 
-        @Transformation("method1")
+        @Transformation(displayName = "method1")
         public static Vector3d method1(Vector3d vec1){ return null; }
 
-        @Transformation(value = "method2", desctiption = "Does Stuff")
+        @Transformation(displayName = "method2", desctiption = "Does Stuff")
         public void method2(Vector3d vec1){}
 
     }
@@ -145,7 +145,7 @@ public class TransformationParserTest {
     @SkipParsing
     private static class TestClass4 {
 
-        @Transformation("method1")
+        @Transformation(displayName = "method1")
         public Vector3d method1(Vector3d vec1){ return null; }
 
         public void method2(){}
