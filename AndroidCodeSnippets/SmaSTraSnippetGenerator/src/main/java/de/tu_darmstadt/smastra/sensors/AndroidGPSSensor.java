@@ -27,7 +27,7 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     /**
      * The last known data.
      */
-    private Data3d lastData;
+    private Data3d lastData = new Data3d(0,100000,0,0,0);
 
 
     public AndroidGPSSensor(Context context) {

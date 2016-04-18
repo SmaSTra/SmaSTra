@@ -149,4 +149,9 @@ public class Vector3d {
         return new Vector3d(this);
     }
 
+
+    @Override
+    public String toString() {
+        return "{x:"+x+",y:"+y+",z:"+z+"}";
+    }
 }

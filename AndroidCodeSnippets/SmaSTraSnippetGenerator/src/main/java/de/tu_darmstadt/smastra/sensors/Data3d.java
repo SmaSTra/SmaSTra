@@ -102,4 +102,11 @@ public class Data3d extends Vector3d {
         return new Data3d(this);
     }
 
+
+
+    @Override
+    public String toString() {
+        return "{time:"+time+",accuracy"+accuracy+",x:"+x+",y:"+y+",z:"+z+"}";
+    }
+
 }

@@ -36,7 +36,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de
     /**
      * A cache of the last data.
      */
-    protected Data3d lastData;
+    protected Data3d lastData = new Data3d(0,0,0,0,0);
 
 
     /**
