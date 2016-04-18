@@ -3,10 +3,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@android:drawable/arrow_up_float"
         android:label="SmaStraAAR"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:supportsRtl="true">
 
     </application>
 
