@@ -36,4 +36,5 @@ captures/
 AndroidCodeSnippets/.idea/*
 AndroidCodeSnippets/gradle/
 AndroidCodeSnippets/SmaSTraSnippetGenerator/generated/
+AndroidCodeSnippets/myapplication/
 *.iml
