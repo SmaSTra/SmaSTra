@@ -19,7 +19,7 @@ public class SmaSTraSensorSerializer implements JsonSerializer<SmaSTraSensor> {
     public JsonElement serialize(SmaSTraSensor src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
         obj.addProperty("type", "sensor");
-        obj.addProperty("class", src.getElementClass().getCanonicalName());
+        obj.addProperty("mainClass", src.getElementClass().getCanonicalName());
         obj.addProperty("display", src.getDisplayName());
         obj.addProperty("dataMethod", src.getDataMethodName());
         obj.addProperty("description", src.getDescription());
