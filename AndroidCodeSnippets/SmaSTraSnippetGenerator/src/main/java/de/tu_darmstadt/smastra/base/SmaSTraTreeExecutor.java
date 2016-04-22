@@ -66,7 +66,9 @@ public abstract class SmaSTraTreeExecutor<T> {
      * <br>The step is calling each step of the Pipeline.
      */
     public void step(){
-        for(int i = 0; i < maxSteps; i++) transform(i);
+        for(int i = 0; i < maxSteps; i++) {
+            try{ transform(i); }catch (Throwable exp){ exp.printStackTrace(); }
+        }
     }
 
 
