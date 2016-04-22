@@ -2,10 +2,15 @@ package de.tu_darmstadt.smastra.generator.sensor;
 
 import org.junit.Test;
 
+import java.util.List;
+
+import de.tu_darmstadt.smastra.generator.transformation.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.Transformation;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
@@ -108,6 +113,27 @@ public class SensorParserTest {
         public Vector3d method1(Vector3d vec1){ return null; }
 
         public void method2(){}
+    }
+
+
+    @Test
+    public void testNeedsPermissionsReadingWorks() throws Throwable {
+        SmaSTraSensor list = SmaSTraClassSensorParser.readFromClass(TestClass5.class);
+        assertEquals("TEST", list.getAndroidPermissions()[0]);
+    }
+
+
+
+    /* For testSkipMethodWithoutAnnotationWorks */
+    @SkipParsing
+    @NeedsAndroidPermissions("TEST")
+    @SensorConfig(displayName = "fsaf")
+    private static class TestClass5 implements Sensor {
+
+        public Vector3d method1(Vector3d vec1){ return null; }
+
+        @SensorOutput
+        public int method2(){ return 1; }
     }
 
 }

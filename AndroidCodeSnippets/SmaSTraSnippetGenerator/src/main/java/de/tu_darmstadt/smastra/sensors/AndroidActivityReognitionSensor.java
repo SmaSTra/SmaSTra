@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
@@ -31,7 +32,8 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  *
  * @author Tobias Welther
  */
-@SensorConfig(displayName = "Activity Recognition Sensor", description = "This sensor represents the Android ")
+@NeedsAndroidPermissions("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
+@SensorConfig(displayName = "Activity Recognition Sensor", description = "This sensor represents the Android Activity Recognition")
 public class AndroidActivityReognitionSensor extends BroadcastReceiver implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     private static final String BROADCAST_NAME = "ACTIVITY_RECOGNITION";

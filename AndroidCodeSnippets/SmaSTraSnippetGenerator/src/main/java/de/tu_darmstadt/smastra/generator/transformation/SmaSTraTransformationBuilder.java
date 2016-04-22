@@ -56,6 +56,12 @@ public class SmaSTraTransformationBuilder {
      */
     private String displayName;
 
+    /**
+     * The Android permissions needed.
+     */
+    private String[] androidPermissions = new String[0];
+
+
 
     public SmaSTraTransformationBuilder setDescription(String description) {
         this.description = description;
@@ -107,6 +113,10 @@ public class SmaSTraTransformationBuilder {
         return this;
     }
 
+    public SmaSTraTransformationBuilder setAndroidPermissions(String[] androidPermissions) {
+        if(androidPermissions != null) this.androidPermissions = androidPermissions;
+        return this;
+    }
 
 
     public List<Input> getInputs() {
@@ -141,6 +151,12 @@ public class SmaSTraTransformationBuilder {
         return displayName;
     }
 
+    public String[] getAndroidPermissions() {
+        return androidPermissions;
+    }
+
+
+
     /**
      * Generates the Transaction.
      *
@@ -152,7 +168,7 @@ public class SmaSTraTransformationBuilder {
         if(methodName == null) throw new ElementGenerationFailedException("No Method-Name defined.");
         if(displayName == null) throw new ElementGenerationFailedException("No displayName defined.");
 
-        return new SmaSTraTransformation(displayName, inputs, needsOtherClasses, description, output,
+        return new SmaSTraTransformation(displayName, inputs, androidPermissions, needsOtherClasses, description, output,
                 methodName, clazz, isStatic);
     }
 }

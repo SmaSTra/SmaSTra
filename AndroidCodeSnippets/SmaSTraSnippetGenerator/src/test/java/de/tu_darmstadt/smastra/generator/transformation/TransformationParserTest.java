@@ -3,10 +3,17 @@ package de.tu_darmstadt.smastra.generator.transformation;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.List;
 
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraClassSensorParser;
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 import static de.tu_darmstadt.smastra.generator.elements.Output.VOID_OUTPUT;
@@ -181,5 +188,25 @@ public class TransformationParserTest {
 
         return null;
     }
+
+    @Test
+    public void testNeedsPermissionsReadingWorks() throws Throwable {
+        Collection<SmaSTraTransformation> list = SmaSTraClassTransformationParser.readFromClass(TestClass6.class);
+        assertEquals("TEST", list.iterator().next().getAndroidPermissions()[0]);
+    }
+
+
+
+    /* For testSkipMethodWithoutAnnotationWorks */
+    @SkipParsing
+    @NeedsAndroidPermissions("TEST")
+    private static class TestClass6 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
+
+        public Vector3d method1(Vector3d vec1){ return null; }
+
+        @Transformation(displayName = "TEST")
+        public int method2(){ return 1; }
+    }
+
 
 }

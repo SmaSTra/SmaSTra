@@ -9,6 +9,7 @@ import java.util.Set;
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
@@ -40,6 +41,7 @@ public class SmaSTraClassSensorParser {
             builder.setDataMethodName(readDataMethodName(clazz));
             builder.setDescription(readDescription(clazz));
             builder.setOutput(readOutput(clazz));
+            builder.setAndroidPermissions(readNeededPermissions(clazz));
             builder.addNeededClass(readNeededClasses(clazz));
 
            return builder.build();
@@ -48,6 +50,16 @@ public class SmaSTraClassSensorParser {
         }
 
         return null;
+    }
+
+    /**
+     * Reads the needed Permissions from the Class.
+     * @param clazz to use.
+     * @return the needed Permissions. Empty Array if none present.
+     */
+    private static String[] readNeededPermissions(Class<?> clazz) {
+        NeedsAndroidPermissions permsAnnotation = clazz.getAnnotation(NeedsAndroidPermissions.class);
+        return permsAnnotation == null ? new String[0] : permsAnnotation.value();
     }
 
     /**

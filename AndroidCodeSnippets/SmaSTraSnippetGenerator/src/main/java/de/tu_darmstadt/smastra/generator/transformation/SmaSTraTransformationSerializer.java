@@ -28,6 +28,11 @@ public class SmaSTraTransformationSerializer implements JsonSerializer<SmaSTraTr
         obj.addProperty("static", src.isStatic());
         obj.addProperty("output", src.getOutput().getOutputParam().getCanonicalName());
 
+        //Needed Permissions:
+        JsonArray permsArray = new JsonArray();
+        for(String perm : src.getAndroidPermissions()) permsArray.add(perm);
+        obj.add("neededPermissions", permsArray);
+
         //Needs others:
         JsonArray others = new JsonArray();
         for(Class<?> clazz : src.getNeededClasses()) others.add(clazz.getCanonicalName());
