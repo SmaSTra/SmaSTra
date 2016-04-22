@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 /**
@@ -121,6 +122,16 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
             String readable = getFriendlyName(activity.getType());
             this.activitiesToProbabilitiesMap.put(readable, activity.getConfidence());
         }
+    }
+
+
+    /**
+     * Gets the Current Activitys.
+     * @return the current Activities.
+     */
+    @SensorOutput
+    public Map<String, Integer> getActivitiesToProbabilitiesMap() {
+        return activitiesToProbabilitiesMap;
     }
 
 
