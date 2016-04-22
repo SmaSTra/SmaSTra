@@ -68,6 +68,7 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
     /**
      * Starts the Sensor.
      */
+    @Override
     public void start(){
         LocalBroadcastManager.getInstance(context).registerReceiver(this, new IntentFilter(BROADCAST_NAME));
         apiClient.connect();
@@ -76,6 +77,7 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
     /**
      * Stops the Sensor.
      */
+    @Override
     public void stop(){
         LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
         apiClient.disconnect();

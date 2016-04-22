@@ -27,6 +27,12 @@ public class AndroidChargerSensor implements Sensor {
     }
 
 
+    @Override
+    public void start(){}
+
+    @Override
+    public void stop(){}
+
     /**
      * Gets the Status of the Charger.
      * @return the charger status.
