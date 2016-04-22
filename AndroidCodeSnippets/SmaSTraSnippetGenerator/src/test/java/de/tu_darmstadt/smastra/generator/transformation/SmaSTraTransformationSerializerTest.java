@@ -40,7 +40,7 @@ public class SmaSTraTransformationSerializerTest {
         JsonObject obj = element.getAsJsonObject();
 
         assertEquals("transformation", obj.get("type").getAsString());
-        assertEquals(this.getClass().getCanonicalName(), obj.get("class").getAsString());
+        assertEquals(this.getClass().getCanonicalName(), obj.get("mainClass").getAsString());
         assertEquals("TEST", obj.get("description").getAsString());
         assertEquals("TEST", obj.get("method").getAsString());
         assertEquals("TEST", obj.get("display").getAsString());

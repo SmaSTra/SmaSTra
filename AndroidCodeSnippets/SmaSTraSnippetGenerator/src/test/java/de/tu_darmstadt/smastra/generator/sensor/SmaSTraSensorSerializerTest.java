@@ -38,7 +38,7 @@ public class SmaSTraSensorSerializerTest {
         JsonObject obj = element.getAsJsonObject();
 
         assertEquals("sensor", obj.get("type").getAsString());
-        assertEquals(this.getClass().getCanonicalName(), obj.get("class").getAsString());
+        assertEquals(this.getClass().getCanonicalName(), obj.get("mainClass").getAsString());
         assertEquals("TEST", obj.get("description").getAsString());
         assertEquals("TEST", obj.get("dataMethod").getAsString());
         assertEquals("TEST", obj.get("display").getAsString());

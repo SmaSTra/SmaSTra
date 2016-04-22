@@ -53,6 +53,9 @@ public class SensorParserTest {
         @SensorOutput
         public Vector3d method1(){ return null; }
 
+        @Override public void start(){}
+        @Override public void stop(){}
+
     }
 
 
@@ -78,6 +81,9 @@ public class SensorParserTest {
 
         @SensorOutput
         public Vector3d method1(){ return null; }
+
+        @Override public void start(){}
+        @Override public void stop(){}
     }
 
 
@@ -95,6 +101,9 @@ public class SensorParserTest {
         public Vector3d method1(Vector3d vec1){ return null; }
 
         public void method2(){}
+
+        @Override public void start(){}
+        @Override public void stop(){}
     }
 
 
@@ -113,6 +122,9 @@ public class SensorParserTest {
         public Vector3d method1(Vector3d vec1){ return null; }
 
         public void method2(){}
+
+        @Override public void start(){}
+        @Override public void stop(){}
     }
 
 
@@ -134,6 +146,9 @@ public class SensorParserTest {
 
         @SensorOutput
         public int method2(){ return 1; }
+
+        @Override public void start(){}
+        @Override public void stop(){}
     }
 
 }
