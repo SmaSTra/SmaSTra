@@ -38,3 +38,8 @@ AndroidCodeSnippets/gradle/
 AndroidCodeSnippets/SmaSTraSnippetGenerator/generated/
 AndroidCodeSnippets/myapplication/
 *.iml
+/SmaSTraDesigner/code/external/CommonLib/obj
+/SmaSTraDesigner/code/external/PresentationCommonLib/obj
+/SmaSTraDesigner/code/external/WpfCommonLib/obj
+/SmaSTraDesigner/code/local/SmaSTraDesigner/obj
+/SmaSTraDesigner/code/.vs
