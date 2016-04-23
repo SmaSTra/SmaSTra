@@ -1,5 +1,6 @@
 package de.tu_darmstadt.smastra.sensors;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -7,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
@@ -15,7 +17,9 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  * A android sensor for GPS data.
  * @author Tobias Welther
  */
+@SuppressWarnings("MissingPermission")
 @NeedsOtherClass(Data3d.class)
+@NeedsAndroidPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)
 @SensorConfig(displayName = "Gps Sensor", description = "The GPS sensor of the Device.")
 public class AndroidGPSSensor implements Sensor, LocationListener {
 
@@ -38,14 +42,16 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     /**
      * Starts the Listener.
      */
+    @Override
     public void start(){
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
 
     /**
-     * Starts the Listener.
+     * stops the Listener.
      */
+    @Override
     public void stop(){
         locationManager.removeUpdates(this);
     }

@@ -16,7 +16,7 @@ public abstract class SmaSTraTreeExecutor<T> {
     /**
      * The Executor service to use for ticking!
      */
-    protected final ScheduledExecutorService executor;
+    protected ScheduledExecutorService executor;
 
     /**
      * The Context to use.
@@ -33,6 +33,11 @@ public abstract class SmaSTraTreeExecutor<T> {
      */
     protected T data;
 
+    /**
+     * If already inited.
+     */
+    protected boolean inited = false;
+
 
     /**
      * Creates the SmaSTra Execution Tree.
@@ -42,30 +47,50 @@ public abstract class SmaSTraTreeExecutor<T> {
     public SmaSTraTreeExecutor(int maxSteps, Context context) {
         this.maxSteps = maxSteps;
         this.context = context;
+    }
+
+    /**
+     * Starts ticking.
+     */
+    public void start(){
+        //If not stopped -> Stop before!
+        if(this.executor != null) stop();
 
         //Start the ticking of the Pipeline:
         this.executor = Executors.newSingleThreadScheduledExecutor();
         this.executor.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
+                if(!inited) { inited = true; init(); }
+
                 step();
             }
         }, 50, 50, TimeUnit.MILLISECONDS);
-
-        initSensors();
     }
 
+
     /**
-     * Inits all sensors.
+     * Stops ticking.
      */
-    protected void initSensors() {}
+    public void stop(){
+        if(this.executor != null){
+            this.executor.shutdown();
+            this.executor = null;
+        }
+    }
+
+
+    /**
+     * Inits all needed stuff (as sensors, Web-APIs, aso).
+     */
+    protected void init() {}
 
 
     /**
      * Does a simple step.
      * <br>The step is calling each step of the Pipeline.
      */
-    public void step(){
+    protected void step(){
         for(int i = 0; i < maxSteps; i++) {
             try{ transform(i); }catch (Throwable exp){ exp.printStackTrace(); }
         }

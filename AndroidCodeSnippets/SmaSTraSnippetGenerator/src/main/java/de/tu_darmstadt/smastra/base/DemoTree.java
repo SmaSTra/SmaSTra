@@ -22,15 +22,15 @@ public class DemoTree extends SmaSTraTreeExecutor<Vector3d> {
     }
 
 
-    protected void initSensors(){
+    protected void init(){
         sensor0 = new AndroidAccelerometerSensor(context, SensorManager.SENSOR_DELAY_FASTEST);
-        sensor0.startListening();
+        sensor0.start();
 
         sensor1 = new AndroidAccelerometerSensor(context, SensorManager.SENSOR_DELAY_FASTEST);
-        sensor1.startListening();
+        sensor1.start();
 
         sensor2 = new AndroidAccelerometerSensor(context, SensorManager.SENSOR_DELAY_FASTEST);
-        sensor2.startListening();
+        sensor2.start();
     }
 
 

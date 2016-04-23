@@ -25,15 +25,26 @@ public abstract class SmaSTraElement {
      */
     protected final String displayName;
 
+    /**
+     * The Android permissions needed.
+     */
+    protected final String[] androidPermissions;
+
 
     public SmaSTraElement(String displayName, Class<?> elementClass) {
-        this(displayName, elementClass, null);
+        this(displayName, elementClass, new String[0], null);
+    }
+
+    public SmaSTraElement(String displayName, Class<?> elementClass, String[] androidPermissions) {
+        this(displayName, elementClass, androidPermissions, null);
     }
 
 
-    public SmaSTraElement(String displayName, Class<?> elementClass, Collection<Class<?>> neededClasses) {
+    public SmaSTraElement(String displayName, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses) {
         this.displayName = displayName;
         this.elementClass = elementClass;
+        this.androidPermissions = androidPermissions == null ? new String[0] : androidPermissions;
+
         if(neededClasses != null) this.neededClasses.addAll(neededClasses);
     }
 
@@ -46,7 +57,6 @@ public abstract class SmaSTraElement {
         return neededClasses;
     }
 
-
     /**
      * Returns the DisplayName to use.
      * @return the display Name.
@@ -56,13 +66,20 @@ public abstract class SmaSTraElement {
     }
 
     /**
+     * Gets the Android permissions needed.
+     * @return the needed Android permissions.
+     */
+    public String[] getAndroidPermissions() {
+        return androidPermissions;
+    }
+
+    /**
      * The Main-Class of the Element.
      * @return the class of the Element.
      */
     public Class<?> getElementClass() {
         return elementClass;
     }
-
 
     /**
      * Generates a Json String from this element.

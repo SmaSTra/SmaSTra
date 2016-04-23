@@ -48,6 +48,7 @@ public class TransformationBuilderTest {
         Class<?> clazz = name.getClass();
         Input input = new Input("TEST", this.getClass());
         Output output = new Output(this.getClass());
+        String[] androidPermissions = new String[]{"TEST", "TEST2"};
         Collection<Class<?>> needsOtherClasses = Arrays.asList(this.getClass(), SmaSTraTransformation.class);
 
         SmaSTraTransformationBuilder sut = new SmaSTraTransformationBuilder()
@@ -57,6 +58,7 @@ public class TransformationBuilderTest {
             .setDisplayName(displayName)
             .addInput(input)
             .setOutput(output)
+            .setAndroidPermissions(androidPermissions)
             .addNeededClass(needsOtherClasses);
 
         assertEquals(name, sut.getMethodName());
@@ -64,6 +66,7 @@ public class TransformationBuilderTest {
         assertEquals(clazz, sut.getClazz());
         assertEquals(input, sut.getInputs().get(0));
         assertEquals(output, sut.getOutput());
+        assertEquals(androidPermissions, sut.getAndroidPermissions());
 
         //At least check for Needed Classes:
         for(Class<?> cl : needsOtherClasses) assertTrue(sut.getNeedsOtherClasses().contains(cl));

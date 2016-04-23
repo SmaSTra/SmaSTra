@@ -30,10 +30,10 @@ public class SmaSTraSensor extends SmaSTraElement {
     private final String dataMethodName;
 
 
-    public SmaSTraSensor(String displayName, String description, List<Class<?>> needsOtherClasses, Output output,
+    public SmaSTraSensor(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses, Output output,
                          String dataMethodName, Class<?> clazz) {
 
-        super(displayName, clazz, needsOtherClasses);
+        super(displayName, clazz, androidPermissions, needsOtherClasses);
         this.description = description;
         this.output = output;
         this.dataMethodName = dataMethodName;

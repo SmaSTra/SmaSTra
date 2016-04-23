@@ -115,7 +115,7 @@ public abstract class Abstract1dAndroidSensorTest {
     @Test
     public void TestIfRegisterIsCalled(){
         Abstract1dAndroidSensor sut = generateSut();
-        sut.startListening();
+        sut.start();
 
         Mockito.verify(mockSensorManager, Mockito.times(1)).registerListener(sut, mockSensor, sut.getSamplingPeriodUs());
     }
@@ -124,7 +124,7 @@ public abstract class Abstract1dAndroidSensorTest {
     @Test
     public void TestIfUnregisterIsCalled(){
         Abstract1dAndroidSensor sut = generateSut();
-        sut.stopListening();
+        sut.stop();
 
         Mockito.verify(mockSensorManager, Mockito.times(1)).unregisterListener(sut);
     }

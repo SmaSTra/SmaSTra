@@ -42,11 +42,11 @@ public class SmaSTraTransformation extends SmaSTraElement {
 
 
 
-    public SmaSTraTransformation(String displayName, List<Input> inputs,
+    public SmaSTraTransformation(String displayName, List<Input> inputs, String[] androidPermissions,
                                  List<Class<?>> needsOtherClasses, String description,
                                  Output output, String methodName, Class<?> clazz, boolean isStatic) {
 
-        super(displayName, clazz, needsOtherClasses);
+        super(displayName, clazz, androidPermissions, needsOtherClasses);
         this.inputs = inputs;
         this.description = description;
         this.output = output;

@@ -2,6 +2,7 @@ package de.tu_darmstadt.smastra.generator.transformation;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ public class SmaSTraTransformationSerializerTest {
                 .setDescription("TEST")
                 .setDisplayName("TEST")
                 .setMethodName("TEST")
+                .setAndroidPermissions(new String[]{"Test1", "Test2"})
                 .setClass(this.getClass())
                 .setOutput(Output.VOID_OUTPUT)
                 .setStatic(false)
@@ -38,12 +40,16 @@ public class SmaSTraTransformationSerializerTest {
         JsonObject obj = element.getAsJsonObject();
 
         assertEquals("transformation", obj.get("type").getAsString());
-        assertEquals(this.getClass().getCanonicalName(), obj.get("class").getAsString());
+        assertEquals(this.getClass().getCanonicalName(), obj.get("mainClass").getAsString());
         assertEquals("TEST", obj.get("description").getAsString());
         assertEquals("TEST", obj.get("method").getAsString());
         assertEquals("TEST", obj.get("display").getAsString());
         assertEquals(false, obj.get("static").getAsBoolean());
         assertEquals(Output.VOID_OUTPUT.getOutputParam().getCanonicalName(), obj.get("output").getAsString());
+
+        assertEquals(true, obj.get("neededPermissions").isJsonArray());
+        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test1")));
+        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test2")));
 
         assertTrue(obj.get("needs").isJsonArray());
         assertEquals(0, obj.get("needs").getAsJsonArray().size());

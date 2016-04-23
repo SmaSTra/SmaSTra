@@ -12,6 +12,7 @@ import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.Transformation;
 
 /**
@@ -49,6 +50,7 @@ public class SmaSTraClassTransformationParser {
                 builder.setDescription(readDescription(method));
                 builder.setOutput(readOutput(method));
                 builder.addInputs(readInput(method));
+                builder.setAndroidPermissions(readNeededPermissions(clazz));
                 builder.addNeededClass(readNeededClasses(clazz));
 
                 SmaSTraTransformation transaction = builder.build();
@@ -59,6 +61,17 @@ public class SmaSTraClassTransformationParser {
         }
 
         return transformations;
+    }
+
+
+    /**
+     * Reads the needed Permissions from the Class.
+     * @param clazz to use.
+     * @return the needed Permissions. Empty Array if none present.
+     */
+    private static String[] readNeededPermissions(Class<?> clazz) {
+        NeedsAndroidPermissions permsAnnotation = clazz.getAnnotation(NeedsAndroidPermissions.class);
+        return permsAnnotation == null ? new String[0] : permsAnnotation.value();
     }
 
     /**

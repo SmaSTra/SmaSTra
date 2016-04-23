@@ -26,6 +26,11 @@ public class AndroidBatteryStatusSensor implements Sensor {
         this.context = context;
     }
 
+    @Override
+    public void start(){}
+
+    @Override
+    public void stop(){}
 
     /**
      * Gets the Status of the Charger.

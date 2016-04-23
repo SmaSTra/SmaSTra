@@ -35,7 +35,7 @@ public class ElementGeneratorTest {
 
         int created = 0;
         for(SmaSTraElement element : elements){
-            File tileDir = new File(targetDir, element.getDisplayName());
+            File tileDir = new File(targetDir, element.getDisplayName().replace(" ", "_"));
 
             //Create Directory:
             if(tileDir.exists()) FileUtils.forceDelete(tileDir);
