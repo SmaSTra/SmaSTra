@@ -1,9 +1,11 @@
-﻿<Application x:Class="SmaSTraDesigner.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SmaSTraDesigner"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+﻿<Application
+	x:Class="SmaSTraDesigner.App"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:SmaSTraDesigner"
+	xmlns:wpfConverters="clr-namespace:Common.Resources.Converters;assembly=WpfCommonLib"
+	StartupUri="MainWindow.xaml">
+	<Application.Resources>
+		<wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
+	</Application.Resources>
 </Application>

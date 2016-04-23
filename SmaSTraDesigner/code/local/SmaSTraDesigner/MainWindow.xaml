@@ -29,12 +29,17 @@
 		</Menu>
 
 		<StackPanel Orientation="Horizontal">
-			<StackPanel Orientation="Vertical">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel.LayoutTransform>
+					<RotateTransform Angle="90" />
+				</StackPanel.LayoutTransform>
 				<ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" />
 				<ToggleButton x:Name="tglOwnTF" Content="My Transformations" IsEnabled="False" />
 				<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" />
 			</StackPanel>
-			
+			<Grid>
+				<ListBox x:Name=""
+			</Grid>
 		</StackPanel>
 		<ctrl:UcTreeDesigner Grid.Row="1" />
 	</Grid>

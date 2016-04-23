@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{67FDEAA2-B1B3-4A06-AB81-F979C302A43A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>PresentationCommonLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CollectionObservationHandle.cs" />
+    <Compile Include="Collections\DispatcherCompatibleObservableCollectionWrap.cs" />
+    <Compile Include="Collections\DispatcherCompatibleObservableListWrap.cs" />
+    <Compile Include="DebugHelper.cs" />
+    <Compile Include="DPHelper.cs" />
+    <Compile Include="DependencyPropertyProvider.cs" />
+    <Compile Include="DumbBinding.cs" />
+    <Compile Include="DumbBindingTarget.cs" />
+    <Compile Include="EventArgs\DumbBindingValueUpdatedEventArgs.cs" />
+    <Compile Include="ExtensionMethods\BindingBaseExtensions.cs" />
+    <Compile Include="ExtensionMethods\PropertyMetadataExtensions.cs" />
+    <Compile Include="InstanceDumbBindingTarget.cs" />
+    <Compile Include="MultiPropertyChangedHandle.cs" />
+    <Compile Include="PropertyChangedHandle.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Converters\LambdaConverter.cs" />
+    <Compile Include="Resources\Converters\MultiValueLogicalConverter.cs" />
+    <Compile Include="Resources\Converters\NotConverter.cs" />
+    <Compile Include="ExtensionMethods\BindingExtensions.cs" />
+    <Compile Include="ExtensionMethods\DependencyObjectExtensions.cs" />
+    <Compile Include="ExtensionMethods\MultiBindingExtensions.cs" />
+    <Compile Include="ExtensionMethods\ObjectExtensions.cs" />
+    <Compile Include="Resources\Converters\ObjectToBooleanConverter.cs" />
+    <Compile Include="StaticDumbBindingTarget.cs" />
+    <Compile Include="UniversalEventChain.cs" />
+    <Compile Include="UniversalEventHandle.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\external\CommonLib\CommonLib.csproj">
+      <Project>{882729C9-C88B-48CC-878F-38B057BCE631}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rem registercustomtool.cs "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

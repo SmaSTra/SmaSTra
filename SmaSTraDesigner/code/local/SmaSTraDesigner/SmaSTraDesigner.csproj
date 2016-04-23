@@ -141,6 +141,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\external\CommonLib\CommonLib.csproj">
+      <Project>{882729c9-c88b-48cc-878f-38b057bce631}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\PresentationCommonLib\PresentationCommonLib.csproj">
+      <Project>{67fdeaa2-b1b3-4a06-ab81-f979c302a43a}</Project>
+      <Name>PresentationCommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\WpfCommonLib\WpfCommonLib.csproj">
+      <Project>{cb73e756-2d21-49c8-b2c2-eb015da5dab0}</Project>
+      <Name>WpfCommonLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
