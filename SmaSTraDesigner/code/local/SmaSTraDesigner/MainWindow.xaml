@@ -61,6 +61,7 @@
 		</ScrollViewer>
 
 		<!--<GridSplitter x:Name="gspMain" Grid.Column="2" Grid.Row="1" ResizeBehavior="PreviousAndNext" Width="10" />-->
+		<!-- asdasd asd-->
 
 		<ctrl:UcTreeDesigner Grid.Column="3" Grid.Row="1" />
 	</Grid>
