@@ -6,11 +6,33 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:support="clr-namespace:SmaSTraDesigner.Controls.Support"
-	mc:Ignorable="d" 
-	d:DesignHeight="300" d:DesignWidth="300">
+	mc:Ignorable="d"
+	x:Name="This"  Width="20">
 	<UserControl.Resources>
 		<support:IOHandleTemplateSelector x:Key="IOHandleTemplateSelector" />
 	</UserControl.Resources>
-	<Grid>
-	</Grid>
+	<UserControl.Style>
+		<Style TargetType="{x:Type UserControl}">
+			<Setter Property="Height" Value="15" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Polygon Points="0.0,0.0 1.0,0.0 0.5,1.0" Stroke="DarkRed" StrokeThickness="3" Fill="Red" Stretch="Fill" />
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="True">
+					<Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Self}, Path=Width}" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate>
+								<Ellipse Stroke="DarkGreen" StrokeThickness="3" Fill="Green" Stretch="UniformToFill" />
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</UserControl.Style>
 </UserControl>

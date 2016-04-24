@@ -24,5 +24,22 @@ namespace SmaSTraDesigner.Controls
 		{
 			this.InitializeComponent();
 		}
+
+		/// <summary>
+		/// Gets or sets the value of the IsInput property.
+		/// TODO: (PS) Comment this.
+		/// This is a Dependency Property.
+		/// </summary>
+		public bool IsInput
+		{
+			get { return (bool)this.GetValue(IsInputProperty); }
+			set { this.SetValue(IsInputProperty, value); }
+		}
+
+		/// <summary>
+		/// Registration of IsInput Dependency Property.
+		/// </summary>
+		public static readonly DependencyProperty IsInputProperty =
+			DependencyProperty.Register("IsInput", typeof(bool), typeof(UcIOHandle));
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Common;
+using SmaSTraDesigner.BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace SmaSTraDesigner
 		public MainWindow()
 		{
 			this.InitializeComponent();
+			this.spnNodeClasses.DataContext = Singleton<ClassManager>.Instance;
 		}
 
 		private void mniExit_Click(object sender, RoutedEventArgs e)

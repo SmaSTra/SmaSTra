@@ -5,9 +5,47 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
-	mc:Ignorable="d" 
-	d:DesignHeight="300" d:DesignWidth="300">
-	<Grid>
-		<Border Background="LightBlue" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+	mc:Ignorable="d">
+	<Grid Margin="0,5,0,5">
+		<Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+			<Border.Style>
+				<Style TargetType="{x:Type Border}">
+					<Setter Property="Background" Value="LightBlue" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Path=InputTypes.Length}" Value="1">
+							<Setter Property="Background" Value="LightGray" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Border.Style>
+		</Border>
+		<TextBlock Text="{Binding Path=DisplayName}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
+		
+		<ItemsControl ItemsSource="{Binding Path=InputTypes}" VerticalAlignment="Top">
+			<ItemsControl.Style>
+				<Style TargetType="{x:Type ItemsControl}">
+					<Setter Property="HorizontalAlignment" Value="Left" />
+					<Setter Property="Margin" Value="5,-5,0,0" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Path=InputTypes.Length}" Value="1">
+							<Setter Property="HorizontalAlignment" Value="Center" />
+							<Setter Property="Margin" Value="0,-5,0,0" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ItemsControl.Style>
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<local:UcIOHandle IsInput="True" Margin="5,0" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
 	</Grid>
 </UserControl>

@@ -5,9 +5,10 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
-	mc:Ignorable="d" 
-	d:DesignHeight="300" d:DesignWidth="300">
-	<Grid>
-		
+	mc:Ignorable="d">
+	<Grid Margin="0,5,0,0">
+		<Ellipse Stretch="Fill" Stroke="Black" StrokeThickness="2" Fill="Yellow" />
+		<TextBlock Text="Output" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
+		<local:UcIOHandle IsInput="True" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-5,0,0" />
 	</Grid>
 </UserControl>

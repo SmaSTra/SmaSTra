@@ -44,5 +44,10 @@ namespace SmaSTraDesigner.BusinessLogic
 		{
 			return this.Name.GetHashCode();
 		}
+
+		public override string ToString()
+		{
+			return String.Format("{{{0} {1}}}", this.GetType().Name, this.Name);
+		}
 	}
 }

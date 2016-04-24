@@ -5,9 +5,12 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
-	mc:Ignorable="d" 
-	d:DesignHeight="300" d:DesignWidth="300">
-	<Grid>
-		
+	mc:Ignorable="d"
+	x:Name="This">
+	<Grid Margin="0,0,0,5">
+		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />
+		<!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
+		<TextBlock Text="{Binding Path=DisplayName}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
+		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
 	</Grid>
 </UserControl>

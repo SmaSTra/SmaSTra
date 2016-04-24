@@ -7,8 +7,8 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d"
-	Title="MainWindow" d:DesignWidth="800" d:DesignHeight="450">
-	<Grid>
+	x:Name="This" Title="MainWindow" d:DesignWidth="800" d:DesignHeight="450">
+	<Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
@@ -20,7 +20,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
-		
+
 		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
 			<MenuItem x:Name="mniFile" Header="File">
 				<MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
@@ -33,13 +33,32 @@
 				<RotateTransform Angle="90" />
 			</StackPanel.LayoutTransform>
 			<ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
-			<ToggleButton x:Name="tglOwnTF" Content="My Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
+			<ToggleButton x:Name="tglCustomTF" Content="Custom Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 			<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 		</StackPanel>
-		
-		<Grid Grid.Column="1" Grid.Row="1">
-			<ListBox x:Name="lstDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" />
-		</Grid>
+
+		<ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+			<StackPanel x:Name="spnNodeClasses">
+				<Expander x:Name="expSensors" Header="Data Sources" IsExpanded="True">
+					<Grid>
+						<ItemsControl x:Name="icDefaultDS" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=DataSourceClasses}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<!-- TODO: (PS) Add ItemControls here for custom and online Sensors -->
+					</Grid>
+				</Expander>
+				<Expander x:Name="expConversions" Header="Conversions">
+					<Grid>
+						<ItemsControl x:Name="icDefaultCV" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=ConversionClasses}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<!-- TODO: (PS) Add ItemControls here for custom and online Conversions -->
+					</Grid>
+				</Expander>
+				<Expander x:Name="expTansformations" Header="Transformations">
+					<Grid>
+						<ItemsControl x:Name="icDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=TransformationClasses}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<!-- TODO: (PS) Add ItemControls here for custom and online Transformations -->
+					</Grid>
+				</Expander>
+			</StackPanel>
+		</ScrollViewer>
 
 		<!--<GridSplitter x:Name="gspMain" Grid.Column="2" Grid.Row="1" ResizeBehavior="PreviousAndNext" Width="10" />-->
 
