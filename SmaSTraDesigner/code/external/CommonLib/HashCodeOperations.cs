@@ -35,11 +35,15 @@
 			{
 				throw new ArgumentNullException("objectsToHash");
 			}
-
-			int result = 0;
+			
+			int result = 17;
 			foreach (object obj in objectsToHash)
 			{
-				result ^= obj != null ? obj.GetHashCode() : 0;
+				int hash = obj != null ? obj.GetHashCode() : 0;
+				unchecked
+				{
+					result = result * 31 + hash;
+				}
 			}
 
 			return result;

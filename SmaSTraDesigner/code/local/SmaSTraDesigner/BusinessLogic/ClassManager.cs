@@ -131,6 +131,12 @@ namespace SmaSTraDesigner.BusinessLogic
 					break;
 			}
 
+			if (String.IsNullOrWhiteSpace(displayName))
+			{
+				displayName = name;
+			}
+
+			baseNode.Name = displayName;
 			result = new NodeClass(name, baseNode, this.AddDataType(outputType), actualInputTypes)
 			{
 				DisplayName = displayName,

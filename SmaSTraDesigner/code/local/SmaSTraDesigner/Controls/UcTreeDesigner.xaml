@@ -8,6 +8,14 @@
 	mc:Ignorable="d" 
 	d:DesignHeight="300" d:DesignWidth="300">
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
 		<StackPanel x:Name="spnMain" Orientation="Vertical">
 			
 		</StackPanel>
@@ -15,5 +23,8 @@
 		<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige">
 			<local:UcOutputViewer x:Name="outOutputViewer" />
 		</Canvas>
+
+		<ScrollBar x:Name="scrHorizontal" Grid.Row="1" Orientation="Horizontal" />
+		<ScrollBar x:Name="scrVertical" Grid.Column="1" Orientation="Vertical" />
 	</Grid>
 </UserControl>
