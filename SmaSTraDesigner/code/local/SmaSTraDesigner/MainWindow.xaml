@@ -26,6 +26,9 @@
 				<MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
 			</MenuItem>
 			<MenuItem x:Name="mniEdit" Header="Edit" />
+			<MenuItem Header="Test">
+				<MenuItem x:Name="mniTestJavaGen" Header="Java generation test" Click="mniTestJavaGen_Click" />
+			</MenuItem>
 		</Menu>
 
 		<StackPanel x:Name="spnSideMenu" Grid.Row="1" Orientation="Horizontal">

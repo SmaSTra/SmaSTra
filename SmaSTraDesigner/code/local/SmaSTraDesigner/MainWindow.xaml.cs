@@ -45,5 +45,10 @@ namespace SmaSTraDesigner
 				}
 			}
 		}
+
+		private void mniTestJavaGen_Click(object sender, RoutedEventArgs e)
+		{
+			new TransformationTree().test();
+		}
 	}
 }
