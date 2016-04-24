@@ -4,8 +4,18 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:SmaSTraDesigner"
 	xmlns:wpfConverters="clr-namespace:Common.Resources.Converters;assembly=WpfCommonLib"
-	StartupUri="MainWindow.xaml">
+	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
+	StartupUri="MainWindow.xaml" Startup="Application_Startup">
 	<Application.Resources>
 		<wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
+		<DataTemplate x:Key="TransformationNodeTemplate">
+			<ctrl:UcTransformationViewer />
+		</DataTemplate>
+		<DataTemplate x:Key="OutputNodeTemplate">
+			<ctrl:UcOutputViewer />
+		</DataTemplate>
+		<DataTemplate x:Key="DataSourceNodeTemplate">
+			<ctrl:UcDataSourceViewer />
+		</DataTemplate>
 	</Application.Resources>
 </Application>

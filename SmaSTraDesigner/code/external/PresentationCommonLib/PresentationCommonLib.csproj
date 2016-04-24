@@ -85,8 +85,8 @@
     <None Include="Key.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\external\CommonLib\CommonLib.csproj">
-      <Project>{882729C9-C88B-48CC-878F-38B057BCE631}</Project>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{882729c9-c88b-48cc-878f-38b057bce631}</Project>
       <Name>CommonLib</Name>
     </ProjectReference>
   </ItemGroup>

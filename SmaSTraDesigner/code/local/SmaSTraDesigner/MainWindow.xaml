@@ -7,9 +7,11 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d"
-	Title="MainWindow" d:DesignHeight="300" d:DesignWidth="300">
+	Title="MainWindow" d:DesignWidth="800" d:DesignHeight="450">
 	<Grid>
 		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="Auto" />
@@ -18,29 +20,29 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
+		
 		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
-			<Menu.Items>
-				<MenuItem x:Name="mniFile" Header="File">
-					<MenuItem.Items>
-						<MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
-					</MenuItem.Items>
-				</MenuItem>
-			</Menu.Items>
+			<MenuItem x:Name="mniFile" Header="File">
+				<MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
+			</MenuItem>
+			<MenuItem x:Name="mniEdit" Header="Edit" />
 		</Menu>
 
-		<StackPanel Orientation="Horizontal">
-			<StackPanel Orientation="Horizontal">
-				<StackPanel.LayoutTransform>
-					<RotateTransform Angle="90" />
-				</StackPanel.LayoutTransform>
-				<ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" />
-				<ToggleButton x:Name="tglOwnTF" Content="My Transformations" IsEnabled="False" />
-				<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" />
-			</StackPanel>
-			<Grid>
-				<ListBox x:Name=""
-			</Grid>
+		<StackPanel x:Name="spnSideMenu" Grid.Row="1" Orientation="Horizontal">
+			<StackPanel.LayoutTransform>
+				<RotateTransform Angle="90" />
+			</StackPanel.LayoutTransform>
+			<ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
+			<ToggleButton x:Name="tglOwnTF" Content="My Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
+			<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 		</StackPanel>
-		<ctrl:UcTreeDesigner Grid.Row="1" />
+		
+		<Grid Grid.Column="1" Grid.Row="1">
+			<ListBox x:Name="lstDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" />
+		</Grid>
+
+		<!--<GridSplitter x:Name="gspMain" Grid.Column="2" Grid.Row="1" ResizeBehavior="PreviousAndNext" Width="10" />-->
+
+		<ctrl:UcTreeDesigner Grid.Column="3" Grid.Row="1" />
 	</Grid>
 </Window>

@@ -94,6 +94,7 @@
     <Compile Include="BusinessLogic\TransformationClass.cs" />
     <Compile Include="BusinessLogic\TransformationTree.cs" />
     <Compile Include="Controls\Support\IOHandleTemplateSelector.cs" />
+    <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">
       <DependentUpon>UcDataSourceViewer.xaml</DependentUpon>
     </Compile>

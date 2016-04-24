@@ -8,9 +8,9 @@
 	mc:Ignorable="d" 
 	d:DesignHeight="300" d:DesignWidth="300">
 	<Grid>
-        <StackPanel x:Name="spnMain" Orientation="Vertical">
-            
-        </StackPanel>
+		<StackPanel x:Name="spnMain" Orientation="Vertical">
+			
+		</StackPanel>
 		<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige" />
 	</Grid>
 </UserControl>

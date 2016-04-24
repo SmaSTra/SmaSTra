@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmaSTraDesigner", "local\SmaSTraDesigner\SmaSTraDesigner.csproj", "{2F477278-9C5D-4086-9977-28763B011414}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external", "external", "{9AE516E7-B8B2-4326-AD4D-FA6B78C16FE7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "external\CommonLib\CommonLib.csproj", "{882729C9-C88B-48CC-878F-38B057BCE631}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationCommonLib", "external\PresentationCommonLib\PresentationCommonLib.csproj", "{67FDEAA2-B1B3-4A06-AB81-F979C302A43A}"
@@ -36,5 +38,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{882729C9-C88B-48CC-878F-38B057BCE631} = {9AE516E7-B8B2-4326-AD4D-FA6B78C16FE7}
+		{67FDEAA2-B1B3-4A06-AB81-F979C302A43A} = {9AE516E7-B8B2-4326-AD4D-FA6B78C16FE7}
+		{CB73E756-2D21-49C8-B2C2-EB015DA5DAB0} = {9AE516E7-B8B2-4326-AD4D-FA6B78C16FE7}
 	EndGlobalSection
 EndGlobal
