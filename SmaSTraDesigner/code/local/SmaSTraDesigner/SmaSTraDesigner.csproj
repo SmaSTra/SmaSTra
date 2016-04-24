@@ -96,6 +96,7 @@
     <Compile Include="BusinessLogic\ClassManager.cs" />
     <Compile Include="BusinessLogic\NodeClassCategory.cs" />
     <Compile Include="BusinessLogic\NodeClassCollection.cs" />
+    <Compile Include="BusinessLogic\NodeId.cs" />
     <Compile Include="BusinessLogic\OutputNode.cs" />
     <Compile Include="BusinessLogic\Transformation.cs" />
     <Compile Include="BusinessLogic\TransformationTree.cs" />
