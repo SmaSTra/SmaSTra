@@ -11,6 +11,9 @@
 		<StackPanel x:Name="spnMain" Orientation="Vertical">
 			
 		</StackPanel>
-		<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige" />
+		
+		<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige">
+			<local:UcOutputViewer x:Name="outOutputViewer" />
+		</Canvas>
 	</Grid>
 </UserControl>
