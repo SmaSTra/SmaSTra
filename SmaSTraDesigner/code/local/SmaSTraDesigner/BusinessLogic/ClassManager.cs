@@ -147,11 +147,21 @@ namespace SmaSTraDesigner.BusinessLogic
 			switch (nodeType)
 			{
 				case NodeType.Transformation:
-					this.OnPropertyChanged("TransformationClasses");
+					if (result.InputTypes.Length == 1)
+					{
+						this.baseConversions = null;
+						this.OnPropertyChanged("BaseConversions");
+					}
+					else
+					{
+						this.baseTransformations = null;
+						this.OnPropertyChanged("TransformationClasses");
+					}
 					break;
 
 				case NodeType.Sensor:
-					this.OnPropertyChanged("DataSourceClasses");
+					this.baseDataSources = null;
+					this.OnPropertyChanged("BaseDataSources");
 					break;
 			}
 
@@ -161,66 +171,69 @@ namespace SmaSTraDesigner.BusinessLogic
 		/// <summary>
 		/// TODO: (PS) Comment this.
 		/// </summary>
-		private NodeClass[] dataSourceClasses = null;
+		private DataSource[] baseDataSources = null;
 
 		/// <summary>
-		/// Gets the DataSourceClasses instance (creates one if none exists).
+		/// Gets the BaseDataSources instance (creates one if none exists).
 		/// TODO: (PS) Comment this.
 		/// </summary>
-		public NodeClass[] DataSourceClasses
+		public DataSource[] BaseDataSources
 		{
 			get
 			{
-				if (this.dataSourceClasses == null)
+				if (this.baseDataSources == null)
 				{
-					this.dataSourceClasses = this.classes.Values.Where(cls => cls.BaseNode is DataSource).ToArray();
+					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource)
+						.Select(cls => (DataSource)cls.BaseNode).ToArray();
 				}
 
-				return this.dataSourceClasses;
+				return this.baseDataSources;
 			}
 		}
 
 		/// <summary>
 		/// TODO: (PS) Comment this.
 		/// </summary>
-		private NodeClass[] transformationNodeClasses = null;
+		private Transformation[] baseTransformations = null;
 
 		/// <summary>
-		/// Gets the TransformationClasses instance (creates one if none exists).
+		/// Gets the BaseTransformations instance (creates one if none exists).
 		/// TODO: (PS) Comment this.
 		/// </summary>
-		public NodeClass[] TransformationClasses
+		public Transformation[] BaseTransformations
 		{
 			get
 			{
-				if (this.transformationNodeClasses == null)
+				if (this.baseTransformations == null)
 				{
-					this.transformationNodeClasses = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1).ToArray();
+					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1)
+						.Select(cls => (Transformation)cls.BaseNode).ToArray();
 				}
 
-				return this.transformationNodeClasses;
+				return this.baseTransformations;
 			}
 		}
 
 		/// <summary>
 		/// TODO: (PS) Comment this.
 		/// </summary>
-		private NodeClass[] conversionClasses = null;
+		private Transformation[] baseConversions = null;
 
 		/// <summary>
-		/// Gets the ConversionClasses instance (creates one if none exists).
+		/// Gets the BaseConversions instance (creates one if none exists).
 		/// TODO: (PS) Comment this.
 		/// </summary>
-		public NodeClass[] ConversionClasses
+		public Transformation[] BaseConversions
 		{
 			get
 			{
-				if (this.conversionClasses == null)
+				if (this.baseConversions == null)
 				{
-					this.conversionClasses = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1).ToArray();
+					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1)
+						.Select(cls => (Transformation)cls.BaseNode).ToArray();
 				}
 
-				return this.conversionClasses;
+				return this.baseConversions;
 			}
 		}
 

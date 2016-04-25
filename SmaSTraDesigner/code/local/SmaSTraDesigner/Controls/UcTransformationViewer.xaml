@@ -12,22 +12,22 @@
 				<Style TargetType="{x:Type Border}">
 					<Setter Property="Background" Value="LightBlue" />
 					<Style.Triggers>
-						<DataTrigger Binding="{Binding Path=InputTypes.Length}" Value="1">
+						<DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
 							<Setter Property="Background" Value="LightGray" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
 			</Border.Style>
 		</Border>
-		<TextBlock Text="{Binding Path=DisplayName}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
+		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
 		
-		<ItemsControl ItemsSource="{Binding Path=InputTypes}" VerticalAlignment="Top">
+		<ItemsControl ItemsSource="{Binding Path=Class.InputTypes}" VerticalAlignment="Top">
 			<ItemsControl.Style>
 				<Style TargetType="{x:Type ItemsControl}">
 					<Setter Property="HorizontalAlignment" Value="Left" />
 					<Setter Property="Margin" Value="5,-5,0,0" />
 					<Style.Triggers>
-						<DataTrigger Binding="{Binding Path=InputTypes.Length}" Value="1">
+						<DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
 							<Setter Property="HorizontalAlignment" Value="Center" />
 							<Setter Property="Margin" Value="0,-5,0,0" />
 						</DataTrigger>

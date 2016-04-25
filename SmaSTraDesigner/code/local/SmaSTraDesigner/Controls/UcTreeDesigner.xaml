@@ -6,7 +6,8 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d" 
-	d:DesignHeight="300" d:DesignWidth="300">
+	d:DesignHeight="300" d:DesignWidth="300"
+	x:Name="This" Loaded="This_Loaded">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
@@ -19,12 +20,15 @@
 		<StackPanel x:Name="spnMain" Orientation="Vertical">
 			
 		</StackPanel>
-		
-		<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige">
-			<local:UcOutputViewer x:Name="outOutputViewer" />
-		</Canvas>
 
-		<ScrollBar x:Name="scrHorizontal" Grid.Row="1" Orientation="Horizontal" />
-		<ScrollBar x:Name="scrVertical" Grid.Column="1" Orientation="Vertical" />
+		<Border x:Name="bdrViewPort" />
+		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+			<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige">
+				<local:UcOutputViewer x:Name="outOutputViewer" />
+			</Canvas>
+		</ScrollViewer>
+
+		<!--<ScrollBar x:Name="scrHorizontal" Grid.Row="1" Orientation="Horizontal" />
+		<ScrollBar x:Name="scrVertical" Grid.Column="1" Orientation="Vertical" />-->
 	</Grid>
 </UserControl>

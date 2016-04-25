@@ -14,21 +14,17 @@ namespace SmaSTraDesigner.Controls.Support
 		public override DataTemplate SelectTemplate(object item, DependencyObject container)
 		{
 			FrameworkElement element = (FrameworkElement)container;
-			NodeClass nodeClass = item as NodeClass;
-			if (nodeClass != null)
+			if (item is Transformation)
 			{
-				if (nodeClass.BaseNode is Transformation)
-				{
-					return element.FindResource("TransformationNodeTemplate") as DataTemplate;
-				}
-				else if (nodeClass.BaseNode is OutputNode)
-				{
-					return element.FindResource("OutputNodeTemplate") as DataTemplate;
-				}
-				else if (nodeClass.BaseNode is DataSource)
-				{
-					return element.FindResource("DataSourceNodeTemplate") as DataTemplate;
-				}
+				return element.FindResource("TransformationNodeTemplate") as DataTemplate;
+			}
+			else if (item is OutputNode)
+			{
+				return element.FindResource("OutputNodeTemplate") as DataTemplate;
+			}
+			else if (item is DataSource)
+			{
+				return element.FindResource("DataSourceNodeTemplate") as DataTemplate;
 			}
 
 			return base.SelectTemplate(item, container);

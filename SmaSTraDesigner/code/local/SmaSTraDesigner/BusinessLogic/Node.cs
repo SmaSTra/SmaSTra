@@ -60,5 +60,57 @@ namespace SmaSTraDesigner.BusinessLogic
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+
+		/// <summary>
+			/// TODO: (PS) Comment this.
+			/// </summary>
+		private double posX = 0;
+
+		/// <summary>
+		/// Gets or sets the PosX property value.
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		public double PosX
+		{
+			get
+			{
+				return this.posX;
+			}
+			set
+			{
+				if (value != this.posX)
+				{
+					double oldValue = this.posX;
+					this.posX = value;
+					this.OnPropertyChanged("PosX");
+				}
+			}
+		}
+
+		/// <summary>
+			/// TODO: (PS) Comment this.
+			/// </summary>
+		private double posY = 0;
+
+		/// <summary>
+		/// Gets or sets the PosY property value.
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		public double PosY
+		{
+			get
+			{
+				return this.posY;
+			}
+			set
+			{
+				if (value != this.posY)
+				{
+					double oldValue = this.posY;
+					this.posY = value;
+					this.OnPropertyChanged("PosY");
+				}
+			}
+		}
 	}
 }

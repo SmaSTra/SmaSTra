@@ -44,19 +44,19 @@
 			<StackPanel x:Name="spnNodeClasses">
 				<Expander x:Name="expSensors" Header="Data Sources" IsExpanded="True">
 					<Grid>
-						<ItemsControl x:Name="icDefaultDS" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=DataSourceClasses}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<ItemsControl x:Name="icDefaultDS" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
 						<!-- TODO: (PS) Add ItemControls here for custom and online Sensors -->
 					</Grid>
 				</Expander>
 				<Expander x:Name="expConversions" Header="Conversions">
 					<Grid>
-						<ItemsControl x:Name="icDefaultCV" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=ConversionClasses}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<ItemsControl x:Name="icDefaultCV" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
 						<!-- TODO: (PS) Add ItemControls here for custom and online Conversions -->
 					</Grid>
 				</Expander>
 				<Expander x:Name="expTansformations" Header="Transformations">
 					<Grid>
-						<ItemsControl x:Name="icDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=TransformationClasses}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<ItemsControl x:Name="icDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
 						<!-- TODO: (PS) Add ItemControls here for custom and online Transformations -->
 					</Grid>
 				</Expander>
