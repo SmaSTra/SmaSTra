@@ -18,7 +18,7 @@ namespace SmaSTraDesigner.Controls
 	/// <summary>
 	/// Interaction logic for UcTransformationViewer.xaml
 	/// </summary>
-	public partial class UcTransformationViewer : UserControl
+	public partial class UcTransformationViewer : UcNodeViewer
 	{
 		public UcTransformationViewer()
 		{

@@ -1,19 +1,24 @@
-﻿<UserControl
+﻿<local:UcNodeViewer
 	x:Class="SmaSTraDesigner.Controls.UcTransformationViewer"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
-	mc:Ignorable="d">
+	mc:Ignorable="d"
+	x:Name="This">
 	<Grid Margin="0,5,0,5">
-		<Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		<Border BorderThickness="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 			<Border.Style>
 				<Style TargetType="{x:Type Border}">
+					<Setter Property="BorderBrush" Value="Black" />
 					<Setter Property="Background" Value="LightBlue" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
 							<Setter Property="Background" Value="LightGray" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+							<Setter Property="BorderBrush" Value="Blue" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
@@ -48,4 +53,4 @@
 
 		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
 	</Grid>
-</UserControl>
+</local:UcNodeViewer>

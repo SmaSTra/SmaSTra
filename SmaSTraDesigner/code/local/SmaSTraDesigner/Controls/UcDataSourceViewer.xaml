@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<local:UcNodeViewer
 	x:Class="SmaSTraDesigner.Controls.UcDataSourceViewer"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,11 +6,22 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d"
-	x:Name="This">
+	x:Name="This" MouseMove="This_MouseMove">
 	<Grid Margin="0,0,0,5">
-		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />
+		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" StrokeThickness="2" Fill="LightGreen" Stretch="Fill">
+			<Polygon.Style>
+				<Style TargetType="Polygon">
+					<Setter Property="Stroke" Value="Black" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+							<Setter Property="Stroke" Value="Blue" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Polygon.Style>
+		</Polygon>
 		<!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
 		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
 		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
 	</Grid>
-</UserControl>
+</local:UcNodeViewer>

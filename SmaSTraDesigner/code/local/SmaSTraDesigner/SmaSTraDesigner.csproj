@@ -116,6 +116,7 @@
     <Compile Include="Controls\UcIOHandle.xaml.cs">
       <DependentUpon>UcIOHandle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UcNodeViewer.cs" />
     <Compile Include="Controls\UcOutputViewer.xaml.cs">
       <DependentUpon>UcOutputViewer.xaml</DependentUpon>
     </Compile>

@@ -11,13 +11,13 @@
 		<wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
 		<ctrlSupport:NodeListTemplateSelector x:Key="NodeListTemplateSelector" />
 		<DataTemplate x:Key="TransformationNodeTemplate">
-			<ctrl:UcTransformationViewer Margin="5,5" />
+			<ctrl:UcTransformationViewer Margin="5,5" IsPreview="True" />
 		</DataTemplate>
 		<DataTemplate x:Key="OutputNodeTemplate">
-			<ctrl:UcOutputViewer Margin="5,5" />
+			<ctrl:UcOutputViewer Margin="5,5" IsPreview="True" />
 		</DataTemplate>
 		<DataTemplate x:Key="DataSourceNodeTemplate">
-			<ctrl:UcDataSourceViewer Margin="5,5" />
+			<ctrl:UcDataSourceViewer Margin="5,5" IsPreview="True" />
 		</DataTemplate>
 	</Application.Resources>
 </Application>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmaSTraDesigner.BusinessLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -19,7 +20,7 @@ namespace SmaSTraDesigner.Controls
 	/// <summary>
 	/// Interaction logic for UcDataSourceViewer.xaml
 	/// </summary>
-	public partial class UcDataSourceViewer : UserControl
+	public partial class UcDataSourceViewer : UcNodeViewer
 	{
 		public UcDataSourceViewer()
 		{

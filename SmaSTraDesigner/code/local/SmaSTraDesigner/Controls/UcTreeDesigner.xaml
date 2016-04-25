@@ -7,7 +7,7 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d" 
 	d:DesignHeight="300" d:DesignWidth="300"
-	x:Name="This" Loaded="This_Loaded">
+	x:Name="This" AllowDrop="True" Loaded="This_Loaded" DragOver="This_DragOver" Drop="This_Drop" MouseMove="This_MouseMove" PreviewMouseLeftButtonUp="This_PreviewMouseLeftButtonUp" MouseLeave="This_MouseLeave">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
@@ -23,7 +23,7 @@
 
 		<Border x:Name="bdrViewPort" />
 		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-			<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige">
+			<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown">
 				<local:UcOutputViewer x:Name="outOutputViewer" />
 			</Canvas>
 		</ScrollViewer>

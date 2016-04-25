@@ -5,8 +5,8 @@
 	using System.Collections.Specialized;
 	using System.Diagnostics;
 	using System.Text;
-
-	#if DEBUG
+	using System.Windows.Data;
+#if DEBUG
 
 	/// <summary>
 	/// Contains functions to help with the debugging process.
@@ -51,6 +51,21 @@
 			}
 
 			return PropertyChangedHandle.GetDistinctInstance(source, path, PropertyChangeCallback, keepAlive:true);
+		}
+
+		// TODO: (PS) Comment this.
+		public static PropertyChangedHandle MonitorProperty(Binding binding, bool announceMonitorBegin = true)
+		{
+			if (binding == null)
+			{
+				throw new ArgumentNullException("binding");
+			}
+			if (announceMonitorBegin)
+			{
+				Debug.WriteLine("Monitoring property path \"{0}\" of source \"{1}\".", binding.Path, binding.Source);
+			}
+
+			return PropertyChangedHandle.GetDistinctInstance(binding, PropertyChangeCallback, keepAlive: true);
 		}
 
 		/// <summary>

@@ -21,6 +21,7 @@
 			{
 				collection = Activator.CreateInstance<TCollection>();
 				collection.Add(value);
+				subject.Add(key, collection);
 			}
 			else if (!checkRedundancy || collection.Contains(value))
 			{

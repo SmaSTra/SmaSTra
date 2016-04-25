@@ -18,7 +18,7 @@ namespace SmaSTraDesigner.Controls
 	/// <summary>
 	/// Interaction logic for UcOutputViewer.xaml
 	/// </summary>
-	public partial class UcOutputViewer : UserControl
+	public partial class UcOutputViewer : UcNodeViewer
 	{
 		public UcOutputViewer()
 		{
