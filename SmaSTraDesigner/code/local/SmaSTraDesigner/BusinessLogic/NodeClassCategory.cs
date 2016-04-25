@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
 	public class NodeClassCategory
 	{
-		// TODO: (PS) Comment this.
-		public string Name
-		{
-			get;
-			private set;
-		}
+		#region constructors
 
 		public NodeClassCategory(string name)
 		{
@@ -24,6 +19,21 @@ namespace SmaSTraDesigner.BusinessLogic
 
 			this.Name = name;
 		}
+
+		#endregion constructors
+
+		#region properties
+
+		// TODO: (PS) Comment this.
+		public string Name
+		{
+			get;
+			private set;
+		}
+
+		#endregion properties
+
+		#region overrideable methods
 
 		public override bool Equals(object obj)
 		{
@@ -40,5 +50,7 @@ namespace SmaSTraDesigner.BusinessLogic
 		{
 			return this.Name.GetHashCode();
 		}
+
+		#endregion overrideable methods
 	}
 }

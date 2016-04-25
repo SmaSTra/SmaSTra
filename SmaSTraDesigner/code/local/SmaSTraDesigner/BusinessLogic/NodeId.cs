@@ -1,14 +1,27 @@
-﻿using Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
+	using Common;
+
 	public struct NodeId
 	{
+		#region constructors
+
+		public NodeId(string className, ulong instanceId)
+		{
+			this.ClassName = className;
+			this.InstanceId = instanceId;
+		}
+
+		#endregion constructors
+
+		#region properties
+
 		// TODO: (PS) Comment this.
 		public string ClassName
 		{
@@ -23,11 +36,9 @@ namespace SmaSTraDesigner.BusinessLogic
 			set;
 		}
 
-		public NodeId(string className, ulong instanceId)
-		{
-			this.ClassName = className;
-			this.InstanceId = instanceId;
-		}
+		#endregion properties
+
+		#region overrideable methods
 
 		public override bool Equals(object obj)
 		{
@@ -42,5 +53,7 @@ namespace SmaSTraDesigner.BusinessLogic
 		{
 			return HashCodeOperations.Combine(this.ClassName, this.InstanceId);
 		}
+
+		#endregion overrideable methods
 	}
 }

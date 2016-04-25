@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
 	public class DataType
 	{
+		#region static fields
+
 		public static DataType Number = new DataType("Number");
 		public static DataType Text = new DataType("Text");
 
-		// TODO: (PS) Comment this.
-		public string Name
-		{
-			get;
-			private set;
-		}
+		#endregion static fields
+
+		#region constructors
 
 		public DataType(string name)
 		{
@@ -28,6 +27,21 @@ namespace SmaSTraDesigner.BusinessLogic
 			this.Name = name;
 		}
 
+		#endregion constructors
+
+		#region properties
+
+		// TODO: (PS) Comment this.
+		public string Name
+		{
+			get;
+			private set;
+		}
+
+		#endregion properties
+
+		#region overrideable methods
+
 		public override bool Equals(object obj)
 		{
 			DataType other = obj as DataType;
@@ -35,7 +49,6 @@ namespace SmaSTraDesigner.BusinessLogic
 			{
 				return false;
 			}
-
 
 			return String.Equals(this.Name, other.Name, StringComparison.InvariantCultureIgnoreCase);
 		}
@@ -49,5 +62,7 @@ namespace SmaSTraDesigner.BusinessLogic
 		{
 			return String.Format("{{{0} {1}}}", this.GetType().Name, this.Name);
 		}
+
+		#endregion overrideable methods
 	}
 }

@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
 	public class NodeClass
 	{
+		#region constructors
+
 		public NodeClass(string name, Node baseNode, DataType outputType, DataType[] inputTypes = null)
 		{
 			if (String.IsNullOrWhiteSpace(name))
@@ -30,22 +32,26 @@ namespace SmaSTraDesigner.BusinessLogic
 			this.InputTypes = inputTypes;
 		}
 
+		#endregion constructors
+
+		#region properties
+
 		// TODO: (PS) Comment this.
-		public string Name
+		public Node BaseNode
 		{
 			get;
 			private set;
 		}
 
 		// TODO: (PS) Comment this.
-		public string DisplayName
+		public string Description
 		{
 			get;
 			set;
 		}
-		
+
 		// TODO: (PS) Comment this.
-		public string Description
+		public string DisplayName
 		{
 			get;
 			set;
@@ -59,22 +65,28 @@ namespace SmaSTraDesigner.BusinessLogic
 		}
 
 		// TODO: (PS) Comment this.
-		public DataType OutputType
+		public string Name
 		{
 			get;
 			private set;
 		}
 
 		// TODO: (PS) Comment this.
-		public Node BaseNode
+		public DataType OutputType
 		{
 			get;
 			private set;
 		}
 
+		#endregion properties
+
+		#region overrideable methods
+
 		public override string ToString()
 		{
 			return String.Format("{{{0} {1}}}", this.GetType().Name, this.Name);
 		}
+
+		#endregion overrideable methods
 	}
 }

@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
 	public class Transformation : Node
 	{
+		#region fields
+
 		/// <summary>
 		/// TODO: (PS) Comment this.
 		/// </summary>
 		private ObservableCollection<Node> inputNodes = null;
+
+		#endregion fields
+
+		#region properties
 
 		/// <summary>
 		/// Gets or sets the InputNodes property value.
@@ -36,6 +42,10 @@ namespace SmaSTraDesigner.BusinessLogic
 			}
 		}
 
+		#endregion properties
+
+		#region overrideable methods
+
 		/// <summary>
 		/// Called when the InputNodes property changed its value.
 		/// </summary>
@@ -44,5 +54,7 @@ namespace SmaSTraDesigner.BusinessLogic
 		protected virtual void OnInputNodesChanged(ObservableCollection<Node> oldValue, ObservableCollection<Node> newValue)
 		{
 		}
+
+		#endregion overrideable methods
 	}
 }

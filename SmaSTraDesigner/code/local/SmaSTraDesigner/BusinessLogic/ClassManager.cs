@@ -1,81 +1,33 @@
-﻿using Common.IO;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Json;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.IO;
+	using System.Json;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
+	using Common.IO;
+
 	// TODO: (PS) Comment this.
 	public class ClassManager : INotifyPropertyChanged
 	{
-		private const string METADATA_FILENAME = "metadata.json";
-		private const string NODE_TYPE_TRANSFORMATION = "transformation";
-		private const string NODE_TYPE_SENSOR = "sensor";
-		private const string JSON_PROP_TYPE = "type";
-		private const string JSON_PROP_DISPLAY = "display";
+		#region constants
+
 		private const string JSON_PROP_DESCRIPTION = "description";
-		private const string JSON_PROP_OUTPUT = "output";
+		private const string JSON_PROP_DISPLAY = "display";
 		private const string JSON_PROP_INPUT = "input";
+		private const string JSON_PROP_OUTPUT = "output";
+		private const string JSON_PROP_TYPE = "type";
+		private const string METADATA_FILENAME = "metadata.json";
+		private const string NODE_TYPE_SENSOR = "sensor";
+		private const string NODE_TYPE_TRANSFORMATION = "transformation";
 
-		private enum NodeType
-		{
-			Transformation,
-			Sensor
-		}
+		#endregion constants
 
-		private Dictionary<string, NodeClass> classes = new Dictionary<string, NodeClass>();
-		private Dictionary<string, DataType> dataTypes = new Dictionary<string, DataType>();
-
-		public void LoadClasses(string path)
-		{
-			if (!Directory.Exists(path))
-			{
-				throw new ArgumentException(String.Format("Directory \"{0}\" does not exist", path), "path");
-			}
-
-			string[] dirs = Directory.GetDirectories(path);
-			foreach (string dir in dirs)
-			{
-				string dirName = Path.GetFileName(dir);
-				try
-				{
-					JsonObject jso;
-					using (var stream = File.OpenRead(Path.Combine(dir, METADATA_FILENAME)))
-					{
-						jso = (JsonObject)JsonObject.Load(stream);
-					}
-
-					string type = jso[JSON_PROP_TYPE].ReadAs<string>();
-					string[] inputTypes = GetNodeType(type) == NodeType.Transformation ?
-						jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray() :
-						null;
-
-					JsonValue value;
-					string displayName = null;
-					if (jso.TryGetValue(JSON_PROP_DISPLAY, out value))
-					{
-						displayName = value.ReadAs<string>();
-					}
-
-					string description = null;
-					if (jso.TryGetValue(JSON_PROP_DESCRIPTION, out value))
-					{
-						description = value.ReadAs<string>();
-					}
-
-					this.AddClass(dirName, type, jso["output"].ReadAs<string>(), inputTypes, displayName, description);
-				}
-				catch (Exception ex)
-				{
-					throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
-				}
-			}
-		}
+		#region static methods
 
 		private static NodeType GetNodeType(string type)
 		{
@@ -92,20 +44,94 @@ namespace SmaSTraDesigner.BusinessLogic
 			}
 		}
 
-		public DataType AddDataType(string dataTypeName)
+		#endregion static methods
+
+		#region fields
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		private Transformation[] baseConversions = null;
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		private DataSource[] baseDataSources = null;
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		private Transformation[] baseTransformations = null;
+		private Dictionary<string, NodeClass> classes = new Dictionary<string, NodeClass>();
+		private Dictionary<string, DataType> dataTypes = new Dictionary<string, DataType>();
+
+		#endregion fields
+
+		#region events
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion events
+
+		#region properties
+
+		/// <summary>
+		/// Gets the BaseConversions instance (creates one if none exists).
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		public Transformation[] BaseConversions
 		{
-			if (String.IsNullOrWhiteSpace(dataTypeName))
+			get
 			{
-				throw new ArgumentException("String argument 'dataTypeName' must not be null or empty (incl. whitespace).", "dataTypeName");
-			}
+				if (this.baseConversions == null)
+				{
+					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1)
+						.Select(cls => (Transformation)cls.BaseNode).ToArray();
+				}
 
-			if (!this.dataTypes.ContainsKey(dataTypeName))
-			{
-				return this.dataTypes[dataTypeName] = new DataType(dataTypeName);
+				return this.baseConversions;
 			}
-
-			return this.dataTypes[dataTypeName];
 		}
+
+		/// <summary>
+		/// Gets the BaseDataSources instance (creates one if none exists).
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		public DataSource[] BaseDataSources
+		{
+			get
+			{
+				if (this.baseDataSources == null)
+				{
+					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource)
+						.Select(cls => (DataSource)cls.BaseNode).ToArray();
+				}
+
+				return this.baseDataSources;
+			}
+		}
+
+		/// <summary>
+		/// Gets the BaseTransformations instance (creates one if none exists).
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		public Transformation[] BaseTransformations
+		{
+			get
+			{
+				if (this.baseTransformations == null)
+				{
+					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1)
+						.Select(cls => (Transformation)cls.BaseNode).ToArray();
+				}
+
+				return this.baseTransformations;
+			}
+		}
+
+		#endregion properties
+
+		#region methods
 
 		public NodeClass AddClass(string name, string type, string outputType, string[] inputTypes, string displayName = null, string description = null)
 		{
@@ -168,76 +194,66 @@ namespace SmaSTraDesigner.BusinessLogic
 			return result;
 		}
 
-		/// <summary>
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		private DataSource[] baseDataSources = null;
-
-		/// <summary>
-		/// Gets the BaseDataSources instance (creates one if none exists).
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		public DataSource[] BaseDataSources
+		public DataType AddDataType(string dataTypeName)
 		{
-			get
+			if (String.IsNullOrWhiteSpace(dataTypeName))
 			{
-				if (this.baseDataSources == null)
-				{
-					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource)
-						.Select(cls => (DataSource)cls.BaseNode).ToArray();
-				}
-
-				return this.baseDataSources;
+				throw new ArgumentException("String argument 'dataTypeName' must not be null or empty (incl. whitespace).", "dataTypeName");
 			}
+
+			if (!this.dataTypes.ContainsKey(dataTypeName))
+			{
+				return this.dataTypes[dataTypeName] = new DataType(dataTypeName);
+			}
+
+			return this.dataTypes[dataTypeName];
 		}
 
-		/// <summary>
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		private Transformation[] baseTransformations = null;
-
-		/// <summary>
-		/// Gets the BaseTransformations instance (creates one if none exists).
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		public Transformation[] BaseTransformations
+		public void LoadClasses(string path)
 		{
-			get
+			if (!Directory.Exists(path))
 			{
-				if (this.baseTransformations == null)
-				{
-					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1)
-						.Select(cls => (Transformation)cls.BaseNode).ToArray();
-				}
+				throw new ArgumentException(String.Format("Directory \"{0}\" does not exist", path), "path");
+			}
 
-				return this.baseTransformations;
+			string[] dirs = Directory.GetDirectories(path);
+			foreach (string dir in dirs)
+			{
+				string dirName = Path.GetFileName(dir);
+				try
+				{
+					JsonObject jso;
+					using (var stream = File.OpenRead(Path.Combine(dir, METADATA_FILENAME)))
+					{
+						jso = (JsonObject)JsonObject.Load(stream);
+					}
+
+					string type = jso[JSON_PROP_TYPE].ReadAs<string>();
+					string[] inputTypes = GetNodeType(type) == NodeType.Transformation ?
+						jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray() :
+						null;
+
+					JsonValue value;
+					string displayName = null;
+					if (jso.TryGetValue(JSON_PROP_DISPLAY, out value))
+					{
+						displayName = value.ReadAs<string>();
+					}
+
+					string description = null;
+					if (jso.TryGetValue(JSON_PROP_DESCRIPTION, out value))
+					{
+						description = value.ReadAs<string>();
+					}
+
+					this.AddClass(dirName, type, jso["output"].ReadAs<string>(), inputTypes, displayName, description);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
+				}
 			}
 		}
-
-		/// <summary>
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		private Transformation[] baseConversions = null;
-
-		/// <summary>
-		/// Gets the BaseConversions instance (creates one if none exists).
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		public Transformation[] BaseConversions
-		{
-			get
-			{
-				if (this.baseConversions == null)
-				{
-					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1)
-						.Select(cls => (Transformation)cls.BaseNode).ToArray();
-				}
-
-				return this.baseConversions;
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void OnPropertyChanged(string propertyName)
 		{
@@ -246,5 +262,17 @@ namespace SmaSTraDesigner.BusinessLogic
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+
+		#endregion methods
+
+		#region enumerations
+
+		private enum NodeType
+		{
+			Transformation,
+			Sensor
+		}
+
+		#endregion enumerations
 	}
 }

@@ -1,74 +1,47 @@
-﻿using Common;
-using SmaSTraDesigner.BusinessLogic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-
-namespace SmaSTraDesigner.Controls
+﻿namespace SmaSTraDesigner.Controls
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Input;
+
+	using Common;
+
+	using SmaSTraDesigner.BusinessLogic;
+
 	public class UcNodeViewer : UserControl
 	{
-		private bool enteredWithButtonPressed = false;
-
-		/// <summary>
-		/// Gets or sets the value of the IsPreview property.
-		/// TODO: (PS) Comment this.
-		/// This is a Dependency Property.
-		/// </summary>
-		public bool IsPreview
-		{
-			get { return (bool)this.GetValue(IsPreviewProperty); }
-			set { this.SetValue(IsPreviewProperty, value); }
-		}
-
-		/// <summary>
-		/// Registration of IsPreview Dependency Property.
-		/// </summary>
-		public static readonly DependencyProperty IsPreviewProperty =
-			DependencyProperty.Register("IsPreview", typeof(bool), typeof(UcNodeViewer));
-
-		/// <summary>
-		/// Gets or sets the value of the IsMoving property.
-		/// TODO: (PS) Comment this.
-		/// This is a Dependency Property.
-		/// </summary>
-		public bool IsMoving
-		{
-			get { return (bool)this.GetValue(IsMovingProperty); }
-			set { this.SetValue(IsMovingProperty, value); }
-		}
+		#region dependency properties
 
 		/// <summary>
 		/// Registration of IsMoving Dependency Property.
 		/// </summary>
-		public static readonly DependencyProperty IsMovingProperty =
+		public static readonly DependencyProperty IsMovingProperty = 
 			DependencyProperty.Register("IsMoving", typeof(bool), typeof(UcNodeViewer));
 
 		/// <summary>
-		/// Gets or sets the value of the IsSelected property.
-		/// TODO: (PS) Comment this.
-		/// This is a Dependency Property.
+		/// Registration of IsPreview Dependency Property.
 		/// </summary>
-		public bool IsSelected
-		{
-			get { return (bool)this.GetValue(IsSelectedProperty); }
-			set { this.SetValue(IsSelectedProperty, value); }
-		}
+		public static readonly DependencyProperty IsPreviewProperty = 
+			DependencyProperty.Register("IsPreview", typeof(bool), typeof(UcNodeViewer));
 
 		/// <summary>
 		/// Registration of IsSelected Dependency Property.
 		/// </summary>
-		public static readonly DependencyProperty IsSelectedProperty =
+		public static readonly DependencyProperty IsSelectedProperty = 
 			DependencyProperty.Register(
 				"IsSelected", typeof(bool), typeof(UcNodeViewer),
 				new FrameworkPropertyMetadata(
 					false,
 					OnIsSelectedChanged));
+
+		#endregion dependency properties
+
+		#region dependency property callbacks
 
 		/// <summary>
 		/// Property Changed Callback method of the IsSelected Dependency Property.
@@ -91,6 +64,16 @@ namespace SmaSTraDesigner.Controls
 			}
 		}
 
+		#endregion dependency property callbacks
+
+		#region fields
+
+		private bool enteredWithButtonPressed = false;
+
+		#endregion fields
+
+		#region constructors
+
 		public UcNodeViewer()
 		{
 			this.MouseMove += this.This_MouseMove;
@@ -101,35 +84,46 @@ namespace SmaSTraDesigner.Controls
 			this.MouseRightButtonDown += UcNodeViewer_MouseRightButtonDown;
 		}
 
-		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		#endregion constructors
+
+		#region properties
+
+		/// <summary>
+		/// Gets or sets the value of the IsMoving property.
+		/// TODO: (PS) Comment this.
+		/// This is a Dependency Property.
+		/// </summary>
+		public bool IsMoving
 		{
-			this.IsSelected = true;
-			e.Handled = true;
+			get { return (bool)this.GetValue(IsMovingProperty); }
+			set { this.SetValue(IsMovingProperty, value); }
 		}
 
-		private void UcNodeViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		/// <summary>
+		/// Gets or sets the value of the IsPreview property.
+		/// TODO: (PS) Comment this.
+		/// This is a Dependency Property.
+		/// </summary>
+		public bool IsPreview
 		{
-			this.IsSelected = true;
-			e.Handled = true;
+			get { return (bool)this.GetValue(IsPreviewProperty); }
+			set { this.SetValue(IsPreviewProperty, value); }
 		}
 
-		private void UcNodeViewer_MouseLeave(object sender, MouseEventArgs e)
+		/// <summary>
+		/// Gets or sets the value of the IsSelected property.
+		/// TODO: (PS) Comment this.
+		/// This is a Dependency Property.
+		/// </summary>
+		public bool IsSelected
 		{
-			this.enteredWithButtonPressed = false;
+			get { return (bool)this.GetValue(IsSelectedProperty); }
+			set { this.SetValue(IsSelectedProperty, value); }
 		}
 
-		private void UcNodeViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-		{
-			this.enteredWithButtonPressed = false;
-		}
+		#endregion properties
 
-		private void UcNodeViewer_MouseEnter(object sender, MouseEventArgs e)
-		{
-			if (e.LeftButton == MouseButtonState.Pressed)
-			{
-				this.enteredWithButtonPressed = true;
-			}
-		}
+		#region event handlers
 
 		private void This_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -148,5 +142,37 @@ namespace SmaSTraDesigner.Controls
 				}
 			}
 		}
+
+		private void UcNodeViewer_MouseEnter(object sender, MouseEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				this.enteredWithButtonPressed = true;
+			}
+		}
+
+		private void UcNodeViewer_MouseLeave(object sender, MouseEventArgs e)
+		{
+			this.enteredWithButtonPressed = false;
+		}
+
+		private void UcNodeViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			this.IsSelected = true;
+			e.Handled = true;
+		}
+
+		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			this.IsSelected = true;
+			e.Handled = true;
+		}
+
+		private void UcNodeViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			this.enteredWithButtonPressed = false;
+		}
+
+		#endregion event handlers
 	}
 }

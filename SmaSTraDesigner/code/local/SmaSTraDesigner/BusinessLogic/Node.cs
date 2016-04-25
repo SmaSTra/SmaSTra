@@ -1,20 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+
 	public class Node : INotifyPropertyChanged, ICloneable
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
+		#region fields
 
 		/// <summary>
 		/// TODO: (PS) Comment this.
 		/// </summary>
 		private string name = null;
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		private double posX = 0;
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		private double posY = 0;
+
+		#endregion fields
+
+		#region constructors
+
+		public Node()
+		{
+		}
+
+		#endregion constructors
+
+		#region events
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion events
+
+		#region properties
+
+		// TODO: (PS) Comment this.
+		public NodeClass Class
+		{
+			get;
+			internal set;
+		}
 
 		/// <summary>
 		/// Gets or sets the Name property value.
@@ -36,35 +71,6 @@ namespace SmaSTraDesigner.BusinessLogic
 				}
 			}
 		}
-
-		public Node()
-		{
-		}
-
-		// TODO: (PS) Comment this.
-		public NodeClass Class
-		{
-			get;
-			internal set;
-		}
-
-		public virtual object Clone()
-		{
-			return this.MemberwiseClone();
-		}
-
-		protected void OnPropertyChanged(string propertyName)
-		{
-			if (this.PropertyChanged != null)
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-
-		/// <summary>
-			/// TODO: (PS) Comment this.
-			/// </summary>
-		private double posX = 0;
 
 		/// <summary>
 		/// Gets or sets the PosX property value.
@@ -88,11 +94,6 @@ namespace SmaSTraDesigner.BusinessLogic
 		}
 
 		/// <summary>
-			/// TODO: (PS) Comment this.
-			/// </summary>
-		private double posY = 0;
-
-		/// <summary>
 		/// Gets or sets the PosY property value.
 		/// TODO: (PS) Comment this.
 		/// </summary>
@@ -112,5 +113,28 @@ namespace SmaSTraDesigner.BusinessLogic
 				}
 			}
 		}
+
+		#endregion properties
+
+		#region overrideable methods
+
+		public virtual object Clone()
+		{
+			return this.MemberwiseClone();
+		}
+
+		#endregion overrideable methods
+
+		#region methods
+
+		protected void OnPropertyChanged(string propertyName)
+		{
+			if (this.PropertyChanged != null)
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+
+		#endregion methods
 	}
 }
