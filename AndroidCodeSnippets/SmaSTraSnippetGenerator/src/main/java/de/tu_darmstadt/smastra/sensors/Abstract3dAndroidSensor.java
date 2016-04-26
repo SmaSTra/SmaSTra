@@ -84,7 +84,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de
      * Gets the last Data received.
      * @return the last data.
      */
-    public Data3d getLastData() {
+    public Vector3d getLastData() {
         return lastData;
     }
 

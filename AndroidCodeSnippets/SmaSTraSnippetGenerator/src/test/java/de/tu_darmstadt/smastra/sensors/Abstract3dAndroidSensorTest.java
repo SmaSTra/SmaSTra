@@ -140,7 +140,7 @@ public abstract class Abstract3dAndroidSensorTest {
         Abstract3dAndroidSensor sut = generateSut();
         sut.onSensorChanged(sensorEvent);
 
-        Data3d data3d = sut.getLastData();
+        Data3d data3d = (Data3d) sut.getLastData();
         assertEquals(time, data3d.getTime());
         assertEquals(accuracy, data3d.getAccuracy(), 0.01);
         assertEquals(data[0], data3d.getX(), 0.01);

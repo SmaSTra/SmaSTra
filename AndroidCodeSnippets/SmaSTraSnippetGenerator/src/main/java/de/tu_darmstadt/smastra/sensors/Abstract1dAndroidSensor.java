@@ -35,7 +35,7 @@ public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de
     /**
      * A cache of the last data.
      */
-    protected float lastData = 0;
+    protected double lastData = 0;
 
 
     /**
@@ -85,7 +85,7 @@ public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de
      * Gets the last Data received.
      * @return the last data.
      */
-    public float getLastData() {
+    public double getLastData() {
         return lastData;
     }
 

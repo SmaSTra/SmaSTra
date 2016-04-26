@@ -140,7 +140,7 @@ public abstract class Abstract1dAndroidSensorTest {
         Abstract1dAndroidSensor sut = generateSut();
         sut.onSensorChanged(sensorEvent);
 
-        float value = sut.getLastData();
+        double value = sut.getLastData();
         assertEquals(data, value, 0.01);
     }
 

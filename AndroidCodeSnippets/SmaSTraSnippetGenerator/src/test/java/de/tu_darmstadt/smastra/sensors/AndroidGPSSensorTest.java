@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * A Test for Abstract
  */
+@SuppressWarnings("MissingPermission")
 public class AndroidGPSSensorTest {
 
 
@@ -114,7 +115,7 @@ public class AndroidGPSSensorTest {
         AndroidGPSSensor sut = new AndroidGPSSensor(context);
         sut.onLocationChanged(location);
 
-        Data3d data3d = sut.getLastData();
+        Data3d data3d = (Data3d) sut.getLastData();
         assertEquals(time, data3d.getTime());
         assertEquals(accuracy, data3d.getAccuracy(), 0.01);
         assertEquals(latitude, data3d.getX(), 0.01);
