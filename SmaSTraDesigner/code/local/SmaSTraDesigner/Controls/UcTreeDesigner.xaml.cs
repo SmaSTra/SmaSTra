@@ -140,6 +140,7 @@
 			this.InitializeComponent();
 
 			Canvas.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
+			Canvas.SetZIndex(this.linPreviewConnection, Int32.MaxValue);
 
 			this.cnvBackground.Width = 10000;
 			this.cnvBackground.Height = 10000;
@@ -238,6 +239,11 @@
 		{
 		}
 
+		internal void RegisterIOHandle(UcIOHandle ioHandle)
+		{
+			ioHandle.CustomDrag += IoHandle_CustomDrag;
+		}
+
 		private void AdjustZIndex()
 		{
 			int i = 0;
@@ -294,35 +300,6 @@
 			BindingOperations.SetBinding(nodeViewer, property, binding);
 		}
 
-		private void ShowTree(TransformationTree tree)
-		{
-			this.cnvBackground.Children.Clear();
-			this.cnvBackground.Children.Add(this.bdrSelectionBorder);
-			this.nodes.Clear();
-			if (tree != null)
-			{
-				this.cnvBackground.Children.Add(this.outOutputViewer);
-				this.outOutputViewer.DataContext = tree.OutputNode;
-			}
-		}
-
-		private void StopDragging()
-		{
-			if (this.movingNodeViewer != null)
-			{
-				this.movingNodeViewer = null;
-			}
-
-			this.mousePosOnViewer = null;
-			this.dragStart = null;
-			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
-			{
-				this.MarkNodesInSelectionArea(true);
-
-				this.bdrSelectionBorder.Visibility = Visibility.Collapsed;
-			}
-		}
-
 		private void MarkNodesInSelectionArea(bool select)
 		{
 			IEnumerable<UcNodeViewer> nodeViewers = this.cnvBackground.Children.OfType<UcNodeViewer>();
@@ -345,6 +322,38 @@
 			}
 		}
 
+		private void ShowTree(TransformationTree tree)
+		{
+			this.cnvBackground.Children.Clear();
+			this.cnvBackground.Children.Add(this.bdrSelectionBorder);
+			this.nodes.Clear();
+			if (tree != null)
+			{
+				this.cnvBackground.Children.Add(this.outOutputViewer);
+				this.outOutputViewer.DataContext = tree.OutputNode;
+			}
+		}
+
+		private void StopDragging()
+		{
+			this.movingNodeViewer = null;
+			this.ConnectingIOHandle = null;
+
+			this.mousePosOnViewer = null;
+			this.dragStart = null;
+			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
+			{
+				this.MarkNodesInSelectionArea(true);
+
+				this.bdrSelectionBorder.Visibility = Visibility.Collapsed;
+			}
+			if (this.linPreviewConnection.Visibility == Visibility.Visible)
+			{
+
+				this.linPreviewConnection.Visibility = Visibility.Collapsed;
+			}
+		}
+
 		#endregion methods
 
 		#region event handlers
@@ -357,6 +366,11 @@
 		private void cnvBackground_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.SelectedNodeViewers.Clear();
+		}
+
+		private void IoHandle_CustomDrag(object sender, EventArgs e)
+		{
+			this.ConnectingIOHandle = (UcIOHandle)sender;
 		}
 
 		private void SelectedNodeViewers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -425,6 +439,32 @@
 			this.StopDragging();
 		}
 
+		/// <summary>
+		/// Gets the value of the ConnectingIOHandle property.
+		/// This is a Dependency Property.
+		/// </summary>
+		public UcIOHandle ConnectingIOHandle
+		{
+			get { return (UcIOHandle)this.GetValue(ConnectingIOHandleProperty); }
+			private set { this.SetValue(ConnectingIOHandlePropertyKey, value); }
+		}
+
+		/// <summary>
+		/// Registration of ConnectingIOHandle Dependency Property Key.
+		/// </summary>
+		private static readonly DependencyPropertyKey ConnectingIOHandlePropertyKey =
+			DependencyProperty.RegisterReadOnly("ConnectingIOHandle", typeof(UcIOHandle), typeof(UcTreeDesigner), new FrameworkPropertyMetadata(null));
+
+		/// <summary>
+		/// Registration of ConnectingIOHandle Dependency Property.
+		/// </summary>
+		public static readonly DependencyProperty ConnectingIOHandleProperty;
+
+		static UcTreeDesigner()
+		{
+			ConnectingIOHandleProperty = ConnectingIOHandlePropertyKey.DependencyProperty;
+		}
+
 		private void This_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (e.LeftButton == MouseButtonState.Pressed)
@@ -451,6 +491,17 @@
 						node.PosX += dx;
 						node.PosY += dy;
 					}
+				}
+				else if (this.ConnectingIOHandle != null)
+				{
+					this.linPreviewConnection.Visibility = Visibility.Visible;
+
+					Point pos = this.ConnectingIOHandle.TransformToAncestor(this.cnvBackground)
+						.Transform(new Point(this.ConnectingIOHandle.ActualWidth / 2, this.ConnectingIOHandle.ActualHeight / 2));
+					this.linPreviewConnection.X1 = pos.X;
+					this.linPreviewConnection.Y1 = pos.Y;
+					this.linPreviewConnection.X2 = mousePos.X;
+					this.linPreviewConnection.Y2 = mousePos.Y;
 				}
 				else
 				{

@@ -123,6 +123,11 @@
 			return this.MemberwiseClone();
 		}
 
+		public override string ToString()
+		{
+			return String.Format("{0} {1}", this.GetType().Name, this.Name);
+		}
+
 		#endregion overrideable methods
 
 		#region methods

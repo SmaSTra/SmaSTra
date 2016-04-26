@@ -108,6 +108,7 @@
     <Compile Include="BusinessLogic\OutputNode.cs" />
     <Compile Include="BusinessLogic\Transformation.cs" />
     <Compile Include="BusinessLogic\TransformationTree.cs" />
+    <Compile Include="Controls\Support\CustomDragDropHelper.cs" />
     <Compile Include="Controls\Support\IOHandleTemplateSelector.cs" />
     <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">

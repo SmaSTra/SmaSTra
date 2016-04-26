@@ -36,6 +36,7 @@
 							</Border>
 						</Grid>
 					</Border>
+					<Line x:Name="linPreviewConnection" Stroke="DarkBlue" StrokeThickness="4" Opacity="0.5" Visibility="Collapsed" />
 				</Canvas>
 			</Viewbox>
 		</ScrollViewer>

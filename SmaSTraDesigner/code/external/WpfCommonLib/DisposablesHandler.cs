@@ -128,7 +128,11 @@
 				bool result = this.AddEventHandler(wrap);
 				if (result)
 				{
-					this.wrapDictionary.Add(wrap.Subject, wrap);
+					if (!this.wrapDictionary.ContainsKey(wrap.Subject))
+					{
+						this.wrapDictionary.Add(wrap.Subject, wrap);
+					}
+
 					this.disposeConnections.AddForwardAndReverse(wrap, disposable, this.reverseDisposeConnections);
 				}
 
@@ -466,6 +470,23 @@
 			public abstract bool AddEventHandler();
 
 			public abstract void RemoveEventHandler();
+
+			public override bool Equals(object obj)
+			{
+				if (object.ReferenceEquals(this, obj))
+				{
+					return true;
+				}
+
+				ControllingObjectWrap other = obj as ControllingObjectWrap;
+
+				return other != null && object.Equals(this.Subject, other.Subject);
+			}
+
+			public override int GetHashCode()
+			{
+				return this.Subject.GetHashCode();
+			}
 
 			#endregion overrideable methods
 
