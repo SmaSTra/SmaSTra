@@ -191,7 +191,7 @@
             string prep = "\tprivate " + json.mainClass + " sensor" + number + ";\n";
 
             //initiating sensor
-            string init = "\t\t" + " sensor" + number + " = new " + json.mainClass + "(Context context);\n";
+            string init = "\t\t" + "sensor" + number + " = new " + json.mainClass + "(Context context);\n";
 			init = init + "\t\tsensor" + number + ".startListening();\n";
 
             inits.Add(prep);
@@ -280,7 +280,7 @@
 				counter++;
 			}
 			methodCall = methodCall.Remove(methodCall.Length - 2);
-			methodCall = methodCall + ")\n";
+			methodCall = methodCall + ");\n";
 			transform = prep + "\n" + transform + methodCall + "\t}\n";
 
 			transforms.Add(transform);
@@ -358,7 +358,13 @@
 				code[3] = sensorData[3];
 				code[4] = sensorData[4];
 
-				return code;
+                List<string>[] dictionaryValues = new List<string>[2];
+                dictionaryValues[0] = sensorData[3];
+                dictionaryValues[1] = sensorData[4];
+
+                visited.Add(currentNode, dictionaryValues);
+
+                return code;
 			}
 
 			//else: process child nodes, then process this one

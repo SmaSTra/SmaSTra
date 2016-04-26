@@ -97,13 +97,60 @@
 			Console.WriteLine("initialized all the things!");
 		}
 
-		public void test()
+        public void HardcodingForTestingII()
+        {
+            /*                                      Length
+                                                    Subtract
+                                          Multiply         Sensor:Gyro
+                                     Add            GPS   
+                            Sensor:Acc Senso:Gyro
+                            Both Gyros should be from the same source, so this one is interconnected!
+            */
+            OutputNode = new OutputNode();
+            Transformation Multiply = new Transformation();
+            Transformation first = new Transformation();
+            first.Name = "Vector_Length";
+            first.InputNodes = new ObservableCollection<Node>();
+            Transformation Subtract = new Transformation();
+            Subtract.Name = "Subtract_Vectors";
+            Subtract.InputNodes = new ObservableCollection<Node>();
+            Multiply.Name = "Multiply_Vectors";
+            Multiply.InputNodes = new ObservableCollection<Node>();
+            Transformation Add = new Transformation();
+            Add.Name = "Add_Vectors";
+            Add.InputNodes = new ObservableCollection<Node>();
+            DataSource data1 = new DataSource();
+            data1.Name = "Accelerometer_Sensor";
+            DataSource data2 = new DataSource();
+            data2.Name = "Gyroscope_Sensor";
+            Add.InputNodes.Add(data1);
+            Add.InputNodes.Add(data2);
+            Multiply.InputNodes.Add(Add);
+            DataSource data3 = new DataSource();
+            data3.Name = "Gps_Sensor";
+            Multiply.InputNodes.Add(data3);
+            Subtract.InputNodes.Add(Multiply);
+            Subtract.InputNodes.Add(data2);
+            first.InputNodes.Add(Subtract);
+            OutputNode.InputNode = first;
+            OutputNode.Name = "Output Node";
+            Console.WriteLine("initialized all the things!");
+        }
+
+        public void test()
 		{
 			HardcodingForTesting();
 
 			createJava();
 		}
 
-		#endregion methods
-	}
+        public void secondTest()
+        {
+            HardcodingForTestingII();
+
+            createJava();
+        }
+
+        #endregion methods
+    }
 }
