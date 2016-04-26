@@ -89,7 +89,8 @@
 		/// Combining all those string-Lists so that in the end there will be a nice string containing wonderful java code!
 		/// </summary>
 		/// <param name="className">The name of the class. Should be equal to the fileName, but do whatever you want.</param>
-		/// <param name="code">An array of five string-Lists. First element are the imports, second are the sensor-inits, third are the transformation-methods, fourth is a list containing a single element:
+		/// <param name="code">An array of five string-Lists. First element are the imports, second are the sensor-inits (of which every first element is the init as a global variable and every second
+        /// element is the acutal init needed for the respective sensor), third are the transformation-methods, fourth is a list containing a single element:
 		/// the type of the last variable, that is going to be the output of this calls, the last element is another list with one element, containing a parsed integer, the number of transformations.</param>
 		/// <returns>A string that is just one big java class.</returns>
 		public string assembleText(string className, List<string>[] code)
@@ -114,13 +115,22 @@
 			string intro = "public class " + className + " extends SmaSTraTreeExecutor<" + extends + "> {" + breaks +
 				"\tpublic " + className + "(Context context) { \n\t\tsuper(" + level + ", context); \n\t}" + breaks;
 
-			/////////sensor init section///////
+            /////////sensor init section///////
+            string prep = "";
 			string init = "\tprotected void initSensors(){\n";
-			foreach(string s in code[1])
-			{
-				init = init +  s;
-			}
-			init = init + "\t}" + breaks;
+            for(int i = 0; i<code[1].Count; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    prep = prep + code[1][i]; // add the variable init
+                }
+                else
+                {
+                    init = init + code[1][i]; // init the sensor, so we can listen
+                }
+            }
+
+			init = prep + breaks + init + "\t}" + breaks;
 
 			/////////transformation call///////
 			string transformMethod = "\t@Override\n\tprotected void transform(int level) {\n\t\tswitch (level){\n";
@@ -150,8 +160,9 @@
 		/// <param name="currentNode">The current node that will be processed.</param>
 		/// <param name="number">The sensor-number, so the sensor can be identified.</param>
 		/// <param name="targetDirectory">The directory all the files are going to be saved into.</param>
-		/// <returns>An array of five string-Lists. First element is imports, second is inits, third is transforms (empty in this case, but added for consistency), fourth are the 
-		/// functions' returnValues (also empty in the case of sensors), last are the methodcalls needed to fetch data from these sensors</returns>
+		/// <returns>An array of five string-Lists. First element is imports, second is inits (of which every first element is the initialization of the sensor as a variable and the second element
+        /// are the calls needed to actually initalize it), third is transforms (empty in this case, but added for consistency), fourth are the 
+		/// functions' returnValues, which in this case contains an int, the number of the current sensor, last are the methodcalls needed to fetch data from these sensors</returns>
 		public List<string>[] processSensor(Node currentNode, int number, string targetDirectory)
 		{
 			string fileName = currentNode.Name;
@@ -176,13 +187,17 @@
 				DirectoryCopy(sourceDirectory, targetDirectory, true);
 			}
 
-			//initiating sensor
-			string init = "\t\t" + json.mainClass + " sensor" + number + " = new " + json.mainClass + "(Context context);\n";
+
+            string prep = "\tprivate " + json.mainClass + " sensor" + number + ";\n";
+
+            //initiating sensor
+            string init = "\t\t" + " sensor" + number + " = new " + json.mainClass + "(Context context);\n";
 			init = init + "\t\tsensor" + number + ".startListening();\n";
 
+            inits.Add(prep);
 			inits.Add(init);
 
-			newReturnValues.Add("");
+			newReturnValues.Add(number.ToString());
 			newFunctionCalls.Add("" + json.dataMethod); //throws random exception without empty string in front. maybe some implicit conversion stuff.
 
 			code[0] = imports;
@@ -200,7 +215,7 @@
 		/// </summary>
 		/// <param name="currentNode">The current node that will be processed.</param>
 		/// <param name="number">The transform-number, so the transform can be identified.</param>
-		/// <param name="returnValues">The return values of other transforms that provide data for this one -> the output-variables of other transforms. Entries are either "" if there is
+		/// <param name="returnValues">The return values of other transforms that provide data for this one -> the output-variables of other transforms. Entries are either a string containing just an int, if there is
 		/// no other transformation but a sensor, or will be a string containing their outputVariable</param>
 		/// <param name="functionCalls">The names of functions that are needed to access data from a sensor providing data for this transform. Will either be "", if there is no sensor but
 		/// another transform, or a string containing the methods name, eg "getData"</param>
@@ -249,16 +264,16 @@
 			if (!first) { prep = "\tprivate " + json.output + " resultTransform" + number + ";\n"; }
 			transform = "\tprivate void transform" + number + "(){\n";
 			dynamic temp = json.input;
+            int currentSensorNumber;
 			int counter = 0;
 			foreach (JProperty property in temp.Properties())
 			{
-				if (returnValues[counter] == "")
+				if (Int32.TryParse(returnValues[counter], out currentSensorNumber)) //-> this one is a sensor
 				{
 					methodCall = methodCall + "data" + counter + ", ";
-					prep = prep + "\tprivate " + property.Value + " " + property.Name + ";\n";
-					transform = transform + "\t\t" + property.Value + " data" + counter + " = " + property.Name + "." + functionCalls[counter] + "();\n";
+					transform = transform + "\t\t" + property.Value + " data" + counter + " = sensor" + currentSensorNumber + "." + functionCalls[counter] + "();\n";
 				}
-				else
+				else //-> this one is another transform
 				{
 					methodCall = methodCall + returnValues[counter] + ", ";
 				}
@@ -266,7 +281,7 @@
 			}
 			methodCall = methodCall.Remove(methodCall.Length - 2);
 			methodCall = methodCall + ")\n";
-			transform = prep + "\n" + transform + methodCall + "\t}\n\n";
+			transform = prep + "\n" + transform + methodCall + "\t}\n";
 
 			transforms.Add(transform);
 			if (first)
