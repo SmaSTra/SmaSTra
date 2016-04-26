@@ -64,5 +64,15 @@
 		}
 
 		#endregion overrideable methods
+
+		#region methods
+
+		public bool CanConvertTo(DataType other)
+		{
+			// TODO: (PS) Implement this.
+			return this.Equals(other);
+		}
+
+		#endregion methods
 	}
 }

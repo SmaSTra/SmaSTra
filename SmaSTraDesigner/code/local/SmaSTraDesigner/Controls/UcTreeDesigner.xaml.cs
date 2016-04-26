@@ -32,6 +32,15 @@
 	/// </summary>
 	public partial class UcTreeDesigner : UserControl
 	{
+		#region static constructor
+
+		static UcTreeDesigner()
+		{
+			ConnectingIOHandleProperty = ConnectingIOHandlePropertyKey.DependencyProperty;
+		}
+
+		#endregion static constructor
+
 		#region static methods
 
 		private static double GetOffset(double size, double viewPortSize)
@@ -42,6 +51,17 @@
 		#endregion static methods
 
 		#region dependency properties
+
+		/// <summary>
+		/// Registration of ConnectingIOHandle Dependency Property.
+		/// </summary>
+		public static readonly DependencyProperty ConnectingIOHandleProperty;
+
+		/// <summary>
+		/// Registration of ConnectingIOHandle Dependency Property Key.
+		/// </summary>
+		private static readonly DependencyPropertyKey ConnectingIOHandlePropertyKey = 
+			DependencyProperty.RegisterReadOnly("ConnectingIOHandle", typeof(UcIOHandle), typeof(UcTreeDesigner), new FrameworkPropertyMetadata(null));
 
 		/// <summary>
 		/// Registration of SelectedNodeViewer Dependency Property.
@@ -127,6 +147,7 @@
 		private UcNodeViewer movingNodeViewer = null;
 		private HashSet<Node> nodes = new HashSet<Node>();
 		private UcNodeViewer[] previouslySelectedItems = { };
+		private HashSet<UcIOHandle> registeredIoHandles = new HashSet<UcIOHandle>();
 
 		#endregion fields
 
@@ -139,8 +160,8 @@
 
 			this.InitializeComponent();
 
-			Canvas.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
-			Canvas.SetZIndex(this.linPreviewConnection, Int32.MaxValue);
+			Panel.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
+			Panel.SetZIndex(this.linPreviewConnection, Int32.MaxValue);
 
 			this.cnvBackground.Width = 10000;
 			this.cnvBackground.Height = 10000;
@@ -170,6 +191,16 @@
 		#endregion constructors
 
 		#region properties
+
+		/// <summary>
+		/// Gets the value of the ConnectingIOHandle property.
+		/// This is a Dependency Property.
+		/// </summary>
+		public UcIOHandle ConnectingIOHandle
+		{
+			get { return (UcIOHandle)this.GetValue(ConnectingIOHandleProperty); }
+			private set { this.SetValue(ConnectingIOHandlePropertyKey, value); }
+		}
 
 		/// <summary>
 		/// Gets or sets the value of the SelectedNodeViewer property.
@@ -242,25 +273,26 @@
 		internal void RegisterIOHandle(UcIOHandle ioHandle)
 		{
 			ioHandle.CustomDrag += IoHandle_CustomDrag;
+			this.registeredIoHandles.Add(ioHandle);
 		}
 
 		private void AdjustZIndex()
 		{
 			int i = 0;
-			foreach (var nodeViewer in this.cnvBackground.Children.OfType<UcNodeViewer>().OrderBy(Canvas.GetZIndex))
+			foreach (var nodeViewer in this.cnvBackground.Children.OfType<UcNodeViewer>().OrderBy(Panel.GetZIndex))
 			{
-				Canvas.SetZIndex(nodeViewer, i++);
+				Panel.SetZIndex(nodeViewer, i++);
 			}
 
 			if (this.SelectedNodeViewers.Count != 0)
 			{
 				i = Int32.MaxValue - 2;
-				foreach (var nodeViewer in this.SelectedNodeViewers.OrderBy(Canvas.GetZIndex))
+				foreach (var nodeViewer in this.SelectedNodeViewers.OrderBy(Panel.GetZIndex))
 				{
-					Canvas.SetZIndex(nodeViewer, i--);
+					Panel.SetZIndex(nodeViewer, i--);
 				}
 
-				Canvas.SetZIndex(this.SelectedNodeViewers.First(), Int32.MaxValue - 1);
+				Panel.SetZIndex(this.SelectedNodeViewers.First(), Int32.MaxValue - 1);
 			}
 		}
 
@@ -305,7 +337,7 @@
 			IEnumerable<UcNodeViewer> nodeViewers = this.cnvBackground.Children.OfType<UcNodeViewer>();
 			if (select)
 			{
-				nodeViewers = nodeViewers.OrderByDescending(Canvas.GetZIndex);
+				nodeViewers = nodeViewers.OrderByDescending(Panel.GetZIndex);
 			}
 
 			foreach (var nodeViewer in nodeViewers)
@@ -334,23 +366,65 @@
 			}
 		}
 
-		private void StopDragging()
+		private void StopDragging(MouseButtonEventArgs e)
 		{
-			this.movingNodeViewer = null;
-			this.ConnectingIOHandle = null;
-
 			this.mousePosOnViewer = null;
 			this.dragStart = null;
+
+			this.movingNodeViewer = null;
 			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
 			{
 				this.MarkNodesInSelectionArea(true);
 
 				this.bdrSelectionBorder.Visibility = Visibility.Collapsed;
 			}
-			if (this.linPreviewConnection.Visibility == Visibility.Visible)
+			if (this.ConnectingIOHandle != null)
 			{
-
 				this.linPreviewConnection.Visibility = Visibility.Collapsed;
+
+				this.TryToConnect(e);
+
+				this.ConnectingIOHandle = null;
+			}
+		}
+
+		private void TryToConnect(MouseButtonEventArgs e)
+		{
+			if (e != null && this.ConnectingIOHandle != null)
+			{
+				Point mousePos = e.GetPosition(this.cnvBackground);
+				UcIOHandle handleUnderCursor = null;
+				int zIndex = Int32.MinValue;
+				foreach (var ioHandle in this.registeredIoHandles)
+				{
+					if (ioHandle != this.ConnectingIOHandle)
+					{
+						Point handlePos = ioHandle.TransformToAncestor(this.cnvBackground).Transform(new Point());
+						if (new Rect(handlePos, ioHandle.RenderSize).Contains(mousePos) &&
+							(handleUnderCursor == null || Panel.GetZIndex(ioHandle) > zIndex))
+						{
+							zIndex = Panel.GetZIndex(ioHandle);
+							handleUnderCursor = ioHandle;
+						}
+					}
+				}
+
+				if (handleUnderCursor != null)
+				{
+					UcIOHandle iHandle, oHandle;
+					if (handleUnderCursor.IsInput)
+					{
+						iHandle = handleUnderCursor;
+						oHandle = this.ConnectingIOHandle;
+					}
+					else
+					{
+						iHandle = this.ConnectingIOHandle;
+						oHandle = handleUnderCursor;
+					}
+
+					iHandle.Node.Tree.Connections.Add(new Tuple<Node, Node, int>(oHandle.Node, iHandle.Node, iHandle.InputIndex));
+				}
 			}
 		}
 
@@ -436,33 +510,7 @@
 
 		private void This_MouseLeave(object sender, MouseEventArgs e)
 		{
-			this.StopDragging();
-		}
-
-		/// <summary>
-		/// Gets the value of the ConnectingIOHandle property.
-		/// This is a Dependency Property.
-		/// </summary>
-		public UcIOHandle ConnectingIOHandle
-		{
-			get { return (UcIOHandle)this.GetValue(ConnectingIOHandleProperty); }
-			private set { this.SetValue(ConnectingIOHandlePropertyKey, value); }
-		}
-
-		/// <summary>
-		/// Registration of ConnectingIOHandle Dependency Property Key.
-		/// </summary>
-		private static readonly DependencyPropertyKey ConnectingIOHandlePropertyKey =
-			DependencyProperty.RegisterReadOnly("ConnectingIOHandle", typeof(UcIOHandle), typeof(UcTreeDesigner), new FrameworkPropertyMetadata(null));
-
-		/// <summary>
-		/// Registration of ConnectingIOHandle Dependency Property.
-		/// </summary>
-		public static readonly DependencyProperty ConnectingIOHandleProperty;
-
-		static UcTreeDesigner()
-		{
-			ConnectingIOHandleProperty = ConnectingIOHandlePropertyKey.DependencyProperty;
+			this.StopDragging(null);
 		}
 
 		private void This_MouseMove(object sender, MouseEventArgs e)
@@ -531,7 +579,7 @@
 
 		private void This_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			this.StopDragging();
+			this.StopDragging(e);
 		}
 
 		private void UcNodeViewer_StartedMoving(object sender, EventArgs e)

@@ -18,7 +18,32 @@
 	[Serializable]
 	public class TransformationTree
 	{
+		#region constructors
+
+		public TransformationTree()
+		{
+			this.Nodes = new ObservableCollection<Node>();
+			this.Connections = new ObservableCollection<Tuple<Node, Node, int>>();
+			this.Nodes.CollectionChanged += this.Nodes_CollectionChanged;
+		}
+
+		#endregion constructors
+
 		#region properties
+
+		// TODO: (PS) Comment this.
+		public ObservableCollection<Tuple<Node, Node, int>> Connections
+		{
+			get;
+			private set;
+		}
+
+		// TODO: (PS) Comment this.
+		public ObservableCollection<Node> Nodes
+		{
+			get;
+			private set;
+		}
 
 		// TODO: (PS) Comment this.
 		public OutputNode OutputNode
@@ -105,5 +130,17 @@
 		}
 
 		#endregion methods
+
+		#region event handlers
+
+		private void Nodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			foreach (Node node in e.NewItems.OfType<Node>())
+			{
+				node.Tree = this;
+			}
+		}
+
+		#endregion event handlers
 	}
 }

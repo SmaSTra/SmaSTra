@@ -40,7 +40,7 @@
 		</Border>
 		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
 		
-		<ItemsControl ItemsSource="{Binding Path=Class.InputTypes}" VerticalAlignment="Top" IsHitTestVisible="True">
+		<ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=Class.InputTypes}" VerticalAlignment="Top" IsHitTestVisible="True">
 			<ItemsControl.Style>
 				<Style TargetType="{x:Type ItemsControl}">
 					<Setter Property="HorizontalAlignment" Value="Left" />
@@ -60,7 +60,7 @@
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<local:UcIOHandle IsInput="True" Margin="5,0" />
+					<local:UcIOHandle IsInput="True" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ItemsControl.AlternationIndex)}" Margin="5,0" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>

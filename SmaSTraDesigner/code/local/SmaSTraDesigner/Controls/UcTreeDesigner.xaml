@@ -26,7 +26,7 @@
 			<Viewbox x:Name="vbBackground">
 				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" IsHitTestVisible="True">
 					<local:UcOutputViewer x:Name="outOutputViewer" />
-					<Border x:Name="bdrSelectionBorder" BorderBrush="Black" BorderThickness="1" Opacity="0.5" Visibility="Collapsed" SnapsToDevicePixels="True">
+					<Border x:Name="bdrSelectionBorder" BorderBrush="Black" BorderThickness="1" Opacity="0.5" Visibility="Collapsed" SnapsToDevicePixels="True" IsHitTestVisible="False">
 						<Grid>
 							<Border x:Name="bdrSelectionOpacityMask" Background="White" Opacity="0.8" />
 							<Border Background="LightBlue">
@@ -36,7 +36,7 @@
 							</Border>
 						</Grid>
 					</Border>
-					<Line x:Name="linPreviewConnection" Stroke="DarkBlue" StrokeThickness="4" Opacity="0.5" Visibility="Collapsed" />
+					<Line x:Name="linPreviewConnection" Stroke="DarkBlue" StrokeThickness="4" Opacity="0.5" Visibility="Collapsed" IsHitTestVisible="False" />
 				</Canvas>
 			</Viewbox>
 		</ScrollViewer>

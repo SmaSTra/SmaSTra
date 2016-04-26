@@ -71,7 +71,6 @@
 		#region fields
 
 		private CustomDragDropHelper customDragDropHelper;
-		private UcIOHandle[] ioHandles = null;
 
 		#endregion fields
 
@@ -96,6 +95,13 @@
 		#endregion events
 
 		#region properties
+
+		// TODO: (PS) Comment this.
+		public UcIOHandle[] IoHandles
+		{
+			get;
+			private set;
+		}
 
 		/// <summary>
 		/// Gets or sets the value of the IsInSelectionArea property.
@@ -166,7 +172,7 @@
 			{
 				e.Handled = true;
 				this.IsSelected = true;
-				foreach (var ioHandle in this.ioHandles)
+				foreach (var ioHandle in this.IoHandles)
 				{
 					ioHandle.IsSelected = false;
 				}
@@ -193,7 +199,14 @@
 		{
 			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
-				this.ioHandles = LayoutHelper.FindAllLogicalChildren<UcIOHandle>(this).ToArray();
+				List<UcIOHandle> ioHandles = LayoutHelper.FindAllLogicalChildren<UcIOHandle>(this);
+				if (this is UcTransformationViewer)
+				{
+					ioHandles.AddRange(LayoutHelper.FindAllVisualChildren<UcIOHandle>((ItemsControl)this.FindName("icInputHandles")));
+				}
+
+				this.IoHandles = ioHandles.ToArray();
+
 				this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
 			}
 		}

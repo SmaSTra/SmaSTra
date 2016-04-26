@@ -114,6 +114,13 @@
 			}
 		}
 
+		// TODO: (PS) Comment this.
+		internal TransformationTree Tree
+		{
+			get;
+			set;
+		}
+
 		#endregion properties
 
 		#region overrideable methods

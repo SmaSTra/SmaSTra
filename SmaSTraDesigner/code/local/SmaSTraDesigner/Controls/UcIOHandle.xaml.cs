@@ -38,6 +38,12 @@
 		#region dependency properties
 
 		/// <summary>
+		/// Registration of InputIndex Dependency Property.
+		/// </summary>
+		public static readonly DependencyProperty InputIndexProperty = 
+			DependencyProperty.Register("InputIndex", typeof(int), typeof(UcIOHandle), new PropertyMetadata(-1));
+
+		/// <summary>
 		/// Registration of IsConnectionCompatible Dependency Property.
 		/// </summary>
 		public static readonly DependencyProperty IsConnectionCompatibleProperty;
@@ -84,6 +90,13 @@
 				if (subject.NodeViewer != null)
 				{
 					subject.NodeViewer.IsSelected = true;
+					foreach (var other in subject.NodeViewer.IoHandles)
+					{
+						if (other != subject)
+						{
+							other.IsSelected = false;
+						}
+					}
 				}
 			}
 		}
@@ -123,6 +136,17 @@
 		public DataType DataType
 		{
 			get { return this.DataContext as DataType; }
+		}
+
+		/// <summary>
+		/// Gets or sets the value of the InputIndex property.
+		/// TODO: (PS) Comment this.
+		/// This is a Dependency Property.
+		/// </summary>
+		public int InputIndex
+		{
+			get { return (int)this.GetValue(InputIndexProperty); }
+			set { this.SetValue(InputIndexProperty, value); }
 		}
 
 		/// <summary>
@@ -239,7 +263,7 @@
 				if (newValue != null && this.IsInput != newValue.IsInput && this.NodeViewer != newValue.NodeViewer)
 				{
 					this.IsConnectionCompatible = this.DataType == null || newValue.DataType == null ||
-						object.Equals(this.DataType, newValue.DataType);
+						(!this.IsInput && this.DataType.CanConvertTo(newValue.DataType)) || (this.IsInput && newValue.DataType.CanConvertTo(this.DataType));
 				}
 				else
 				{
@@ -281,14 +305,6 @@
 		private void This_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.OnClick(e);
-		}
-
-		private void This_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (e.LeftButton == MouseButtonState.Pressed)
-			{
-
-			}
 		}
 
 		private void This_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

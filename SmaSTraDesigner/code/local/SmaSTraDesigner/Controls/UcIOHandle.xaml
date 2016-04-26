@@ -7,7 +7,7 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:support="clr-namespace:SmaSTraDesigner.Controls.Support"
 	mc:Ignorable="d"
-	x:Name="This"  Width="20" MouseLeftButtonDown="This_MouseLeftButtonDown" MouseRightButtonDown="This_MouseRightButtonDown" Loaded="This_Loaded" MouseMove="This_MouseMove">
+	x:Name="This"  Width="20" MouseLeftButtonDown="This_MouseLeftButtonDown" MouseRightButtonDown="This_MouseRightButtonDown" Loaded="This_Loaded">
 	<UserControl.Resources>
 		<support:IOHandleTemplateSelector x:Key="IOHandleTemplateSelector" />
 	</UserControl.Resources>
