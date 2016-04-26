@@ -18,10 +18,10 @@
 		#region dependency properties
 
 		/// <summary>
-		/// Registration of IsMoving Dependency Property.
+		/// Registration of IsInSelectionArea Dependency Property.
 		/// </summary>
-		public static readonly DependencyProperty IsMovingProperty = 
-			DependencyProperty.Register("IsMoving", typeof(bool), typeof(UcNodeViewer));
+		public static readonly DependencyProperty IsInSelectionAreaProperty = 
+			DependencyProperty.Register("IsInSelectionArea", typeof(bool), typeof(UcNodeViewer));
 
 		/// <summary>
 		/// Registration of IsPreview Dependency Property.
@@ -86,17 +86,26 @@
 
 		#endregion constructors
 
+		#region events
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
+		public event EventHandler StartedMoving;
+
+		#endregion events
+
 		#region properties
 
 		/// <summary>
-		/// Gets or sets the value of the IsMoving property.
+		/// Gets or sets the value of the IsInSelectionArea property.
 		/// TODO: (PS) Comment this.
 		/// This is a Dependency Property.
 		/// </summary>
-		public bool IsMoving
+		public bool IsInSelectionArea
 		{
-			get { return (bool)this.GetValue(IsMovingProperty); }
-			set { this.SetValue(IsMovingProperty, value); }
+			get { return (bool)this.GetValue(IsInSelectionAreaProperty); }
+			set { this.SetValue(IsInSelectionAreaProperty, value); }
 		}
 
 		/// <summary>
@@ -123,6 +132,21 @@
 
 		#endregion properties
 
+		#region methods
+
+		/// <summary>
+		/// Raises the <see cref="E:StartedMoving"/> event.
+		/// </summary>
+		protected void OnStartedMoving()
+		{
+			if (this.StartedMoving != null)
+			{
+				this.StartedMoving(this, null);
+			}
+		}
+
+		#endregion methods
+
 		#region event handlers
 
 		private void This_MouseMove(object sender, MouseEventArgs e)
@@ -138,7 +162,7 @@
 				}
 				else
 				{
-					this.IsMoving = true;
+					this.OnStartedMoving();
 				}
 			}
 		}
@@ -158,14 +182,20 @@
 
 		private void UcNodeViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.IsSelected = true;
-			e.Handled = true;
+			if (!this.IsPreview)
+			{
+				this.IsSelected = true;
+				e.Handled = true;
+			}
 		}
 
 		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.IsSelected = true;
-			e.Handled = true;
+			if (!this.IsPreview)
+			{
+				this.IsSelected = true;
+				e.Handled = true;
+			}
 		}
 
 		private void UcNodeViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

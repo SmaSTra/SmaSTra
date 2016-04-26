@@ -57,7 +57,7 @@
     <Compile Include="CollectionObservationHandle.cs" />
     <Compile Include="Collections\DispatcherCompatibleObservableCollectionWrap.cs" />
     <Compile Include="Collections\DispatcherCompatibleObservableListWrap.cs" />
-    <Compile Include="DebugHelper.cs" />
+    <Compile Include="PresentationDebugHelper.cs" />
     <Compile Include="DPHelper.cs" />
     <Compile Include="DependencyPropertyProvider.cs" />
     <Compile Include="DumbBinding.cs" />

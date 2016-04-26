@@ -8,17 +8,31 @@
 	mc:Ignorable="d"
 	x:Name="This">
 	<Grid Margin="0,5,0,5">
-		<Border BorderThickness="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 			<Border.Style>
 				<Style TargetType="{x:Type Border}">
-					<Setter Property="BorderBrush" Value="Black" />
+					<Setter Property="BorderBrush">
+						<Setter.Value>
+							<SolidColorBrush>
+								<SolidColorBrush.Color>
+									<Color R="128" G="192" B="255" A="255" />
+								</SolidColorBrush.Color>
+							</SolidColorBrush>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="BorderThickness" Value="2" />
 					<Setter Property="Background" Value="LightBlue" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
 							<Setter Property="Background" Value="LightGray" />
+							<Setter Property="BorderBrush" Value="Gray" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="BorderBrush" Value="Blue" />
+							<Setter Property="BorderBrush" Value="Black" />
+							<Setter Property="BorderThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
+							<Setter Property="BorderBrush" Value="DarkBlue" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>

@@ -68,6 +68,7 @@
     <Compile Include="Collections\TreeWalk\ExtensionMethods.cs" />
     <Compile Include="CommandLine\Command.cs" />
     <Compile Include="CommandLine\CommandAttribute.cs" />
+    <Compile Include="DebugHelper.cs" />
     <Compile Include="EventHook.cs" />
     <Compile Include="ExtensionMethods\ICollectionExtensions.cs" />
     <Compile Include="ExtensionMethods\IDictionaryExtensions.cs" />

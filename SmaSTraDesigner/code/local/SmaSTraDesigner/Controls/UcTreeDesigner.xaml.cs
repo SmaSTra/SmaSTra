@@ -2,6 +2,9 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Collections.Specialized;
+	using System.Diagnostics;
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
@@ -41,12 +44,6 @@
 		#region dependency properties
 
 		/// <summary>
-		/// Registration of MovingNodeViewer Dependency Property.
-		/// </summary>
-		public static readonly DependencyProperty MovingNodeViewerProperty = 
-			DependencyProperty.Register("MovingNodeViewer", typeof(UcNodeViewer), typeof(UcTreeDesigner), new FrameworkPropertyMetadata(null));
-
-		/// <summary>
 		/// Registration of SelectedNodeViewer Dependency Property.
 		/// </summary>
 		public static readonly DependencyProperty SelectedNodeViewerProperty = 
@@ -81,9 +78,27 @@
 			UcNodeViewer newValue = (UcNodeViewer)e.NewValue;
 			UcNodeViewer oldValue = (UcNodeViewer)e.OldValue;
 
-			if (oldValue != null)
+			if (!subject.changingSelectedNodeViewers)
 			{
-				oldValue.IsSelected = false;
+				subject.SelectedNodeViewers.CollectionChanged -= subject.SelectedNodeViewers_CollectionChanged;
+
+				foreach (var noveViewer in subject.SelectedNodeViewers)
+				{
+					noveViewer.IsSelected = false;
+				}
+
+				subject.SelectedNodeViewers.Clear();
+				if (newValue != null)
+				{
+					subject.SelectedNodeViewers.Add(newValue);
+					newValue.IsSelected = true;
+				}
+
+				subject.previouslySelectedItems = subject.SelectedNodeViewers.ToArray();
+
+				subject.AdjustZIndex();
+
+				subject.SelectedNodeViewers.CollectionChanged += subject.SelectedNodeViewers_CollectionChanged;
 			}
 		}
 
@@ -106,7 +121,12 @@
 		#region fields
 
 		private LambdaConverter canvasOffsetConverter;
+		private bool changingSelectedNodeViewers = false;
+		private Point? dragStart = null;
+		private Point? mousePosOnViewer = null;
+		private UcNodeViewer movingNodeViewer = null;
 		private HashSet<Node> nodes = new HashSet<Node>();
+		private UcNodeViewer[] previouslySelectedItems = { };
 
 		#endregion fields
 
@@ -114,7 +134,12 @@
 
 		public UcTreeDesigner()
 		{
+			this.SelectedNodeViewers = new ObservableCollection<UcNodeViewer>();
+			this.SelectedNodeViewers.CollectionChanged += SelectedNodeViewers_CollectionChanged;
+
 			this.InitializeComponent();
+
+			Canvas.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
 
 			this.cnvBackground.Width = 10000;
 			this.cnvBackground.Height = 10000;
@@ -146,17 +171,6 @@
 		#region properties
 
 		/// <summary>
-		/// Gets or sets the value of the MovingNodeViewer property.
-		/// TODO: (PS) Comment this.
-		/// This is a Dependency Property.
-		/// </summary>
-		public UcNodeViewer MovingNodeViewer
-		{
-			get { return (UcNodeViewer)this.GetValue(MovingNodeViewerProperty); }
-			set { this.SetValue(MovingNodeViewerProperty, value); }
-		}
-
-		/// <summary>
 		/// Gets or sets the value of the SelectedNodeViewer property.
 		/// TODO: (PS) Comment this.
 		/// This is a Dependency Property.
@@ -165,6 +179,13 @@
 		{
 			get { return (UcNodeViewer)this.GetValue(SelectedNodeViewerProperty); }
 			set { this.SetValue(SelectedNodeViewerProperty, value); }
+		}
+
+		// TODO: (PS) Comment this.
+		public ObservableCollection<UcNodeViewer> SelectedNodeViewers
+		{
+			get;
+			private set;
 		}
 
 		/// <summary>
@@ -182,20 +203,70 @@
 
 		#region methods
 
+		public void AddNode(Node node, bool select = false)
+		{
+			if (this.nodes.Contains(node))
+			{
+				return;
+			}
+
+			Transformation nodeAsTransformation;
+			//DataSource nodeAsDataSource;
+			UcNodeViewer nodeViewer;
+			if ((nodeAsTransformation = node as Transformation) != null)
+			{
+				nodeViewer = new UcTransformationViewer();
+			}
+			else // if ((nodeAsDataSource = node as DataSource) != null)
+			{
+				nodeViewer = new UcDataSourceViewer();
+			}
+
+			nodeViewer.DataContext = node;
+			this.cnvBackground.Children.Add(nodeViewer);
+			this.MakeBindings(nodeViewer);
+
+			if (select)
+			{
+				nodeViewer.IsSelected = true;
+				nodeViewer.BringIntoView();
+			}
+		}
+
 		// TODO: (PS) Remove this.
 		public void UseTestTree()
 		{
 		}
 
-		private void MakeBindings(Control control)
+		private void AdjustZIndex()
 		{
-			this.MakeCanvasOffsetBinding(control, false);
-			this.MakeCanvasOffsetBinding(control, true);
+			int i = 0;
+			foreach (var nodeViewer in this.cnvBackground.Children.OfType<UcNodeViewer>().OrderBy(Canvas.GetZIndex))
+			{
+				Canvas.SetZIndex(nodeViewer, i++);
+			}
 
-			DisposablesHandler.Instance.AddDisposeConnection(control, PropertyChangedHandle.GetDistinctInstance(control, "IsMoving", this.OnIsMovingChanged));
+			if (this.SelectedNodeViewers.Count != 0)
+			{
+				i = Int32.MaxValue - 2;
+				foreach (var nodeViewer in this.SelectedNodeViewers.OrderBy(Canvas.GetZIndex))
+				{
+					Canvas.SetZIndex(nodeViewer, i--);
+				}
+
+				Canvas.SetZIndex(this.SelectedNodeViewers.First(), Int32.MaxValue - 1);
+			}
 		}
 
-		private void MakeCanvasOffsetBinding(Control control, bool isVertical)
+		private void MakeBindings(UcNodeViewer nodeViewer)
+		{
+			this.MakeCanvasOffsetBinding(nodeViewer, false);
+			this.MakeCanvasOffsetBinding(nodeViewer, true);
+
+			((UcNodeViewer)nodeViewer).StartedMoving += UcNodeViewer_StartedMoving;
+		}
+
+		private void MakeCanvasOffsetBinding(UcNodeViewer nodeViewer, bool isVertical)
 		{
 			MultiBinding binding = new MultiBinding()
 			{
@@ -220,51 +291,57 @@
 					new Binding("PosX"));
 			}
 
-			BindingOperations.SetBinding(control, property, binding);
-		}
-
-		private void OnIsMovingChanged(PropertyChangedCallbackArgs args)
-		{
-			bool isMoving = (bool)args.NewValue;
-			if (isMoving)
-			{
-				this.MovingNodeViewer = (UcNodeViewer)args.Handle.Source;
-			}
-		}
-
-		private void ShowNode(Node node)
-		{
-			if (this.nodes.Contains(node))
-			{
-				return;
-			}
-
-			Transformation nodeAsTransformation;
-			//DataSource nodeAsDataSource;
-			Control control;
-			if ((nodeAsTransformation = node as Transformation) != null)
-			{
-				control = new UcTransformationViewer();
-			}
-			else // if ((nodeAsDataSource = node as DataSource) != null)
-			{
-				control = new UcDataSourceViewer();
-			}
-
-			control.DataContext = node;
-			this.cnvBackground.Children.Add(control);
-			this.MakeBindings(control);
-			control.BringIntoView();
+			BindingOperations.SetBinding(nodeViewer, property, binding);
 		}
 
 		private void ShowTree(TransformationTree tree)
 		{
 			this.cnvBackground.Children.Clear();
+			this.cnvBackground.Children.Add(this.bdrSelectionBorder);
 			this.nodes.Clear();
 			if (tree != null)
 			{
 				this.cnvBackground.Children.Add(this.outOutputViewer);
 				this.outOutputViewer.DataContext = tree.OutputNode;
+			}
+		}
+
+		private void StopDragging()
+		{
+			if (this.movingNodeViewer != null)
+			{
+				this.movingNodeViewer = null;
+			}
+
+			this.mousePosOnViewer = null;
+			this.dragStart = null;
+			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
+			{
+				this.MarkNodesInSelectionArea(true);
+
+				this.bdrSelectionBorder.Visibility = Visibility.Collapsed;
+			}
+		}
+
+		private void MarkNodesInSelectionArea(bool select)
+		{
+			IEnumerable<UcNodeViewer> nodeViewers = this.cnvBackground.Children.OfType<UcNodeViewer>();
+			if (select)
+			{
+				nodeViewers = nodeViewers.OrderByDescending(Canvas.GetZIndex);
+			}
+
+			foreach (var nodeViewer in nodeViewers)
+			{
+				double centerX = Canvas.GetLeft(nodeViewer) + nodeViewer.ActualWidth / 2;
+				double centerY = Canvas.GetTop(nodeViewer) + nodeViewer.ActualHeight / 2;
+				Rect selectionBorder = new Rect(new Point(Canvas.GetLeft(this.bdrSelectionBorder), Canvas.GetTop(this.bdrSelectionBorder)), this.bdrSelectionBorder.RenderSize);
+				bool inside = selectionBorder.Contains(centerX, centerY);
+				nodeViewer.IsInSelectionArea = !select && inside;
+				if (inside && select)
+				{
+					this.SelectedNodeViewers.Add(nodeViewer);
+				}
 			}
 		}
 
@@ -274,14 +351,52 @@
 
 		private void cnvBackground_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.SelectedNodeViewer = null;
-			e.Handled = true;
+			this.SelectedNodeViewers.Clear();
 		}
 
 		private void cnvBackground_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.SelectedNodeViewer = null;
-			e.Handled = true;
+			this.SelectedNodeViewers.Clear();
+		}
+
+		private void SelectedNodeViewers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			this.changingSelectedNodeViewers = true;
+
+			this.SelectedNodeViewer = this.SelectedNodeViewers.Count != 0 ?
+				this.SelectedNodeViewers.First() :
+				null;
+
+			if (e.Action == NotifyCollectionChangedAction.Reset)
+			{
+				foreach (UcNodeViewer nodeViewer in this.previouslySelectedItems)
+				{
+					nodeViewer.IsSelected = false;
+				}
+			}
+			else
+			{
+				if (e.NewItems != null)
+				{
+					foreach (UcNodeViewer nodeViewer in e.NewItems.Cast<UcNodeViewer>())
+					{
+						nodeViewer.IsSelected = true;
+					}
+				}
+				if (e.OldItems != null)
+				{
+					foreach (UcNodeViewer nodeViewer in e.OldItems.Cast<UcNodeViewer>())
+					{
+						nodeViewer.IsSelected = false;
+					}
+				}
+
+				this.AdjustZIndex();
+			}
+
+			this.previouslySelectedItems = this.SelectedNodeViewers.ToArray();
+
+			this.changingSelectedNodeViewers = false;
 		}
 
 		private void This_DragOver(object sender, DragEventArgs e)
@@ -296,43 +411,81 @@
 			newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
 
-			this.ShowNode(newNode);
+			this.AddNode(newNode, true);
 		}
 
 		private void This_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.scvCanvas.ScrollToHorizontalOffset(GetOffset(this.cnvBackground.ActualWidth, this.scvCanvas.ViewportWidth));
-			this.scvCanvas.ScrollToVerticalOffset(GetOffset(this.cnvBackground.ActualHeight, this.scvCanvas.ViewportHeight));
+			this.scvCanvas.ScrollToHorizontalOffset(GetOffset(this.vbBackground.ActualWidth, this.scvCanvas.ViewportWidth));
+			this.scvCanvas.ScrollToVerticalOffset(GetOffset(this.vbBackground.ActualHeight, this.scvCanvas.ViewportHeight));
 		}
 
 		private void This_MouseLeave(object sender, MouseEventArgs e)
 		{
-			if (this.MovingNodeViewer != null)
-			{
-				this.MovingNodeViewer.IsMoving = false;
-				this.MovingNodeViewer = null;
-			}
+			this.StopDragging();
 		}
 
 		private void This_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (e.LeftButton == MouseButtonState.Pressed && this.MovingNodeViewer != null)
+			if (e.LeftButton == MouseButtonState.Pressed)
 			{
 				Point mousePos = e.GetPosition(this.cnvBackground);
-				Point mousePosOnViewer = e.GetPosition(this.MovingNodeViewer);
-				Node node = (Node)this.MovingNodeViewer.DataContext;
-				node.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2/* - mousePosOnViewer.X*/;
-				node.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2/* - mousePosOnViewer.Y*/;
+				if (this.dragStart == null)
+				{
+					this.dragStart = mousePos;
+				}
+
+				if (this.movingNodeViewer != null)
+				{
+					if (this.mousePosOnViewer == null)
+					{
+						this.mousePosOnViewer = Mouse.GetPosition(this.movingNodeViewer);
+					}
+
+					Node node = (Node)this.movingNodeViewer.DataContext;
+					double dx = mousePos.X - this.mousePosOnViewer.Value.X + (this.movingNodeViewer.ActualWidth - this.cnvBackground.ActualWidth) / 2 - node.PosX;
+					double dy = mousePos.Y - this.mousePosOnViewer.Value.Y + (this.movingNodeViewer.ActualHeight - this.cnvBackground.ActualHeight) / 2 - node.PosY;
+					foreach (var nodeViewer in this.SelectedNodeViewers)
+					{
+						node = (Node)nodeViewer.DataContext;
+						node.PosX += dx;
+						node.PosY += dy;
+					}
+				}
+				else
+				{
+					this.bdrSelectionBorder.Visibility = Visibility.Visible;
+					double dx = mousePos.X - this.dragStart.Value.X;
+					double dy = mousePos.Y - this.dragStart.Value.Y;
+					double x = this.dragStart.Value.X;
+					if (dx < 0)
+					{
+						x += dx;
+					}
+					double y = this.dragStart.Value.Y;
+					if (dy < 0)
+					{
+						y += dy;
+					}
+
+					Canvas.SetLeft(this.bdrSelectionBorder, x);
+					Canvas.SetTop(this.bdrSelectionBorder, y);
+					this.bdrSelectionBorder.Width = Math.Abs(dx);
+					this.bdrSelectionBorder.Height = Math.Abs(dy);
+
+					this.MarkNodesInSelectionArea(false);
+				}
 			}
 		}
 
 		private void This_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			if (this.MovingNodeViewer != null)
-			{
-				this.MovingNodeViewer.IsMoving = false;
-				this.MovingNodeViewer = null;
-			}
+			this.StopDragging();
+		}
+
+		private void UcNodeViewer_StartedMoving(object sender, EventArgs e)
+		{
+			this.movingNodeViewer = (UcNodeViewer)sender;
 		}
 
 		#endregion event handlers

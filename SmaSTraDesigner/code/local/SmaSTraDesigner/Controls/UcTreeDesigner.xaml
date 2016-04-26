@@ -23,9 +23,21 @@
 
 		<Border x:Name="bdrViewPort" />
 		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-			<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Beige" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown">
-				<local:UcOutputViewer x:Name="outOutputViewer" />
-			</Canvas>
+			<Viewbox x:Name="vbBackground">
+				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" IsHitTestVisible="True">
+					<local:UcOutputViewer x:Name="outOutputViewer" />
+					<Border x:Name="bdrSelectionBorder" BorderBrush="Black" BorderThickness="1" Opacity="0.5" Visibility="Collapsed" SnapsToDevicePixels="True">
+						<Grid>
+							<Border x:Name="bdrSelectionOpacityMask" Background="White" Opacity="0.8" />
+							<Border Background="LightBlue">
+								<Border.OpacityMask>
+									<VisualBrush Visual="{Binding ElementName=bdrSelectionOpacityMask}"/>
+								</Border.OpacityMask>
+							</Border>
+						</Grid>
+					</Border>
+				</Canvas>
+			</Viewbox>
 		</ScrollViewer>
 
 		<!--<ScrollBar x:Name="scrHorizontal" Grid.Row="1" Orientation="Horizontal" />

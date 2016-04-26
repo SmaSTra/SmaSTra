@@ -6,15 +6,28 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d"
-	x:Name="This">
+	x:Name="This" IsHitTestVisible="True">
 	<Grid Margin="0,5,0,0">
-		<Ellipse Stretch="Fill" StrokeThickness="2" Fill="Yellow">
+		<Ellipse Stretch="Fill" Fill="Yellow">
 			<Ellipse.Style>
 				<Style TargetType="Ellipse">
-					<Setter Property="Stroke" Value="Black" />
+					<Setter Property="Stroke">
+						<Setter.Value>
+							<SolidColorBrush>
+								<SolidColorBrush.Color>
+									<Color R="192" G="192" B="0" A="255" />
+								</SolidColorBrush.Color>
+							</SolidColorBrush>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="StrokeThickness" Value="2" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="Stroke" Value="Blue" />
+							<Setter Property="Stroke" Value="Black" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
+							<Setter Property="Stroke" Value="DarkBlue" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>

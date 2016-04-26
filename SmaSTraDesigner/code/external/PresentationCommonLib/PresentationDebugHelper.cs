@@ -11,7 +11,7 @@
 	/// <summary>
 	/// Contains functions to help with the debugging process.
 	/// </summary>
-	public static class DebugHelper
+	public static class PresentationDebugHelper
 	{
 		#region static methods
 

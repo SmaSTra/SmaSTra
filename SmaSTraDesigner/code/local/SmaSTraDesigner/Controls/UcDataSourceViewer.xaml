@@ -8,13 +8,18 @@
 	mc:Ignorable="d"
 	x:Name="This" MouseMove="This_MouseMove">
 	<Grid Margin="0,0,0,5">
-		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" StrokeThickness="2" Fill="LightGreen" Stretch="Fill">
+		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" Fill="LightGreen" Stretch="Fill">
 			<Polygon.Style>
 				<Style TargetType="Polygon">
-					<Setter Property="Stroke" Value="Black" />
+					<Setter Property="Stroke" Value="Green" />
+					<Setter Property="StrokeThickness" Value="2" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="Stroke" Value="Blue" />
+							<Setter Property="Stroke" Value="Black" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
+							<Setter Property="Stroke" Value="DarkBlue" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
