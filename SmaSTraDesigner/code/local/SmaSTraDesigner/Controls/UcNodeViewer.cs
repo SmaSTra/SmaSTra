@@ -13,6 +13,8 @@
 
 	using SmaSTraDesigner.BusinessLogic;
 
+	using Support;
+
 	public class UcNodeViewer : UserControl
 	{
 		#region dependency properties
@@ -68,7 +70,8 @@
 
 		#region fields
 
-		private bool enteredWithButtonPressed = false;
+		private CustomDragDropHelper customDragDropHelper;
+		private UcIOHandle[] ioHandles = null;
 
 		#endregion fields
 
@@ -76,12 +79,9 @@
 
 		public UcNodeViewer()
 		{
-			this.MouseMove += this.This_MouseMove;
-			this.MouseEnter += UcNodeViewer_MouseEnter;
-			this.PreviewMouseLeftButtonUp += UcNodeViewer_PreviewMouseLeftButtonUp;
-			this.MouseLeave += UcNodeViewer_MouseLeave;
 			this.MouseLeftButtonDown += UcNodeViewer_MouseLeftButtonDown;
 			this.MouseRightButtonDown += UcNodeViewer_MouseRightButtonDown;
+			this.Loaded += UcNodeViewer_Loaded;
 		}
 
 		#endregion constructors
@@ -130,7 +130,22 @@
 			set { this.SetValue(IsSelectedProperty, value); }
 		}
 
+		// TODO: (PS) Comment this.
+		public Node Node
+		{
+			get { return this.DataContext as Node; }
+		}
+
 		#endregion properties
+
+		#region overrideable methods
+
+		public override string ToString()
+		{
+			return String.Format("{0} Node={1}", this.GetType().Name, this.Node);
+		}
+
+		#endregion overrideable methods
 
 		#region methods
 
@@ -145,62 +160,52 @@
 			}
 		}
 
+		private void OnClick(MouseButtonEventArgs e)
+		{
+			if (!this.IsPreview)
+			{
+				e.Handled = true;
+				this.IsSelected = true;
+				foreach (var ioHandle in this.ioHandles)
+				{
+					ioHandle.IsSelected = false;
+				}
+			}
+		}
+
+		private void OnCustomDragDrop(MouseEventArgs e)
+		{
+			if (this.IsPreview)
+			{
+				DragDrop.DoDragDrop(this, new Tuple<Node>((Node)this.DataContext), DragDropEffects.All);
+			}
+			else
+			{
+				this.OnStartedMoving();
+			}
+		}
+
 		#endregion methods
 
 		#region event handlers
 
-		private void This_MouseMove(object sender, MouseEventArgs e)
+		private void UcNodeViewer_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (e.LeftButton == MouseButtonState.Pressed && !this.enteredWithButtonPressed)
+			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
-				if (this.IsPreview)
-				{
-					if (!(this is UcOutputViewer))
-					{
-						DragDrop.DoDragDrop(this, new Tuple<Node>((Node)this.DataContext), DragDropEffects.All);
-					}
-				}
-				else
-				{
-					this.OnStartedMoving();
-				}
+				this.ioHandles = LayoutHelper.FindAllLogicalChildren<UcIOHandle>(this).ToArray();
+				this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
 			}
-		}
-
-		private void UcNodeViewer_MouseEnter(object sender, MouseEventArgs e)
-		{
-			if (e.LeftButton == MouseButtonState.Pressed)
-			{
-				this.enteredWithButtonPressed = true;
-			}
-		}
-
-		private void UcNodeViewer_MouseLeave(object sender, MouseEventArgs e)
-		{
-			this.enteredWithButtonPressed = false;
 		}
 
 		private void UcNodeViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (!this.IsPreview)
-			{
-				this.IsSelected = true;
-				e.Handled = true;
-			}
+			this.OnClick(e);
 		}
 
 		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (!this.IsPreview)
-			{
-				this.IsSelected = true;
-				e.Handled = true;
-			}
-		}
-
-		private void UcNodeViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-		{
-			this.enteredWithButtonPressed = false;
+			this.OnClick(e);
 		}
 
 		#endregion event handlers

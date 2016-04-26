@@ -7,32 +7,70 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:support="clr-namespace:SmaSTraDesigner.Controls.Support"
 	mc:Ignorable="d"
-	x:Name="This"  Width="20">
+	x:Name="This"  Width="20" MouseLeftButtonDown="This_MouseLeftButtonDown" MouseRightButtonDown="This_MouseRightButtonDown" Loaded="This_Loaded" MouseMove="This_MouseMove">
 	<UserControl.Resources>
 		<support:IOHandleTemplateSelector x:Key="IOHandleTemplateSelector" />
 	</UserControl.Resources>
 	<UserControl.Style>
 		<Style TargetType="{x:Type UserControl}">
 			<Setter Property="Height" Value="15" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Polygon Points="0.0,0.0 1.0,0.0 0.5,1.0" Stroke="DarkRed" StrokeThickness="3" Fill="Red" Stretch="Fill" />
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
 			<Style.Triggers>
 				<DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="True">
 					<Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Self}, Path=Width}" />
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate>
-								<Ellipse Stroke="DarkGreen" StrokeThickness="3" Fill="Green" Stretch="UniformToFill" />
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
 				</DataTrigger>
 			</Style.Triggers>
 		</Style>
 	</UserControl.Style>
+	<Grid>
+		<Ellipse Fill="Orange" Stretch="UniformToFill">
+			<Ellipse.Style>
+				<Style TargetType="Ellipse">
+					<Setter Property="Stroke" Value="DarkOrange" />
+					<Setter Property="StrokeThickness" Value="2" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="False">
+							<Setter Property="Visibility" Value="Collapsed" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+							<Setter Property="Stroke" Value="Black" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="True">
+							<Setter Property="Stroke" Value="Green" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+							<Setter Property="Stroke" Value="Red" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Ellipse.Style>
+		</Ellipse>
+		<Polygon Points="0.0,0.0 1.0,0.0 0.5,1.0" Fill="Yellow" Stretch="Fill">
+			<Polygon.Style>
+				<Style TargetType="Polygon">
+					<Setter Property="Stroke" Value="#C0C000" />
+					<Setter Property="StrokeThickness" Value="2" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="True">
+							<Setter Property="Visibility" Value="Collapsed" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+							<Setter Property="Stroke" Value="Black" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="True">
+							<Setter Property="Stroke" Value="Green" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+						<DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+							<Setter Property="Stroke" Value="Red" />
+							<Setter Property="StrokeThickness" Value="3" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Polygon.Style>
+		</Polygon>
+	</Grid>
 </UserControl>

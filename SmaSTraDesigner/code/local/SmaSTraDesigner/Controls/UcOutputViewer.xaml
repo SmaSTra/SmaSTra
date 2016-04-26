@@ -11,15 +11,7 @@
 		<Ellipse Stretch="Fill" Fill="Yellow">
 			<Ellipse.Style>
 				<Style TargetType="Ellipse">
-					<Setter Property="Stroke">
-						<Setter.Value>
-							<SolidColorBrush>
-								<SolidColorBrush.Color>
-									<Color R="192" G="192" B="0" A="255" />
-								</SolidColorBrush.Color>
-							</SolidColorBrush>
-						</Setter.Value>
-					</Setter>
+					<Setter Property="Stroke" Value="#C0C000" />
 					<Setter Property="StrokeThickness" Value="2" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
@@ -34,6 +26,6 @@
 			</Ellipse.Style>
 		</Ellipse>
 		<TextBlock Text="Output" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
-		<local:UcIOHandle IsInput="True" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-5,0,0" />
+		<local:UcIOHandle IsInput="True" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-5,0,0" DataContext="{x:Null}" />
 	</Grid>
 </local:UcNodeViewer>

@@ -40,7 +40,7 @@
 		</Border>
 		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
 		
-		<ItemsControl ItemsSource="{Binding Path=Class.InputTypes}" VerticalAlignment="Top">
+		<ItemsControl ItemsSource="{Binding Path=Class.InputTypes}" VerticalAlignment="Top" IsHitTestVisible="True">
 			<ItemsControl.Style>
 				<Style TargetType="{x:Type ItemsControl}">
 					<Setter Property="HorizontalAlignment" Value="Left" />
