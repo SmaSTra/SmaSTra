@@ -31,7 +31,7 @@ public class AndroidAccelerometerSensor extends Abstract3dAndroidSensor {
 
     @Override
     @SensorOutput
-    public Data3d getLastData() {
+    public Vector3d getLastData() {
         return super.getLastData();
     }
 }

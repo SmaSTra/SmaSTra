@@ -62,7 +62,7 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
      * @return the last GPS data.
      */
     @SensorOutput
-    public Data3d getLastData() {
+    public Vector3d getLastData() {
         return lastData;
     }
 

@@ -30,8 +30,8 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
 
     /**
      * Subtracts 2 Vectors.
-     * @param vector1 to add
-     * @param vector2 to add
+     * @param vector1 to subtract
+     * @param vector2 to subtract
      * @return the result.
      */
     @Transformation(displayName = "Subtract Vectors")
@@ -65,7 +65,7 @@ public class Math3d implements de.tu_darmstadt.smastra.markers.interfaces.Transf
      * @param value to device by.
      * @return the result.
      */
-    @Transformation(displayName = "Multiply Vectors")
+    @Transformation(displayName = "Devide Vectors")
     public static Vector3d divide(Vector3d vector1, double value){
         double x = vector1.getX() / value;
         double y = vector1.getY() / value;

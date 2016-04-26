@@ -21,7 +21,7 @@ public class AndroidProximitySensor extends Abstract1dAndroidSensor {
 
     @SensorOutput
     @Override
-    public float getLastData() {
+    public double getLastData() {
         return super.getLastData();
     }
 }

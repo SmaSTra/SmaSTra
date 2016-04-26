@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "class": "de.tu_darmstadt.smastra.math.Math3dCollections",
+  "display": "Vectors variance Collection",
+  "method": "variance",
+  "description": "None",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.collectors.WindowCollection",
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "de.tu_darmstadt.smastra.math.Math3d"
+  ],
+  "input": {
+    "arg0": "java.util.Collection"
+  }
+}

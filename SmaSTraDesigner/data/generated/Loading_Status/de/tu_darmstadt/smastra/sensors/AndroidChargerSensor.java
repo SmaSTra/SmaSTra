@@ -38,7 +38,7 @@ public class AndroidChargerSensor implements Sensor {
      * @return the charger status.
      */
     @SensorOutput
-    public int getStatus(){
+    public double getStatus(){
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = context.registerReceiver(null, ifilter);
         if(batteryStatus == null) return -1;

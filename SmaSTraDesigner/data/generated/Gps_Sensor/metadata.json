@@ -4,12 +4,12 @@
   "display": "Gps Sensor",
   "dataMethod": "getLastData",
   "description": "The GPS sensor of the Device.",
-  "output": "de.tu_darmstadt.smastra.sensors.Data3d",
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "neededPermissions": [
     "android.permission.ACCESS_COARSE_LOCATION"
   ],
   "needs": [
-    "de.tu_darmstadt.smastra.sensors.Data3d",
-    "de.tu_darmstadt.smastra.sensors.Vector3d"
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "de.tu_darmstadt.smastra.sensors.Data3d"
   ]
 }

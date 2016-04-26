@@ -4,7 +4,7 @@
   "display": "Loading Status",
   "dataMethod": "getStatus",
   "description": "Gives the Loading status (1 \u003d AC, 2 \u003d USB, 4 \u003d Wireless)",
-  "output": "int",
+  "output": "double",
   "neededPermissions": [],
   "needs": []
 }

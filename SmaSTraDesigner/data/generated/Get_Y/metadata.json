@@ -1,0 +1,16 @@
+{
+  "type": "transformation",
+  "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
+  "display": "Get Y",
+  "method": "getY",
+  "description": "None",
+  "static": true,
+  "output": "double",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
+  ],
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d"
+  }
+}

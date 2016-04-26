@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
+  "display": "Create Vector3d",
+  "method": "createVector",
+  "description": "None",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
+  ],
+  "input": {
+    "arg0": "double",
+    "arg1": "double",
+    "arg2": "double"
+  }
+}

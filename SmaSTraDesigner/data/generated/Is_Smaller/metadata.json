@@ -1,0 +1,15 @@
+{
+  "type": "transformation",
+  "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
+  "display": "Is Smaller",
+  "method": "isSmaller",
+  "description": "None",
+  "static": true,
+  "output": "boolean",
+  "neededPermissions": [],
+  "needs": [],
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

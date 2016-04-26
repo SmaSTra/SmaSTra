@@ -4,7 +4,7 @@
   "display": "Proximity Sensor",
   "dataMethod": "getLastData",
   "description": "Captures the nearest distance for the Proximity Sensor",
-  "output": "float",
+  "output": "double",
   "neededPermissions": [],
   "needs": []
 }

@@ -4,7 +4,7 @@
   "display": "Light Sensor",
   "dataMethod": "getLastData",
   "description": "Captures the Light value in lux",
-  "output": "float",
+  "output": "double",
   "neededPermissions": [],
   "needs": []
 }
