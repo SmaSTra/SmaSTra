@@ -133,7 +133,7 @@
 			TransformationTree newValue = (TransformationTree)e.NewValue;
 			TransformationTree oldValue = (TransformationTree)e.OldValue;
 
-			subject.ShowTree(newValue);
+			subject.OnTreeChanged(oldValue, newValue);
 		}
 
 		#endregion dependency property callbacks
@@ -145,7 +145,6 @@
 		private Point? dragStart = null;
 		private Point? mousePosOnViewer = null;
 		private UcNodeViewer movingNodeViewer = null;
-		private HashSet<Node> nodes = new HashSet<Node>();
 		private UcNodeViewer[] previouslySelectedItems = { };
 		private HashSet<UcIOHandle> registeredIoHandles = new HashSet<UcIOHandle>();
 
@@ -160,32 +159,45 @@
 
 			this.InitializeComponent();
 
-			Panel.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
-			Panel.SetZIndex(this.linPreviewConnection, Int32.MaxValue);
-
-			this.cnvBackground.Width = 10000;
-			this.cnvBackground.Height = 10000;
-
-			this.outOutputViewer.DataContext = new OutputNode();
-
-			this.canvasOffsetConverter = new LambdaConverter()
+			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
-				MultiConvertMethod = (values, targetType, parameter, culture) =>
+				this.Tree = new TransformationTree();
+
+				Panel.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
+				Panel.SetZIndex(this.linPreviewConnection, Int32.MaxValue);
+
+				this.cnvBackground.Width = 10000;
+				this.cnvBackground.Height = 10000;
+
+				this.canvasOffsetConverter = new LambdaConverter()
 				{
-					if (values.Any(v => !(v is double) || Double.IsNaN((double)v)))
+					MultiConvertMethod = (values, targetType, parameter, culture) =>
 					{
-						return null;
+						if (values.Any(v => !(v is double) || Double.IsNaN((double)v)))
+						{
+							return null;
+						}
+
+						double controlSize = (double)values[0];
+						double canvasSize = (double)values[1];
+						double offset = (double)values[2];
+
+						return GetOffset(canvasSize, controlSize) + offset;
 					}
+				};
+				this.connectionLineCoordConverter = new LambdaConverter()
+				{
+					ConvertMethod = (value, targetType, parameter, culture) =>
+					{
+						Tuple<bool, UcIOHandle> paramz = (Tuple<bool, UcIOHandle>)parameter;
+						Point p = this.GetCanvasElementPosition(paramz.Item2, true);
 
-					double controlSize = (double)values[0];
-					double canvasSize = (double)values[1];
-					double offset = (double)values[2];
+						return paramz.Item1 ? p.X : p.Y;
+					}
+				};
 
-					return GetOffset(canvasSize, controlSize) + offset;
-				}
-			};
-
-			this.MakeBindings(this.outOutputViewer);
+				this.MakeBindings(this.outOutputViewer);
+			}
 		}
 
 		#endregion constructors
@@ -237,11 +249,17 @@
 
 		public void AddNode(Node node, bool select = false)
 		{
-			if (this.nodes.Contains(node))
+			if (node == null)
+			{
+				throw new ArgumentNullException("node");
+			}
+
+			if (this.Tree == null || this.nodeViewers.ContainsKey(node))
 			{
 				return;
 			}
 
+			node.Tree = this.Tree;
 			Transformation nodeAsTransformation;
 			//DataSource nodeAsDataSource;
 			UcNodeViewer nodeViewer;
@@ -253,6 +271,7 @@
 			{
 				nodeViewer = new UcDataSourceViewer();
 			}
+			this.nodeViewers.Add(node, nodeViewer);
 
 			nodeViewer.DataContext = node;
 			this.cnvBackground.Children.Add(nodeViewer);
@@ -265,9 +284,86 @@
 			}
 		}
 
-		// TODO: (PS) Remove this.
-		public void UseTestTree()
+		public void AddConnection(Connection connection)
 		{
+			if (this.Tree == null || this.connectionLines.ContainsKey(connection))
+			{
+				return;
+			}
+
+			UcNodeViewer oNode = null;
+			if (this.nodeViewers.TryGetValue(connection.OutputNode, out oNode))
+			{
+				throw new Exception(String.Format("OutputNode {0} not found.", connection.OutputNode));
+			}
+			UcNodeViewer iNode = null;
+			if (this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
+			{
+				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
+			}
+
+			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
+			UcIOHandle iHandle = oNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
+
+			this.AddConnection(oHandle, iHandle, connection);
+		}
+
+		private Point GetCanvasElementPosition(FrameworkElement element, bool center)
+		{
+			Point p = center ? new Point(element.ActualWidth / 2, element.ActualHeight / 2) : new Point();
+
+			return element.TransformToAncestor(this.cnvBackground).Transform(p);
+		}
+
+		private LambdaConverter connectionLineCoordConverter;
+
+		private void AddConnection(UcIOHandle oHandle, UcIOHandle iHandle, Connection? connection)
+		{
+			if (connection == null)
+			{
+				connection = new Connection(oHandle.Node, iHandle.Node, iHandle.InputIndex);
+			}
+
+			this.Tree.Connections.Add(connection.Value);
+			
+			Line newLine = new Line()
+			{
+				DataContext = connection.Value,
+				Stroke = Brushes.Black,
+				StrokeThickness = 4
+			};
+			BindingOperations.SetBinding(newLine, Line.X1Property,
+				new Binding("(Canvas.Left)")
+				{
+					Source = oHandle.NodeViewer,
+					Converter = this.connectionLineCoordConverter,
+					ConverterParameter = new Tuple<bool, UcIOHandle>(true, oHandle)
+				});
+			BindingOperations.SetBinding(newLine, Line.Y1Property,
+				new Binding("(Canvas.Left)")
+				{
+					Source = oHandle.NodeViewer,
+					Converter = this.connectionLineCoordConverter,
+					ConverterParameter = new Tuple<bool, UcIOHandle>(false, oHandle)
+				});
+			BindingOperations.SetBinding(newLine, Line.X2Property,
+				new Binding("(Canvas.Left)")
+				{
+					Source = iHandle.NodeViewer,
+					Converter = this.connectionLineCoordConverter,
+					ConverterParameter = new Tuple<bool, UcIOHandle>(true, iHandle)
+				});
+			BindingOperations.SetBinding(newLine, Line.Y2Property,
+				new Binding("(Canvas.Left)")
+				{
+					Source = iHandle.NodeViewer,
+					Converter = this.connectionLineCoordConverter,
+					ConverterParameter = new Tuple<bool, UcIOHandle>(false, iHandle)
+				});
+
+			Panel.SetZIndex(newLine, -1);
+			this.connectionLines.Add(connection.Value, newLine);
+			this.cnvBackground.Children.Add(newLine);
 		}
 
 		internal void RegisterIOHandle(UcIOHandle ioHandle)
@@ -354,16 +450,42 @@
 			}
 		}
 
-		private void ShowTree(TransformationTree tree)
+		private void OnTreeChanged(TransformationTree oldTree, TransformationTree newTree)
 		{
 			this.cnvBackground.Children.Clear();
-			this.cnvBackground.Children.Add(this.bdrSelectionBorder);
-			this.nodes.Clear();
-			if (tree != null)
+			if (newTree != null)
 			{
+				if (newTree.OutputNode == null)
+				{
+					newTree.OutputNode = new OutputNode() { Tree = newTree };
+				}
+
+				this.outOutputViewer.DataContext = newTree.OutputNode;
+				this.cnvBackground.Children.Add(this.bdrSelectionBorder);
+				this.cnvBackground.Children.Add(this.linPreviewConnection);
 				this.cnvBackground.Children.Add(this.outOutputViewer);
-				this.outOutputViewer.DataContext = tree.OutputNode;
+				this.outOutputViewer.DataContext = newTree.OutputNode;
+
+				newTree.Nodes.CollectionChanged += TreeNodes_CollectionChanged;
+				newTree.Connections.CollectionChanged += TreeConnections_CollectionChanged;
 			}
+
+			if (oldTree != null)
+			{
+				newTree.Nodes.CollectionChanged -= TreeNodes_CollectionChanged;
+				newTree.Connections.CollectionChanged -= TreeConnections_CollectionChanged;
+			}
+		}
+
+		private Dictionary<Connection, Line> connectionLines = new Dictionary<Connection, Line>();
+		private Dictionary<Node, UcNodeViewer> nodeViewers = new Dictionary<Node, UcNodeViewer>();
+
+		private void TreeConnections_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+		}
+
+		private void TreeNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
 		}
 
 		private void StopDragging(MouseButtonEventArgs e)
@@ -399,7 +521,7 @@
 				{
 					if (ioHandle != this.ConnectingIOHandle)
 					{
-						Point handlePos = ioHandle.TransformToAncestor(this.cnvBackground).Transform(new Point());
+						Point handlePos = this.GetCanvasElementPosition(ioHandle, false);
 						if (new Rect(handlePos, ioHandle.RenderSize).Contains(mousePos) &&
 							(handleUnderCursor == null || Panel.GetZIndex(ioHandle) > zIndex))
 						{
@@ -423,7 +545,7 @@
 						oHandle = handleUnderCursor;
 					}
 
-					iHandle.Node.Tree.Connections.Add(new Tuple<Node, Node, int>(oHandle.Node, iHandle.Node, iHandle.InputIndex));
+					this.AddConnection(oHandle, iHandle, null);
 				}
 			}
 		}
@@ -544,8 +666,7 @@
 				{
 					this.linPreviewConnection.Visibility = Visibility.Visible;
 
-					Point pos = this.ConnectingIOHandle.TransformToAncestor(this.cnvBackground)
-						.Transform(new Point(this.ConnectingIOHandle.ActualWidth / 2, this.ConnectingIOHandle.ActualHeight / 2));
+					Point pos = this.GetCanvasElementPosition(this.ConnectingIOHandle, true);
 					this.linPreviewConnection.X1 = pos.X;
 					this.linPreviewConnection.Y1 = pos.Y;
 					this.linPreviewConnection.X2 = mousePos.X;

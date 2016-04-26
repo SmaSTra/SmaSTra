@@ -23,7 +23,7 @@
 		public TransformationTree()
 		{
 			this.Nodes = new ObservableCollection<Node>();
-			this.Connections = new ObservableCollection<Tuple<Node, Node, int>>();
+			this.Connections = new ObservableCollection<Connection>();
 			this.Nodes.CollectionChanged += this.Nodes_CollectionChanged;
 		}
 
@@ -32,7 +32,7 @@
 		#region properties
 
 		// TODO: (PS) Comment this.
-		public ObservableCollection<Tuple<Node, Node, int>> Connections
+		public ObservableCollection<Connection> Connections
 		{
 			get;
 			private set;

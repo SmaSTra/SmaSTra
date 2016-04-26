@@ -24,7 +24,7 @@
 
 		public UcOutputViewer()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 		}
 
 		#endregion constructors

@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BusinessLogic\Connection.cs" />
     <Compile Include="BusinessLogic\JavaGenerator.cs" />
     <Compile Include="BusinessLogic\DataSource.cs" />
     <Compile Include="BusinessLogic\DataType.cs" />
