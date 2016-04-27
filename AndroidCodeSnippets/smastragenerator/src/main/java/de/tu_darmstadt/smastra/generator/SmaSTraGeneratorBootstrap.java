@@ -18,6 +18,17 @@ import java.util.List;
 public class SmaSTraGeneratorBootstrap {
 
 
+    /**
+     * The Main Bootstrap method.
+     * @param args to use.
+     */
+    public static void main(String args[]) throws Throwable {
+        File output = new File("generated");
+        if(args.length > 0) output = new File(args[0]);
+        Generate(output);
+    }
+
+
     /***
      * Starts generating.
      * This takes some time!
