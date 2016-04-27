@@ -542,6 +542,19 @@
 			if (connection != null)
 			{
 				this.Tree.Connections.Remove(connection.Value);
+
+				Node iNode = connection.Value.InputNode;
+				Transformation iNodeAsTransformation;
+				OutputNode iNodeAsOutputNode;
+				if ((iNodeAsTransformation = iNode as Transformation) != null)
+				{
+					iNodeAsTransformation.InputNodes[connection.Value.InputIndex] = null;
+				}
+				else if ((iNodeAsOutputNode = iNode as OutputNode) != null)
+				{
+					iNodeAsOutputNode.InputNode = null;
+				}
+
 				Line line = null;
 				if (this.connectionLines.TryGetValue(connection.Value, out line))
 				{
