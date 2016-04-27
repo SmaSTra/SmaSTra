@@ -1,1 +1,1 @@
-include ':SmaSTraSnippetGenerator'
+include ':SmaSTraSnippetGenerator', ':SmaSTraBase', ':SmaSTraGenerator'

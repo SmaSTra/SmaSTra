@@ -1,7 +1,7 @@
 package de.tu_darmstadt.smastra.generator;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,31 +11,32 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import static junit.framework.Assert.assertFalse;
-
 /**
- * A simple test for Using the Element Generator.
+ * This starts generating the Resources.
  * @author Tobias Welther
  */
-public class ElementGeneratorTest {
+public class SmaSTraGeneratorBootstrap {
 
 
-    @Test
-    public void testElementsParsingWorks() throws IOException {
+    /***
+     * Starts generating.
+     * This takes some time!
+     *
+     * @throws IOException when something goes wrong!
+     */
+    public static void Generate(File destinationFolder) throws IOException {
         ElementGenerator generator = new ElementGenerator();
         Collection<SmaSTraElement> elements = new HashSet<>();
         elements.addAll(generator.readTransformationsFromClassLoaded());
         elements.addAll(generator.readSensorsFromClassLoaded());
 
-        assertFalse(elements.isEmpty());
-
         File srcDir = new File(new File(new File("src"), "main"), "java");
-        File targetDir = new File("generated");
-        if(!targetDir.exists()) targetDir.mkdir();
+        //File targetDir = new File("generated");
+        if(!destinationFolder.exists()) destinationFolder.mkdir();
 
         int created = 0;
         for(SmaSTraElement element : elements){
-            File tileDir = new File(targetDir, element.getDisplayName().replace(" ", "_"));
+            File tileDir = new File(destinationFolder, element.getDisplayName().replace(" ", "_"));
 
             //Create Directory:
             if(tileDir.exists()) FileUtils.forceDelete(tileDir);
@@ -47,10 +48,13 @@ public class ElementGeneratorTest {
 
             //Write General File:
             File metaFile = new File(tileDir, "metadata.json");
-            try(  PrintWriter out = new PrintWriter( metaFile )  ){
-                out.println( element.toJsonString(generator) );
-                out.flush();
-            }
+            PrintWriter writer = null;
+            try{
+                writer = new PrintWriter( metaFile );
+                writer.println( element.toJsonString(generator) );
+                writer.flush();
+            }catch (Throwable exp){ exp.printStackTrace(); }
+            finally { IOUtils.closeQuietly(writer); }
 
             //Copy Needed Files:
             for(Class<?> clazz : classesToCopy){
@@ -70,26 +74,16 @@ public class ElementGeneratorTest {
 
 
     /**
-     * Reads the Path for the Class.
-     * Ready to pass into a File.
-     * @param clazz to parse
-     * @return the path to use for Files.
-     */
-    private String readPath(Class<?> clazz){
-        return clazz.getCanonicalName().replace(".", File.separator) + ".java";
-    }
-
-
-    /**
      * Parses a class to a file-path.
      * @param base to use.
      * @param clazz to parse
      * @return the parsed Class as File-Path.
      */
-    private File classToFile(File base, Class<?> clazz){
+    private static File classToFile(File base, Class<?> clazz){
         String path = clazz.getCanonicalName();
         path = path.replace(".", File.separator) + ".java";
 
-       return new File(base, path);
+        return new File(base, path);
     }
+
 }

@@ -1,8 +1,5 @@
 package de.tu_darmstadt.smastra.generator.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This is an input parameter.
  *

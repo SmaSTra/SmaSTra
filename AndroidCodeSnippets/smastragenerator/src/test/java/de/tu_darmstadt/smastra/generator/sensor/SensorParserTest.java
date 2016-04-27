@@ -2,17 +2,12 @@ package de.tu_darmstadt.smastra.generator.sensor;
 
 import org.junit.Test;
 
-import java.util.List;
-
-import de.tu_darmstadt.smastra.generator.transformation.SmaSTraTransformation;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
-import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -37,7 +32,7 @@ public class SensorParserTest {
         assertEquals(TestClass1.class, sut.getElementClass());
         assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getDataMethodName());
-        assertEquals(Vector3d.class, sut.getOutput().getOutputParam());
+        assertEquals(String.class, sut.getOutput().getOutputParam());
         assertEquals("Does Stuff", sut.getDescription());
 
         assertTrue(sut.getNeededClasses().contains(SensorParserTest.class));
@@ -51,7 +46,7 @@ public class SensorParserTest {
     private static class TestClass1 implements Sensor {
 
         @SensorOutput
-        public Vector3d method1(){ return null; }
+        public String method1(){ return null; }
 
         @Override public void start(){}
         @Override public void stop(){}
@@ -68,7 +63,7 @@ public class SensorParserTest {
         assertEquals(TestClass2.class, sut.getElementClass());
         assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getDataMethodName());
-        assertEquals(Vector3d.class, sut.getOutput().getOutputParam());
+        assertEquals(String.class, sut.getOutput().getOutputParam());
         assertEquals("None", sut.getDescription());
         assertTrue(sut.getNeededClasses().isEmpty());
     }
@@ -80,7 +75,7 @@ public class SensorParserTest {
     private static class TestClass2 implements Sensor {
 
         @SensorOutput
-        public Vector3d method1(){ return null; }
+        public String method1(){ return null; }
 
         @Override public void start(){}
         @Override public void stop(){}
@@ -98,7 +93,7 @@ public class SensorParserTest {
     @SkipParsing
     private static class TestClass3 implements Sensor {
 
-        public Vector3d method1(Vector3d vec1){ return null; }
+        public String method1(String vec1){ return null; }
 
         public void method2(){}
 
@@ -119,7 +114,7 @@ public class SensorParserTest {
     @SensorConfig(displayName = "fsaf")
     private static class TestClass4 implements Sensor {
 
-        public Vector3d method1(Vector3d vec1){ return null; }
+        public String method1(String vec1){ return null; }
 
         public void method2(){}
 
@@ -142,7 +137,7 @@ public class SensorParserTest {
     @SensorConfig(displayName = "fsaf")
     private static class TestClass5 implements Sensor {
 
-        public Vector3d method1(Vector3d vec1){ return null; }
+        public String method1(String vec1){ return null; }
 
         @SensorOutput
         public int method2(){ return 1; }

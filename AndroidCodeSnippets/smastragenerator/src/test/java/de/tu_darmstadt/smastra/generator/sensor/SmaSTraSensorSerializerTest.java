@@ -7,7 +7,6 @@ import com.google.gson.JsonPrimitive;
 import org.junit.Test;
 
 import de.tu_darmstadt.smastra.generator.elements.Output;
-import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -28,7 +27,7 @@ public class SmaSTraSensorSerializerTest {
                 .setDataMethodName("TEST")
                 .setClass(this.getClass())
                 .setAndroidPermissions(new String[]{"Test1", "Test2"})
-                .setOutput(new Output(Vector3d.class))
+                .setOutput(new Output(String.class))
                 .build();
 
         JsonElement element = sut.serialize(sensor, SmaSTraSensor.class, null);
@@ -42,7 +41,7 @@ public class SmaSTraSensorSerializerTest {
         assertEquals("TEST", obj.get("description").getAsString());
         assertEquals("TEST", obj.get("dataMethod").getAsString());
         assertEquals("TEST", obj.get("display").getAsString());
-        assertEquals(Vector3d.class.getCanonicalName(), obj.get("output").getAsString());
+        assertEquals(String.class.getCanonicalName(), obj.get("output").getAsString());
 
         assertEquals(true, obj.get("neededPermissions").isJsonArray());
         assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test1")));

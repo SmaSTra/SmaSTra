@@ -3,18 +3,11 @@ package de.tu_darmstadt.smastra.generator.transformation;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.List;
 
-import de.tu_darmstadt.smastra.generator.sensor.SmaSTraClassSensorParser;
-import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.Transformation;
-import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
-import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 import static de.tu_darmstadt.smastra.generator.elements.Output.VOID_OUTPUT;
 import static junit.framework.Assert.assertEquals;
@@ -43,7 +36,7 @@ public class TransformationParserTest {
         assertEquals(VOID_OUTPUT, sut.getOutput());
         assertEquals("Does Stuff", sut.getDescription());
         assertEquals(1, sut.getInputs().size());
-        assertEquals(Vector3d.class, sut.getInputs().get(0).getParameter());
+        assertEquals(String.class, sut.getInputs().get(0).getParameter());
         assertEquals(false, sut.isStatic());
 
         assertTrue(sut.getNeededClasses().contains(TransformationParserTest.class));
@@ -56,7 +49,7 @@ public class TransformationParserTest {
     private static class TestClass1 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1", desctiption = "Does Stuff")
-        public void method1(Vector3d vec1){}
+        public void method1(String vec1){}
 
     }
 
@@ -72,10 +65,10 @@ public class TransformationParserTest {
         assertEquals(TestClass2.class, sut.getElementClass());
         assertEquals("method1", sut.getDisplayName());
         assertEquals("method1", sut.getMethodName());
-        assertEquals(Vector3d.class, sut.getOutput().getOutputParam());
+        assertEquals(String.class, sut.getOutput().getOutputParam());
         assertEquals("None", sut.getDescription());
         assertEquals(1, sut.getInputs().size());
-        assertEquals(Vector3d.class, sut.getInputs().get(0).getParameter());
+        assertEquals(String.class, sut.getInputs().get(0).getParameter());
         assertEquals(true, sut.isStatic());
         assertTrue(sut.getNeededClasses().isEmpty());
     }
@@ -86,7 +79,7 @@ public class TransformationParserTest {
     private static class TestClass2 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1")
-        public static Vector3d method1(Vector3d vec1){ return null; }
+        public static String method1(String vec1){ return null; }
     }
 
     @Test
@@ -101,10 +94,10 @@ public class TransformationParserTest {
         assertEquals(TestClass3.class, sut1.getElementClass());
         assertEquals("method1", sut1.getDisplayName());
         assertEquals("method1", sut1.getMethodName());
-        assertEquals(Vector3d.class, sut1.getOutput().getOutputParam());
+        assertEquals(String.class, sut1.getOutput().getOutputParam());
         assertEquals("None", sut1.getDescription());
         assertEquals(1, sut1.getInputs().size());
-        assertEquals(Vector3d.class, sut1.getInputs().get(0).getParameter());
+        assertEquals(String.class, sut1.getInputs().get(0).getParameter());
         assertEquals(true, sut1.isStatic());
         assertTrue(sut1.getNeededClasses().isEmpty());
 
@@ -118,7 +111,7 @@ public class TransformationParserTest {
         assertEquals(VOID_OUTPUT, sut2.getOutput());
         assertEquals("Does Stuff", sut2.getDescription());
         assertEquals(1, sut2.getInputs().size());
-        assertEquals(Vector3d.class, sut2.getInputs().get(0).getParameter());
+        assertEquals(String.class, sut2.getInputs().get(0).getParameter());
         assertEquals(false, sut2.isStatic());
     }
 
@@ -128,10 +121,10 @@ public class TransformationParserTest {
     private static class TestClass3 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1")
-        public static Vector3d method1(Vector3d vec1){ return null; }
+        public static String method1(String vec1){ return null; }
 
         @Transformation(displayName = "method2", desctiption = "Does Stuff")
-        public void method2(Vector3d vec1){}
+        public void method2(String vec1){}
 
     }
 
@@ -151,7 +144,7 @@ public class TransformationParserTest {
     private static class TestClass4 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         @Transformation(displayName = "method1")
-        public Vector3d method1(Vector3d vec1){ return null; }
+        public String method1(String vec1){ return null; }
 
         public void method2(){}
     }
@@ -169,7 +162,7 @@ public class TransformationParserTest {
     private static class TestClass5 {
 
         @Transformation(displayName = "method1")
-        public Vector3d method1(Vector3d vec1){ return null; }
+        public String method1(String vec1){ return null; }
 
         public void method2(){}
     }
@@ -202,7 +195,7 @@ public class TransformationParserTest {
     @NeedsAndroidPermissions("TEST")
     private static class TestClass6 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
-        public Vector3d method1(Vector3d vec1){ return null; }
+        public String method1(String vec1){ return null; }
 
         @Transformation(displayName = "TEST")
         public int method2(){ return 1; }

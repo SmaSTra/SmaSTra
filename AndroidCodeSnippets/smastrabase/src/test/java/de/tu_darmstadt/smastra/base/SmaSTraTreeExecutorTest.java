@@ -4,7 +4,11 @@ import android.content.Context;
 
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import de.tu_darmstadt.smastra.base.SmaSTraTreeExecutor;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 /**
  * This is the test for the Tree Executor.
