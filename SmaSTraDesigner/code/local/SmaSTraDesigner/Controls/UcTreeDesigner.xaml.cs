@@ -308,6 +308,45 @@
 			this.AddConnection(oHandle, iHandle, connection);
 		}
 
+		public void RemoveConnection(Connection connection)
+		{
+			this.RemoveConnection(null, connection);
+		}
+
+		private void RemoveConnection(UcIOHandle handle, Connection? connection)
+		{
+			if (this.Tree == null)
+			{
+				return;
+			}
+
+			if (connection == null)
+			{
+				if (handle.IsInput)
+				{
+					connection = this.Tree.Connections.Cast<Connection?>()
+						.FirstOrDefault(c => object.Equals(c.Value.InputNode, handle.Node) && handle.InputIndex == c.Value.InputIndex);
+				}
+				else
+				{
+					connection = this.Tree.Connections.Cast<Connection?>()
+						.FirstOrDefault(c => object.Equals(c.Value.OutputNode, handle.Node));
+				}
+			}
+
+			if (connection != null)
+			{
+				this.Tree.Connections.Remove(connection.Value);
+				Line line = null;
+				if (this.connectionLines.TryGetValue(connection.Value, out line))
+				{
+					this.connectionLines.Remove(connection.Value);
+					BindingOperations.ClearAllBindings(line);
+					this.cnvBackground.Children.Remove(line);
+				}
+			}
+		}
+
 		private Point GetCanvasElementPosition(FrameworkElement element, bool center)
 		{
 			Point p = center ? new Point(element.ActualWidth / 2, element.ActualHeight / 2) : new Point();
@@ -319,6 +358,8 @@
 
 		private void AddConnection(UcIOHandle oHandle, UcIOHandle iHandle, Connection? connection)
 		{
+			this.RemoveConnection(iHandle, null);
+
 			if (connection == null)
 			{
 				connection = new Connection(oHandle.Node, iHandle.Node, iHandle.InputIndex);
@@ -531,7 +572,7 @@
 					}
 				}
 
-				if (handleUnderCursor != null)
+				if (handleUnderCursor != null && handleUnderCursor.IsConnectionCompatible == true)
 				{
 					UcIOHandle iHandle, oHandle;
 					if (handleUnderCursor.IsInput)
@@ -567,6 +608,7 @@
 		private void IoHandle_CustomDrag(object sender, EventArgs e)
 		{
 			this.ConnectingIOHandle = (UcIOHandle)sender;
+			this.RemoveConnection(this.ConnectingIOHandle, null);
 		}
 
 		private void SelectedNodeViewers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

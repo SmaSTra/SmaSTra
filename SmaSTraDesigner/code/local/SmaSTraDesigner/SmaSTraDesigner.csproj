@@ -177,7 +177,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem rd /s /q  "$(TargetDir)generated\"
+    <PostBuildEvent>if exist "$(TargetDir)generated\" rd /s /q  "$(TargetDir)generated\"
 xcopy /E /Y "$(SolutionDir)..\data\generated\*" "$(TargetDir)generated\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

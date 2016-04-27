@@ -1,5 +1,7 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
+	using BusinessLogic;
+	using Common.Resources.Converters;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -25,6 +27,13 @@
 		public UcTransformationViewer()
 		{
 			this.InitializeComponent();
+
+			((LambdaConverter)this.FindResource("InputItemsSourceConverter")).ConvertMethod = (value, targetType, parameter, culture) =>
+			{
+				IEnumerable<DataType> inputTypes = (IEnumerable<DataType>)value;
+
+				return inputTypes.Select((t, i) => new Tuple<DataType, int>(t, i)).ToArray();
+			};
 		}
 
 		#endregion constructors
