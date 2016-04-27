@@ -25,6 +25,9 @@
 	{
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UcDataSourceViewer"/> class.
+		/// </summary>
 		public UcDataSourceViewer()
 		{
 			this.InitializeComponent();

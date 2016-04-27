@@ -1,17 +1,14 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-
+	/// <summary>
+	/// Represents a TransformationTree's data output.
+	/// </summary>
 	public class OutputNode : Node
 	{
 		#region fields
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// The node that provides input data to the tree's output.
 		/// </summary>
 		private Node inputNode = null;
 
@@ -21,7 +18,7 @@
 
 		/// <summary>
 		/// Gets or sets the InputNode property value.
-		/// TODO: (PS) Comment this.
+		/// The node that provides input data to the tree's output.
 		/// </summary>
 		public Node InputNode
 		{

@@ -1,15 +1,21 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Prodives information about a specific type of node.
+	/// </summary>
 	public class NodeClass
 	{
 		#region constructors
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="name">This node class's identifying name.</param>
+		/// <param name="baseNode">This node class's base node that is cloned for creation of new nodes.</param>
+		/// <param name="outputType">This node class's output's data type</param>
+		/// <param name="inputTypes">This node class's input's data types</param>
 		public NodeClass(string name, Node baseNode, DataType outputType, DataType[] inputTypes = null)
 		{
 			if (String.IsNullOrWhiteSpace(name))
@@ -37,42 +43,54 @@
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets this node class's base node that is cloned for creation of new nodes.
+		/// </summary>
 		public Node BaseNode
 		{
 			get;
 			private set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets or sets a description for this node class.
+		/// </summary>
 		public string Description
 		{
 			get;
 			set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets or sets a display name for this node class.
+		/// </summary>
 		public string DisplayName
 		{
 			get;
 			set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets this node class's input's data types.
+		/// </summary>
 		public DataType[] InputTypes
 		{
 			get;
 			private set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets this node class's identifying name.
+		/// </summary>
 		public string Name
 		{
 			get;
 			private set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets this node class's output's data type
+		/// </summary>
 		public DataType OutputType
 		{
 			get;

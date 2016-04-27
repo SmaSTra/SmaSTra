@@ -5,21 +5,20 @@
 	using System.Collections.ObjectModel;
 	using System.IO;
 	using System.Linq;
-	using System.Runtime.Serialization;
-	using System.Runtime.Serialization.Formatters.Binary;
-	using System.Text;
-	using System.Text.RegularExpressions;
-	using System.Threading.Tasks;
 
 	using Microsoft.Win32;
 
-	using Newtonsoft.Json.Linq;
-
+	/// <summary>
+	/// Represents a tree graph of data dransformations.
+	/// </summary>
 	[Serializable]
 	public class TransformationTree
 	{
 		#region constructors
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
 		public TransformationTree()
 		{
 			this.Nodes = new ObservableCollection<Node>();
@@ -31,21 +30,27 @@
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the list of connections between nodes in this tree.
+		/// </summary>
 		public ObservableCollection<Connection> Connections
 		{
 			get;
 			private set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the list of nodes this tree contains.
+		/// </summary>
 		public ObservableCollection<Node> Nodes
 		{
 			get;
 			private set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// OutputNode for this tree.
+		/// </summary>
 		public OutputNode OutputNode
 		{
 			get;
@@ -178,6 +183,11 @@
 
 		#region event handlers
 
+		/// <summary>
+		/// Handles the CollectionChanged event of the Nodes control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
 		private void Nodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
 			foreach (Node node in e.NewItems.OfType<Node>())

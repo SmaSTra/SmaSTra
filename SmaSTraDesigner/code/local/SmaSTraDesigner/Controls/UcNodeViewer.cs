@@ -15,6 +15,10 @@
 
 	using Support;
 
+	/// <summary>
+	/// Base class for the different node viewers.
+	/// Represents a node in the tree graph on the GUI.
+	/// </summary>
 	public class UcNodeViewer : UserControl
 	{
 		#region dependency properties
@@ -70,12 +74,18 @@
 
 		#region fields
 
+		/// <summary>
+		/// The CustomDragDropHelper instance that helps with Drag&Drop functionality in this control.
+		/// </summary>
 		private CustomDragDropHelper customDragDropHelper;
 
 		#endregion fields
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UcNodeViewer"/> class.
+		/// </summary>
 		public UcNodeViewer()
 		{
 			this.MouseLeftButtonDown += UcNodeViewer_MouseLeftButtonDown;
@@ -88,24 +98,28 @@
 		#region events
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// Is raised when this control is being dragged.
 		/// </summary>
-		public event EventHandler StartedMoving;
+		public event EventHandler CustomDrag;
 
 		#endregion events
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the IO handles that belong to this node viewer.
+		/// Is only set after this control is loaded.
+		/// </summary>
 		public UcIOHandle[] IoHandles
 		{
 			get;
 			private set;
 		}
 
+		// TODO: (PS) Make this readonly.
 		/// <summary>
 		/// Gets or sets the value of the IsInSelectionArea property.
-		/// TODO: (PS) Comment this.
+		/// States whether this control is in the selection rectangle on the tree designer at this time.
 		/// This is a Dependency Property.
 		/// </summary>
 		public bool IsInSelectionArea
@@ -116,7 +130,7 @@
 
 		/// <summary>
 		/// Gets or sets the value of the IsPreview property.
-		/// TODO: (PS) Comment this.
+		/// States whether this control is used as a preview in the available nodes menu.
 		/// This is a Dependency Property.
 		/// </summary>
 		public bool IsPreview
@@ -127,7 +141,7 @@
 
 		/// <summary>
 		/// Gets or sets the value of the IsSelected property.
-		/// TODO: (PS) Comment this.
+		/// States whether this control is selected on the tree designer.
 		/// This is a Dependency Property.
 		/// </summary>
 		public bool IsSelected
@@ -136,7 +150,9 @@
 			set { this.SetValue(IsSelectedProperty, value); }
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the Node that is represented by this control.
+		/// </summary>
 		public Node Node
 		{
 			get { return this.DataContext as Node; }
@@ -146,6 +162,12 @@
 
 		#region overrideable methods
 
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
 		public override string ToString()
 		{
 			return String.Format("{0} Node={1}", this.GetType().Name, this.Node);
@@ -156,22 +178,28 @@
 		#region methods
 
 		/// <summary>
-		/// Raises the <see cref="E:StartedMoving"/> event.
+		/// Raises the <see cref="E:CustomDrag"/> event.
 		/// </summary>
-		protected void OnStartedMoving()
+		protected void OnCustomDrag()
 		{
-			if (this.StartedMoving != null)
+			if (this.CustomDrag != null)
 			{
-				this.StartedMoving(this, null);
+				this.CustomDrag(this, null);
 			}
 		}
 
+		/// <summary>
+		/// Is called when this control is being clicked.
+		/// Marks it as selected.
+		/// </summary>
+		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void OnClick(MouseButtonEventArgs e)
 		{
 			if (!this.IsPreview)
 			{
 				e.Handled = true;
 				this.IsSelected = true;
+				// Deselect all handles if this node viewer itsself is clicked.
 				foreach (var ioHandle in this.IoHandles)
 				{
 					ioHandle.IsSelected = false;
@@ -187,7 +215,7 @@
 			}
 			else
 			{
-				this.OnStartedMoving();
+				this.OnCustomDrag();
 			}
 		}
 
@@ -195,6 +223,11 @@
 
 		#region event handlers
 
+		/// <summary>
+		/// Handles the Loaded event of this control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
 		private void UcNodeViewer_Loaded(object sender, RoutedEventArgs e)
 		{
 			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
@@ -211,11 +244,21 @@
 			}
 		}
 
+		/// <summary>
+		/// Handles the MouseLeftButtonDown event of this control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void UcNodeViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.OnClick(e);
 		}
 
+		/// <summary>
+		/// Handles the MouseRightButtonDown event of this control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.OnClick(e);

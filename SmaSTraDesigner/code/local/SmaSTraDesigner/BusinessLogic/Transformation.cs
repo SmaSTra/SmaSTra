@@ -1,54 +1,93 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Represents a transformation that combines data inputs to another output value.
+	/// </summary>
 	public class Transformation : Node
 	{
+		#region fields
+
+		/// <summary>
+		/// The Nodes that provide data input for this transformation.
+		/// </summary>
+		private Node[] inputNodes = null;
+
+		#endregion fields
+
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the Nodes that provide data input for this transformation.
+		/// </summary>
 		public Node[] InputNodes
 		{
-			get;
-			private set;
+			get
+			{
+				return this.inputNodes.ToArray();
+			}
 		}
 
 		#endregion properties
 
 		#region overrideable methods
 
+		/// <summary>
+		/// Called when the Class property changed its value.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
 		protected override void OnClassChanged(NodeClass oldValue, NodeClass newValue)
 		{
 			base.OnClassChanged(oldValue, newValue);
 
-			this.InputNodes = new Node[this.Class.InputTypes.Length];
+			this.inputNodes = new Node[this.Class.InputTypes.Length];
 		}
 
 		#endregion overrideable methods
 
 		#region methods
 
-		private bool AddInput(Node inputNode)
+		/// <summary>
+		/// Adds an input node at the first free space.
+		/// </summary>
+		/// <param name="inputNode"></param>
+		/// <returns></returns>
+		public bool AddInput(Node inputNode)
 		{
-			if (this.InputNodes == null)
+			if (this.Class == null)
 			{
-				for (int i = 0; i < this.InputNodes.Length; i++)
-				{
-					if (this.InputNodes[i] == null)
-					{
-						this.InputNodes[i] = inputNode;
+				throw new InvalidOperationException("This transformation has no set class.");
+			}
 
-						return true;
-					}
+			for (int i = 0; i < this.inputNodes.Length; i++)
+			{
+				if (this.inputNodes[i] == null)
+				{
+					this.inputNodes[i] = inputNode;
+
+					return true;
 				}
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// Sets input node at the specified index.
+		/// </summary>
+		/// <param name="index">input index.</param>
+		/// <param name="inputNode">input providing node.</param>
+		public void SetInput(int index, Node inputNode)
+		{
+			if (this.Class == null)
+			{
+				throw new InvalidOperationException("This transformation has no set class.");
+			}
+
+			this.inputNodes[index] = inputNode;
 		}
 
 		#endregion methods

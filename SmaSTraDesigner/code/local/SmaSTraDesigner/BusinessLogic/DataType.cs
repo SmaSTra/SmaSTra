@@ -1,22 +1,18 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Stores information about a data type used by nodes for their inpot or output data.
+	/// </summary>
 	public class DataType
 	{
-		#region static fields
-
-		public static DataType Number = new DataType("Number");
-		public static DataType Text = new DataType("Text");
-
-		#endregion static fields
-
 		#region constructors
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="name">Data type name (is used as a unique identifier)</param>
 		public DataType(string name)
 		{
 			if (String.IsNullOrWhiteSpace(name))
@@ -31,7 +27,9 @@
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Data type name (is used as a unique identifier)
+		/// </summary>
 		public string Name
 		{
 			get;
@@ -67,6 +65,14 @@
 
 		#region methods
 
+		/// <summary>
+		/// Checks whether this dataType can be implicitly converted into another.
+		/// 
+		/// NOT IMPLEMENTED YET!
+		/// Currently analogous to Equals method.
+		/// </summary>
+		/// <param name="other">data type to check for implicit conversion.</param>
+		/// <returns></returns>
 		public bool CanConvertTo(DataType other)
 		{
 			// TODO: (PS) Implement this.

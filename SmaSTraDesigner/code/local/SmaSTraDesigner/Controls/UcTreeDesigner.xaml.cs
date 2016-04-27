@@ -345,7 +345,7 @@
 			OutputNode iNodeAsOutputNode;
 			if ((iNodeAsTransformation = connection.Value.InputNode as Transformation) != null)
 			{
-				iNodeAsTransformation.InputNodes[connection.Value.InputIndex] = connection.Value.OutputNode;
+				iNodeAsTransformation.SetInput(connection.Value.InputIndex, connection.Value.OutputNode);
 			}
 			else if ((iNodeAsOutputNode = connection.Value.InputNode as OutputNode) != null)
 			{
@@ -424,7 +424,7 @@
 			this.MakeCanvasOffsetBinding(nodeViewer, false);
 			this.MakeCanvasOffsetBinding(nodeViewer, true);
 
-			nodeViewer.StartedMoving += this.UcNodeViewer_StartedMoving;
+			nodeViewer.CustomDrag += this.UcNodeViewer_StartedMoving;
 		}
 
 		private void MakeCanvasOffsetBinding(UcNodeViewer nodeViewer, bool isVertical)
@@ -548,7 +548,7 @@
 				OutputNode iNodeAsOutputNode;
 				if ((iNodeAsTransformation = iNode as Transformation) != null)
 				{
-					iNodeAsTransformation.InputNodes[connection.Value.InputIndex] = null;
+					iNodeAsTransformation.SetInput(connection.Value.InputIndex, null);
 				}
 				else if ((iNodeAsOutputNode = iNode as OutputNode) != null)
 				{
@@ -586,7 +586,7 @@
 		private void SeverTiesToNodeViewer(UcNodeViewer nodeViewer)
 		{
 			BindingOperations.ClearAllBindings(nodeViewer);
-			nodeViewer.StartedMoving -= this.UcNodeViewer_StartedMoving;
+			nodeViewer.CustomDrag -= this.UcNodeViewer_StartedMoving;
 			foreach (var handle in nodeViewer.IoHandles)
 			{
 				this.registeredIoHandles.Remove(handle);

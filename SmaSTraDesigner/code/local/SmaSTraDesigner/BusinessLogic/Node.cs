@@ -7,42 +7,42 @@
 	using System.Text;
 	using System.Threading.Tasks;
 
+	/// <summary>
+	/// Base class for all nodes.
+	/// Provides information about a specific node in a TransformationTree.
+	/// Implemented variations are DataSource, Transformation and OutputNode.
+	/// </summary>
 	public class Node : INotifyPropertyChanged, ICloneable
 	{
 		#region fields
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// NodeClass instance that provides information about this node's type.
 		/// </summary>
 		private NodeClass clazz;
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// This node's display name (is used as an identifier).
 		/// </summary>
 		private string name = null;
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// This node's X position on the transformation tree's graph (spread out on a 2D plane).
 		/// </summary>
 		private double posX = 0;
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// This node's Y position on the transformation tree's graph (spread out on a 2D plane).
 		/// </summary>
 		private double posY = 0;
 
 		#endregion fields
 
-		#region constructors
-
-		public Node()
-		{
-		}
-
-		#endregion constructors
-
 		#region events
 
+		/// <summary>
+		/// Is raised whenever a compatible property changes its value.
+		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion events
@@ -51,7 +51,7 @@
 
 		/// <summary>
 		/// Gets or sets the Class property value.
-		/// TODO: (PS) Comment this.
+		/// NodeClass instance that provides information about this node's type.
 		/// </summary>
 		public NodeClass Class
 		{
@@ -72,7 +72,7 @@
 
 		/// <summary>
 		/// Gets or sets the Name property value.
-		/// TODO: (PS) Comment this.
+		/// This node's display name (is used as an identifier).
 		/// </summary>
 		public string Name
 		{
@@ -93,7 +93,7 @@
 
 		/// <summary>
 		/// Gets or sets the PosX property value.
-		/// TODO: (PS) Comment this.
+		/// This node's X position on the transformation tree's graph (spread out on a 2D plane).
 		/// </summary>
 		public double PosX
 		{
@@ -114,7 +114,7 @@
 
 		/// <summary>
 		/// Gets or sets the PosY property value.
-		/// TODO: (PS) Comment this.
+		/// This node's Y position on the transformation tree's graph (spread out on a 2D plane).
 		/// </summary>
 		public double PosY
 		{
@@ -133,17 +133,23 @@
 			}
 		}
 
-		// TODO: (PS) Comment this.
-		internal TransformationTree Tree
+		/// <summary>
+		/// Gets the TransformationTree instance this node belongs to.
+		/// </summary>
+		public TransformationTree Tree
 		{
 			get;
-			set;
+			internal set;
 		}
 
 		#endregion properties
 
 		#region overrideable methods
 
+		/// <summary>
+		/// Clones this node.
+		/// </summary>
+		/// <returns>A clone of this node.</returns>
 		public virtual object Clone()
 		{
 			return this.MemberwiseClone();
@@ -167,6 +173,10 @@
 
 		#region methods
 
+		/// <summary>
+		/// Raises the PropertyChanged event.
+		/// </summary>
+		/// <param name="propertyName">Name of the property that changed values.</param>
 		protected void OnPropertyChanged(string propertyName)
 		{
 			if (this.PropertyChanged != null)

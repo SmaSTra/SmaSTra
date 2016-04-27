@@ -103,14 +103,10 @@
     <Compile Include="BusinessLogic\Node.cs" />
     <Compile Include="BusinessLogic\NodeClass.cs" />
     <Compile Include="BusinessLogic\ClassManager.cs" />
-    <Compile Include="BusinessLogic\NodeClassCategory.cs" />
-    <Compile Include="BusinessLogic\NodeClassCollection.cs" />
-    <Compile Include="BusinessLogic\NodeId.cs" />
     <Compile Include="BusinessLogic\OutputNode.cs" />
     <Compile Include="BusinessLogic\Transformation.cs" />
     <Compile Include="BusinessLogic\TransformationTree.cs" />
     <Compile Include="Controls\Support\CustomDragDropHelper.cs" />
-    <Compile Include="Controls\Support\IOHandleTemplateSelector.cs" />
     <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">
       <DependentUpon>UcDataSourceViewer.xaml</DependentUpon>

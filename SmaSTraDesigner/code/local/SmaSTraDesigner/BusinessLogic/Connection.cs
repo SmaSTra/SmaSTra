@@ -1,19 +1,25 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 
 	using Common;
 
+	/// <summary>
+	/// Contains information about node connection within a TransformationTree.
+	/// </summary>
 	public struct Connection
 	{
 		#region constructors
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="outputNode">Node that provides data output</param>
+		/// <param name="inputNode">Node that the data is fed to.</param>
+		/// <param name="inputIndex">The index of the input to where the data is fed.</param>
 		public Connection(Node outputNode, Node inputNode, int inputIndex)
 		{
+			// Validate arguments.
 			if (outputNode == null)
 			{
 				throw new ArgumentNullException("outputNode");
@@ -47,21 +53,27 @@
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// The index of the input to where the data is fed.
+		/// </summary>
 		public int InputIndex
 		{
 			get;
 			set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Node that the data is fed to.
+		/// </summary>
 		public Node InputNode
 		{
 			get;
 			set;
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Node that provides data output
+		/// </summary>
 		public Node OutputNode
 		{
 			get;
@@ -71,7 +83,7 @@
 		#endregion properties
 
 		#region overrideable methods
-
+		
 		public override bool Equals(object obj)
 		{
 			Connection other = (Connection)obj;

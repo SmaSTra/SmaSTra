@@ -1,19 +1,9 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Controls;
-	using System.Windows.Data;
-	using System.Windows.Documents;
 	using System.Windows.Input;
-	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
-	using System.Windows.Navigation;
-	using System.Windows.Shapes;
 
 	using BusinessLogic;
 
@@ -22,14 +12,20 @@
 	using Support;
 
 	/// <summary>
-	/// Interaction logic for UcIOHandle.xaml
+	/// Represents an input or output of a node on the GUI as a small handle for the user to interact with.
 	/// </summary>
+	/// <seealso cref="System.Windows.Controls.UserControl" />
+	/// <seealso cref="System.Windows.Markup.IComponentConnector" />
 	public partial class UcIOHandle : UserControl
 	{
 		#region static constructor
 
+		/// <summary>
+		/// Initializes the <see cref="UcIOHandle"/> class.
+		/// </summary>
 		static UcIOHandle()
 		{
+			// Initialize readonly dependency properties.
 			IsConnectionCompatibleProperty = IsConnectionCompatiblePropertyKey.DependencyProperty;
 		}
 
@@ -105,13 +101,23 @@
 
 		#region fields
 
+		/// <summary>
+		/// The CustomDragDropHelper instance that helps with Drag&Drop functionality in this control.
+		/// </summary>
 		private CustomDragDropHelper customDragDropHelper;
+
+		/// <summary>
+		/// The tree designer this control belongs to.
+		/// </summary>
 		private UcTreeDesigner treeDesigner = null;
 
 		#endregion fields
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UcIOHandle"/> class.
+		/// </summary>
 		public UcIOHandle()
 		{
 			this.InitializeComponent();
@@ -124,7 +130,7 @@
 		#region events
 
 		/// <summary>
-		/// TODO: (PS) Comment this.
+		/// Is raised when this io handle is being dragged.
 		/// </summary>
 		public event EventHandler CustomDrag;
 
@@ -132,7 +138,9 @@
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the DataType that this control represents.
+		/// </summary>
 		public DataType DataType
 		{
 			get { return this.DataContext as DataType; }
@@ -140,7 +148,7 @@
 
 		/// <summary>
 		/// Gets or sets the value of the InputIndex property.
-		/// TODO: (PS) Comment this.
+		/// If this control is used to represent a node's input then this is the index of that input.
 		/// This is a Dependency Property.
 		/// </summary>
 		public int InputIndex
@@ -151,6 +159,11 @@
 
 		/// <summary>
 		/// Gets the value of the IsConnectionCompatible property.
+		/// States whether the input or output this control represents is compatible with the data type
+		/// the user is currently trying to connect.
+		/// null = no data connection is being made.
+		/// true = data is compatible with this input/output.
+		/// false = data is NOT compatible.
 		/// This is a Dependency Property.
 		/// </summary>
 		public bool? IsConnectionCompatible
@@ -161,7 +174,7 @@
 
 		/// <summary>
 		/// Gets or sets the value of the IsInput property.
-		/// TODO: (PS) Comment this.
+		/// States whether this IO handle represents an input (or output otherwise)
 		/// This is a Dependency Property.
 		/// </summary>
 		public bool IsInput
@@ -170,6 +183,12 @@
 			set { this.SetValue(IsInputProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is used in a preview (left side menu on the main window).
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is preview; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsPreview
 		{
 			get
@@ -180,7 +199,7 @@
 
 		/// <summary>
 		/// Gets or sets the value of the IsSelected property.
-		/// TODO: (PS) Comment this.
+		/// States whether this input/output is currently selected in the tree designer.
 		/// This is a Dependency Property.
 		/// </summary>
 		public bool IsSelected
@@ -189,13 +208,17 @@
 			set { this.SetValue(IsSelectedProperty, value); }
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the Node instance the represented input/output is attached to.
+		/// </summary>
 		public Node Node
 		{
 			get { return this.NodeViewer != null ? this.NodeViewer.DataContext as Node : null; }
 		}
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets the node viewer this input/output is attached to.
+		/// </summary>
 		public UcNodeViewer NodeViewer
 		{
 			get;
@@ -206,6 +229,12 @@
 
 		#region overrideable methods
 
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
 		public override string ToString()
 		{
 			return String.Format("{0} Node={1}, DataType={2}", this.GetType().Name, this.Node, this.DataType);
@@ -216,16 +245,9 @@
 		#region methods
 
 		/// <summary>
-		/// Raises the <see cref="E:CustomDrag"/> event.
+		/// Raises the <see cref="E:Click" /> event.
 		/// </summary>
-		protected void OnCustomDrag()
-		{
-			if (this.CustomDrag != null)
-			{
-				this.CustomDrag(this, null);
-			}
-		}
-
+		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void OnClick(MouseButtonEventArgs e)
 		{
 			if (!this.IsPreview)
@@ -235,6 +257,21 @@
 			}
 		}
 
+		/// <summary>
+		/// Raises the <see cref="E:CustomDrag"/> event.
+		/// </summary>
+		private void OnCustomDrag()
+		{
+			if (this.CustomDrag != null)
+			{
+				this.CustomDrag(this, null);
+			}
+		}
+
+		/// <summary>
+		/// Callback for the CustomDragDropHelper
+		/// </summary>
+		/// <param name="e">The <see cref="MouseEventArgs"/> instance containing the event data.</param>
 		private void OnCustomDragDrop(MouseEventArgs e)
 		{
 			if (!this.IsPreview)
@@ -244,20 +281,32 @@
 			}
 		}
 
+		/// <summary>
+		/// Callback for when the associated UcNodeViewer's IsSelected property changes.
+		/// </summary>
+		/// <param name="args">The change arguments.</param>
 		private void OnNodeViewerIsSelectedChanged(PropertyChangedCallbackArgs args)
 		{
 			bool newValue = (bool)args.NewValue;
 
 			if (!newValue)
 			{
+				// Deselect this IO handle if node is deselected.
 				this.IsSelected = false;
 			}
 		}
 
+		/// <summary>
+		/// Callback for when the assiciated UcTreeDesigner's ConnectingIOHandle property changes.
+		/// </summary>
+		/// <param name="args">The change arguments.</param>
 		private void OnTreeDesignerConnectingIOHandleChanged(PropertyChangedCallbackArgs args)
 		{
 			UcIOHandle newValue = args.NewValue as UcIOHandle;
 
+			// If user is trying to connect another IO handle, provide information about
+			// whether this handle is compatible with its data by setting the IsConnectionCompatible
+			// property.
 			if (newValue != this)
 			{
 				if (newValue != null && this.IsInput != newValue.IsInput && this.NodeViewer != newValue.NodeViewer)
@@ -276,6 +325,11 @@
 
 		#region event handlers
 
+		/// <summary>
+		/// Handles the Loaded event of this control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
 		private void This_Loaded(object sender, RoutedEventArgs e)
 		{
 			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
@@ -302,11 +356,21 @@
 			}
 		}
 
+		/// <summary>
+		/// Handles the MouseLeftButtonDown event of this control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void This_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.OnClick(e);
 		}
 
+		/// <summary>
+		/// Handles the MouseRightButtonDown event of this control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void This_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.OnClick(e);

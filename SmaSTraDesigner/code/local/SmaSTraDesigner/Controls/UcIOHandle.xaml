@@ -8,9 +8,6 @@
 	xmlns:support="clr-namespace:SmaSTraDesigner.Controls.Support"
 	mc:Ignorable="d"
 	x:Name="This"  Width="20" MouseLeftButtonDown="This_MouseLeftButtonDown" MouseRightButtonDown="This_MouseRightButtonDown" Loaded="This_Loaded">
-	<UserControl.Resources>
-		<support:IOHandleTemplateSelector x:Key="IOHandleTemplateSelector" />
-	</UserControl.Resources>
 	<UserControl.Style>
 		<Style TargetType="{x:Type UserControl}">
 			<Setter Property="Height" Value="15" />
