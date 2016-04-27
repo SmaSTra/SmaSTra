@@ -69,6 +69,6 @@
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
 
-		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
+		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
 	</Grid>
 </local:UcNodeViewer>

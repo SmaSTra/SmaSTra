@@ -14,6 +14,11 @@
 		/// <summary>
 		/// TODO: (PS) Comment this.
 		/// </summary>
+		private NodeClass clazz;
+
+		/// <summary>
+		/// TODO: (PS) Comment this.
+		/// </summary>
 		private string name = null;
 
 		/// <summary>
@@ -44,11 +49,25 @@
 
 		#region properties
 
-		// TODO: (PS) Comment this.
+		/// <summary>
+		/// Gets or sets the Class property value.
+		/// TODO: (PS) Comment this.
+		/// </summary>
 		public NodeClass Class
 		{
-			get;
-			internal set;
+			get
+			{
+				return this.clazz;
+			}
+			internal set
+			{
+				if (value != this.clazz)
+				{
+					NodeClass oldValue = this.clazz;
+					this.clazz = value;
+					this.OnClassChanged(oldValue, value);
+				}
+			}
 		}
 
 		/// <summary>
@@ -128,6 +147,15 @@
 		public virtual object Clone()
 		{
 			return this.MemberwiseClone();
+		}
+
+		/// <summary>
+		/// Called when the Class property changed its value.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		protected virtual void OnClassChanged(NodeClass oldValue, NodeClass newValue)
+		{
 		}
 
 		public override string ToString()

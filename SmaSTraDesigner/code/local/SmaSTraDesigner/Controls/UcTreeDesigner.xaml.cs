@@ -142,9 +142,12 @@
 
 		private LambdaConverter canvasOffsetConverter;
 		private bool changingSelectedNodeViewers = false;
+		private LambdaConverter connectionLineCoordConverter;
+		private Dictionary<Connection, Line> connectionLines = new Dictionary<Connection, Line>();
 		private Point? dragStart = null;
 		private Point? mousePosOnViewer = null;
 		private UcNodeViewer movingNodeViewer = null;
+		private Dictionary<Node, UcNodeViewer> nodeViewers = new Dictionary<Node, UcNodeViewer>();
 		private UcNodeViewer[] previouslySelectedItems = { };
 		private HashSet<UcIOHandle> registeredIoHandles = new HashSet<UcIOHandle>();
 
@@ -247,6 +250,30 @@
 
 		#region methods
 
+		public void AddConnection(Connection connection)
+		{
+			if (this.Tree == null || this.connectionLines.ContainsKey(connection))
+			{
+				return;
+			}
+
+			UcNodeViewer oNode = null;
+			if (this.nodeViewers.TryGetValue(connection.OutputNode, out oNode))
+			{
+				throw new Exception(String.Format("OutputNode {0} not found.", connection.OutputNode));
+			}
+			UcNodeViewer iNode = null;
+			if (this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
+			{
+				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
+			}
+
+			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
+			UcIOHandle iHandle = oNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
+
+			this.AddConnection(oHandle, iHandle, connection);
+		}
+
 		public void AddNode(Node node, bool select = false)
 		{
 			if (node == null)
@@ -284,77 +311,25 @@
 			}
 		}
 
-		public void AddConnection(Connection connection)
-		{
-			if (this.Tree == null || this.connectionLines.ContainsKey(connection))
-			{
-				return;
-			}
-
-			UcNodeViewer oNode = null;
-			if (this.nodeViewers.TryGetValue(connection.OutputNode, out oNode))
-			{
-				throw new Exception(String.Format("OutputNode {0} not found.", connection.OutputNode));
-			}
-			UcNodeViewer iNode = null;
-			if (this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
-			{
-				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
-			}
-
-			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
-			UcIOHandle iHandle = oNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
-
-			this.AddConnection(oHandle, iHandle, connection);
-		}
-
 		public void RemoveConnection(Connection connection)
 		{
 			this.RemoveConnection(null, connection);
 		}
 
-		private void RemoveConnection(UcIOHandle handle, Connection? connection)
+		public void RemoveNode(Node node)
 		{
-			if (this.Tree == null)
+			UcNodeViewer nodeViewer;
+			if (this.nodeViewers.TryGetValue(node, out nodeViewer))
 			{
-				return;
-			}
-
-			if (connection == null)
-			{
-				if (handle.IsInput)
-				{
-					connection = this.Tree.Connections.Cast<Connection?>()
-						.FirstOrDefault(c => object.Equals(c.Value.InputNode, handle.Node) && handle.InputIndex == c.Value.InputIndex);
-				}
-				else
-				{
-					connection = this.Tree.Connections.Cast<Connection?>()
-						.FirstOrDefault(c => object.Equals(c.Value.OutputNode, handle.Node));
-				}
-			}
-
-			if (connection != null)
-			{
-				this.Tree.Connections.Remove(connection.Value);
-				Line line = null;
-				if (this.connectionLines.TryGetValue(connection.Value, out line))
-				{
-					this.connectionLines.Remove(connection.Value);
-					BindingOperations.ClearAllBindings(line);
-					this.cnvBackground.Children.Remove(line);
-				}
+				this.RemoveNode(nodeViewer);
 			}
 		}
 
-		private Point GetCanvasElementPosition(FrameworkElement element, bool center)
+		internal void RegisterIOHandle(UcIOHandle ioHandle)
 		{
-			Point p = center ? new Point(element.ActualWidth / 2, element.ActualHeight / 2) : new Point();
-
-			return element.TransformToAncestor(this.cnvBackground).Transform(p);
+			ioHandle.CustomDrag += IoHandle_CustomDrag;
+			this.registeredIoHandles.Add(ioHandle);
 		}
-
-		private LambdaConverter connectionLineCoordConverter;
 
 		private void AddConnection(UcIOHandle oHandle, UcIOHandle iHandle, Connection? connection)
 		{
@@ -366,7 +341,17 @@
 			}
 
 			this.Tree.Connections.Add(connection.Value);
-			
+			Transformation iNodeAsTransformation;
+			OutputNode iNodeAsOutputNode;
+			if ((iNodeAsTransformation = connection.Value.InputNode as Transformation) != null)
+			{
+				iNodeAsTransformation.InputNodes[connection.Value.InputIndex] = connection.Value.OutputNode;
+			}
+			else if ((iNodeAsOutputNode = connection.Value.InputNode as OutputNode) != null)
+			{
+				iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
+			}
+
 			Line newLine = new Line()
 			{
 				DataContext = connection.Value,
@@ -381,7 +366,7 @@
 					ConverterParameter = new Tuple<bool, UcIOHandle>(true, oHandle)
 				});
 			BindingOperations.SetBinding(newLine, Line.Y1Property,
-				new Binding("(Canvas.Left)")
+				new Binding("(Canvas.Top)")
 				{
 					Source = oHandle.NodeViewer,
 					Converter = this.connectionLineCoordConverter,
@@ -395,7 +380,7 @@
 					ConverterParameter = new Tuple<bool, UcIOHandle>(true, iHandle)
 				});
 			BindingOperations.SetBinding(newLine, Line.Y2Property,
-				new Binding("(Canvas.Left)")
+				new Binding("(Canvas.Top)")
 				{
 					Source = iHandle.NodeViewer,
 					Converter = this.connectionLineCoordConverter,
@@ -405,12 +390,6 @@
 			Panel.SetZIndex(newLine, -1);
 			this.connectionLines.Add(connection.Value, newLine);
 			this.cnvBackground.Children.Add(newLine);
-		}
-
-		internal void RegisterIOHandle(UcIOHandle ioHandle)
-		{
-			ioHandle.CustomDrag += IoHandle_CustomDrag;
-			this.registeredIoHandles.Add(ioHandle);
 		}
 
 		private void AdjustZIndex()
@@ -433,12 +412,19 @@
 			}
 		}
 
+		private Point GetCanvasElementPosition(FrameworkElement element, bool center)
+		{
+			Point p = center ? new Point(element.ActualWidth / 2, element.ActualHeight / 2) : new Point();
+
+			return element.TransformToAncestor(this.cnvBackground).Transform(p);
+		}
+
 		private void MakeBindings(UcNodeViewer nodeViewer)
 		{
 			this.MakeCanvasOffsetBinding(nodeViewer, false);
 			this.MakeCanvasOffsetBinding(nodeViewer, true);
 
-			((UcNodeViewer)nodeViewer).StartedMoving += UcNodeViewer_StartedMoving;
+			nodeViewer.StartedMoving += this.UcNodeViewer_StartedMoving;
 		}
 
 		private void MakeCanvasOffsetBinding(UcNodeViewer nodeViewer, bool isVertical)
@@ -493,7 +479,19 @@
 
 		private void OnTreeChanged(TransformationTree oldTree, TransformationTree newTree)
 		{
+			foreach (var nodeViewer in this.nodeViewers.Values)
+			{
+				this.SeverTiesToNodeViewer(nodeViewer);
+			}
+
+			foreach (var line in this.connectionLines.Values)
+			{
+				BindingOperations.ClearAllBindings(line);
+			}
+
 			this.cnvBackground.Children.Clear();
+			this.nodeViewers.Clear();
+			this.connectionLines.Clear();
 			if (newTree != null)
 			{
 				if (newTree.OutputNode == null)
@@ -507,6 +505,8 @@
 				this.cnvBackground.Children.Add(this.outOutputViewer);
 				this.outOutputViewer.DataContext = newTree.OutputNode;
 
+				this.outOutputViewer.BringIntoView();
+
 				newTree.Nodes.CollectionChanged += TreeNodes_CollectionChanged;
 				newTree.Connections.CollectionChanged += TreeConnections_CollectionChanged;
 			}
@@ -518,15 +518,66 @@
 			}
 		}
 
-		private Dictionary<Connection, Line> connectionLines = new Dictionary<Connection, Line>();
-		private Dictionary<Node, UcNodeViewer> nodeViewers = new Dictionary<Node, UcNodeViewer>();
-
-		private void TreeConnections_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		private void RemoveConnection(UcIOHandle handle, Connection? connection)
 		{
+			if (this.Tree == null)
+			{
+				return;
+			}
+
+			if (connection == null)
+			{
+				if (handle.IsInput)
+				{
+					connection = this.Tree.Connections.Cast<Connection?>()
+						.FirstOrDefault(c => object.Equals(c.Value.InputNode, handle.Node) && handle.InputIndex == c.Value.InputIndex);
+				}
+				else
+				{
+					connection = this.Tree.Connections.Cast<Connection?>()
+						.FirstOrDefault(c => object.Equals(c.Value.OutputNode, handle.Node));
+				}
+			}
+
+			if (connection != null)
+			{
+				this.Tree.Connections.Remove(connection.Value);
+				Line line = null;
+				if (this.connectionLines.TryGetValue(connection.Value, out line))
+				{
+					this.connectionLines.Remove(connection.Value);
+					BindingOperations.ClearAllBindings(line);
+					this.cnvBackground.Children.Remove(line);
+				}
+			}
 		}
 
-		private void TreeNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		private void RemoveNode(UcNodeViewer nodeViewer)
 		{
+			if (this.Tree == null || nodeViewer is UcOutputViewer)
+			{
+				return;
+			}
+
+			foreach (var handle in nodeViewer.IoHandles)
+			{
+				this.RemoveConnection(handle, null);
+			}
+
+			this.Tree.Nodes.Remove(nodeViewer.Node);
+			this.nodeViewers.Remove(nodeViewer.Node);
+			this.cnvBackground.Children.Remove(nodeViewer);
+			this.SeverTiesToNodeViewer(nodeViewer);
+		}
+
+		private void SeverTiesToNodeViewer(UcNodeViewer nodeViewer)
+		{
+			BindingOperations.ClearAllBindings(nodeViewer);
+			nodeViewer.StartedMoving -= this.UcNodeViewer_StartedMoving;
+			foreach (var handle in nodeViewer.IoHandles)
+			{
+				this.registeredIoHandles.Remove(handle);
+			}
 		}
 
 		private void StopDragging(MouseButtonEventArgs e)
@@ -666,6 +717,18 @@
 			this.AddNode(newNode, true);
 		}
 
+		// TODO: (PS) Replace this with a WPF command
+		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Delete)
+			{
+				foreach (var nodeViewer in this.SelectedNodeViewers)
+				{
+					this.RemoveNode(nodeViewer);
+				}
+			}
+		}
+
 		private void This_Loaded(object sender, RoutedEventArgs e)
 		{
 			this.scvCanvas.ScrollToHorizontalOffset(GetOffset(this.vbBackground.ActualWidth, this.scvCanvas.ViewportWidth));
@@ -743,6 +806,14 @@
 		private void This_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			this.StopDragging(e);
+		}
+
+		private void TreeConnections_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+		}
+
+		private void TreeNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
 		}
 
 		private void UcNodeViewer_StartedMoving(object sender, EventArgs e)

@@ -9,52 +9,48 @@
 
 	public class Transformation : Node
 	{
-		#region fields
-
-		/// <summary>
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		private ObservableCollection<Node> inputNodes = null;
-
-		#endregion fields
-
 		#region properties
 
-		/// <summary>
-		/// Gets or sets the InputNodes property value.
-		/// TODO: (PS) Comment this.
-		/// </summary>
-		public ObservableCollection<Node> InputNodes
+		// TODO: (PS) Comment this.
+		public Node[] InputNodes
 		{
-			get
-			{
-				return this.inputNodes;
-			}
-			set
-			{
-				if (value != this.inputNodes)
-				{
-					ObservableCollection<Node> oldValue = this.inputNodes;
-					this.inputNodes = value;
-					this.OnInputNodesChanged(oldValue, value);
-					this.OnPropertyChanged("InputNodes");
-				}
-			}
+			get;
+			private set;
 		}
 
 		#endregion properties
 
 		#region overrideable methods
 
-		/// <summary>
-		/// Called when the InputNodes property changed its value.
-		/// </summary>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		protected virtual void OnInputNodesChanged(ObservableCollection<Node> oldValue, ObservableCollection<Node> newValue)
+		protected override void OnClassChanged(NodeClass oldValue, NodeClass newValue)
 		{
+			base.OnClassChanged(oldValue, newValue);
+
+			this.InputNodes = new Node[this.Class.InputTypes.Length];
 		}
 
 		#endregion overrideable methods
+
+		#region methods
+
+		private bool AddInput(Node inputNode)
+		{
+			if (this.InputNodes == null)
+			{
+				for (int i = 0; i < this.InputNodes.Length; i++)
+				{
+					if (this.InputNodes[i] == null)
+					{
+						this.InputNodes[i] = inputNode;
+
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		#endregion methods
 	}
 }

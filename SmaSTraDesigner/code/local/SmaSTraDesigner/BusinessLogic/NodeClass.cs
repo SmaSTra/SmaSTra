@@ -27,9 +27,10 @@
 
 			this.Name = name;
 			this.BaseNode = baseNode;
-			baseNode.Class = this;
 			this.OutputType = outputType;
 			this.InputTypes = inputTypes;
+
+			baseNode.Class = this;
 		}
 
 		#endregion constructors

@@ -44,7 +44,7 @@
 
 		private void mniTestJavaGen_Click(object sender, RoutedEventArgs e)
 		{
-			new TransformationTree().test();
+			this.tdTreeDesigner.Tree.createJava();
 		}
 
 		private void ToggleButton_Checked(object sender, RoutedEventArgs e)

@@ -87,7 +87,7 @@
 			if (saveFileDialog.ShowDialog() == true)
 			{
 				string className = saveFileDialog.SafeFileName.Remove(saveFileDialog.SafeFileName.Length - 5);
-				string directory = saveFileDialog.FileName.Remove(saveFileDialog.FileName.Length - (className.Length+5));
+				string directory = saveFileDialog.FileName.Remove(saveFileDialog.FileName.Length - (className.Length + 5));
 				Console.WriteLine(directory);
 				code = javaGenerator.traverse(OutputNode.InputNode, visited, numbers, true, directory);
 				string completeJavaText = javaGenerator.assembleText(className, code);
@@ -100,66 +100,64 @@
 		/// </summary>
 		public void HardcodingForTesting()
 		{
-			OutputNode = new OutputNode();
-				Transformation first = new Transformation();
-				first.Name = "Add_Vectors";
-				first.InputNodes = new ObservableCollection<Node>();
-					Transformation second = new Transformation();
-					second.Name = "Add_Vectors";
-					second.InputNodes = new ObservableCollection<Node>();
-					DataSource data1 = new DataSource();
-						data1.Name = "Accelerometer_Sensor";
-					DataSource data2 = new DataSource();
-						data2.Name = "Gyroscope_Sensor";
-					second.InputNodes.Add(data1);
-					second.InputNodes.Add(data2);
-				first.InputNodes.Add(second);
-					DataSource data3 = new DataSource();
-					data3.Name = "Gps_Sensor";
-				first.InputNodes.Add(data3);
-			OutputNode.InputNode = first;
-			OutputNode.Name = "Output Node";
-			Console.WriteLine("initialized all the things!");
+			//OutputNode = new OutputNode();
+			//Transformation first = new Transformation();
+			//first.Name = "Add_Vectors";
+			//Transformation second = new Transformation();
+			//second.Name = "Add_Vectors";
+			//DataSource data1 = new DataSource();
+			//data1.Name = "Accelerometer_Sensor";
+			//DataSource data2 = new DataSource();
+			//data2.Name = "Gyroscope_Sensor";
+			//second.InputNodes[0] = data1;
+			//second.InputNodes[1] = data2;
+			//first.InputNodes[0] = second;
+			//DataSource data3 = new DataSource();
+			//data3.Name = "Gps_Sensor";
+			//first.InputNodes[1] = data3;
+			//OutputNode.InputNode = first;
+			//OutputNode.Name = "Output Node";
+			//Console.WriteLine("initialized all the things!");
 		}
 
 		public void HardcodingForTestingII()
 		{
-			/*                                      Length
-													Subtract
-										  Multiply         Sensor:Gyro
-									 Add            GPS
-							Sensor:Acc Senso:Gyro
-							Both Gyros should be from the same source, so this one is interconnected!
-			*/
-			OutputNode = new OutputNode();
-			Transformation Multiply = new Transformation();
-			Transformation first = new Transformation();
-			first.Name = "Vector_Length";
-			first.InputNodes = new ObservableCollection<Node>();
-			Transformation Subtract = new Transformation();
-			Subtract.Name = "Subtract_Vectors";
-			Subtract.InputNodes = new ObservableCollection<Node>();
-			Multiply.Name = "Multiply_Vectors";
-			Multiply.InputNodes = new ObservableCollection<Node>();
-			Transformation Add = new Transformation();
-			Add.Name = "Add_Vectors";
-			Add.InputNodes = new ObservableCollection<Node>();
-			DataSource data1 = new DataSource();
-			data1.Name = "Accelerometer_Sensor";
-			DataSource data2 = new DataSource();
-			data2.Name = "Gyroscope_Sensor";
-			Add.InputNodes.Add(data1);
-			Add.InputNodes.Add(data2);
-			Multiply.InputNodes.Add(Add);
-			DataSource data3 = new DataSource();
-			data3.Name = "Gps_Sensor";
-			Multiply.InputNodes.Add(data3);
-			Subtract.InputNodes.Add(Multiply);
-			Subtract.InputNodes.Add(data2);
-			first.InputNodes.Add(Subtract);
-			OutputNode.InputNode = first;
-			OutputNode.Name = "Output Node";
-			Console.WriteLine("initialized all the things!");
+			///*                                      Length
+			//										Subtract
+			//							  Multiply         Sensor:Gyro
+			//						 Add            GPS
+			//				Sensor:Acc Senso:Gyro
+			//				Both Gyros should be from the same source, so this one is interconnected!
+			//*/
+			//OutputNode = new OutputNode();
+			//Transformation Multiply = new Transformation();
+			//Transformation first = new Transformation();
+			//first.Name = "Vector_Length";
+			//first.InputNodes = new ObservableCollection<Node>();
+			//Transformation Subtract = new Transformation();
+			//Subtract.Name = "Subtract_Vectors";
+			//Subtract.InputNodes = new ObservableCollection<Node>();
+			//Multiply.Name = "Multiply_Vectors";
+			//Multiply.InputNodes = new ObservableCollection<Node>();
+			//Transformation Add = new Transformation();
+			//Add.Name = "Add_Vectors";
+			//Add.InputNodes = new ObservableCollection<Node>();
+			//DataSource data1 = new DataSource();
+			//data1.Name = "Accelerometer_Sensor";
+			//DataSource data2 = new DataSource();
+			//data2.Name = "Gyroscope_Sensor";
+			//Add.InputNodes.Add(data1);
+			//Add.InputNodes.Add(data2);
+			//Multiply.InputNodes.Add(Add);
+			//DataSource data3 = new DataSource();
+			//data3.Name = "Gps_Sensor";
+			//Multiply.InputNodes.Add(data3);
+			//Subtract.InputNodes.Add(Multiply);
+			//Subtract.InputNodes.Add(data2);
+			//first.InputNodes.Add(Subtract);
+			//OutputNode.InputNode = first;
+			//OutputNode.Name = "Output Node";
+			//Console.WriteLine("initialized all the things!");
 		}
 
 		public void secondTest()

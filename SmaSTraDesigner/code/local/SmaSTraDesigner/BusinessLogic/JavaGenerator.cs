@@ -165,7 +165,7 @@
 		/// functions' returnValues, which in this case contains an int, the number of the current sensor, last are the methodcalls needed to fetch data from these sensors</returns>
 		public List<string>[] processSensor(Node currentNode, int number, string targetDirectory)
 		{
-			string fileName = currentNode.Name;
+			string fileName = currentNode.Class.Name;
 			string sourceDirectory = "generated\\" + fileName;
 			StreamReader sr = new StreamReader(sourceDirectory + "\\metadata.json");
 			string metadata = sr.ReadToEnd();
@@ -228,7 +228,7 @@
 		/// for initializing the class just right.</returns>
 		public List<string>[] processTransform(Node currentNode, int number, List<string> returnValues, List<string> functionCalls, bool first, string targetDirectory)
 		{
-			string fileName = currentNode.Name;
+			string fileName = currentNode.Class.Name;
 			string sourceDirectory = "generated\\" + fileName;
 			StreamReader sr = new StreamReader(sourceDirectory + "\\metadata.json");
 			string metadata = sr.ReadToEnd();
