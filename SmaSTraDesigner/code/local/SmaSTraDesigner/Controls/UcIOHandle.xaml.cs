@@ -4,13 +4,14 @@
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
+	using System.Linq;
 
 	using BusinessLogic;
 
 	using Common;
 
 	using Support;
-
+	using Common.Resources.Converters;
 	/// <summary>
 	/// Represents an input or output of a node on the GUI as a small handle for the user to interact with.
 	/// </summary>
@@ -121,6 +122,13 @@
 		public UcIOHandle()
 		{
 			this.InitializeComponent();
+			
+			((LambdaConverter)this.FindResource("ToolTipConverter")).ConvertMethod = (value, targetType, parameter, culture) =>
+			{
+				string typeName = (string)value;
+
+				return typeName != null ? typeName.Split('.').Last() : null;
+			};
 
 			this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
 		}

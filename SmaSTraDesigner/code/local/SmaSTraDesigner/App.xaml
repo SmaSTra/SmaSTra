@@ -3,12 +3,14 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:SmaSTraDesigner"
+	xmlns:presConverters="clr-namespace:Common.Resources.Converters;assembly=PresentationCommonLib"
 	xmlns:wpfConverters="clr-namespace:Common.Resources.Converters;assembly=WpfCommonLib"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
 	StartupUri="MainWindow.xaml" Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
 	<Application.Resources>
 		<wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
+		<presConverters:LambdaConverter x:Key="ToolTipConverter" />
 		<ctrlSupport:NodeListTemplateSelector x:Key="NodeListTemplateSelector" />
 		<DataTemplate x:Key="TransformationNodeTemplate">
 			<ctrl:UcTransformationViewer Margin="5,5" IsPreview="True" />

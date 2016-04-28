@@ -6,8 +6,9 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:support="clr-namespace:SmaSTraDesigner.Controls.Support"
+	xmlns:converters="clr-namespace:Common.Resources.Converters;assembly=PresentationCommonLib"
 	mc:Ignorable="d"
-	x:Name="This"  Width="20" MouseLeftButtonDown="This_MouseLeftButtonDown" MouseRightButtonDown="This_MouseRightButtonDown" Loaded="This_Loaded">
+	x:Name="This"  Width="20" MouseLeftButtonDown="This_MouseLeftButtonDown" MouseRightButtonDown="This_MouseRightButtonDown" Loaded="This_Loaded" ToolTip="{Binding Path=Name, Converter={StaticResource ToolTipConverter}}">
 	<UserControl.Style>
 		<Style TargetType="{x:Type UserControl}">
 			<Setter Property="Height" Value="15" />
