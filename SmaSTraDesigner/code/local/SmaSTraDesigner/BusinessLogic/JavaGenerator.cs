@@ -11,9 +11,7 @@
 	using Newtonsoft.Json.Linq;
 
 	/// <summary>
-	/// Todos:
-	/// - it is not always 6 in the Class Constructor, is it? -> Nope.
-	/// - check for doubles? identical imports etc. everything uses System.
+	/// Class handling all necessary functionality for the generation of java-code
 	/// </summary>
 	public class JavaGenerator
 	{
@@ -21,8 +19,7 @@
 
 		/// <summary>
 		/// Copying all files from a given source directory to a destination directory, is capable of copying subdirs too. Deletes File "metadata.json" from dest in the end.
-		/// Note: This is probably a horrible place for this code, but first exercise is to get this to work. Feel free to replace it.
-		/// Copied from MSDN and added deletion of metadata.json
+		/// Copied from MSDN
 		/// </summary>
 		/// <param name="sourceDirName">The source directory</param>
 		/// <param name="destDirName">The target directory</param>
@@ -72,14 +69,55 @@
 					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
 				}
 			}
-			File.Delete("metadata.json");
 		}
 
-		#endregion static methods
+        /// <summary>
+        /// Removing the metadata.json and adding the SmaSTraBase.aar 
+        /// </summary>
+        /// <param name="sourceDirName">location of the generated-folder</param>
+        /// <param name="destDirName">destination directory, where the java-generation has taken place</param>
+        private static void FinalizeCopy(string sourceDirName, string destDirName)
+        {
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            string libsDirName = destDirName + "\\libs\\";
 
-		#region fields
+            // If the source directory does not exist, throw an exception.
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+            // If the destination directory does not exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+            // If the libs directory does not yet exist, create it.
+            if (!Directory.Exists(libsDirName))
+            {
+                Directory.CreateDirectory(libsDirName);
+            }
 
-		string breaks = "\n \n";
+
+            FileInfo[] aar = dir.GetFiles("SmaSTraBase.aar"); //aar-file is the first element
+
+            // Create the path to the new copy of the file.
+            string libspath = Path.Combine(libsDirName, aar[0].Name);
+
+            // Copy the file.
+            aar[0].CopyTo(libspath, true);
+
+            string temppath = Path.Combine(destDirName, "metadata.json");
+
+            File.Delete(temppath);
+        }
+
+        #endregion static methods
+
+        #region fields
+
+        string breaks = "\n \n";
 
 		#endregion fields
 
@@ -132,23 +170,23 @@
 
 			init = prep + breaks + init + "\t}" + breaks;
 
-			/////////transformation call///////
-			string transformMethod = "\t@Override\n\tprotected void transform(int level) {\n\t\tswitch (level){\n";
-			for (int i = 0; i<level; i++)
-			{
-				transformMethod = transformMethod + "\t\t\tcase " + i +" : transform" + i + "(); break;\n";
-			}
-			transformMethod = transformMethod + "\t}" + breaks;
+            //////////transformation call///////
+            string transformMethod = "\t@Override\n\tprotected void transform(int level) {\n\t\tswitch (level){\n";
+            for (int i = 0; i < level; i++)
+            {
+                transformMethod = transformMethod + "\t\t\tcase " + i + " : transform" + i + "(); break;\n";
+            }
+            transformMethod = transformMethod + "\t\t}\n\t}" + breaks;
 
-			/////////transformation section///////
-			string transforms = "";
-			foreach(string s in code[2])
-			{
-				transforms = transforms + s + breaks;
-			}
+            /////////transformation section///////
+            string transforms = "";
+            foreach (string s in code[2])
+            {
+                transforms = transforms + s + breaks;
+            }
 
-			/////////combining///////
-			string text = import + intro + init + transformMethod + transforms + "}";
+            /////////combining///////
+            string text = import + intro + init + transformMethod + transforms + "}";
 			text.Replace("\n", Environment.NewLine);
 			return text;
 		}
@@ -228,7 +266,7 @@
 		/// for initializing the class just right.</returns>
 		public List<string>[] processTransform(Node currentNode, int number, List<string> returnValues, List<string> functionCalls, bool first, string targetDirectory)
 		{
-			string fileName = currentNode.Class.Name;
+            string fileName = currentNode.Class.Name;
 			string sourceDirectory = "generated\\" + fileName;
 			StreamReader sr = new StreamReader(sourceDirectory + "\\metadata.json");
 			string metadata = sr.ReadToEnd();
@@ -322,7 +360,15 @@
 		/// will be needed for generating the complete file.</returns>
 		public List<string>[] traverse(Node currentNode, Dictionary<Node, List<string>[]> visited, int[] numbers, bool first, string targetDirectory)
 		{
-			List<string>[] code = new List<string>[5];
+            //checking for valid input
+            if(currentNode == null)
+            {
+                throw new NullNodeException("Current Node is Null after " + numbers[0] + " visited transforms and " + numbers[1] + " visited sensors. Is your tree complete?");
+            }
+
+
+            //initializing stuff
+            List<string>[] code = new List<string>[5];
 
 			List<string> imports = new List<string>();
 			List<string> inits = new List<string>();
@@ -397,7 +443,9 @@
 			if (first)
 			{
 				functionCalls.Clear();
-				functionCalls.Add(numbers[0].ToString()); //TODO: COMMENT THIS!!!!
+				functionCalls.Add(numbers[0].ToString()); //at this point we are at the last node before returning all code snippets. numbers[0] will contain the number of transformations.
+                string sourceDirectory = "generated\\";
+                FinalizeCopy(sourceDirectory, targetDirectory);
 			}
 
 			code[0] = imports;
@@ -411,4 +459,12 @@
 
 		#endregion methods
 	}
+
+
+    [Serializable]
+    public class NullNodeException : Exception
+    {
+        public NullNodeException() { }
+        public NullNodeException(string message) : base(message) { }
+    }
 }

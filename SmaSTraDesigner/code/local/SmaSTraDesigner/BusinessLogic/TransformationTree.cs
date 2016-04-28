@@ -1,17 +1,18 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.IO;
-	using System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Linq;
 
-	using Microsoft.Win32;
+    using Microsoft.Win32;
+    using System.Windows;
 
-	/// <summary>
-	/// Represents a tree graph of data dransformations.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Represents a tree graph of data dransformations.
+    /// </summary>
+    [Serializable]
 	public class TransformationTree
 	{
 		#region constructors
@@ -94,8 +95,15 @@
 				string className = saveFileDialog.SafeFileName.Remove(saveFileDialog.SafeFileName.Length - 5);
 				string directory = saveFileDialog.FileName.Remove(saveFileDialog.FileName.Length - (className.Length + 5));
 				Console.WriteLine(directory);
-				code = javaGenerator.traverse(OutputNode.InputNode, visited, numbers, true, directory);
-				string completeJavaText = javaGenerator.assembleText(className, code);
+                try
+                {
+                    code = javaGenerator.traverse(OutputNode.InputNode, visited, numbers, true, directory);
+                }
+                catch(NullNodeException e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+                string completeJavaText = javaGenerator.assembleText(className, code);
 				File.WriteAllText(saveFileDialog.FileName, completeJavaText);
 			}
 		}
