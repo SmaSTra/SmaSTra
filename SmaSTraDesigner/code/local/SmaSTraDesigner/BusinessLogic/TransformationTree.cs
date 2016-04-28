@@ -98,13 +98,17 @@
                 try
                 {
                     code = javaGenerator.traverse(OutputNode.InputNode, visited, numbers, true, directory);
+                    string completeJavaText = javaGenerator.assembleText(className, code);
+                    File.WriteAllText(saveFileDialog.FileName, completeJavaText);
                 }
                 catch(NullNodeException e)
                 {
                     MessageBox.Show(e.Message);
                 }
-                string completeJavaText = javaGenerator.assembleText(className, code);
-				File.WriteAllText(saveFileDialog.FileName, completeJavaText);
+                catch(InvalidArgumentException e)
+                {
+                    MessageBox.Show(e.Message);
+                }
 			}
 		}
 
