@@ -134,7 +134,11 @@
 		public string assembleText(string className, List<string>[] code)
 		{
 			string levelString = code[4][0];
-			int level = int.Parse(levelString);
+            int level;
+            if(!int.TryParse(levelString, out level))
+            {
+                throw new InvalidArgumentException("Tried parsing " + levelString + ", but failed.");
+            }
 
 			string extends = code[3][0];
 
@@ -201,7 +205,7 @@
 		/// <returns>An array of five string-Lists. First element is imports, second is inits (of which every first element is the initialization of the sensor as a variable and the second element
         /// are the calls needed to actually initalize it), third is transforms (empty in this case, but added for consistency), fourth are the 
 		/// functions' returnValues, which in this case contains an int, the number of the current sensor, last are the methodcalls needed to fetch data from these sensors</returns>
-		public List<string>[] processSensor(Node currentNode, int number, string targetDirectory)
+		public List<string>[] processSensor(Node currentNode, int number, bool first, string targetDirectory)
 		{
 			string fileName = currentNode.Class.Name;
 			string sourceDirectory = "generated\\" + fileName;
@@ -235,8 +239,25 @@
             inits.Add(prep);
 			inits.Add(init);
 
-			newReturnValues.Add(number.ToString());
-			newFunctionCalls.Add("" + json.dataMethod); //throws random exception without empty string in front. maybe some implicit conversion stuff.
+            if (first)
+            {
+                string transform = "\tprivate void transform0(){\n";
+                string methodCall = "\t\tdata = sensor0." + json.dataMethod + "();\n";
+
+                transform = transform + methodCall + "\t}\n";
+
+                transforms.Add(transform);
+
+                newReturnValues.Add("" + json.output); //Needed so the text-assembly will know what to derive from
+                newFunctionCalls.Add("1");
+            }
+            else
+            {
+                newReturnValues.Add(number.ToString()); //in every other case this will be needed for the following transform
+                newFunctionCalls.Add("" + json.dataMethod);
+            } 
+			
+			
 
 			code[0] = imports;
 			code[1] = inits;
@@ -324,7 +345,7 @@
 			transforms.Add(transform);
 			if (first)
 			{
-				newReturnValues.Add("" + json.output); //TODO: COMMENT THIS!
+				newReturnValues.Add("" + json.output); //Needed so the text-assembly will know what to derive from
 			}
 			else
 			{
@@ -393,7 +414,7 @@
 			//anchor 2: is end node -> sensor
 			if (currentNode is DataSource)
 			{
-				List<string>[] sensorData = processSensor(currentNode, numbers[1], targetDirectory);
+				List<string>[] sensorData = processSensor(currentNode, numbers[1], first, targetDirectory);
 
 				numbers[1]++;
 
@@ -466,5 +487,11 @@
     {
         public NullNodeException() { }
         public NullNodeException(string message) : base(message) { }
+    }
+
+    public class InvalidArgumentException : Exception
+    {
+        public InvalidArgumentException() { }
+        public InvalidArgumentException(string message) : base(message) { }
     }
 }
