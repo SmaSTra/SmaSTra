@@ -42,7 +42,7 @@
 			App.Current.Shutdown();
 		}
 
-		private void mniTestJavaGen_Click(object sender, RoutedEventArgs e)
+		private void mniGenerateJava_Click(object sender, RoutedEventArgs e)
 		{
 			this.tdTreeDesigner.Tree.createJava();
 		}
