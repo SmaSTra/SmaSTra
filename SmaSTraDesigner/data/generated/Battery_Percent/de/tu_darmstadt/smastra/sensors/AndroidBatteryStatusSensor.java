@@ -7,6 +7,8 @@ import android.os.BatteryManager;
 
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 /**
@@ -26,9 +28,11 @@ public class AndroidBatteryStatusSensor implements Sensor {
         this.context = context;
     }
 
+    @SensorStart
     @Override
     public void start(){}
 
+    @SensorStop
     @Override
     public void stop(){}
 

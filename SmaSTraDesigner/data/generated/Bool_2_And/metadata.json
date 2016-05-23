@@ -2,12 +2,12 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Bool 2 And",
-  "method": "and2",
   "description": "None",
-  "static": true,
-  "output": "boolean",
   "neededPermissions": [],
   "needs": [],
+  "method": "and2",
+  "static": true,
+  "output": "boolean",
   "input": {
     "arg0": "boolean",
     "arg1": "boolean"

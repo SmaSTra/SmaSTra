@@ -2,9 +2,11 @@
   "type": "sensor",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidLightSensor",
   "display": "Light Sensor",
-  "dataMethod": "getLastData",
   "description": "Captures the Light value in lux",
-  "output": "double",
   "neededPermissions": [],
-  "needs": []
+  "needs": [],
+  "dataMethod": "getLastData",
+  "output": "double",
+  "start": "start",
+  "stop": "stop"
 }

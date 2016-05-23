@@ -2,14 +2,14 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Add Vectors",
-  "method": "add",
   "description": "None",
-  "static": true,
-  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
+  "method": "add",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "input": {
     "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d",
     "arg1": "de.tu_darmstadt.smastra.sensors.Vector3d"

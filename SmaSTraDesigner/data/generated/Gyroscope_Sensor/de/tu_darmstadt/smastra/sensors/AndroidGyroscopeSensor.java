@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 
 /**
  * An implementation of a sensor for the Accelerometer.
@@ -29,9 +28,4 @@ public class AndroidGyroscopeSensor extends Abstract3dAndroidSensor {
         super(context, Sensor.TYPE_GYROSCOPE, samplingPeriodUs);
     }
 
-    @Override
-    @SensorOutput
-    public Vector3d getLastData() {
-        return super.getLastData();
-    }
 }

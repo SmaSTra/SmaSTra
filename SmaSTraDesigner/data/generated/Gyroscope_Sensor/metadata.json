@@ -2,13 +2,15 @@
   "type": "sensor",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidGyroscopeSensor",
   "display": "Gyroscope Sensor",
-  "dataMethod": "getLastData",
   "description": "The Gyro sensor measuring 3d-circle acceleration",
-  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "neededPermissions": [],
   "needs": [
-    "de.tu_darmstadt.smastra.sensors.Vector3d",
     "de.tu_darmstadt.smastra.sensors.Data3d",
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
     "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor"
-  ]
+  ],
+  "dataMethod": "getLastData",
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
+  "start": "start",
+  "stop": "stop"
 }

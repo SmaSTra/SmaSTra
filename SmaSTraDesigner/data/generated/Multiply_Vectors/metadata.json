@@ -2,14 +2,14 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Multiply Vectors",
-  "method": "multiply",
   "description": "None",
-  "static": true,
-  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
+  "method": "multiply",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "input": {
     "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d",
     "arg1": "double"

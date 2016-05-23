@@ -2,11 +2,13 @@
   "type": "sensor",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidActivityReognitionSensor",
   "display": "Activity Recognition Sensor",
-  "dataMethod": "getActivitiesToProbabilitiesMap",
   "description": "This sensor represents the Android Activity Recognition",
-  "output": "java.util.Map",
   "neededPermissions": [
     "com.google.android.gms.permission.ACTIVITY_RECOGNITION"
   ],
-  "needs": []
+  "needs": [],
+  "dataMethod": "getActivitiesToProbabilitiesMap",
+  "output": "java.util.Map",
+  "start": "start",
+  "stop": "stop"
 }

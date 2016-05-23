@@ -2,14 +2,14 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
   "display": "Get Z",
-  "method": "getZ",
   "description": "None",
-  "static": true,
-  "output": "double",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
+  "method": "getZ",
+  "static": true,
+  "output": "double",
   "input": {
     "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d"
   }

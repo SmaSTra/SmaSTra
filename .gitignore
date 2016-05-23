@@ -39,6 +39,9 @@ AndroidCodeSnippets/SmaSTraDefaultsGenerator/generated/
 AndroidCodeSnippets/myapplication/
 *.iml
 
+### Bat files:
+*.bat
+
 
 ## Visual Studio stuff below: ##
 ## Ignore Visual Studio temporary files, build results, and

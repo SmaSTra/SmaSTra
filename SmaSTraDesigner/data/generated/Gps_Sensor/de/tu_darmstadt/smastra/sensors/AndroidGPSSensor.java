@@ -11,6 +11,8 @@ import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 /**
@@ -42,6 +44,7 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     /**
      * Starts the Listener.
      */
+    @SensorStart
     @Override
     public void start(){
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -51,6 +54,7 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     /**
      * stops the Listener.
      */
+    @SensorStop
     @Override
     public void stop(){
         locationManager.removeUpdates(this);

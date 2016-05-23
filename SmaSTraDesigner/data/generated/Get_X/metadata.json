@@ -2,14 +2,14 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
   "display": "Get X",
-  "method": "getX",
   "description": "None",
-  "static": true,
-  "output": "double",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
+  "method": "getX",
+  "static": true,
+  "output": "double",
   "input": {
     "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d"
   }

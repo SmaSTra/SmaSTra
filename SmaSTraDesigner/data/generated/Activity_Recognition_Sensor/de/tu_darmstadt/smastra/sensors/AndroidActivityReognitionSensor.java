@@ -25,6 +25,8 @@ import java.util.Map;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 /**
@@ -68,6 +70,7 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
     /**
      * Starts the Sensor.
      */
+    @SensorStart
     @Override
     public void start(){
         LocalBroadcastManager.getInstance(context).registerReceiver(this, new IntentFilter(BROADCAST_NAME));
@@ -77,6 +80,7 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
     /**
      * Stops the Sensor.
      */
+    @SensorStop
     @Override
     public void stop(){
         LocalBroadcastManager.getInstance(context).unregisterReceiver(this);

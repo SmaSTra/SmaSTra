@@ -2,14 +2,14 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Vector squared length",
-  "method": "lengthSquare",
   "description": "None",
-  "static": true,
-  "output": "double",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
+  "method": "lengthSquare",
+  "static": true,
+  "output": "double",
   "input": {
     "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d"
   }

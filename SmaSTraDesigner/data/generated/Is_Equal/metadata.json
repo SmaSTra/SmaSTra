@@ -2,12 +2,12 @@
   "type": "transformation",
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Is Equal",
-  "method": "isEqual",
   "description": "None",
-  "static": true,
-  "output": "boolean",
   "neededPermissions": [],
   "needs": [],
+  "method": "isEqual",
+  "static": true,
+  "output": "boolean",
   "input": {
     "arg0": "double",
     "arg1": "double"
