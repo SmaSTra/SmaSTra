@@ -24,6 +24,10 @@ public abstract class SmaSTraElement {
      * The displayName to use.
      */
     protected final String displayName;
+    /**
+     * The description to show.
+     */
+    protected final String description;
 
     /**
      * The Android permissions needed.
@@ -31,17 +35,18 @@ public abstract class SmaSTraElement {
     protected final String[] androidPermissions;
 
 
-    public SmaSTraElement(String displayName, Class<?> elementClass) {
-        this(displayName, elementClass, new String[0], null);
+    public SmaSTraElement(String displayName, String description, Class<?> elementClass) {
+        this(displayName, description, elementClass, new String[0], null);
     }
 
-    public SmaSTraElement(String displayName, Class<?> elementClass, String[] androidPermissions) {
-        this(displayName, elementClass, androidPermissions, null);
+    public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions) {
+        this(displayName, description, elementClass, androidPermissions, null);
     }
 
 
-    public SmaSTraElement(String displayName, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses) {
+    public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses) {
         this.displayName = displayName;
+        this.description = description;
         this.elementClass = elementClass;
         this.androidPermissions = androidPermissions == null ? new String[0] : androidPermissions;
 
@@ -63,6 +68,14 @@ public abstract class SmaSTraElement {
      */
     public String getDisplayName() {
         return displayName;
+    }
+
+    /**
+     * Gets the description for the Element.
+     * @return the Description as String.
+     */
+    public String getDescription() {
+        return description;
     }
 
     /**

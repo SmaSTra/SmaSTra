@@ -15,11 +15,6 @@ import de.tu_darmstadt.smastra.generator.elements.Output;
 public class SmaSTraSensor extends SmaSTraElement {
 
     /**
-     * The Description of the Sensor.
-     */
-    private final String description;
-
-    /**
      * The List of the output usable.
      */
     private final Output output;
@@ -29,23 +24,31 @@ public class SmaSTraSensor extends SmaSTraElement {
      */
     private final String dataMethodName;
 
+    /**
+     * The Method to start the sensor.
+     */
+    private final String startMethod;
+
+    /**
+     * The Method to stop the sensor.
+     */
+    private final String stopMethod;
+
 
     public SmaSTraSensor(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses, Output output,
-                         String dataMethodName, Class<?> clazz) {
+                         String dataMethodName, String startMethod, String stopMethod, Class<?> clazz) {
 
-        super(displayName, clazz, androidPermissions, needsOtherClasses);
-        this.description = description;
+        super(displayName, description, clazz, androidPermissions, needsOtherClasses);
+
         this.output = output;
         this.dataMethodName = dataMethodName;
+        this.startMethod = startMethod;
+        this.stopMethod = stopMethod;
     }
 
 
     public String getDisplayName() {
         return displayName;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public Output getOutput() {
@@ -54,6 +57,14 @@ public class SmaSTraSensor extends SmaSTraElement {
 
     public String getDataMethodName() {
         return dataMethodName;
+    }
+
+    public String getStartMethod() {
+        return startMethod;
+    }
+
+    public String getStopMethod() {
+        return stopMethod;
     }
 
     public String toJsonString(ElementGenerator generator){

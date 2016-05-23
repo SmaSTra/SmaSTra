@@ -33,12 +33,9 @@ public class SmaSTraTransformationSerializerTest {
                 .setStatic(false)
                 .build();
 
-        JsonElement element = sut.serialize(transformation, SmaSTraTransformation.class, null);
+        JsonObject obj = sut.serialize(transformation, SmaSTraTransformation.class, null);
 
         //Now validate serialization:
-        assertTrue(element.isJsonObject());
-        JsonObject obj = element.getAsJsonObject();
-
         assertEquals("transformation", obj.get("type").getAsString());
         assertEquals(this.getClass().getCanonicalName(), obj.get("mainClass").getAsString());
         assertEquals("TEST", obj.get("description").getAsString());

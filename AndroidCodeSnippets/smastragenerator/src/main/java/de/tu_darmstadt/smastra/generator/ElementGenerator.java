@@ -52,7 +52,7 @@ public class ElementGenerator {
     public Collection<SmaSTraTransformation> readTransformationsFromClassLoaded(){
         Collection<SmaSTraTransformation> transformations = new HashSet<>();
         Collection<Class<? extends Transformation>> classes = getAllClassesOf(Transformation.class);
-        for(Class<?> clazz : classes) {
+        for(Class<? extends Transformation> clazz : classes) {
             if (hasSkipAnnotation(clazz)) continue;
 
             Collection<SmaSTraTransformation> classTransformations = SmaSTraClassTransformationParser.readFromClass(clazz);
@@ -72,7 +72,7 @@ public class ElementGenerator {
     public Collection<SmaSTraSensor> readSensorsFromClassLoaded(){
         Collection<SmaSTraSensor> transformations = new HashSet<>();
         Collection<Class<? extends Sensor>> classes = getAllClassesOf(Sensor.class);
-        for(Class<?> clazz : classes) {
+        for(Class<? extends Sensor> clazz : classes) {
             if (hasSkipAnnotation(clazz)) continue;
 
             SmaSTraSensor sensor = SmaSTraClassSensorParser.readFromClass(clazz);

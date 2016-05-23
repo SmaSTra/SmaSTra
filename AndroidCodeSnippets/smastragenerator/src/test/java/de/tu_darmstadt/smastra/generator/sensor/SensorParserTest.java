@@ -7,6 +7,8 @@ import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 import static junit.framework.Assert.assertEquals;
@@ -136,6 +138,58 @@ public class SensorParserTest {
     @NeedsAndroidPermissions("TEST")
     @SensorConfig(displayName = "fsaf")
     private static class TestClass5 implements Sensor {
+
+        public String method1(String vec1){ return null; }
+
+        @SensorOutput
+        public int method2(){ return 1; }
+
+        @Override public void start(){}
+        @Override public void stop(){}
+    }
+
+
+    @Test
+    public void testStartStopIsReadCorrectlyIfPresent() throws Throwable {
+        SmaSTraSensor list = SmaSTraClassSensorParser.readFromClass(TestClass6.class);
+        assertEquals("testStart", list.getStartMethod());
+        assertEquals("testStop", list.getStopMethod());
+    }
+
+
+
+    /* For testStartStopIsReadCorrectlyIfPresent */
+    @SkipParsing
+    @NeedsAndroidPermissions("TEST")
+    @SensorConfig(displayName = "fsaf")
+    private static class TestClass6 implements Sensor {
+
+        public String method1(String vec1){ return null; }
+
+        @SensorOutput
+        public int method2(){ return 1; }
+
+        @Override public void start(){}
+        @Override public void stop(){}
+
+        @SensorStart public void testStart() {}
+        @SensorStop public void testStop() {}
+    }
+
+    @Test
+    public void testStartStopIsReadCorrectlyIfNotPresent() throws Throwable {
+        SmaSTraSensor list = SmaSTraClassSensorParser.readFromClass(TestClass7.class);
+        assertTrue(list.getStartMethod().isEmpty());
+        assertTrue(list.getStopMethod().isEmpty());
+    }
+
+
+
+    /* For testSkipMethodWithoutAnnotationWorks */
+    @SkipParsing
+    @NeedsAndroidPermissions("TEST")
+    @SensorConfig(displayName = "fsaf")
+    private static class TestClass7 implements Sensor {
 
         public String method1(String vec1){ return null; }
 

@@ -21,11 +21,6 @@ public class SmaSTraTransformation extends SmaSTraElement {
     private final List<Input> inputs;
 
     /**
-     * The Description of the Transaction.
-     */
-    private final String description;
-
-    /**
      * The List of the output usable.
      */
     private final Output output;
@@ -46,9 +41,8 @@ public class SmaSTraTransformation extends SmaSTraElement {
                                  List<Class<?>> needsOtherClasses, String description,
                                  Output output, String methodName, Class<?> clazz, boolean isStatic) {
 
-        super(displayName, clazz, androidPermissions, needsOtherClasses);
+        super(displayName, description, clazz, androidPermissions, needsOtherClasses);
         this.inputs = inputs;
-        this.description = description;
         this.output = output;
         this.methodName = methodName;
         this.isStatic = isStatic;
@@ -69,10 +63,6 @@ public class SmaSTraTransformation extends SmaSTraElement {
 
     public boolean isStatic() {
         return isStatic;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getDisplayName() {

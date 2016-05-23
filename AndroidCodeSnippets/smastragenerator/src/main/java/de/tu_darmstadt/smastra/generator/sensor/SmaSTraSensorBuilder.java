@@ -50,6 +50,16 @@ public class SmaSTraSensorBuilder {
      */
     private String[] androidPermissions = new String[0];
 
+    /**
+     * The Method to start the sensor.
+     */
+    private String startMethod = "";
+
+    /**
+     * The Method to stop the sensor.
+     */
+    private String stopMethod = "";
+
 
 
     public SmaSTraSensorBuilder setDescription(String description) {
@@ -120,6 +130,17 @@ public class SmaSTraSensorBuilder {
         return androidPermissions;
     }
 
+    public void setStartMethod(String startMethod) {
+        if(startMethod == null) return;
+        this.startMethod = startMethod;
+    }
+
+    public void setStopMethod(String stopMethod) {
+        if(stopMethod == null) return;
+        this.stopMethod = stopMethod;
+    }
+
+
     /**
      * Generates the Sensor.
      *
@@ -132,6 +153,6 @@ public class SmaSTraSensorBuilder {
         if(output == null) throw new ElementGenerationFailedException("No Output defined.");
         if(dataMethodName == null) throw new ElementGenerationFailedException("No MethodName defined.");
 
-        return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses, output, dataMethodName, clazz);
+        return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses, output, dataMethodName, startMethod, stopMethod, clazz);
     }
 }

@@ -3,7 +3,6 @@ package de.tu_darmstadt.smastra.sensors;
 import android.content.Context;
 
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 
 import static android.hardware.Sensor.TYPE_LIGHT;
 
@@ -18,10 +17,4 @@ public class AndroidLightSensor extends Abstract1dAndroidSensor {
         super(context, TYPE_LIGHT, samplingPeriodUs);
     }
 
-
-    @SensorOutput
-    @Override
-    public double getLastData() {
-        return super.getLastData();
-    }
 }

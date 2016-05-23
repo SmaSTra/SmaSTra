@@ -7,6 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.SensorStop;
 
 /**
  * This is the basic class for a sensor.
@@ -67,6 +70,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de
     /**
      * Starts listening for Sensor data.
      */
+    @SensorStart
     public void start(){
         sensorManager.registerListener(this, usedSensor, samplingPeriodUs);
     }
@@ -75,6 +79,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de
     /**
      * Stops listening for data.
      */
+    @SensorStop
     public void stop(){
         sensorManager.unregisterListener(this);
     }
@@ -84,6 +89,7 @@ public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de
      * Gets the last Data received.
      * @return the last data.
      */
+    @SensorOutput
     public Vector3d getLastData() {
         return lastData;
     }

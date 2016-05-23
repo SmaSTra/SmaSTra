@@ -30,12 +30,9 @@ public class SmaSTraSensorSerializerTest {
                 .setOutput(new Output(String.class))
                 .build();
 
-        JsonElement element = sut.serialize(sensor, SmaSTraSensor.class, null);
+        JsonObject obj = sut.serialize(sensor, SmaSTraSensor.class, null);
 
         //Now validate serialization:
-        assertTrue(element.isJsonObject());
-        JsonObject obj = element.getAsJsonObject();
-
         assertEquals("sensor", obj.get("type").getAsString());
         assertEquals(this.getClass().getCanonicalName(), obj.get("mainClass").getAsString());
         assertEquals("TEST", obj.get("description").getAsString());
