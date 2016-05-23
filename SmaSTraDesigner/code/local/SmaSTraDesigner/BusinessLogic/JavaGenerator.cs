@@ -1,19 +1,16 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Linq;
-	using System.Windows;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
-	using Microsoft.Win32;
+    using Newtonsoft.Json.Linq;
 
-	using Newtonsoft.Json.Linq;
-
-	/// <summary>
-	/// Class handling all necessary functionality for the generation of java-code
-	/// </summary>
-	public class JavaGenerator
+    /// <summary>
+    /// Class handling all necessary functionality for the generation of java-code
+    /// </summary>
+    public class JavaGenerator
 	{
 		#region static methods
 
@@ -140,18 +137,15 @@
                 throw new InvalidArgumentException("Tried parsing " + levelString + ", but failed.");
             }
 
-			string extends = code[3][0];
+			string extends = minimizeToClass( code[3][0] );
 
 			/////////import section///////
 			List<string> imports = code[0];
 			imports = imports.Distinct().ToList();
 			string import = "";
 
-			foreach(string s in imports)
-			{
-				import = import + s;
-			}
-			import = import + breaks;
+            foreach (string s in imports) import += "import "+s+";\n";
+			import += breaks;
 
 			/////////intro section///////
 			string intro = "public class " + className + " extends SmaSTraTreeExecutor<" + extends + "> {" + breaks +
@@ -159,7 +153,7 @@
 
             /////////sensor init section///////
             string prep = "";
-			string init = "\tprotected void initSensors(){\n";
+			string init = "\tprotected void init(){\n";
             for(int i = 0; i<code[1].Count; i++)
             {
                 if (i % 2 == 0)
@@ -209,9 +203,7 @@
 		{
 			string fileName = currentNode.Class.Name;
 			string sourceDirectory = "generated\\" + fileName;
-			StreamReader sr = new StreamReader(sourceDirectory + "\\metadata.json");
-			string metadata = sr.ReadToEnd();
-			dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(metadata);
+            var json = JObject.Parse(File.ReadAllText(sourceDirectory + "\\metadata.json"));
 
 			List<string>[] code = new List<string>[5];
 			List<string> imports = new List<string>();
@@ -222,19 +214,22 @@
 
 			Console.WriteLine("sensor processing called!");
 
-			//imports
-			foreach (string need in json.needs)
+            //imports
+            imports.Add(json["mainClass"].ToString());
+			foreach (string need in json["needs"])
 			{
-				imports.Add("import " + need + "\n");
+				imports.Add(need);
 				DirectoryCopy(sourceDirectory, targetDirectory, true);
 			}
 
-
-            string prep = "\tprivate " + json.mainClass + " sensor" + number + ";\n";
+            string sensorMainClass = minimizeToClass(json["mainClass"].ToString());
+            string prep = "\tprivate " + sensorMainClass + " sensor" + number + ";\n";
 
             //initiating sensor
-            string init = "\t\t" + "sensor" + number + " = new " + json.mainClass + "(Context context);\n";
-			init = init + "\t\tsensor" + number + ".startListening();\n";
+            string init = "\t\t" + "sensor" + number + " = new " + sensorMainClass + "(context);\n";
+            
+            //Start the sensor if startable. This means that .start is present in the dynamic json:
+            if(json["start"] != null) init += "\t\tsensor" + number + "." + json["start"] + "();\n";
 
             inits.Add(prep);
 			inits.Add(init);
@@ -242,19 +237,19 @@
             if (first)
             {
                 string transform = "\tprivate void transform0(){\n";
-                string methodCall = "\t\tdata = sensor0." + json.dataMethod + "();\n";
+                string methodCall = "\t\tdata = sensor0." + json["dataMethod"] + "();\n";
 
                 transform = transform + methodCall + "\t}\n";
 
                 transforms.Add(transform);
 
-                newReturnValues.Add("" + json.output); //Needed so the text-assembly will know what to derive from
+                newReturnValues.Add(minimizeToClass( json["output"].ToString() )); //Needed so the text-assembly will know what to derive from
                 newFunctionCalls.Add("1");
             }
             else
             {
                 newReturnValues.Add(number.ToString()); //in every other case this will be needed for the following transform
-                newFunctionCalls.Add("" + json.dataMethod);
+                newFunctionCalls.Add(json["dataMethod"].ToString());
             } 
 			
 			
@@ -266,7 +261,19 @@
 			code[4] = newFunctionCalls;
 
 			return code;
-		}
+        }
+
+        /// <summary>
+        /// This gets the last part of a class from an complete Class name.
+        /// Eg.: java.util.List -> List.
+        /// </summary>
+        /// <param name="completeClassName"> This is the complete class name. For example 'java.util.List'</param>
+        /// <returns>The last part of the Class name.</returns>
+        private string minimizeToClass(string completeClassName)
+        {
+            return completeClassName.Split('.').Last();
+        }
+
 
 		/// <summary>
 		/// Processing a transform-node for code production. Will take care of storing all imports, the transformation itself including its variable init, and is returning viable recursive data back upwards.
@@ -289,11 +296,9 @@
 		{
             string fileName = currentNode.Class.Name;
 			string sourceDirectory = "generated\\" + fileName;
-			StreamReader sr = new StreamReader(sourceDirectory + "\\metadata.json");
-			string metadata = sr.ReadToEnd();
-			dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(metadata);
+            var json = JObject.Parse(File.ReadAllText(sourceDirectory + "\\metadata.json"));
 
-			Console.WriteLine("transform processing called!");
+            Console.WriteLine("transform processing called!");
 			List<string>[] code = new List<string>[5];
 			HashSet<string> imports = new HashSet<string>();
 			List<string> inits = new List<string>();
@@ -301,43 +306,58 @@
 			List<string> newReturnValues = new List<string>();
 			List<string> newFunctionCalls = new List<string>();
 
-			//imports
-			foreach (string need in json.needs)
+            string mainClass = json["mainClass"].ToString();
+            string method = json["method"].ToString();
+            string output = json["output"].ToString();
+
+
+            //imports
+            imports.Add(mainClass);
+            imports.Add(output);
+			foreach (string need in json["needs"])
 			{
-				imports.Add("import " + need + ";\n");
+				imports.Add(need);
 				DirectoryCopy(sourceDirectory, targetDirectory, true);
 			}
+
+            //First shorten classes:
+            mainClass = minimizeToClass(mainClass);
+            output = minimizeToClass(output);
 
 			//transforms
 			string transform = "";
 			string methodCall = "";
 			if (!first)
 			{
-				methodCall = "\t\t" + "resultTransform" + number + " = " + json.mainClass + "." + json.method + "(";
+				methodCall = "\t\t" + "resultTransform" + number + " = " + mainClass + "." + method + "(";
 			}
 			else
 			{
-				methodCall = "\t\tdata = " + json.mainClass + "." + json.method + "(";
+				methodCall = "\t\tdata = " + mainClass + "." + method + "(";
 			}
+
 			string prep = "";
-			if (!first) { prep = "\tprivate " + json.output + " resultTransform" + number + ";\n"; }
+			if (!first) { prep = "\tprivate " + output + " resultTransform" + number + ";\n"; }
 			transform = "\tprivate void transform" + number + "(){\n";
-			dynamic temp = json.input;
+
+			dynamic temp = json["input"];
             int currentSensorNumber;
 			int counter = 0;
 			foreach (JProperty property in temp.Properties())
 			{
 				if (Int32.TryParse(returnValues[counter], out currentSensorNumber)) //-> this one is a sensor
 				{
-					methodCall = methodCall + "data" + counter + ", ";
-					transform = transform + "\t\t" + property.Value + " data" + counter + " = sensor" + currentSensorNumber + "." + functionCalls[counter] + "();\n";
+                    string dataType = minimizeToClass(property.Value.ToString());
+                    methodCall = methodCall + "data" + counter + ", ";
+					transform += "\t\t" + dataType + " data" + counter + " = sensor" + currentSensorNumber + "." + functionCalls[counter] + "();\n";
 				}
 				else //-> this one is another transform
 				{
-					methodCall = methodCall + returnValues[counter] + ", ";
+					methodCall += returnValues[counter] + ", ";
 				}
 				counter++;
 			}
+
 			methodCall = methodCall.Remove(methodCall.Length - 2);
 			methodCall = methodCall + ");\n";
 			transform = prep + "\n" + transform + methodCall + "\t}\n";
@@ -345,7 +365,7 @@
 			transforms.Add(transform);
 			if (first)
 			{
-				newReturnValues.Add("" + json.output); //Needed so the text-assembly will know what to derive from
+				newReturnValues.Add(json["output"].ToString()); //Needed so the text-assembly will know what to derive from
 			}
 			else
 			{
