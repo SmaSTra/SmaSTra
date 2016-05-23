@@ -304,7 +304,7 @@
 			//imports
 			foreach (string need in json.needs)
 			{
-				imports.Add("import " + need + "\n");
+				imports.Add("import " + need + ";\n");
 				DirectoryCopy(sourceDirectory, targetDirectory, true);
 			}
 
