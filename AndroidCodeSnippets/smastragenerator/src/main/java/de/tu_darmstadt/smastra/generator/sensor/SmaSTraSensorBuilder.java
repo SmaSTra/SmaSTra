@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
  * Builder pattern for a SmaSTra Sensor.
@@ -18,7 +19,12 @@ public class SmaSTraSensorBuilder {
     /**
      * The Other classes needed.
      */
-    private List<Class<?>> needsOtherClasses = new ArrayList<>();
+    private final List<Class<?>> needsOtherClasses = new ArrayList<>();
+
+    /**
+     * The List of the configuration.
+     */
+    private final List<ConfigurationElement> configuration = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -102,6 +108,11 @@ public class SmaSTraSensorBuilder {
         return this;
     }
 
+    public SmaSTraSensorBuilder addConfigurationElements(List<ConfigurationElement> elements){
+        if(elements != null) this.configuration.addAll(elements);
+        return this;
+    }
+
     public List<Class<?>> getNeedsOtherClasses() {
         return needsOtherClasses;
     }
@@ -130,6 +141,10 @@ public class SmaSTraSensorBuilder {
         return androidPermissions;
     }
 
+    public List<ConfigurationElement> getConfiguration() {
+        return configuration;
+    }
+
     public void setStartMethod(String startMethod) {
         if(startMethod == null) return;
         this.startMethod = startMethod;
@@ -153,6 +168,6 @@ public class SmaSTraSensorBuilder {
         if(output == null) throw new ElementGenerationFailedException("No Output defined.");
         if(dataMethodName == null) throw new ElementGenerationFailedException("No MethodName defined.");
 
-        return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses, output, dataMethodName, startMethod, stopMethod, clazz);
+        return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses, output, dataMethodName, startMethod, stopMethod, clazz, configuration);
     }
 }

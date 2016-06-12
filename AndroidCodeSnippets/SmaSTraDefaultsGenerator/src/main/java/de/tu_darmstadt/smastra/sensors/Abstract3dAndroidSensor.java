@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
 import de.tu_darmstadt.smastra.markers.elements.SensorStop;
@@ -17,6 +19,9 @@ import de.tu_darmstadt.smastra.markers.elements.SensorStop;
  *
  * @author Tobias Welther
  */
+@Configuration(elements =  {
+        @ConfigurationElement(key = "SamplingRate", configClass = Integer.class, description = "Sets the sampling rate. This is the delay in Miliseconds between 2 Events.")
+})
 @NeedsOtherClass( Data3d.class )
 public abstract class Abstract3dAndroidSensor implements SensorEventListener ,de.tu_darmstadt.smastra.markers.interfaces.Sensor {
 

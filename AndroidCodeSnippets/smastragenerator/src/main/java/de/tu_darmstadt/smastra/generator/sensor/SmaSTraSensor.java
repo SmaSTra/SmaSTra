@@ -1,10 +1,12 @@
 package de.tu_darmstadt.smastra.generator.sensor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerator;
 import de.tu_darmstadt.smastra.generator.SmaSTraElement;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
  * This is the representation of a Sensor
@@ -36,9 +38,9 @@ public class SmaSTraSensor extends SmaSTraElement {
 
 
     public SmaSTraSensor(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses, Output output,
-                         String dataMethodName, String startMethod, String stopMethod, Class<?> clazz) {
+                         String dataMethodName, String startMethod, String stopMethod, Class<?> clazz, List<ConfigurationElement> configuration) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses);
+        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration);
 
         this.output = output;
         this.dataMethodName = dataMethodName;
@@ -70,4 +72,5 @@ public class SmaSTraSensor extends SmaSTraElement {
     public String toJsonString(ElementGenerator generator){
         return generator.getGson().toJson(this);
     }
+
 }

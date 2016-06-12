@@ -6,6 +6,7 @@ import de.tu_darmstadt.smastra.generator.ElementGenerator;
 import de.tu_darmstadt.smastra.generator.SmaSTraElement;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
  * This is the Sensor element of the SmaSTra system.
@@ -39,9 +40,9 @@ public class SmaSTraTransformation extends SmaSTraElement {
 
     public SmaSTraTransformation(String displayName, List<Input> inputs, String[] androidPermissions,
                                  List<Class<?>> needsOtherClasses, String description,
-                                 Output output, String methodName, Class<?> clazz, boolean isStatic) {
+                                 Output output, String methodName, Class<?> clazz, boolean isStatic, List< ConfigurationElement> config) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses);
+        super(displayName, description, clazz, androidPermissions, needsOtherClasses, config);
         this.inputs = inputs;
         this.output = output;
         this.methodName = methodName;

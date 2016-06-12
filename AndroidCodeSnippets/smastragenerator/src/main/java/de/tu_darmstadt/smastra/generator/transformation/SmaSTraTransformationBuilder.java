@@ -8,6 +8,7 @@ import java.util.List;
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
  * Builder pattern for a SmaSTra Transaction.
@@ -24,7 +25,12 @@ public class SmaSTraTransformationBuilder {
     /**
      * The Other classes needed.
      */
-    private List<Class<?>> needsOtherClasses = new ArrayList<>();
+    private final List<Class<?>> needsOtherClasses = new ArrayList<>();
+
+    /**
+     * The config to use.
+     */
+    private final List<ConfigurationElement> config = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -97,6 +103,10 @@ public class SmaSTraTransformationBuilder {
         this.needsOtherClasses.addAll(otherClasses);
         return this;
     }
+    public SmaSTraTransformationBuilder addConfig(Collection<ConfigurationElement> config){
+        this.config.addAll(config);
+        return this;
+    }
 
     public SmaSTraTransformationBuilder addNeededClass(Class<?>[] otherClasses){
         this.needsOtherClasses.addAll(Arrays.asList(otherClasses));
@@ -155,7 +165,9 @@ public class SmaSTraTransformationBuilder {
         return androidPermissions;
     }
 
-
+    public List<ConfigurationElement> getConfig() {
+        return config;
+    }
 
     /**
      * Generates the Transaction.
@@ -169,6 +181,6 @@ public class SmaSTraTransformationBuilder {
         if(displayName == null) throw new ElementGenerationFailedException("No displayName defined.");
 
         return new SmaSTraTransformation(displayName, inputs, androidPermissions, needsOtherClasses, description, output,
-                methodName, clazz, isStatic);
+                methodName, clazz, isStatic, config);
     }
 }

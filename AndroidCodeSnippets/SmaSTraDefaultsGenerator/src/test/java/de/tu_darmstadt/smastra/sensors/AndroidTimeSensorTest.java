@@ -12,7 +12,7 @@ public class AndroidTimeSensorTest {
 
     @Test
     public void testIfValueIsOkay(){
-        AndroidTimeSensor sut = new AndroidTimeSensor();
+        AndroidTimeSensor sut = new AndroidTimeSensor(null);
 
         long now = System.currentTimeMillis();
         long data = sut.getLastData();

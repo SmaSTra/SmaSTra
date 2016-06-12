@@ -1,7 +1,11 @@
 package de.tu_darmstadt.smastra.generator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
  * This is the base class for different SmaSTra Elements.
@@ -34,21 +38,29 @@ public abstract class SmaSTraElement {
      */
     protected final String[] androidPermissions;
 
+    /**
+     * The needed configuration.
+     */
+    protected final List<ConfigurationElement> configuration;
+
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass) {
-        this(displayName, description, elementClass, new String[0], null);
+        this(displayName, description, elementClass, new String[0], null, null);
     }
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions) {
-        this(displayName, description, elementClass, androidPermissions, null);
+        this(displayName, description, elementClass, androidPermissions, null, null);
     }
 
 
-    public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses) {
+    public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses,
+                          List<ConfigurationElement> config) {
+
         this.displayName = displayName;
         this.description = description;
         this.elementClass = elementClass;
         this.androidPermissions = androidPermissions == null ? new String[0] : androidPermissions;
+        this.configuration = config == null ? new ArrayList<ConfigurationElement>() : config;
 
         if(neededClasses != null) this.neededClasses.addAll(neededClasses);
     }
@@ -92,6 +104,14 @@ public abstract class SmaSTraElement {
      */
     public Class<?> getElementClass() {
         return elementClass;
+    }
+
+    /**
+     * Gets the used Configuration.
+     * @return the configuration. May be empty.
+     */
+    public List<ConfigurationElement> getConfiguration() {
+        return configuration;
     }
 
     /**

@@ -11,6 +11,8 @@ import java.util.Set;
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
@@ -47,6 +49,8 @@ public class SmaSTraClassSensorParser {
             builder.setOutput(readOutput(clazz));
             builder.setAndroidPermissions(readNeededPermissions(clazz));
             builder.addNeededClass(readNeededClasses(clazz));
+
+            builder.addConfigurationElements(readConfigElements(clazz));
 
             builder.setStartMethod(readStartMethod(clazz));
             builder.setStopMethod(readStopMethod(clazz));
@@ -207,6 +211,24 @@ public class SmaSTraClassSensorParser {
         }
 
         return neededClasses;
+    }
+
+    /**
+     * Gets all Configuration Elements from the class passed.
+     * @param classToInspect to read from.
+     * @return a list of all Elements present.
+     */
+    private static List<ConfigurationElement> readConfigElements(Class<? extends Object> classToInspect){
+        if(classToInspect == null) return new ArrayList<>();
+
+        List<ConfigurationElement> elements = new ArrayList<>();
+        while(classToInspect != null && classToInspect != Object.class){
+            Configuration annotation = classToInspect.getAnnotation(Configuration.class);
+            if(annotation != null) elements.addAll(Arrays.asList(annotation.elements()));
+            classToInspect = classToInspect.getSuperclass();
+        }
+
+        return elements;
     }
 
 

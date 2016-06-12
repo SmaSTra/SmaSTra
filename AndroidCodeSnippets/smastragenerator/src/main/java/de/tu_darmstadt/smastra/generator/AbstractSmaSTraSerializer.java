@@ -6,6 +6,9 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.util.List;
+
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
  * This is the abstract base for a SmaSTra serialization to a metadata object.
@@ -20,6 +23,11 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
 
     protected static final String NEEDED_PERMISSIONS_PATH = "neededPermissions";
     protected static final String NEEDED_CLASSES_PATH = "needs";
+
+    protected static final String CONFIG_PRE_PATH = "config";
+    protected static final String CONFIG_KEY_PATH = "key";
+    protected static final String CONFIG_DESCRIPTION_PATH = "description";
+    protected static final String CONFIG_CLASS_TYPE_PATH = "classType";
 
 
     /**
@@ -41,15 +49,34 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
         obj.addProperty(DISPLAY_PATH, src.getDisplayName());
         obj.addProperty(DESCRIPTION_PATH, src.getDescription());
 
+
         //Needed Permissions:
         JsonArray permsArray = new JsonArray();
         for(String perm : src.getAndroidPermissions()) permsArray.add(perm);
         obj.add(NEEDED_PERMISSIONS_PATH, permsArray);
 
-        //Needs others:
+
+        //Needs other classes:
         JsonArray others = new JsonArray();
         for(Class<?> clazz : src.getNeededClasses()) others.add(clazz.getCanonicalName());
         obj.add(NEEDED_CLASSES_PATH, others);
+
+
+        //Write config if present:
+        List<ConfigurationElement> config = src.getConfiguration();
+        if(config != null && !config.isEmpty()){
+            JsonArray array = new JsonArray();
+            for(ConfigurationElement element : config){
+                JsonObject elementObj = new JsonObject();
+                elementObj.addProperty(CONFIG_KEY_PATH, element.key());
+                elementObj.addProperty(CONFIG_DESCRIPTION_PATH, element.description());
+                elementObj.addProperty(CONFIG_CLASS_TYPE_PATH, element.configClass().getCanonicalName());
+
+                array.add(elementObj);
+            }
+
+            obj.add(CONFIG_PRE_PATH, array);
+        }
 
         return obj;
     }
