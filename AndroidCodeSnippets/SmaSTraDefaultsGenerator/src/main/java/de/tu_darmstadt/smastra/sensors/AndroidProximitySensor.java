@@ -1,6 +1,7 @@
 package de.tu_darmstadt.smastra.sensors;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 
@@ -15,6 +16,10 @@ public class AndroidProximitySensor extends Abstract1dAndroidSensor {
 
     public AndroidProximitySensor(Context context, int samplingPeriodUs) {
         super(context, TYPE_PROXIMITY, samplingPeriodUs);
+    }
+
+    public AndroidProximitySensor(Context context) {
+        super(context, TYPE_PROXIMITY, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
 }
