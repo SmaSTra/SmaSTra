@@ -116,6 +116,8 @@
 
         string breaks = "\n \n";
 
+        string[] importBlacklist = { "double", "byte", "long", "float", "short", "char", "int", "integer", "boolean" };
+
 		#endregion fields
 
 		#region methods
@@ -138,13 +140,25 @@
             }
 
 			string extends = minimizeToClass( code[3][0] );
+            //Check if we have a primitive as Extend. If yes, we need to make it to an Object:
+            if (importBlacklist.Contains(extends))
+            {
+                extends = extends.First().ToString().ToUpper() + extends.Substring(1);
+            }
+
 
 			/////////import section///////
 			List<string> imports = code[0];
 			imports = imports.Distinct().ToList();
 			string import = "";
 
-            foreach (string s in imports) import += "import "+s+";\n";
+            foreach (string s in imports)
+            {
+                ///Avoid imports of Primitves!
+                if (importBlacklist.Contains(s.ToLower())) continue;
+                import += "import " + s + ";\n";
+            }
+
 			import += breaks;
 
 			/////////intro section///////
