@@ -2,6 +2,8 @@ package de.tu_darmstadt.smastra.sensors;
 
 import android.content.Context;
 
+import java.util.Map;
+
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
@@ -30,6 +32,9 @@ public class AndroidTimeSensor implements Sensor {
     @Override
     public void stop(){}
 
+
+    @Override
+    public void configure(Map<String, Object> configuration) {}
 
     @SensorOutput
     public long getLastData() {

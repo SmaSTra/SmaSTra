@@ -6,10 +6,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import java.util.Map;
+
+import de.tu_darmstadt.smastra.markers.elements.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
 import de.tu_darmstadt.smastra.markers.elements.SensorStop;
+import de.tu_darmstadt.smastra.utils.ConfigParserUtils;
 
 /**
  * This is the basic class for a sensor.
@@ -17,7 +21,13 @@ import de.tu_darmstadt.smastra.markers.elements.SensorStop;
  *
  * @author Tobias Welther
  */
+@Configuration(elements =  {
+        @ConfigurationElement(key = Abstract3dAndroidSensor.CONFIG_SAMPLING_RATE, configClass = Integer.class, description = "Sets the sampling rate. This is the delay in Miliseconds between 2 Events.")
+})
 public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de.tu_darmstadt.smastra.markers.interfaces.Sensor {
+
+    //Static config fields:
+    protected static final String CONFIG_SAMPLING_RATE = "SamplingRate";
 
 
     /**
@@ -28,7 +38,7 @@ public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de
     /**
      * The Sampling period for the Sensor to use.
      */
-    private final int samplingPeriodUs;
+    private int samplingPeriodUs;
 
     /**
      * The SensorManager to use.
@@ -44,17 +54,14 @@ public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de
     /**
      * Generates the Sensor.
      * <br>It needs a Context for the SensorManager
-     * and an sensorType defined in the Sensor class (by int)
-     * and a delay (defined in ).
+     * and an sensorType defined in the Sensor class (by int).
      *
      * @param context for the SensorManager.
      * @param sensorType to get.
-     * @param samplingPeriodUs to use.
      */
-    public Abstract1dAndroidSensor(Context context, int sensorType, int samplingPeriodUs) {
+    public Abstract1dAndroidSensor(Context context, int sensorType) {
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.usedSensor = sensorManager.getDefaultSensor(sensorType);
-        this.samplingPeriodUs = samplingPeriodUs;
     }
 
 
@@ -85,6 +92,11 @@ public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de
         sensorManager.unregisterListener(this);
     }
 
+
+    @Override
+    public void configure(Map<String,Object> config){
+        this.samplingPeriodUs = ConfigParserUtils.parseInt(config.get(CONFIG_SAMPLING_RATE), this.samplingPeriodUs);
+    }
 
     /**
      * Gets the last Data received.

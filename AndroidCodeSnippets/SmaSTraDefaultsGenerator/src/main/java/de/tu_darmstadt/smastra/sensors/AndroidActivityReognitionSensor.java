@@ -88,6 +88,9 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
     }
 
 
+    @Override
+    public void configure(Map<String, Object> configuration) {}
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {

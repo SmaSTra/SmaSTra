@@ -16,6 +16,6 @@ public class AndroidProximtySensorTest extends Abstract1dAndroidSensorTest {
 
     @Override
     protected Abstract1dAndroidSensor generateSut() {
-        return new AndroidProximitySensor(context, 0);
+        return new AndroidProximitySensor(context);
     }
 }

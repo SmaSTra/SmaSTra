@@ -7,6 +7,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import java.util.Map;
+
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
@@ -59,6 +61,10 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     public void stop(){
         locationManager.removeUpdates(this);
     }
+
+
+    @Override
+    public void configure(Map<String, Object> configuration) {}
 
 
     /**

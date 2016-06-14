@@ -15,6 +15,6 @@ public class AndroidAccelerometerSensorTest extends Abstract3dAndroidSensorTest 
 
     @Override
     protected Abstract3dAndroidSensor generateSut() {
-        return new AndroidAccelerometerSensor(context, 9_001);
+        return new AndroidAccelerometerSensor(context);
     }
 }

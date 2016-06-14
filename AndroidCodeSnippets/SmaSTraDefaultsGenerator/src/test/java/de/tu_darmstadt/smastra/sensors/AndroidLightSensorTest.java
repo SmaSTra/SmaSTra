@@ -16,6 +16,6 @@ public class AndroidLightSensorTest extends Abstract1dAndroidSensorTest {
 
     @Override
     protected Abstract1dAndroidSensor generateSut() {
-        return new AndroidLightSensor(context, 0);
+        return new AndroidLightSensor(context);
     }
 }

@@ -1,6 +1,5 @@
 package de.tu_darmstadt.smastra.generator.sensor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerator;

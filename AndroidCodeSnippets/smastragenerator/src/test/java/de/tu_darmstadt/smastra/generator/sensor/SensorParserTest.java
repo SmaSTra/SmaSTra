@@ -2,6 +2,8 @@ package de.tu_darmstadt.smastra.generator.sensor;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
@@ -52,6 +54,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
 
     }
 
@@ -81,6 +84,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
     }
 
 
@@ -101,6 +105,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
     }
 
 
@@ -122,6 +127,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
     }
 
 
@@ -146,6 +152,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
     }
 
 
@@ -171,6 +178,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
 
         @SensorStart public void testStart() {}
         @SensorStop public void testStop() {}
@@ -198,6 +206,7 @@ public class SensorParserTest {
 
         @Override public void start(){}
         @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
     }
 
 }

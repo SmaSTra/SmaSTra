@@ -15,6 +15,6 @@ public class AndroidGyroscopeSensorTest extends Abstract3dAndroidSensorTest {
 
     @Override
     protected Abstract3dAndroidSensor generateSut() {
-        return new AndroidGyroscopeSensor(context, 9_001);
+        return new AndroidGyroscopeSensor(context);
     }
 }
