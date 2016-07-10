@@ -8,33 +8,43 @@
 
     using Microsoft.Win32;
     using System.Windows;
+    using Controls;
 
     /// <summary>
     /// Represents a tree graph of data transformations.
     /// </summary>
-    [Serializable]
-	public class TransformationTree
+    public class TransformationTree
 	{
-		#region constructors
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public TransformationTree()
-		{
-			this.Nodes = new ObservableCollection<Node>();
-			this.Connections = new ObservableCollection<Connection>();
-			this.Nodes.CollectionChanged += this.Nodes_CollectionChanged;
-		}
+        #region constructors
 
-		#endregion constructors
+        public TransformationTree(UcTreeDesigner ucTreeDesigner)
+        {
+            this.DesignTree = ucTreeDesigner;
+            this.Nodes = new ObservableCollection<Node>();
+            this.Connections = new ObservableCollection<Connection>();
+            this.Nodes.CollectionChanged += this.Nodes_CollectionChanged;
+        }
 
-		#region properties
+        #endregion constructors
 
-		/// <summary>
-		/// Gets the list of connections between nodes in this tree.
-		/// </summary>
-		public ObservableCollection<Connection> Connections
+        #region properties
+
+
+        /// <summary>
+        /// This is a reference to the DesignTree used for back-Handling.
+        /// </summary>
+        public UcTreeDesigner DesignTree
+        {
+            private set;
+            get;
+        }
+
+
+        /// <summary>
+        /// Gets the list of connections between nodes in this tree.
+        /// </summary>
+        public ObservableCollection<Connection> Connections
 		{
 			get;
 			private set;
@@ -114,11 +124,23 @@
 
 
         /// <summary>
-        /// 
+        /// Saves the current state to a file.
         /// </summary>
         public void saveToFile()
         {
-            new TreeSerilizer(OutputNode.Tree).Serialize("D:\\test.json");
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "All files|*";
+            saveFileDialog.InitialDirectory = Environment.CurrentDirectory;
+
+            //show the dialog and save the file
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string name = saveFileDialog.SafeFileName;
+                if (name.EndsWith(".SmaSTra")) name = name.Remove(".SmaSTra".Count());
+
+                string directory = System.IO.Path.GetDirectoryName(saveFileDialog.FileName);
+                new TreeSerilizer(OutputNode.Tree).Serialize(directory + "\\" + name + ".SmaSTra");
+            }
         }
 
         /// <summary>
@@ -126,89 +148,17 @@
         /// </summary>
         public void loadFromFile()
         {
-            new TreeSerilizer(OutputNode.Tree).Deserialize("D:\\test.json");
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "SmaSTra Save file|*.SmaSTra";
+            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
+
+            //show the dialog and save the file
+            if (openFileDialog.ShowDialog() == true)
+            {
+                new TreeSerilizer(OutputNode.Tree).Deserialize(openFileDialog.FileName);
+            }
         }
 
-
-
-        /// <summary>
-        /// Hardcoding some fun for testing purposes. Random demo tree.
-        /// </summary>
-        public void HardcodingForTesting()
-		{
-			//OutputNode = new OutputNode();
-			//Transformation first = new Transformation();
-			//first.Name = "Add_Vectors";
-			//Transformation second = new Transformation();
-			//second.Name = "Add_Vectors";
-			//DataSource data1 = new DataSource();
-			//data1.Name = "Accelerometer_Sensor";
-			//DataSource data2 = new DataSource();
-			//data2.Name = "Gyroscope_Sensor";
-			//second.InputNodes[0] = data1;
-			//second.InputNodes[1] = data2;
-			//first.InputNodes[0] = second;
-			//DataSource data3 = new DataSource();
-			//data3.Name = "Gps_Sensor";
-			//first.InputNodes[1] = data3;
-			//OutputNode.InputNode = first;
-			//OutputNode.Name = "Output Node";
-			//Console.WriteLine("initialized all the things!");
-		}
-
-		public void HardcodingForTestingII()
-		{
-			///*                                      Length
-			//										Subtract
-			//							  Multiply         Sensor:Gyro
-			//						 Add            GPS
-			//				Sensor:Acc Senso:Gyro
-			//				Both Gyros should be from the same source, so this one is interconnected!
-			//*/
-			//OutputNode = new OutputNode();
-			//Transformation Multiply = new Transformation();
-			//Transformation first = new Transformation();
-			//first.Name = "Vector_Length";
-			//first.InputNodes = new ObservableCollection<Node>();
-			//Transformation Subtract = new Transformation();
-			//Subtract.Name = "Subtract_Vectors";
-			//Subtract.InputNodes = new ObservableCollection<Node>();
-			//Multiply.Name = "Multiply_Vectors";
-			//Multiply.InputNodes = new ObservableCollection<Node>();
-			//Transformation Add = new Transformation();
-			//Add.Name = "Add_Vectors";
-			//Add.InputNodes = new ObservableCollection<Node>();
-			//DataSource data1 = new DataSource();
-			//data1.Name = "Accelerometer_Sensor";
-			//DataSource data2 = new DataSource();
-			//data2.Name = "Gyroscope_Sensor";
-			//Add.InputNodes.Add(data1);
-			//Add.InputNodes.Add(data2);
-			//Multiply.InputNodes.Add(Add);
-			//DataSource data3 = new DataSource();
-			//data3.Name = "Gps_Sensor";
-			//Multiply.InputNodes.Add(data3);
-			//Subtract.InputNodes.Add(Multiply);
-			//Subtract.InputNodes.Add(data2);
-			//first.InputNodes.Add(Subtract);
-			//OutputNode.InputNode = first;
-			//OutputNode.Name = "Output Node";
-			//Console.WriteLine("initialized all the things!");
-		}
-
-		public void secondTest()
-		{
-			HardcodingForTestingII();
-
-			createJava();
-		}
-
-		public void test()
-		{
-			HardcodingForTesting();
-
-			createJava();
-		}
 
 		#endregion methods
 

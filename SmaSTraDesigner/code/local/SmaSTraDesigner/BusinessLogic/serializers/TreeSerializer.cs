@@ -7,6 +7,8 @@ using System.Dynamic;
 using System;
 using Newtonsoft.Json.Linq;
 using Common;
+using SmaSTraDesigner.Controls;
+using System.Threading.Tasks;
 
 namespace SmaSTraDesigner.BusinessLogic
 {
@@ -61,10 +63,16 @@ namespace SmaSTraDesigner.BusinessLogic
             //Read the singleton ClassManager.
             ClassManager classManager = Singleton<ClassManager>.Instance;
 
-            //Generate the Serializer:
+            //First clear old tree:
+            foreach (Node node in new List<Node>(this.tree.Nodes)) if(!(node is OutputNode)) tree.DesignTree.RemoveNode(node);
+            foreach (Connection connection in new List<Connection>(this.tree.Connections)) tree.DesignTree.RemoveConnection(connection);
+
+            //Generate the Serializer + lists:
             var nodeSerializer = new NodeSerializer();
-            TransformationTree tree = new TransformationTree();
-            tree.Nodes.Add(new OutputNode());
+            UcTreeDesigner treeDesigner = tree.DesignTree;
+
+            List<Node> newNodes = new List<Node>();
+            List<Connection> newConnections = new List<Connection>();
 
             dynamic json = JObject.Parse(File.ReadAllText(targetFile));
 
@@ -73,17 +81,47 @@ namespace SmaSTraDesigner.BusinessLogic
             foreach (dynamic obj in json["nodes"])
             {
                 Node node = nodeSerializer.deserializeNode(obj, classManager);
-                if (node != null) tree.Nodes.Add(node);
+                if (node != null) newNodes.Add(node);
             }
 
             //Read connections:
             foreach (dynamic obj in json["connections"])
             {
-                Connection? connection = nodeSerializer.deserializeConnection(obj, tree.Nodes);
-                if (connection.HasValue) tree.Connections.Add(connection.Value);
+                Connection? connection = nodeSerializer.deserializeConnection(obj, newNodes);
+                if (connection.HasValue)
+                {
+                    //Apply the connection:
+                    applyConnection(connection.Value);
+                    newConnections.Add(connection.Value);
+                }
+                
             }
 
-            Console.WriteLine(" Read " + tree.Nodes.Count + " Nodes and " + tree.Connections.Count + " Connections!");
+            //Then add new ones. FIRST THE NODES!
+            foreach (Node node in newNodes)
+            {
+                if(node is OutputNode)
+                {
+                    OutputNode outNode = tree.OutputNode;
+                    outNode.PosX = node.PosX;
+                    outNode.PosY = node.PosY;
+                }
+                else treeDesigner.AddNode(node, true);
+            }
+            
+            //TODO Fix this somehow:
+            //foreach (Connection connection in newConnections) treeDesigner.AddConnection(connection);
+        }
+
+        private void applyConnection(Connection connection)
+        {
+            Node input = connection.InputNode;
+            Node output = connection.OutputNode;
+            if (input == null) return;
+
+            //Add the input:
+            if (input is OutputNode) ((OutputNode)tree.OutputNode).InputNode = connection.OutputNode;
+            if (input is Transformation) ((Transformation)input).InputNodes[connection.InputIndex] = output;
         }
     }
 }

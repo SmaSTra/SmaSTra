@@ -28,10 +28,19 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             double posX = Double.Parse( obj["PosX"].ToString());
             double posY = Double.Parse( obj["PosY"].ToString());
 
+            //This is the special case when we have the output node:
+            if (nodeName == "OutputNode") return new OutputNode();
+
+            //Normal node:
             Node newNode = getNode(nodeName, classManager);
             if (newNode == null) return null;
 
-            return (Node)newNode.Clone();
+            //Do not forget to set x,y:
+            newNode = (Node) newNode.Clone();
+            newNode.PosX = posX;
+            newNode.PosY = posY;
+
+            return newNode;
         }
 
         public Connection? deserializeConnection(dynamic obj, IEnumerable<Node> nodes)

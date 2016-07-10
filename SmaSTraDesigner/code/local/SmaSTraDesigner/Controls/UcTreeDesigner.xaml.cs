@@ -164,7 +164,7 @@
 
 			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
-				this.Tree = new TransformationTree();
+				this.Tree = new TransformationTree(this);
 
 				Panel.SetZIndex(this.bdrSelectionBorder, Int32.MaxValue);
 				Panel.SetZIndex(this.linPreviewConnection, Int32.MaxValue);
@@ -258,12 +258,12 @@
 			}
 
 			UcNodeViewer oNode = null;
-			if (this.nodeViewers.TryGetValue(connection.OutputNode, out oNode))
+			if (!this.nodeViewers.TryGetValue(connection.OutputNode, out oNode))
 			{
 				throw new Exception(String.Format("OutputNode {0} not found.", connection.OutputNode));
 			}
 			UcNodeViewer iNode = null;
-			if (this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
+			if (!this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
 			{
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
@@ -288,16 +288,23 @@
 
 			node.Tree = this.Tree;
 			Transformation nodeAsTransformation;
-			//DataSource nodeAsDataSource;
-			UcNodeViewer nodeViewer;
+			DataSource nodeAsDataSource;
+			OutputNode nodeAsOutputNode;
+
+            UcNodeViewer nodeViewer = null;
 			if ((nodeAsTransformation = node as Transformation) != null)
 			{
 				nodeViewer = new UcTransformationViewer();
 			}
-			else // if ((nodeAsDataSource = node as DataSource) != null)
+			else if ((nodeAsDataSource = node as DataSource) != null)
 			{
 				nodeViewer = new UcDataSourceViewer();
 			}
+            else if ((nodeAsOutputNode = node as OutputNode) != null)
+            {
+                nodeViewer = new UcOutputViewer();
+            }
+
 			this.nodeViewers.Add(node, nodeViewer);
 
 			nodeViewer.DataContext = node;
@@ -498,6 +505,7 @@
 				if (newTree.OutputNode == null)
 				{
 					newTree.OutputNode = new OutputNode() { Tree = newTree };
+                    newTree.Nodes.Add(newTree.OutputNode);
 				}
 
 				this.outOutputViewer.DataContext = newTree.OutputNode;
