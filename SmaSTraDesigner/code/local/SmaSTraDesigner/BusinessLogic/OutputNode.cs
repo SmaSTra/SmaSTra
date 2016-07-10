@@ -5,6 +5,14 @@
 	/// </summary>
 	public class OutputNode : Node
 	{
+
+
+        public OutputNode()
+        {
+            this.Name = "OutputNode";
+        }
+
+
 		#region fields
 
 		/// <summary>

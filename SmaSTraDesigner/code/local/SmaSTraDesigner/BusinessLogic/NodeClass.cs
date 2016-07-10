@@ -1,11 +1,12 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
+    using Newtonsoft.Json;
+    using System;
 
-	/// <summary>
-	/// Prodives information about a specific type of node.
-	/// </summary>
-	public class NodeClass
+    /// <summary>
+    /// Prodives information about a specific type of node.
+    /// </summary>
+    public class NodeClass
 	{
 		#region constructors
 

@@ -41,8 +41,18 @@
 		{
 			App.Current.Shutdown();
 		}
+ 
+        private void mniSave_Click(object sender, RoutedEventArgs e)
+        {
+            this.tdTreeDesigner.Tree.saveToFile();
+        }
 
-		private void mniGenerateJava_Click(object sender, RoutedEventArgs e)
+        private void mniLoad_Click(object sender, RoutedEventArgs e)
+        {
+            this.tdTreeDesigner.Tree.loadFromFile();
+        }
+
+        private void mniGenerateJava_Click(object sender, RoutedEventArgs e)
 		{
 			this.tdTreeDesigner.Tree.createJava();
 		}

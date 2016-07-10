@@ -86,6 +86,8 @@
 		
 		public override bool Equals(object obj)
 		{
+            if (obj == null) return false;
+            if (!(obj is Connection)) return false;
 			Connection other = (Connection)obj;
 
 			return object.Equals(this.InputNode, other.InputNode) &&

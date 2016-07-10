@@ -10,7 +10,7 @@
     using System.Windows;
 
     /// <summary>
-    /// Represents a tree graph of data dransformations.
+    /// Represents a tree graph of data transformations.
     /// </summary>
     [Serializable]
 	public class TransformationTree
@@ -67,55 +67,74 @@
 			set;
 		}
 
-		#endregion properties
+        #endregion properties
 
-		#region methods
+        #region methods
 
-		/// <summary>
-		/// Opens a Save File Dialog where the file to save can be specified. Then generates the java-Code and copies all needed subdirectories.
-		/// Careful: current assumption is, that all our files are in Debug\\generated, which is hardcoded in the beginning of processSensor and processTransform. Changes have to be made there.
-		/// </summary>
-		public void createJava()
-		{
-			JavaGenerator javaGenerator = new JavaGenerator();
+        /// <summary>
+        /// Opens a Save File Dialog where the file to save can be specified. Then generates the java-Code and copies all needed subdirectories.
+        /// Careful: current assumption is, that all our files are in Debug\\generated, which is hardcoded in the beginning of processSensor and processTransform. Changes have to be made there.
+        /// </summary>
+        public void createJava()
+        {
+            JavaGenerator javaGenerator = new JavaGenerator();
 
-			SaveFileDialog saveFileDialog = new SaveFileDialog();
-			saveFileDialog.Filter = "Java Source File Java Code (*.java)|*.java";
-			saveFileDialog.InitialDirectory = Environment.CurrentDirectory;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Java Source File Java Code (*.java)|*.java";
+            saveFileDialog.InitialDirectory = Environment.CurrentDirectory;
 
-			Dictionary<Node, List<string>[]> visited = new Dictionary<Node, List<string>[]>();
-			int[] numbers = new int[2];
-			numbers[1] = 0;
-			numbers[0] = 0;
-			List<string>[] code = new List<string>[5];
+            Dictionary<Node, List<string>[]> visited = new Dictionary<Node, List<string>[]>();
+            int[] numbers = new int[2];
+            numbers[1] = 0;
+            numbers[0] = 0;
+            List<string>[] code = new List<string>[5];
 
-			//show the dialog and save the file
-			if (saveFileDialog.ShowDialog() == true)
-			{
-				string className = saveFileDialog.SafeFileName.Remove(saveFileDialog.SafeFileName.Length - 5);
-				string directory = saveFileDialog.FileName.Remove(saveFileDialog.FileName.Length - (className.Length + 5));
-				Console.WriteLine(directory);
+            //show the dialog and save the file
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string className = saveFileDialog.SafeFileName.Remove(saveFileDialog.SafeFileName.Length - 5);
+                string directory = saveFileDialog.FileName.Remove(saveFileDialog.FileName.Length - (className.Length + 5));
+                Console.WriteLine(directory);
                 try
                 {
                     code = javaGenerator.traverse(OutputNode.InputNode, visited, numbers, true, directory);
                     string completeJavaText = javaGenerator.assembleText(className, code);
                     File.WriteAllText(saveFileDialog.FileName, completeJavaText);
                 }
-                catch(NullNodeException e)
+                catch (NullNodeException e)
                 {
                     MessageBox.Show(e.Message);
                 }
-                catch(InvalidArgumentException e)
+                catch (InvalidArgumentException e)
                 {
                     MessageBox.Show(e.Message);
                 }
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Hardcoding some fun for testing purposes. Random demo tree.
-		/// </summary>
-		public void HardcodingForTesting()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void saveToFile()
+        {
+            new TreeSerilizer(OutputNode.Tree).Serialize("D:\\test.json");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void loadFromFile()
+        {
+            new TreeSerilizer(OutputNode.Tree).Deserialize("D:\\test.json");
+        }
+
+
+
+        /// <summary>
+        /// Hardcoding some fun for testing purposes. Random demo tree.
+        /// </summary>
+        public void HardcodingForTesting()
 		{
 			//OutputNode = new OutputNode();
 			//Transformation first = new Transformation();

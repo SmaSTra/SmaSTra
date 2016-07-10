@@ -22,8 +22,10 @@
 		</Grid.RowDefinitions>
 
 		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
-			<MenuItem x:Name="mniFile" Header="File">
-				<MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
+            <MenuItem x:Name="mniFile" Header="File">
+                <MenuItem x:Name="mniSave" Header="Save" Click="mniSave_Click" />
+                <MenuItem x:Name="mniLoad" Header="Load" Click="mniLoad_Click" />
+                <MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
 			</MenuItem>
 			<MenuItem x:Name="mniEdit" Header="Edit" />
 			<MenuItem Header="Tree">

@@ -301,6 +301,7 @@
 			this.nodeViewers.Add(node, nodeViewer);
 
 			nodeViewer.DataContext = node;
+            this.Tree.Nodes.Add(node);
 			this.cnvBackground.Children.Add(nodeViewer);
 			this.MakeBindings(nodeViewer);
 
