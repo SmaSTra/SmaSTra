@@ -160,21 +160,24 @@
         }
 
 
-		#endregion methods
+        #endregion methods
 
-		#region event handlers
+        #region event handlers
 
-		/// <summary>
-		/// Handles the CollectionChanged event of the Nodes control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-		private void Nodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
-			foreach (Node node in e.NewItems.OfType<Node>())
-			{
-				node.Tree = this;
-			}
+        /// <summary>
+        /// Handles the CollectionChanged event of the Nodes control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        private void Nodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e != null && e.NewItems != null)
+            {
+                foreach (Node node in e.NewItems.OfType<Node>())
+                {
+                    node.Tree = this;
+                }
+            }
 		}
 
 		#endregion event handlers
