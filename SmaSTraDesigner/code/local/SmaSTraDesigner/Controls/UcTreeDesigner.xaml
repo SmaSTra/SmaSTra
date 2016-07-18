@@ -25,7 +25,7 @@
 		<Border x:Name="bdrViewPort" />
 		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
 			<Viewbox x:Name="vbBackground">
-				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding ElementName=This, Path=Background}" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" IsHitTestVisible="True">
+				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding ElementName=This, Path=Background}" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
 					<local:UcOutputViewer x:Name="outOutputViewer" />
 					<Border x:Name="bdrSelectionBorder" BorderBrush="Black" BorderThickness="1" Opacity="0.5" Visibility="Collapsed" SnapsToDevicePixels="True" IsHitTestVisible="False">
 						<Grid>

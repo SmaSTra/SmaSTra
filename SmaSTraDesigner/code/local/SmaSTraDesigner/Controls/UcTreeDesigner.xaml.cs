@@ -138,9 +138,17 @@
 
 		#endregion dependency property callbacks
 
-		#region fields
 
-		private LambdaConverter canvasOffsetConverter;
+        #region constants
+
+        private const double scaleRate = 1.1;
+
+        #endregion constants
+
+
+        #region fields
+
+        private LambdaConverter canvasOffsetConverter;
 		private bool changingSelectedNodeViewers = false;
 		private LambdaConverter connectionLineCoordConverter;
 		private Dictionary<Connection, Line> connectionLines = new Dictionary<Connection, Line>();
@@ -150,6 +158,7 @@
 		private Dictionary<Node, UcNodeViewer> nodeViewers = new Dictionary<Node, UcNodeViewer>();
 		private UcNodeViewer[] previouslySelectedItems = { };
 		private HashSet<UcIOHandle> registeredIoHandles = new HashSet<UcIOHandle>();
+        private ScaleTransform scaletransform;
 
 		#endregion fields
 
@@ -843,6 +852,34 @@
 			this.movingNodeViewer = (UcNodeViewer)sender;
 		}
 
-		#endregion event handlers
-	}
+
+        private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (scaletransform == null)
+                {
+                    scaletransform = new ScaleTransform(1, 1);
+                    cnvBackground.RenderTransform = scaletransform;
+                }
+
+                if (e.Delta > 0)
+                {
+                    scaletransform.ScaleX *= scaleRate;
+                    scaletransform.ScaleY *= scaleRate;
+                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset * scaleRate);
+                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset * scaleRate);
+                }
+                else
+                {
+                    scaletransform.ScaleX /= scaleRate;
+                    scaletransform.ScaleY /= scaleRate;
+                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset / scaleRate);
+                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset / scaleRate);
+                }
+            }
+        }
+
+        #endregion event handlers
+    }
 }
