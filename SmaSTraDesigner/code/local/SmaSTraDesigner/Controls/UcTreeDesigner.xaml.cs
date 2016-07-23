@@ -4,19 +4,12 @@
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Collections.Specialized;
-	using System.Diagnostics;
-	using System.Globalization;
 	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Data;
-	using System.Windows.Documents;
 	using System.Windows.Input;
 	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
-	using System.Windows.Navigation;
 	using System.Windows.Shapes;
 
 	using Common;
@@ -48,14 +41,57 @@
 			return (size - viewPortSize) / 2.0;
 		}
 
-		#endregion static methods
 
-		#region dependency properties
+        private static bool SubTreeContains(Node root, List<Node> nodes)
+        {
+            //Remove the first element:
+            if (root != null) nodes.Remove(root);
 
-		/// <summary>
-		/// Registration of ConnectingIOHandle Dependency Property.
-		/// </summary>
-		public static readonly DependencyProperty ConnectingIOHandleProperty;
+            //If empty -> Everything is okay!
+            if (!nodes.Any()) return true;
+
+            //Check recursivcely:
+            foreach (Node input in GetInputsOfNode(root))
+            {
+                if (SubTreeContains(input, nodes)) return true;
+            }
+
+            return false;
+        }
+
+
+        private static List<Node> GetInputsOfNode(Node node)
+        {
+            List<Node> result = new List<Node>();
+            if (node == null) return result;
+            if (node is DataSource) return result;
+
+            if (node is OutputNode)
+            {
+                OutputNode outNode = (OutputNode)node;
+                if (outNode.InputNode != null) result.Add(outNode.InputNode);
+                return result;
+            }
+
+            if (node is Transformation)
+            {
+                Transformation outNode = (Transformation)node;
+                result.AddRange(outNode.InputNodes);
+                result.RemoveAll(item => item == null);
+                return result;
+            }
+
+            return result;
+        }
+
+        #endregion static methods
+
+        #region dependency properties
+
+        /// <summary>
+        /// Registration of ConnectingIOHandle Dependency Property.
+        /// </summary>
+        public static readonly DependencyProperty ConnectingIOHandleProperty;
 
 		/// <summary>
 		/// Registration of ConnectingIOHandle Dependency Property Key.
@@ -673,11 +709,12 @@
 			}
 		}
 
-		#endregion methods
 
-		#region event handlers
+        #endregion methods
 
-		private void cnvBackground_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        #region event handlers
+
+        private void cnvBackground_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.SelectedNodeViewers.Clear();
 		}
@@ -751,14 +788,93 @@
 		// TODO: (PS) Replace this with a WPF command
 		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
+            //If delete key -> Delete selected elements!
 			if (e.Key == Key.Delete)
 			{
 				foreach (var nodeViewer in this.SelectedNodeViewers)
 				{
 					this.RemoveNode(nodeViewer);
 				}
+                return;
 			}
+
+
+            //TODO This is only for testing! Remove after working:
+            //If P-Key, do some fancy magic!
+            if(e.Key == Key.P) handleSpitOfSelected();
 		}
+
+
+        private void handleSpitOfSelected()
+        {
+            //Try to find the top root:
+            var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).ToList();
+            Node rootNode = null;
+            foreach (Node node in nodes)
+            {
+                if (SubTreeContains(node, nodes.ToList()))
+                {
+                    rootNode = node;
+                    break;
+                }
+            }
+
+            //Generate a new Node if possible:
+            Node newNode = null;
+            if(rootNode != null)
+            {
+                newNode = GenerateNewNode(rootNode, this.SelectedNodeViewers);
+                if (newNode != null)
+                {
+                    //Get the new x / y pos.
+                    double x = 0;
+                    double y = 0;
+                    foreach (Node node in nodes) { x += node.PosX; y += node.PosY; }
+                    x /= nodes.Count;
+                    y /= nodes.Count;
+
+                    newNode.PosX = x;
+                    newNode.PosY = y;
+
+                    //Remove old nodes -> Add new:
+                    foreach (Node node in nodes) RemoveNode(node);
+                    AddNode(newNode);
+                }
+            }
+
+            Console.WriteLine("Connected: " + (rootNode != null) + " - " + nodes.Count + " Nodes.");
+        }
+
+        private Node GenerateNewNode(Node rootNode, IEnumerable<UcNodeViewer> nodeViewers)
+        {
+            //Generate Input / Output values:
+            DataType output = rootNode.Class.OutputType;
+            List<DataType> inputs = new List<DataType>();
+            foreach(UcNodeViewer sub in nodeViewers)
+            {
+                Node subNode = sub.Node;
+                //Be sure to skip empty elements:
+                if (subNode.Class == null || subNode.Class.InputTypes == null) continue;
+
+                List<Node> subNodes = GetInputsOfNode(subNode);
+                for( int i = 0; i < subNode.Class.InputTypes.Length; i++)
+                {
+                    bool found = false;
+                    DataType subType = subNode.Class.InputTypes[i];
+                    foreach (Node subSubNode in subNodes) if (subSubNode.Class.OutputType == subType) found = true;
+
+                    if (!found) inputs.Add(subType);
+                }
+            }
+
+            //Generate additional stuff:
+            String type = inputs.Any() ? "transformation" : "sensor";
+            String name = "RND" + new Random().Next();
+            NodeClass clazz = Singleton<ClassManager>.Instance.AddClass(name, type, output.Name, inputs.Select(o=>o.Name).ToArray(), name, "Test element!");
+            Node newNode = clazz.BaseNode.MemberwiseClone();
+            return newNode;
+        }
+
 
 		private void This_Loaded(object sender, RoutedEventArgs e)
 		{
