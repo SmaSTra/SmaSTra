@@ -352,7 +352,7 @@
 
 			this.nodeViewers.Add(node, nodeViewer);
 
-			nodeViewer.DataContext = node;
+            nodeViewer.DataContext = node;
             this.Tree.Nodes.Add(node);
 			this.cnvBackground.Children.Add(nodeViewer);
 			this.MakeBindings(nodeViewer);
@@ -478,7 +478,7 @@
 			this.MakeCanvasOffsetBinding(nodeViewer, true);
 
 			nodeViewer.CustomDrag += this.UcNodeViewer_StartedMoving;
-		}
+        }
 
 		private void MakeCanvasOffsetBinding(UcNodeViewer nodeViewer, bool isVertical)
 		{
@@ -574,7 +574,7 @@
 
 		private void RemoveConnection(UcIOHandle handle, Connection? connection)
 		{
-			if (this.Tree == null)
+			if (this.Tree == null || handle == null)
 			{
 				return;
 			}
@@ -826,15 +826,9 @@
                 newNode = GenerateNewNode(rootNode, this.SelectedNodeViewers);
                 if (newNode != null)
                 {
-                    //Get the new x / y pos.
-                    double x = 0;
-                    double y = 0;
-                    foreach (Node node in nodes) { x += node.PosX; y += node.PosY; }
-                    x /= nodes.Count;
-                    y /= nodes.Count;
-
-                    newNode.PosX = x;
-                    newNode.PosY = y;
+                    //Calculate the new x / y pos.
+                    newNode.PosX = nodes.Average(n => n.PosX);
+                    newNode.PosY = nodes.Average(n => n.PosY);
 
                     //Remove old nodes -> Add new:
                     foreach (Node node in nodes) RemoveNode(node);
