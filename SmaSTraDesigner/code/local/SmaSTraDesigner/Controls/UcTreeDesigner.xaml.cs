@@ -1,29 +1,31 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Collections.Specialized;
-	using System.Linq;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Data;
-	using System.Windows.Input;
-	using System.Windows.Media;
-	using System.Windows.Shapes;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
 
-	using Common;
-	using Common.ExtensionMethods;
-	using Common.Resources.Converters;
+    using Common;
+    using Common.ExtensionMethods;
+    using Common.Resources.Converters;
 
-	using SmaSTraDesigner.BusinessLogic;
+    using SmaSTraDesigner.BusinessLogic;
+    using BusinessLogic.classhandler;
+    using BusinessLogic.nodes;
 
-	// TODO: (PS) Comment this.
-	// TODO: (PS) Adapt for dynamic size changes for canvas.
-	/// <summary>
-	/// Interaction logic for UcTreeDesigner.xaml
-	/// </summary>
-	public partial class UcTreeDesigner : UserControl
+    // TODO: (PS) Comment this.
+    // TODO: (PS) Adapt for dynamic size changes for canvas.
+    /// <summary>
+    /// Interaction logic for UcTreeDesigner.xaml
+    /// </summary>
+    public partial class UcTreeDesigner : UserControl
 	{
 		#region static constructor
 
@@ -335,6 +337,7 @@
 			Transformation nodeAsTransformation;
 			DataSource nodeAsDataSource;
 			OutputNode nodeAsOutputNode;
+			CombinedNode nodeAsCombinedNode;
 
             UcNodeViewer nodeViewer = null;
 			if ((nodeAsTransformation = node as Transformation) != null)
@@ -349,8 +352,13 @@
             {
                 nodeViewer = new UcOutputViewer();
             }
+            else if ((nodeAsCombinedNode = node as CombinedNode) != null)
+            {
+                if (node.Class.InputTypes.Count() > 0) nodeViewer = new UcTransformationViewer();
+                else nodeViewer = new UcDataSourceViewer();
+            }
 
-			this.nodeViewers.Add(node, nodeViewer);
+            this.nodeViewers.Add(node, nodeViewer);
 
             nodeViewer.DataContext = node;
             this.Tree.Nodes.Add(node);
@@ -710,6 +718,35 @@
 		}
 
 
+        private void handleMergeOfSelected()
+        {
+            //Try to find the top root:
+            var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).ToList();
+            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+            if (!generator.IsConnected()) return;
+
+            NodeClass generatedClass = generator.GenerateClass();
+            if (generatedClass == null) return;
+
+            //Register the new Node:
+            Singleton<ClassManager>.Instance.AddClass(generatedClass);
+
+            //Generate the own Node:
+            Node newNode = generatedClass.BaseNode.MemberwiseClone();
+            newNode.PosX = nodes.Average(n => n.PosX);
+            newNode.PosY = nodes.Average(n => n.PosY);
+
+            //add the new Node:
+            AddNode(newNode);
+
+            //Change the Connections:
+            //TODO:
+
+            //At end -> Remove old ones!
+            foreach (Node old in nodes) RemoveNode(old);
+        }
+
+
         #endregion methods
 
         #region event handlers
@@ -801,73 +838,8 @@
 
             //TODO This is only for testing! Remove after working:
             //If P-Key, do some fancy magic!
-            if(e.Key == Key.P) handleSpitOfSelected();
+            if(e.Key == Key.P) handleMergeOfSelected();
 		}
-
-
-        private void handleSpitOfSelected()
-        {
-            //Try to find the top root:
-            var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).ToList();
-            Node rootNode = null;
-            foreach (Node node in nodes)
-            {
-                if (SubTreeContains(node, nodes.ToList()))
-                {
-                    rootNode = node;
-                    break;
-                }
-            }
-
-            //Generate a new Node if possible:
-            Node newNode = null;
-            if(rootNode != null)
-            {
-                newNode = GenerateNewNode(rootNode, this.SelectedNodeViewers);
-                if (newNode != null)
-                {
-                    //Calculate the new x / y pos.
-                    newNode.PosX = nodes.Average(n => n.PosX);
-                    newNode.PosY = nodes.Average(n => n.PosY);
-
-                    //Remove old nodes -> Add new:
-                    foreach (Node node in nodes) RemoveNode(node);
-                    AddNode(newNode);
-                }
-            }
-
-            Console.WriteLine("Connected: " + (rootNode != null) + " - " + nodes.Count + " Nodes.");
-        }
-
-        private Node GenerateNewNode(Node rootNode, IEnumerable<UcNodeViewer> nodeViewers)
-        {
-            //Generate Input / Output values:
-            DataType output = rootNode.Class.OutputType;
-            List<DataType> inputs = new List<DataType>();
-            foreach(UcNodeViewer sub in nodeViewers)
-            {
-                Node subNode = sub.Node;
-                //Be sure to skip empty elements:
-                if (subNode.Class == null || subNode.Class.InputTypes == null) continue;
-
-                List<Node> subNodes = GetInputsOfNode(subNode);
-                for( int i = 0; i < subNode.Class.InputTypes.Length; i++)
-                {
-                    bool found = false;
-                    DataType subType = subNode.Class.InputTypes[i];
-                    foreach (Node subSubNode in subNodes) if (subSubNode.Class.OutputType == subType) found = true;
-
-                    if (!found) inputs.Add(subType);
-                }
-            }
-
-            //Generate additional stuff:
-            String type = inputs.Any() ? "transformation" : "sensor";
-            String name = "RND" + new Random().Next();
-            NodeClass clazz = Singleton<ClassManager>.Instance.AddClass(name, type, output.Name, inputs.Select(o=>o.Name).ToArray(), name, "Test element!");
-            Node newNode = clazz.BaseNode.MemberwiseClone();
-            return newNode;
-        }
 
 
 		private void This_Loaded(object sender, RoutedEventArgs e)

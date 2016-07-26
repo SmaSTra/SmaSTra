@@ -96,18 +96,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessLogic\Connection.cs" />
+    <Compile Include="BusinessLogic\classhandler\CombinedClassGenerator.cs" />
+    <Compile Include="BusinessLogic\nodes\Connection.cs" />
     <Compile Include="BusinessLogic\codegeneration\JavaGenerator.cs" />
+    <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />
     <Compile Include="BusinessLogic\nodes\DataSource.cs" />
-    <Compile Include="BusinessLogic\DataType.cs" />
+    <Compile Include="BusinessLogic\classhandler\DataType.cs" />
     <Compile Include="BusinessLogic\nodes\Node.cs" />
-    <Compile Include="BusinessLogic\NodeClass.cs" />
-    <Compile Include="BusinessLogic\ClassManager.cs" />
+    <Compile Include="BusinessLogic\classhandler\NodeClass.cs" />
+    <Compile Include="BusinessLogic\classhandler\ClassManager.cs" />
     <Compile Include="BusinessLogic\codegeneration\serializers\NodeSerializer.cs" />
     <Compile Include="BusinessLogic\codegeneration\serializers\TreeSerializer.cs" />
     <Compile Include="BusinessLogic\nodes\OutputNode.cs" />
     <Compile Include="BusinessLogic\nodes\Transformation.cs" />
-    <Compile Include="BusinessLogic\TransformationTree.cs" />
+    <Compile Include="BusinessLogic\classhandler\TransformationTree.cs" />
     <Compile Include="Controls\Support\CustomDragDropHelper.cs" />
     <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">

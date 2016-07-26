@@ -63,6 +63,7 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             return classManager.BaseConversions
                 .Concat<Node>(classManager.BaseDataSources)
                 .Concat<Node>(classManager.BaseTransformations)
+                .Concat<Node>(classManager.BaseCombinedNodes)
                 .FirstOrDefault(x => x.Name == name);
         }
 

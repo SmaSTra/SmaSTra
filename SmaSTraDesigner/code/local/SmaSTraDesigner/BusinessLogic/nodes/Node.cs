@@ -16,7 +16,7 @@
 		/// <summary>
 		/// NodeClass instance that provides information about this node's type.
 		/// </summary>
-		private NodeClass clazz;
+		protected NodeClass clazz;
 
 		/// <summary>
 		/// This node's display name (is used as an identifier).
@@ -174,7 +174,7 @@
 		/// Raises the PropertyChanged event.
 		/// </summary>
 		/// <param name="propertyName">Name of the property that changed values.</param>
-		protected void OnPropertyChanged(string propertyName)
+		protected virtual void OnPropertyChanged(string propertyName)
 		{
 			if (this.PropertyChanged != null)
 			{
