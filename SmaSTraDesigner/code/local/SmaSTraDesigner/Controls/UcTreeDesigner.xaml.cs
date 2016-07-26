@@ -274,17 +274,48 @@
 				throw new Exception(String.Format("OutputNode {0} not found.", connection.OutputNode));
 			}
 			UcNodeViewer iNode = null;
-			if (!this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
+            if(connection.InputNode is OutputNode)
+            {
+                iNode = outOutputViewer;
+            }
+            else if (!this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
 			{
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
 
-            if (oNode.IoHandles == null) return;
+            if (oNode.IoHandles == null)
+            {
+                System.Diagnostics.Debug.Print("ABORT: Connection not Added: oNode.IoHandles == null");
+                return;
+            }
+
+            foreach (UcNodeViewer nodeViewer in nodeViewers.Values)
+            {
+                System.Diagnostics.Debug.Print("nodeViewer.Node.Name: " + nodeViewer.Node.Name);
+            }
+
+            foreach (UcIOHandle handle in iNode.IoHandles)
+            {
+                System.Diagnostics.Debug.Print("iNode: " + iNode.Node.Name+ " handle.IsLoaded :" + handle.IsLoaded + " handle.LoadedCompletely :" + handle.LoadedCompletely);
+            }
 
 			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
-			UcIOHandle iHandle = oNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
+            UcIOHandle iHandle = iNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
 
-			this.AddConnection(oHandle, iHandle, connection);
+            System.Diagnostics.Debug.Print("conection.InputIndex: " + connection.InputIndex);
+            System.Diagnostics.Debug.Print("oNode: " + oNode.Node.Name + " IoHandles.length: " + oNode.IoHandles.Length);
+            System.Diagnostics.Debug.Print("oHandle.Node: " + oHandle.Node.Name);
+            System.Diagnostics.Debug.Print("iNode: " + iNode.Node.Name + " IoHandles.length: " + iNode.IoHandles.Length);
+            System.Diagnostics.Debug.Print("iHandle.Node: " + iHandle.Node.Name);
+
+            if (iHandle != null && iHandle.Node != null)
+            {
+                System.Diagnostics.Debug.Print("Adding Connection: " + oHandle.Node.Name + " / " + iHandle.Node.Name);
+                this.AddConnection(oHandle, iHandle, connection);
+            } else
+            {
+                System.Diagnostics.Debug.Print("iHandle == null or iHandle.Node == null");
+            }
 		}
 
 		public void AddNode(Node node, bool select = false)
@@ -885,5 +916,25 @@
         }
 
         #endregion event handlers
+
+        #region not sorted yet
+
+        public void onUcNodeViewer_LoadedCompletely()
+        {
+            Boolean allNodeViewerLoadedCompletely = true;
+           foreach(UcNodeViewer nodeViewer in this.nodeViewers.Values){
+                if (!nodeViewer.LoadedCompletely)
+                {
+                    allNodeViewerLoadedCompletely = false;
+                    return;
+                }
+            }
+            if (allNodeViewerLoadedCompletely)
+            {
+                TreeSerilizer.addConnections();
+            }
+        }
+
+        #endregion not sorted yet
     }
 }

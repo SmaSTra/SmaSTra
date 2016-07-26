@@ -17,18 +17,17 @@ namespace SmaSTraDesigner.BusinessLogic
     class TreeSerilizer
     {
 
-        private TransformationTree tree;
+        private static TransformationTree tree;
 
-        public TreeSerilizer(TransformationTree tree)
+        private static List<Node> newNodes = new List<Node>();
+        private static List<Connection> newConnections = new List<Connection>();
+
+
+        public static void Serialize(TransformationTree transformationTree, string targetFile)
         {
-            this.tree = tree;
-        }
-
-
-        public void Serialize(string targetFile)
-        {
+            tree = transformationTree;
             //Before we start -> Check if we are connected at all:
-            if (this.tree == null || tree.OutputNode.InputNode == null)
+            if (tree == null || tree.OutputNode.InputNode == null)
             {
                 Console.WriteLine("Root node is not connected to any node! Can not save!");
                 return;
@@ -58,21 +57,22 @@ namespace SmaSTraDesigner.BusinessLogic
         }
 
 
-        public void Deserialize(string targetFile)
+        public static void Deserialize(TransformationTree transformationTree, string targetFile)
         {
+            tree = transformationTree;
             //Read the singleton ClassManager.
             ClassManager classManager = Singleton<ClassManager>.Instance;
 
             //First clear old tree:
-            foreach (Node node in new List<Node>(this.tree.Nodes)) if(!(node is OutputNode)) tree.DesignTree.RemoveNode(node);
-            foreach (Connection connection in new List<Connection>(this.tree.Connections)) tree.DesignTree.RemoveConnection(connection);
+            foreach (Node node in new List<Node>(tree.Nodes)) if(!(node is OutputNode)) tree.DesignTree.RemoveNode(node);
+            foreach (Connection connection in new List<Connection>(tree.Connections)) tree.DesignTree.RemoveConnection(connection);
 
             //Generate the Serializer + lists:
             var nodeSerializer = new NodeSerializer();
             UcTreeDesigner treeDesigner = tree.DesignTree;
 
-            List<Node> newNodes = new List<Node>();
-            List<Connection> newConnections = new List<Connection>();
+            newNodes = new List<Node>();
+            newConnections = new List<Connection>();
 
             dynamic json = JObject.Parse(File.ReadAllText(targetFile));
 
@@ -108,12 +108,17 @@ namespace SmaSTraDesigner.BusinessLogic
                 }
                 else treeDesigner.AddNode(node, true);
             }
-            
+
             //TODO Fix this somehow:
-         //   foreach (Connection connection in newConnections) treeDesigner.AddConnection(connection);
+            addConnections();
         }
 
-        private void applyConnection(Connection connection)
+        public static void addConnections()
+        {
+            foreach (Connection connection in newConnections) tree.DesignTree.AddConnection(connection);
+        }
+
+        private static void applyConnection(Connection connection)
         {
             Node input = connection.InputNode;
             Node output = connection.OutputNode;

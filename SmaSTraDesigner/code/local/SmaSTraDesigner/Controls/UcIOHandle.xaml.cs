@@ -361,7 +361,9 @@
 				{
 					this.NodeViewer = LayoutHelper.FindVisualParent<UcNodeViewer>(this, true);
 				}
-				if (this.NodeViewer != null && !this.IsPreview)
+                System.Diagnostics.Debug.Print("UcIOHandle Loaded. NodeViewer.Node: " + this.NodeViewer.Node.Name);
+
+                if (this.NodeViewer != null && !this.IsPreview)
 				{
 					this.treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this.NodeViewer, true);
 					if (this.treeDesigner != null)
@@ -376,6 +378,7 @@
 						PropertyChangedHandle.GetDistinctInstance(this.NodeViewer, "IsSelected", this.OnNodeViewerIsSelectedChanged));
 				}
 			}
+            LoadedCompletely = true;
 		}
 
 		/// <summary>
@@ -407,6 +410,23 @@
             }
         }
 
-		#endregion event handlers
-	}
+        #endregion event handlers
+
+        #region not sorted yet
+
+        private Boolean loadedCompletely = false;
+        public Boolean LoadedCompletely
+        {
+            get { return loadedCompletely; }
+            set {
+                loadedCompletely = value;
+                if (loadedCompletely)
+                {
+                    NodeViewer.onUcIOHandleLoadedCompletely();
+                }
+            }
+        }
+
+        #endregion not sorted yet
+    }
 }
