@@ -110,7 +110,7 @@ namespace SmaSTraDesigner.BusinessLogic
             }
             
             //TODO Fix this somehow:
-            //foreach (Connection connection in newConnections) treeDesigner.AddConnection(connection);
+         //   foreach (Connection connection in newConnections) treeDesigner.AddConnection(connection);
         }
 
         private void applyConnection(Connection connection)

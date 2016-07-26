@@ -67,16 +67,22 @@
 					false,
 					OnIsSelectedChanged));
 
-		#endregion dependency properties
+        public static readonly DependencyProperty DataTypeNameProperty =
+            DependencyProperty.Register(
+                "DataTypeName", typeof(string), typeof(UcIOHandle),
+                new FrameworkPropertyMetadata(
+                    "null"));
 
-		#region dependency property callbacks
+        #endregion dependency properties
 
-		/// <summary>
-		/// Property Changed Callback method of the IsSelected Dependency Property.
-		/// </summary>
-		/// <param name="sender">The instance of the class that had the IsSelected property changed.</param>
-		/// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
-		private static void OnIsSelectedChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        #region dependency property callbacks
+
+        /// <summary>
+        /// Property Changed Callback method of the IsSelected Dependency Property.
+        /// </summary>
+        /// <param name="sender">The instance of the class that had the IsSelected property changed.</param>
+        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        private static void OnIsSelectedChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			UcIOHandle subject = (UcIOHandle)sender;
 			bool newValue = (bool)e.NewValue;
@@ -131,6 +137,8 @@
 			};
 
 			this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
+
+            DataContextChanged += OnDataContextChanged;
 		}
 
 		#endregion constructors
@@ -216,10 +224,16 @@
 			set { this.SetValue(IsSelectedProperty, value); }
 		}
 
-		/// <summary>
-		/// Gets the Node instance the represented input/output is attached to.
-		/// </summary>
-		public Node Node
+        public string DataTypeName
+        {
+            get { return (string)this.GetValue(DataTypeNameProperty); }
+            set { this.SetValue(DataTypeNameProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets the Node instance the represented input/output is attached to.
+        /// </summary>
+        public Node Node
 		{
 			get { return this.NodeViewer != null ? this.NodeViewer.DataContext as Node : null; }
 		}
@@ -383,6 +397,15 @@
 		{
 			this.OnClick(e);
 		}
+
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is DataType)
+            {
+                string typeName = ((DataType)e.NewValue).Name;
+                DataTypeName = typeName != null ? typeName.Split('.').Last() : null;
+            }
+        }
 
 		#endregion event handlers
 	}

@@ -119,7 +119,9 @@
 				subject.AdjustZIndex();
 
 				subject.SelectedNodeViewers.CollectionChanged += subject.SelectedNodeViewers_CollectionChanged;
-			}
+                //TODO: update properties window
+               Singleton<NodeProperties>.Instance.NodeViewer = newValue;
+            }
 		}
 
 		/// <summary>
@@ -276,6 +278,8 @@
 			{
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
+
+            if (oNode.IoHandles == null) return;
 
 			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
 			UcIOHandle iHandle = oNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);

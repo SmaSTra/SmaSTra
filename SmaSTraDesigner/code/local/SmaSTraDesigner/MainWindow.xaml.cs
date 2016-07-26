@@ -31,7 +31,9 @@
 		{
 			this.InitializeComponent();
 			this.spnNodeClasses.DataContext = Singleton<ClassManager>.Instance;
-		}
+            this.spnProperties.DataContext = Singleton<NodeProperties>.Instance;
+            this.spnLibrary.DataContext = Singleton<Library>.Instance;
+        }
 
 		#endregion constructors
 
@@ -67,8 +69,25 @@
 					toggleButton.IsChecked = false;
 				}
 			}
-		}
+        }
 
-		#endregion event handlers
-	}
+        private void spnLibrary_Drop(object sender, DragEventArgs e)
+        {
+            Singleton<Library>.Instance.Library_Drop(sender, e);
+        }
+
+        private void spnLibrary_DragEnter(object sender, DragEventArgs e)
+        {
+            Singleton<Library>.Instance.Library_DragEnter(sender, e);
+        }
+
+        #endregion event handlers
+
+        #region test area
+
+
+
+        #endregion test area
+
+    }
 }
