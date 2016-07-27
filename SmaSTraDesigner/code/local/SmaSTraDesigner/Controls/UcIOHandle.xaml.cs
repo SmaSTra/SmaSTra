@@ -420,7 +420,7 @@
             get { return loadedCompletely; }
             set {
                 loadedCompletely = value;
-                if (loadedCompletely)
+                if (loadedCompletely && NodeViewer != null)
                 {
                     NodeViewer.onUcIOHandleLoadedCompletely();
                 }

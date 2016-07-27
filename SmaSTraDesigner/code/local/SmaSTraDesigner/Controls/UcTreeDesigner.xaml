@@ -25,8 +25,23 @@
 		<Border x:Name="bdrViewPort" />
 		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
 			<Viewbox x:Name="vbBackground">
-				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding ElementName=This, Path=Background}" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
-					<local:UcOutputViewer x:Name="outOutputViewer" />
+				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
+                    <Canvas.Background>
+                        <DrawingBrush TileMode="Tile" Viewport="0,0,100,100" 
+                                     ViewportUnits="Absolute">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,100,100"/>
+                                    </GeometryDrawing.Geometry>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="LightGray" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Canvas.Background>
+                    <local:UcOutputViewer x:Name="outOutputViewer" />
 					<Border x:Name="bdrSelectionBorder" BorderBrush="Black" BorderThickness="1" Opacity="0.5" Visibility="Collapsed" SnapsToDevicePixels="True" IsHitTestVisible="False">
 						<Grid>
 							<Border x:Name="bdrSelectionOpacityMask" Background="White" Opacity="0.8" />
