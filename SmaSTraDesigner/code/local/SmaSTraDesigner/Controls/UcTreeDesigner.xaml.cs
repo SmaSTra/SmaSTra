@@ -896,22 +896,22 @@
                 {
                     scaletransform = new ScaleTransform(1, 1);
                     cnvBackground.RenderTransform = scaletransform;
+                    scaletransform.CenterX = cnvBackground.Width / 2;
+                    scaletransform.CenterY = cnvBackground.Height / 2;
                 }
 
                 if (e.Delta > 0)
                 {
                     scaletransform.ScaleX *= scaleRate;
                     scaletransform.ScaleY *= scaleRate;
-                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset * scaleRate);
-                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset * scaleRate);
                 }
                 else
                 {
                     scaletransform.ScaleX /= scaleRate;
                     scaletransform.ScaleY /= scaleRate;
-                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset / scaleRate);
-                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset / scaleRate);
                 }
+
+                e.Handled = true;
             }
         }
 
