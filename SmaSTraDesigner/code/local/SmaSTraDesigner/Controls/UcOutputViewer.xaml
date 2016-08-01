@@ -8,24 +8,33 @@
 	mc:Ignorable="d"
 	x:Name="This" IsHitTestVisible="True">
 	<Grid Margin="0,5,0,0">
-	<!--	<Ellipse Stretch="Fill" Fill="Yellow">
-			<Ellipse.Style>
-				<Style TargetType="Ellipse">
-					<Setter Property="Stroke" Value="#C0C000" />
-					<Setter Property="StrokeThickness" Value="2" />
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="Stroke" Value="Black" />
-							<Setter Property="StrokeThickness" Value="3" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
-							<Setter Property="Stroke" Value="DarkBlue" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Ellipse.Style>
-		</Ellipse>
-        -->
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush>
+                                <SolidColorBrush.Color>
+                                    <Color R="0" G="0" B="0" A="0" />
+                                </SolidColorBrush.Color>
+                            </SolidColorBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="2" />
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="5" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
+                            <Setter Property="BorderBrush" Value="DarkBlue" />
+                            <Setter Property="BorderThickness" Value="3" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
         <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbOutputName}" Height="100" Source="pack://siteoforigin:,,,/Resources/yellow_window.png"/>
         <TextBlock Name="tbOutputName" Text="Output" Foreground="White" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
         <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-10,15,0,0" DataContext="{x:Null}" />

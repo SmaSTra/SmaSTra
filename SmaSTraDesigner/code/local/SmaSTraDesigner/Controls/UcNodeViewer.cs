@@ -65,7 +65,7 @@
 				UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(subject, true);
 				if (treeDesigner != null)
 				{
-					treeDesigner.SelectedNodeViewer = subject;
+                    treeDesigner.onNodeViewerSelected(subject);
 				}
 			}
 		}

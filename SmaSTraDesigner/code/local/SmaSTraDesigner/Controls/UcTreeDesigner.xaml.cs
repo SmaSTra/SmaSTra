@@ -171,7 +171,7 @@
 			this.SelectedNodeViewers = new ObservableCollection<UcNodeViewer>();
 			this.SelectedNodeViewers.CollectionChanged += SelectedNodeViewers_CollectionChanged;
 
-			this.InitializeComponent();
+            this.InitializeComponent();
 
 			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
@@ -214,15 +214,15 @@
 			}
 		}
 
-		#endregion constructors
+        #endregion constructors
 
-		#region properties
+        #region properties
 
-		/// <summary>
-		/// Gets the value of the ConnectingIOHandle property.
-		/// This is a Dependency Property.
-		/// </summary>
-		public UcIOHandle ConnectingIOHandle
+        /// <summary>
+        /// Gets the value of the ConnectingIOHandle property.
+        /// This is a Dependency Property.
+        /// </summary>
+        public UcIOHandle ConnectingIOHandle
 		{
 			get { return (UcIOHandle)this.GetValue(ConnectingIOHandleProperty); }
 			private set { this.SetValue(ConnectingIOHandlePropertyKey, value); }
@@ -651,6 +651,10 @@
 			this.mousePosOnViewer = null;
 			this.dragStart = null;
 
+            if (movingNodeViewer != null)
+            {
+                snapToGrid(movingNodeViewer);
+            }
 			this.movingNodeViewer = null;
 			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
 			{
@@ -779,10 +783,9 @@
 			Node newNode = (Node)node.Clone();
 			newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
-            snapToGrid(newNode);
-
 			this.AddNode(newNode, true);
-		}
+            scvCanvas.Focus();
+        }
 
 		// TODO: (PS) Replace this with a WPF command
 		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -794,9 +797,29 @@
 					this.RemoveNode(nodeViewer);
 				}
 			}
+            if (e.Key == Key.LeftCtrl)
+            {
+                leftCtrlPressed = true;
+            }
+            if (e.Key == Key.LeftShift)
+            {
+                leftShiftPressed = true;
+            }
 		}
 
-		private void This_Loaded(object sender, RoutedEventArgs e)
+        private void This_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                leftCtrlPressed = false;
+            }
+            if (e.Key == Key.LeftShift)
+            {
+                leftShiftPressed = false;
+            }
+        }
+
+        private void This_Loaded(object sender, RoutedEventArgs e)
 		{
 			this.scvCanvas.ScrollToHorizontalOffset(GetOffset(this.vbBackground.ActualWidth, this.scvCanvas.ViewportWidth));
 			this.scvCanvas.ScrollToVerticalOffset(GetOffset(this.vbBackground.ActualHeight, this.scvCanvas.ViewportHeight));
@@ -832,7 +855,6 @@
 						node = (Node)nodeViewer.DataContext;
 						node.PosX += dx;
 						node.PosY += dy;
-                        snapToGrid(node);
 					}
 				}
 				else if (this.ConnectingIOHandle != null)
@@ -921,15 +943,33 @@
 
         #region not sorted yet
 
-        public int gridSize = 50;
-        public Boolean isSnapToGrid = true;
+        private bool leftCtrlPressed = false;
+        private bool leftShiftPressed = false;
 
-        public void snapToGrid(Node node)
+        public void onNodeViewerSelected(UcNodeViewer nodeViewer)
         {
-            if (isSnapToGrid)
+            scvCanvas.Focus();
+            if (leftCtrlPressed)
             {
-                node.PosX = node.PosX - (node.PosX % gridSize);
-                node.PosY = node.PosY - (node.PosY % gridSize);
+                SelectedNodeViewers.Add(nodeViewer);
+            } else
+            {
+                SelectedNodeViewer = nodeViewer;
+            }
+        }
+
+        public int gridSize = 50;
+
+        public void snapToGrid(UcNodeViewer nodeViewer)
+        {
+            if (leftShiftPressed)
+            {
+                double left = Canvas.GetLeft(nodeViewer);
+                double deltaX = ((left % gridSize) > (gridSize / 2)) ? (left % gridSize) - gridSize : (left % gridSize);
+                nodeViewer.Node.PosX = nodeViewer.Node.PosX - deltaX;
+                double top = Canvas.GetTop(nodeViewer);
+                double deltaY = ((top % gridSize) > (gridSize / 2)) ? (top % gridSize) - gridSize : (top % gridSize);
+                nodeViewer.Node.PosY = nodeViewer.Node.PosY - deltaY;
             }
         }
 
