@@ -27,12 +27,16 @@
 			<Viewbox x:Name="vbBackground">
 				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
                     <Canvas.Background>
-                        <DrawingBrush TileMode="Tile" Viewport="0,0,100,100" 
+                        <DrawingBrush TileMode="Tile" Viewport="0,0,50,50" 
                                      ViewportUnits="Absolute">
                             <DrawingBrush.Drawing>
                                 <GeometryDrawing>
                                     <GeometryDrawing.Geometry>
-                                        <RectangleGeometry Rect="0,0,100,100"/>
+                                        <RectangleGeometry>
+                                            <RectangleGeometry.Rect>
+                                                <Rect X="0" Y="0" Width="50" Height="50" />
+                                            </RectangleGeometry.Rect>
+                                        </RectangleGeometry>
                                     </GeometryDrawing.Geometry>
                                     <GeometryDrawing.Pen>
                                         <Pen Brush="LightGray" />

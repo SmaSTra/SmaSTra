@@ -70,7 +70,7 @@
 				</Style>
 			</Ellipse.Style>
 		</Ellipse>
-		<Polygon Points="0.0,0.0 1.0,0.0 0.5,1.0"  Stretch="Fill">
+		<Polygon Points="0.0,0.0 1.0,0.5 0.0,1.0"  Stretch="Fill">
 			<Polygon.Style>
 				<Style TargetType="Polygon">
                     <Setter Property="Fill" Value="{StaticResource ColorDefault}" />

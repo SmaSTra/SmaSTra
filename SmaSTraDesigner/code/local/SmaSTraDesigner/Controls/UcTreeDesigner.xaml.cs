@@ -779,6 +779,7 @@
 			Node newNode = (Node)node.Clone();
 			newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
+            snapToGrid(newNode);
 
 			this.AddNode(newNode, true);
 		}
@@ -831,6 +832,7 @@
 						node = (Node)nodeViewer.DataContext;
 						node.PosX += dx;
 						node.PosY += dy;
+                        snapToGrid(node);
 					}
 				}
 				else if (this.ConnectingIOHandle != null)
@@ -918,6 +920,18 @@
         #endregion event handlers
 
         #region not sorted yet
+
+        public int gridSize = 50;
+        public Boolean isSnapToGrid = true;
+
+        public void snapToGrid(Node node)
+        {
+            if (isSnapToGrid)
+            {
+                node.PosX = node.PosX - (node.PosX % gridSize);
+                node.PosY = node.PosY - (node.PosY % gridSize);
+            }
+        }
 
         public void onUcNodeViewer_LoadedCompletely()
         {

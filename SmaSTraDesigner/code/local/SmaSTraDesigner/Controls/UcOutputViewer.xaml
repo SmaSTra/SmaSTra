@@ -8,7 +8,7 @@
 	mc:Ignorable="d"
 	x:Name="This" IsHitTestVisible="True">
 	<Grid Margin="0,5,0,0">
-		<Ellipse Stretch="Fill" Fill="Yellow">
+	<!--	<Ellipse Stretch="Fill" Fill="Yellow">
 			<Ellipse.Style>
 				<Style TargetType="Ellipse">
 					<Setter Property="Stroke" Value="#C0C000" />
@@ -25,7 +25,9 @@
 				</Style>
 			</Ellipse.Style>
 		</Ellipse>
-		<TextBlock Text="Output" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
-		<local:UcIOHandle IsInput="True" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-5,0,0" DataContext="{x:Null}" />
+        -->
+        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbOutputName}" Height="100" Source="pack://siteoforigin:,,,/Resources/yellow_window.png"/>
+        <TextBlock Name="tbOutputName" Text="Output" Foreground="White" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
+        <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-10,15,0,0" DataContext="{x:Null}" />
 	</Grid>
 </local:UcNodeViewer>

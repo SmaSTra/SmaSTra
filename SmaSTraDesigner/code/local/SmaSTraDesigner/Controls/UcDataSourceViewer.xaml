@@ -8,7 +8,7 @@
 	mc:Ignorable="d"
 	x:Name="This">
 	<Grid Margin="0,0,0,5">
-		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" Fill="LightGreen" Stretch="Fill">
+		<!--<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" Fill="LightGreen" Stretch="Fill">
 			<Polygon.Style>
 				<Style TargetType="Polygon">
 					<Setter Property="Stroke" Value="Green" />
@@ -24,9 +24,10 @@
 					</Style.Triggers>
 				</Style>
 			</Polygon.Style>
-		</Polygon>
-		<!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
-		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
-		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
+		</Polygon> -->
+        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbSourceName}" Height="100" Source="pack://siteoforigin:,,,/Resources/green_window.png"/>
+        <!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
+		<TextBlock Name="tbSourceName" Foreground="White" Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,2,10,0" />
+		<local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-10,0" />
 	</Grid>
 </local:UcNodeViewer>
