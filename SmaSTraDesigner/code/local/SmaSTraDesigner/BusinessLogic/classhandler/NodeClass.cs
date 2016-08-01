@@ -36,7 +36,7 @@
 			this.Name = name;
 			this.BaseNode = baseNode;
 			this.OutputType = outputType;
-			this.InputTypes = inputTypes;
+			this.InputTypes = inputTypes == null ? new DataType[0] : inputTypes;
             this.NodeType = nodeType;
 
 			baseNode.Class = this;

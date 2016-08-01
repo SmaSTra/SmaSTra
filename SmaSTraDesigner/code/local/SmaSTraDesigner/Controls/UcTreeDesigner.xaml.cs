@@ -12,6 +12,8 @@
     using System.Windows.Media;
     using System.Windows.Shapes;
 
+    using Microsoft.VisualBasic;
+
     using Common;
     using Common.ExtensionMethods;
     using Common.Resources.Converters;
@@ -722,11 +724,23 @@
         {
             //Try to find the top root:
             var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).ToList();
+
+            //Get a name for the New Element:
+            MessageBoxResult result = MessageBox.Show("Generate a new Element?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            if (result != MessageBoxResult.OK) return;
+            
+            //TODO ADD New Window for Name!
+            //
+            //
+
             CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
             if (!generator.IsConnected()) return;
 
             NodeClass generatedClass = generator.GenerateClass();
             if (generatedClass == null) return;
+
+            //Save the just generated class:
+            generator.saveToDisc();
 
             //Register the new Node:
             Singleton<ClassManager>.Instance.AddClass(generatedClass);

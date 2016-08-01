@@ -1,15 +1,16 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
-	using System.ComponentModel;
+    using System;
+    using System.ComponentModel;
+    using classhandler;
 
 
-	/// <summary>
-	/// Base class for all nodes.
-	/// Provides information about a specific node in a TransformationTree.
-	/// Implemented variations are DataSource, Transformation and OutputNode.
-	/// </summary>
-	public class Node : INotifyPropertyChanged, ICloneable
+    /// <summary>
+    /// Base class for all nodes.
+    /// Provides information about a specific node in a TransformationTree.
+    /// Implemented variations are DataSource, Transformation and OutputNode.
+    /// </summary>
+    public class Node : INotifyPropertyChanged, ICloneable
 	{
 		#region fields
 
@@ -182,6 +183,6 @@
 			}
 		}
 
-		#endregion methods
-	}
+        #endregion methods
+    }
 }

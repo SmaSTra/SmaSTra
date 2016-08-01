@@ -97,6 +97,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\classhandler\CombinedClassGenerator.cs" />
+    <Compile Include="BusinessLogic\classhandler\CombinedNodeClass.cs" />
     <Compile Include="BusinessLogic\nodes\Connection.cs" />
     <Compile Include="BusinessLogic\codegeneration\JavaGenerator.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />

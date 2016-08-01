@@ -1,6 +1,9 @@
-﻿using SmaSTraDesigner.BusinessLogic.nodes;
+﻿using Newtonsoft.Json;
+using SmaSTraDesigner.BusinessLogic.nodes;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +69,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// </summary>
         private List<Node> nodes = new List<Node>();
 
+        /// <summary>
+        /// The Cached node class to not having to rebuild it all the time when calling the getter.
+        /// </summary>
+        private CombinedNodeClass cachedNodeClass = null;
+
         #endregion fields
 
         #region properties
@@ -117,7 +125,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <param name="node">to add</param>
         public void AddNode(Node node)
         {
-            if(node != null) this.nodes.Add(node);
+            if (node != null)
+            {
+                this.nodes.Add(node);
+                this.cachedNodeClass = null;
+            }
         }
 
         /// <summary>
@@ -126,7 +138,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <param name="nodes">to add</param>
         public void AddNodes(IEnumerable<Node> nodes)
         {
-            if(nodes != null && nodes.Any()) this.nodes.AddRange(nodes);
+            if (nodes != null && nodes.Any())
+            {
+                this.nodes.AddRange(nodes);
+                this.cachedNodeClass = null;
+            }
         }
 
         /// <summary>
@@ -143,20 +159,36 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// Generates the NodeClass.
         /// </summary>
         /// <returns>The node class or null if not possible.</returns>
-        public NodeClass GenerateClass()
+        public CombinedNodeClass GenerateClass()
         {
+            if (cachedNodeClass != null) return cachedNodeClass;
+
             Node root = GetRootNode();
             if (root == null) return null;
 
+            //Generate Inputs + Sub-Hirachy.
             List<DataType> inputs = new List<DataType>();
-            foreach( Node node in nodes)
+            List<SimpleConnection> connections = new List<SimpleConnection>();
+            List<SimpleSubNode> subNodes = new List<SimpleSubNode>();
+            int input = 0;
+
+            foreach ( Node node in nodes)
             {
                 NodeClass nodeClass = node.Class;
                 Node[] nodeInputs = GetInputsOfNode(node);
+
+                subNodes.Add(new SimpleSubNode(node));
                 for(int i = 0; i < nodeInputs.Count(); i++)
                 {
                     Node subNode = nodeInputs[i];
-                    if(subNode == null || !nodes.Contains(subNode)) inputs.Add(nodeClass.InputTypes[i]);
+                    if (subNode == null || !nodes.Contains(subNode))
+                    {
+                        inputs.Add(nodeClass.InputTypes[i]);
+                        connections.Add(new SimpleConnection(node.Name, "input"+input, i));
+                        input++;
+                    }else{
+                        connections.Add(new SimpleConnection(node.Name, subNode.Name, i));
+                    }
                 }
             }
 
@@ -166,10 +198,68 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             baseNode.Name = Name;
 
             //Finally generate the NodeClass
-            NodeClass finalNodeClass = new NodeClass(NodeType.Combined, Name, baseNode, output, inputs.ToArray());
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, baseNode, subNodes, connections, output, inputs.ToArray());
             finalNodeClass.Description = Description;
+            finalNodeClass.DisplayName = Name;
 
+            this.cachedNodeClass = finalNodeClass;
             return finalNodeClass;
+        }
+
+
+        /// <summary>
+        /// Saves the Current state to the disc.
+        /// </summary>
+        public bool saveToDisc()
+        {
+            CombinedNodeClass toSave = GenerateClass();
+            if (toSave == null) return false;
+
+            string savePath = Path.Combine(Environment.CurrentDirectory, "created");
+            savePath = Path.Combine(savePath, toSave.DisplayName);
+
+            if (Directory.Exists(savePath)) return false;
+            Directory.CreateDirectory(savePath);
+
+            string metaFile = Path.Combine(savePath, "metadata.json");
+            Console.WriteLine("Saving to: " + metaFile);
+
+            //Combine the JSON:
+            dynamic json = new ExpandoObject();
+            json.description = toSave.Description;
+            json.display = toSave.DisplayName;
+            json.output = toSave.OutputType.Name;
+            json.type = "combined";
+
+            //Generate the inputs:
+            dynamic inputs = new ExpandoObject();
+            for (int i = 0; i < toSave.InputTypes.Count(); i++) { inputs["arg" + i] = toSave.InputTypes[i].Name; i++; }
+
+            //Generate the Connections:
+            dynamic[] connections = new dynamic[toSave.Connections.Count()];
+            for (int i = 0; i < connections.Count(); i++) connections[i] = toSave.Connections.ElementAt(i);
+            json.connections = connections;
+
+            //Generate the Nodes:
+            dynamic[] nodes = new dynamic[toSave.SubElements.Count()];
+            for (int i = 0; i < toSave.SubElements.Count(); i++) nodes[i] = toSave.SubElements.ElementAt(i);
+            json.subElements = nodes;
+
+
+
+            //Create the Json settings:
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Newtonsoft.Json.Formatting.Indented
+            };
+
+            //Generate a string and write it to the file:
+            string text = JsonConvert.SerializeObject(json, jsonSettings);
+            File.WriteAllText(metaFile, text);
+
+            return true;
         }
 
 
