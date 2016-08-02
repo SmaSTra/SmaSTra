@@ -403,11 +403,11 @@
 			{
 				iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
 			}
-
+            
 			Line newLine = new Line()
 			{
 				DataContext = connection.Value,
-				Stroke = Brushes.Black,
+				Stroke = getColorFromType(iHandle.DataTypeName),
 				StrokeThickness = 4
 			};
 			BindingOperations.SetBinding(newLine, Line.X1Property,
@@ -942,6 +942,38 @@
         #endregion event handlers
 
         #region not sorted yet
+
+        private SolidColorBrush getColorFromType(String type)
+        {
+            SolidColorBrush color = new SolidColorBrush();
+
+            switch (type)
+            {
+                case "double":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorDouble");
+                    break;
+                case "boolean":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorBoolean");
+                    break;
+                case "long":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorLong");
+                    break;
+                case "Map":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorMap");
+                    break;
+                case "Vector3d":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorVector3d");
+                    break;
+                case "Collection":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorCollection");
+                    break;
+                default:
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorDefault");
+                    break;
+            }
+
+            return color;
+        }
 
         public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
         {
