@@ -6,8 +6,9 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	mc:Ignorable="d"
+    ToolTip="{Binding Path=Name}"
 	x:Name="This">
-	<Grid Margin="0,0,0,5">
+    <Grid Margin="0,0,0,5">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
