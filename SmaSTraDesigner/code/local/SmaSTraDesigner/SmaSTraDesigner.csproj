@@ -97,7 +97,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessLogic\NodeGroup.cs" />
     <Compile Include="BusinessLogic\Library.cs" />
     <Compile Include="BusinessLogic\NodeProperties.cs" />
     <Compile Include="BusinessLogic\Connection.cs" />

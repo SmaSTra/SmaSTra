@@ -91,16 +91,18 @@
 			this.MouseLeftButtonDown += UcNodeViewer_MouseLeftButtonDown;
 			this.MouseRightButtonDown += UcNodeViewer_MouseRightButtonDown;
 			this.Loaded += UcNodeViewer_Loaded;
+            this.MouseDoubleClick += UcNodeViewer_MouseDoubleClick;
 		}
+        
 
-		#endregion constructors
+        #endregion constructors
 
-		#region events
+        #region events
 
-		/// <summary>
-		/// Is raised when this control is being dragged.
-		/// </summary>
-		public event EventHandler CustomDrag;
+        /// <summary>
+        /// Is raised when this control is being dragged.
+        /// </summary>
+        public event EventHandler CustomDrag;
 
 		#endregion events
 
@@ -265,6 +267,16 @@
 		{
 			this.OnClick(e);
 		}
+
+        private void UcNodeViewer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            UcNodeViewer subject = (UcNodeViewer)sender;
+            UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(subject, true);
+            if (treeDesigner != null)
+            {
+                treeDesigner.onNodeViewerDoubleClick(subject);
+            }
+        }
 
         #endregion event handlers
 

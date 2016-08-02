@@ -943,6 +943,39 @@
 
         #region not sorted yet
 
+        public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
+        {
+            List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
+            connectedNodeList.Add(nodeViewer);
+            int i = 0;
+            while (i < connectedNodeList.Count)
+            {
+                foreach(Connection connection in Tree.Connections)
+                {
+                    if (connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) || connection.OutputNode.Equals(connectedNodeList.ElementAt(i).Node))
+                    {
+                        UcNodeViewer connectedViewer;
+                        Node connectedNode = connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) ? connection.OutputNode : connection.InputNode;
+                        if (connectedNode.Equals(outOutputViewer.Node))
+                        {
+                            connectedViewer = outOutputViewer;
+                        }
+                        else
+                        {
+                            nodeViewers.TryGetValue(connectedNode, out connectedViewer);
+                        }
+                        if (!connectedNodeList.Contains(connectedViewer))
+                        {
+                            connectedNodeList.Add(connectedViewer);
+                            connectedViewer.IsSelected = true;
+                        }
+                    }
+                }
+                System.Diagnostics.Debug.Print("connectedNodeList Count: " + connectedNodeList.Count);
+                i++;
+            }
+        }
+
         private bool leftCtrlPressed = false;
         private bool leftShiftPressed = false;
 

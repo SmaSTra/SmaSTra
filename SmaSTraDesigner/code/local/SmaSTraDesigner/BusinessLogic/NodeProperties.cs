@@ -76,7 +76,7 @@ namespace SmaSTraDesigner.BusinessLogic
                     string dataTypesString = "";
                     for(int i = 0; i < nodeViewer.Node.Class.InputTypes.Length; i++)
                     {
-                        dataTypesString += nodeViewer.Node.Class.InputTypes[i].Name + " ";
+                        dataTypesString += nodeViewer.Node.Class.InputTypes[i].Name.Split('.').Last();
                     }
                     return dataTypesString;
                 }
@@ -93,7 +93,7 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 if (nodeViewer != null && nodeViewer.Node.Class != null && nodeViewer.Node.Class.OutputType != null)
                 {
-                        return nodeViewer.Node.Class.OutputType.Name;
+                        return nodeViewer.Node.Class.OutputType.Name.Split('.').Last();
                 }
                 else
                 {
