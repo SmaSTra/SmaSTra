@@ -653,7 +653,10 @@
 
             if (movingNodeViewer != null)
             {
-                snapToGrid(movingNodeViewer);
+                foreach (UcNodeViewer nodeViewer in SelectedNodeViewers)
+                {
+                    snapToGrid(nodeViewer);
+                }
             }
 			this.movingNodeViewer = null;
 			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
