@@ -6,9 +6,20 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:SmaSTraDesigner"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
+    xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
 	mc:Ignorable="d"
 	x:Name="This" Title="SmaSTra" d:DesignWidth="900" d:DesignHeight="650">
-	<Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
+    <Window.CommandBindings>
+        <CommandBinding Command="ctrlSupport:Commands.Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Load" CanExecute="Load_CanExecute" Executed="Load_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Exit" CanExecute="Exit_CanExecute" Executed="Exit_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Generate" CanExecute="Generate_CanExecute" Executed="Generate_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Delete" CanExecute="Delete_CanExecute" Executed="Delete_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.SelectConnected" CanExecute="SelectConnected_CanExecute" Executed="SelectConnected_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.AddSelected" CanExecute="AddSelected_CanExecute" Executed="AddSelected_Executed" />
+    </Window.CommandBindings>
+
+    <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="5" />
@@ -23,13 +34,13 @@
 
 		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
             <MenuItem x:Name="mniFile" Header="File">
-                <MenuItem x:Name="mniSave" Header="Save" Click="mniSave_Click" />
-                <MenuItem x:Name="mniLoad" Header="Load" Click="mniLoad_Click" />
-                <MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
+                <MenuItem x:Name="mniSave" Header="Save" Command="ctrlSupport:Commands.Save" />
+                <MenuItem x:Name="mniLoad" Header="Load" Command="ctrlSupport:Commands.Load" />
+                <MenuItem x:Name="mniExit" Header="Exit" Command="ctrlSupport:Commands.Exit" />
 			</MenuItem>
 			<MenuItem x:Name="mniEdit" Header="Edit" />
 			<MenuItem Header="Tree">
-				<MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Click="mniGenerateJava_Click" />
+                <MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Command="ctrlSupport:Commands.Generate" />
 			</MenuItem>
 		</Menu>
 

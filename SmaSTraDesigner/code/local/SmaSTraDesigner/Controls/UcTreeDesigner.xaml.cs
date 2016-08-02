@@ -787,16 +787,17 @@
             scvCanvas.Focus();
         }
 
+        public void onDeleteCommand()
+        {
+                foreach (var nodeViewer in this.SelectedNodeViewers)
+                {
+                    this.RemoveNode(nodeViewer);
+                }
+        }
+
 		// TODO: (PS) Replace this with a WPF command
 		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.Delete)
-			{
-				foreach (var nodeViewer in this.SelectedNodeViewers)
-				{
-					this.RemoveNode(nodeViewer);
-				}
-			}
             if (e.Key == Key.LeftCtrl)
             {
                 leftCtrlPressed = true;
@@ -975,6 +976,13 @@
             return color;
         }
 
+        public void onNodeViewerSelectAdded(UcNodeViewer nodeViewer)
+        {
+            this.changingSelectedNodeViewers = true;
+            nodeViewer.IsSelected = true;
+            this.changingSelectedNodeViewers = false;
+        }
+
         public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
         {
             List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
@@ -999,7 +1007,9 @@
                         if (!connectedNodeList.Contains(connectedViewer))
                         {
                             connectedNodeList.Add(connectedViewer);
+                            this.changingSelectedNodeViewers = true;
                             connectedViewer.IsSelected = true;
+                            this.changingSelectedNodeViewers = false;
                         }
                     }
                 }
@@ -1014,7 +1024,7 @@
         public void onNodeViewerSelected(UcNodeViewer nodeViewer)
         {
             scvCanvas.Focus();
-            if (leftCtrlPressed)
+            if (changingSelectedNodeViewers)
             {
                 SelectedNodeViewers.Add(nodeViewer);
             } else

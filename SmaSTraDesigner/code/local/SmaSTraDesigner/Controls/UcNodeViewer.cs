@@ -91,7 +91,6 @@
 			this.MouseLeftButtonDown += UcNodeViewer_MouseLeftButtonDown;
 			this.MouseRightButtonDown += UcNodeViewer_MouseRightButtonDown;
 			this.Loaded += UcNodeViewer_Loaded;
-            this.MouseDoubleClick += UcNodeViewer_MouseDoubleClick;
 		}
         
 
@@ -267,16 +266,6 @@
 		{
 			this.OnClick(e);
 		}
-
-        private void UcNodeViewer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            UcNodeViewer subject = (UcNodeViewer)sender;
-            UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(subject, true);
-            if (treeDesigner != null)
-            {
-                treeDesigner.onNodeViewerDoubleClick(subject);
-            }
-        }
 
         #endregion event handlers
 
