@@ -105,7 +105,23 @@
 
         private void Delete_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
+                if (nodeViewer.IsPreview || !nodeViewer.IsSelected)
+                {
+                    e.CanExecute = false;
+                }
+                else
+                {
+                    e.CanExecute = true;
+                }
+                e.Handled = true;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
         }
         private void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -114,7 +130,22 @@
 
         private void SelectConnected_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
+                if (nodeViewer.IsPreview)
+                {
+                    e.CanExecute = false;
+                }
+                else
+                {
+                    e.CanExecute = true;
+                }
+                e.Handled = true;
+            } else
+            {
+
+            }
         }
         private void SelectConnected_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -123,11 +154,26 @@
 
         private void AddSelected_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
+                if (nodeViewer.IsPreview)
+                {
+                    e.CanExecute = false;
+                }
+                else
+                {
+                    e.CanExecute = true;
+                }
+                e.Handled = true;
+            } else
+            {
+
+            }
         }
         private void AddSelected_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.onNodeViewerSelectAdded((UcNodeViewer)e.OriginalSource);
+            this.tdTreeDesigner.onNodeViewerSelectAdded((UcNodeViewer) e.OriginalSource);
         }
 
         #endregion test area

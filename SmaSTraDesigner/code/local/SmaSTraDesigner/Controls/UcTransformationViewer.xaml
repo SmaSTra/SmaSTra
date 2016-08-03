@@ -10,14 +10,23 @@
 	mc:Ignorable="d"
     ToolTip="{Binding Path=Name}"
 	x:Name="This">
+    <local:UcNodeViewer.Resources>
+        <converters:LambdaConverter x:Key="InputItemsSourceConverter" />
+    </local:UcNodeViewer.Resources>
     <local:UcNodeViewer.InputBindings>
         <MouseBinding Gesture="LeftDoubleClick" Command="ctrlSupport:Commands.SelectConnected" />
         <MouseBinding Gesture="CTRL+LeftClick" Command="ctrlSupport:Commands.AddSelected" />
     </local:UcNodeViewer.InputBindings>
-    <local:UcNodeViewer.Resources>
-		<converters:LambdaConverter x:Key="InputItemsSourceConverter" />
-	</local:UcNodeViewer.Resources>
-	<Grid Margin="0,5,0,5">
+    <local:UcNodeViewer.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="ctrlSupport:Commands.SelectConnected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+            <MenuItem Command="ctrlSupport:Commands.AddSelected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            <Separator />
+            <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+        </ContextMenu>
+    </local:UcNodeViewer.ContextMenu>
+
+    <Grid Margin="0,5,0,5">
 	 	<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 			<Border.Style>
 				<Style TargetType="{x:Type Border}">

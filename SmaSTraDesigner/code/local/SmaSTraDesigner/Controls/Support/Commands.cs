@@ -66,7 +66,7 @@ namespace SmaSTraDesigner.Controls.Support
 
         public static readonly RoutedUICommand SelectConnected = new RoutedUICommand
                         (
-                                "SelectConnected",
+                                "Select all connected",
                                 "SelectConnected",
                                 typeof(Commands),
                                 new InputGestureCollection()
@@ -77,7 +77,7 @@ namespace SmaSTraDesigner.Controls.Support
 
         public static readonly RoutedUICommand AddSelected = new RoutedUICommand
                         (
-                                "AddSelected",
+                                "Add to selection",
                                 "AddSelected",
                                 typeof(Commands),
                                 new InputGestureCollection()

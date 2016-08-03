@@ -264,7 +264,7 @@
 		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.OnClick(e);
+			//this.OnClick(e);
 		}
 
         #endregion event handlers

@@ -13,6 +13,14 @@
         <MouseBinding Gesture="LeftDoubleClick" Command="ctrlSupport:Commands.SelectConnected" />
         <MouseBinding Gesture="CTRL+LeftClick" Command="ctrlSupport:Commands.AddSelected" />
     </local:UcNodeViewer.InputBindings>
+    <local:UcNodeViewer.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="ctrlSupport:Commands.SelectConnected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+            <MenuItem Command="ctrlSupport:Commands.AddSelected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            <Separator />
+            <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+        </ContextMenu>
+    </local:UcNodeViewer.ContextMenu>
     <Grid Margin="0,5,0,0">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>

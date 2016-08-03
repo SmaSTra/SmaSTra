@@ -726,7 +726,7 @@
 
 		private void cnvBackground_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.SelectedNodeViewers.Clear();
+		//	this.SelectedNodeViewers.Clear();
 		}
 
 		private void IoHandle_CustomDrag(object sender, EventArgs e)
@@ -988,6 +988,7 @@
 
         public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
         {
+            nodeViewer.IsSelected = true;
             List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
             connectedNodeList.Add(nodeViewer);
             int i = 0;

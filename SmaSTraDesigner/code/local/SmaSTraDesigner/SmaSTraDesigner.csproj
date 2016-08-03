@@ -177,9 +177,7 @@
       <Name>WpfCommonLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\green_window.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
