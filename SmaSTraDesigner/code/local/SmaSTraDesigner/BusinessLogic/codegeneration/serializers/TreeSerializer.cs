@@ -108,9 +108,13 @@ namespace SmaSTraDesigner.BusinessLogic
                 }
                 else treeDesigner.AddNode(node, false);
             }
+            
+            addConnections();
+        }
 
-            //TODO Fix this somehow:
-            foreach (Connection connection in newConnections) treeDesigner.AddConnection(connection);
+        internal static void addConnections()
+        {
+            foreach (Connection connection in newConnections) tree.DesignTree.AddConnection(connection);
         }
 
         private static void applyConnection(Connection connection)

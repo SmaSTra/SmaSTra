@@ -92,9 +92,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         public CombinedClassGenerator()
         {
             this.Name = "TMP" + new Random().Next();
+            this.Description = "No description provided";
         }
 
-        public CombinedClassGenerator(String name)
+        public CombinedClassGenerator(String name) : this()
         {
             this.Name = name;
         }

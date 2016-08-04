@@ -413,7 +413,7 @@
 					string description = null;
 					if (jso.TryGetValue(JSON_PROP_DESCRIPTION, out value))
 					{
-						description = value.ReadAs<string>();
+						description = value == null ? "No description" : value.ReadAs<string>();
 					}
 
                     //If combined, read this!
