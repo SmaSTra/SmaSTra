@@ -1,25 +1,27 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
 
-	using Common;
+    using Common;
 
-	using SmaSTraDesigner.BusinessLogic;
+    using SmaSTraDesigner.BusinessLogic;
 
-	using Support;
+    using Support;
+    using System.ComponentModel;
+    using System.Collections.ObjectModel;
 
-	/// <summary>
-	/// Base class for the different node viewers.
-	/// Represents a node in the tree graph on the GUI.
-	/// </summary>
-	public class UcNodeViewer : UserControl
+    /// <summary>
+    /// Base class for the different node viewers.
+    /// Represents a node in the tree graph on the GUI.
+    /// </summary>
+    public class UcNodeViewer : UserControl
 	{
 		#region dependency properties
 
@@ -271,6 +273,34 @@
 
         #region not sorted yet
 
+        private ObservableCollection<IOTypeAndValue> nodeViewerIOTypeAndValue = new ObservableCollection<IOTypeAndValue>();
+        public ObservableCollection<IOTypeAndValue> NodeViewerIOTypeAndValue
+        {
+            get
+            {
+                return nodeViewerIOTypeAndValue;
+            }
+            set
+            {
+                nodeViewerIOTypeAndValue = value;
+            }
+        }
+
+        private void updateNodeViewerIOTypesAndValues()
+        {
+            NodeViewerIOTypeAndValue.Clear();
+            if (IoHandles != null)
+            {
+                foreach (UcIOHandle handle in IoHandles)
+                {
+                    if (handle.IsInput)
+                    {
+                        NodeViewerIOTypeAndValue.Add(new IOTypeAndValue(handle.DataTypeName, handle.DataTypeName));
+                    }
+                }
+            }
+        }
+
         private Boolean loadedCompletely = false;
         public Boolean LoadedCompletely
         {
@@ -311,11 +341,60 @@
                 UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this, true);
                 if (treeDesigner != null)
                 {
+                    updateNodeViewerIOTypesAndValues();
                     treeDesigner.onUcNodeViewer_LoadedCompletely();
+                    Singleton<NodeProperties>.Instance.onUcNodeViewer_LoadedCompletely(this);
                 }
             }
         }
 
         #endregion not sorted yet
+    }
+
+    public class IOTypeAndValue : INotifyPropertyChanged
+    {
+        private string ioTypeName;
+        private string ioValue;
+        public string IOTypeName
+        {
+            get { return this.ioTypeName; }
+            set
+            {
+                if (this.ioTypeName != value)
+                {
+                    this.ioTypeName = value;
+                    this.NotifyPropertyChanged("IOTypeName");
+                }
+            }
+        }
+
+        public string IOValue
+        {
+            get { return this.ioValue; }
+            set
+            {
+                if (this.ioValue != value)
+                {
+                    this.ioValue = value;
+                    this.NotifyPropertyChanged("IOValue");
+                }
+            }
+        }
+
+        public IOTypeAndValue(string name, string value)
+        {
+            IOTypeName = name;
+            IOValue = value;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propName)
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
+
     }
 }

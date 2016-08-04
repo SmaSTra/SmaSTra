@@ -7,6 +7,7 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
     xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
+    xmlns:logic="clr-namespace:SmaSTraDesigner.BusinessLogic"
 	mc:Ignorable="d"
 	x:Name="This" Title="SmaSTra" d:DesignWidth="900" d:DesignHeight="650">
     <Window.CommandBindings>
@@ -106,9 +107,10 @@
                 <RowDefinition Height="5" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
+
             <StackPanel x:Name="spnProperties">
                 <StackPanel.Resources>
+                    <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
                     <Style TargetType="TextBlock">
                         <Setter Property="FontSize" Value="15" />
                     </Style>
@@ -127,9 +129,21 @@
                     <TextBlock Text="Class: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClass ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
+                <TextBlock Text="Input: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <WrapPanel>
-                    <TextBlock Text="Input: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassInput ,UpdateSourceTrigger=PropertyChanged}" />
+                    <ItemsControl x:Name="icNodeClassInputTypes" ItemsSource="{Binding Path=NodeViewerIOTypeAndValue, UpdateSourceTrigger=PropertyChanged}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" >
+                                    <WrapPanel>
+                                        <TextBlock Text="{Binding Path=IOTypeName, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" FontSize="15"/>
+                                        <TextBlock Text=": " TextWrapping="Wrap" FontSize="15"/>
+                                        <TextBox Text="{Binding Path=IOValue, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" FontSize="15"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>

@@ -1,10 +1,12 @@
 ﻿using SmaSTraDesigner.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace SmaSTraDesigner.BusinessLogic
 {
@@ -15,11 +17,14 @@ namespace SmaSTraDesigner.BusinessLogic
         private string defaultString = "---";
         private double defaultNumber = 0;
 
+        
+
         private UcNodeViewer nodeViewer = null;
         public UcNodeViewer NodeViewer
         {
             get { return nodeViewer; }
             set {
+                System.Diagnostics.Debug.Print("Set nodeViewer");
                 if (NodeViewer != null)
                 {
                     nodeViewer.Node.PropertyChanged -= OnNodePropertyChanged;
@@ -29,6 +34,7 @@ namespace SmaSTraDesigner.BusinessLogic
                     updateNodeProperties(NodeViewer.Node);
                     OnNodeViewerChanged(NodeViewer);
                     this.NotifyPropertyChanged("NodeViewer");
+                System.Diagnostics.Debug.Print("IOCount: " + NodeViewerIOTypeAndValue.Count);
             }
         }
 
@@ -67,23 +73,40 @@ namespace SmaSTraDesigner.BusinessLogic
             }
         }
 
-        public string NodeClassInput
+        public UcIOHandle[] NodeViewerIOHandles
         {
             get
             {
-                if (nodeViewer != null && nodeViewer.Node.Class != null && nodeViewer.Node.Class.InputTypes != null)
+                if (NodeViewer != null)
                 {
-                    string dataTypesString = "";
-                    for(int i = 0; i < nodeViewer.Node.Class.InputTypes.Length; i++)
-                    {
-                        dataTypesString += nodeViewer.Node.Class.InputTypes[i].Name.Split('.').Last();
-                    }
-                    return dataTypesString;
+                    return NodeViewer.IoHandles;
                 }
                 else
                 {
-                    return defaultString;
+                    return null;
                 }
+            }
+        }
+
+        public ObservableCollection<IOTypeAndValue> NodeViewerIOTypeAndValue
+        {
+            get
+            {
+                if (NodeViewer != null)
+                {
+                    return NodeViewer.NodeViewerIOTypeAndValue;
+                } else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if (value != NodeViewer.NodeViewerIOTypeAndValue)
+                {
+                    NodeViewer.NodeViewerIOTypeAndValue = value;
+                }
+                this.NotifyPropertyChanged("NodeViewerIOTypeAndValue");
             }
         }
 
@@ -91,9 +114,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (nodeViewer != null && nodeViewer.Node.Class != null && nodeViewer.Node.Class.OutputType != null)
+                if (NodeViewer != null && NodeViewer.Node.Class != null && NodeViewer.Node.Class.OutputType != null)
                 {
-                        return nodeViewer.Node.Class.OutputType.Name.Split('.').Last();
+                        return NodeViewer.Node.Class.OutputType.Name.Split('.').Last();
                 }
                 else
                 {
@@ -176,8 +199,10 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             this.NotifyPropertyChanged("NodeClass");
             this.NotifyPropertyChanged("NodeClassDescription");
-            this.NotifyPropertyChanged("NodeClassInput");
+            this.NotifyPropertyChanged("NodeViewerIOTypeAndValue");
             this.NotifyPropertyChanged("NodeClassOutput");
+
+
         }
 
         private void updateNodeProperties(Node node)
@@ -185,6 +210,14 @@ namespace SmaSTraDesigner.BusinessLogic
             NodeName = node.Name;
             NodePositionX = node.PosX;
             NodePositionY = node.PosY;
+        }
+
+        public void onUcNodeViewer_LoadedCompletely(UcNodeViewer loadedNodeViewer)
+        {
+            if (loadedNodeViewer.Equals(NodeViewer))
+            {
+                NodeViewer = loadedNodeViewer;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -196,5 +229,20 @@ namespace SmaSTraDesigner.BusinessLogic
         }
 
     }
+    
+
+    public class ConverterInputTypeName : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+           return value.ToString().Split('.').Last() + ": ";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
 
 }

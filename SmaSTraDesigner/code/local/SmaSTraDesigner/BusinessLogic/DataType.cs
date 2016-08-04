@@ -1,11 +1,12 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
+    using System;
+    using System.Linq;
 
-	/// <summary>
-	/// Stores information about a data type used by nodes for their inpot or output data.
-	/// </summary>
-	public class DataType
+    /// <summary>
+    /// Stores information about a data type used by nodes for their inpot or output data.
+    /// </summary>
+    public class DataType
 	{
 		#region constructors
 
@@ -15,6 +16,7 @@
 		/// <param name="name">Data type name (is used as a unique identifier)</param>
 		public DataType(string name)
 		{
+            System.Diagnostics.Debug.Print("DataType created: " + name);
 			if (String.IsNullOrWhiteSpace(name))
 			{
 				throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", "name");
@@ -36,11 +38,11 @@
 			private set;
 		}
 
-		#endregion properties
+        #endregion properties
 
-		#region overrideable methods
+        #region overrideable methods
 
-		public override bool Equals(object obj)
+        public override bool Equals(object obj)
 		{
 			DataType other = obj as DataType;
 			if (other == null)

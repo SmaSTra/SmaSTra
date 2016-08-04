@@ -2,6 +2,7 @@
 {
     using Newtonsoft.Json;
     using System;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Prodives information about a specific type of node.
@@ -80,10 +81,10 @@
 			private set;
 		}
 
-		/// <summary>
-		/// Gets this node class's identifying name.
-		/// </summary>
-		public string Name
+        /// <summary>
+        /// Gets this node class's identifying name.
+        /// </summary>
+        public string Name
 		{
 			get;
 			private set;
