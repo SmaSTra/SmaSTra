@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
     using System;
-    using System.Collections.ObjectModel;
+    using static ClassManager;
 
     /// <summary>
     /// Prodives information about a specific type of node.
@@ -18,7 +18,7 @@
 		/// <param name="baseNode">This node class's base node that is cloned for creation of new nodes.</param>
 		/// <param name="outputType">This node class's output's data type</param>
 		/// <param name="inputTypes">This node class's input's data types</param>
-		public NodeClass(string name, Node baseNode, DataType outputType, DataType[] inputTypes = null)
+		public NodeClass(NodeType nodeType, string name, Node baseNode, DataType outputType, DataType[] inputTypes = null)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 			{
@@ -36,7 +36,8 @@
 			this.Name = name;
 			this.BaseNode = baseNode;
 			this.OutputType = outputType;
-			this.InputTypes = inputTypes;
+			this.InputTypes = inputTypes == null ? new DataType[0] : inputTypes;
+            this.NodeType = nodeType;
 
 			baseNode.Class = this;
 		}
@@ -81,10 +82,10 @@
 			private set;
 		}
 
-        /// <summary>
-        /// Gets this node class's identifying name.
-        /// </summary>
-        public string Name
+		/// <summary>
+		/// Gets this node class's identifying name.
+		/// </summary>
+		public string Name
 		{
 			get;
 			private set;
@@ -98,6 +99,15 @@
 			get;
 			private set;
 		}
+
+        /// <summary>
+        /// The Node type of this class.
+        /// </summary>
+        public NodeType NodeType
+        {
+            get;
+            private set;
+        }
 
 		#endregion properties
 

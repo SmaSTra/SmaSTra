@@ -1,36 +1,33 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Collections.Specialized;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Data;
-	using System.Windows.Documents;
-	using System.Windows.Input;
-	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
-	using System.Windows.Navigation;
-	using System.Windows.Shapes;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
 
-	using Common;
-	using Common.ExtensionMethods;
-	using Common.Resources.Converters;
+    using Microsoft.VisualBasic;
 
-	using SmaSTraDesigner.BusinessLogic;
+    using Common;
+    using Common.ExtensionMethods;
+    using Common.Resources.Converters;
 
-	// TODO: (PS) Comment this.
-	// TODO: (PS) Adapt for dynamic size changes for canvas.
-	/// <summary>
-	/// Interaction logic for UcTreeDesigner.xaml
-	/// </summary>
-	public partial class UcTreeDesigner : UserControl
+    using SmaSTraDesigner.BusinessLogic;
+    using BusinessLogic.classhandler;
+    using BusinessLogic.nodes;
+
+    // TODO: (PS) Comment this.
+    // TODO: (PS) Adapt for dynamic size changes for canvas.
+    /// <summary>
+    /// Interaction logic for UcTreeDesigner.xaml
+    /// </summary>
+    public partial class UcTreeDesigner : UserControl
 	{
 		#region static constructor
 
@@ -48,14 +45,57 @@
 			return (size - viewPortSize) / 2.0;
 		}
 
-		#endregion static methods
 
-		#region dependency properties
+        private static bool SubTreeContains(Node root, List<Node> nodes)
+        {
+            //Remove the first element:
+            if (root != null) nodes.Remove(root);
 
-		/// <summary>
-		/// Registration of ConnectingIOHandle Dependency Property.
-		/// </summary>
-		public static readonly DependencyProperty ConnectingIOHandleProperty;
+            //If empty -> Everything is okay!
+            if (!nodes.Any()) return true;
+
+            //Check recursivcely:
+            foreach (Node input in GetInputsOfNode(root))
+            {
+                if (SubTreeContains(input, nodes)) return true;
+            }
+
+            return false;
+        }
+
+
+        private static List<Node> GetInputsOfNode(Node node)
+        {
+            List<Node> result = new List<Node>();
+            if (node == null) return result;
+            if (node is DataSource) return result;
+
+            if (node is OutputNode)
+            {
+                OutputNode outNode = (OutputNode)node;
+                if (outNode.InputNode != null) result.Add(outNode.InputNode);
+                return result;
+            }
+
+            if (node is Transformation)
+            {
+                Transformation outNode = (Transformation)node;
+                result.AddRange(outNode.InputNodes);
+                result.RemoveAll(item => item == null);
+                return result;
+            }
+
+            return result;
+        }
+
+        #endregion static methods
+
+        #region dependency properties
+
+        /// <summary>
+        /// Registration of ConnectingIOHandle Dependency Property.
+        /// </summary>
+        public static readonly DependencyProperty ConnectingIOHandleProperty;
 
 		/// <summary>
 		/// Registration of ConnectingIOHandle Dependency Property Key.
@@ -334,6 +374,7 @@
 			Transformation nodeAsTransformation;
 			DataSource nodeAsDataSource;
 			OutputNode nodeAsOutputNode;
+			CombinedNode nodeAsCombinedNode;
 
             UcNodeViewer nodeViewer = null;
 			if ((nodeAsTransformation = node as Transformation) != null)
@@ -348,10 +389,15 @@
             {
                 nodeViewer = new UcOutputViewer();
             }
+            else if ((nodeAsCombinedNode = node as CombinedNode) != null)
+            {
+                if (node.Class.InputTypes.Count() > 0) nodeViewer = new UcTransformationViewer();
+                else nodeViewer = new UcDataSourceViewer();
+            }
 
-			this.nodeViewers.Add(node, nodeViewer);
+            this.nodeViewers.Add(node, nodeViewer);
 
-			nodeViewer.DataContext = node;
+            nodeViewer.DataContext = node;
             this.Tree.Nodes.Add(node);
 			this.cnvBackground.Children.Add(nodeViewer);
 			this.MakeBindings(nodeViewer);
@@ -477,7 +523,7 @@
 			this.MakeCanvasOffsetBinding(nodeViewer, true);
 
 			nodeViewer.CustomDrag += this.UcNodeViewer_StartedMoving;
-		}
+        }
 
 		private void MakeCanvasOffsetBinding(UcNodeViewer nodeViewer, bool isVertical)
 		{
@@ -573,7 +619,7 @@
 
 		private void RemoveConnection(UcIOHandle handle, Connection? connection)
 		{
-			if (this.Tree == null)
+			if (this.Tree == null || handle == null)
 			{
 				return;
 			}
@@ -715,11 +761,53 @@
 			}
 		}
 
-		#endregion methods
 
-		#region event handlers
+        private void handleMergeOfSelected()
+        {
+            //Try to find the top root:
+            var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).Distinct().ToList();
 
-		private void cnvBackground_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+            //Get a name for the New Element:
+            MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            if (result != MessageBoxResult.OK) return;
+            
+            //TODO ADD New Window for Name!
+            //
+            //
+
+            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+            if (!generator.IsConnected()) return;
+
+            NodeClass generatedClass = generator.GenerateClass();
+            if (generatedClass == null) return;
+
+            //Save the just generated class:
+            generator.saveToDisc();
+
+            //Register the new Node:
+            Singleton<ClassManager>.Instance.AddClass(generatedClass);
+
+            //Generate the own Node:
+            Node newNode = generatedClass.BaseNode.MemberwiseClone();
+            newNode.PosX = nodes.Average(n => n.PosX);
+            newNode.PosY = nodes.Average(n => n.PosY);
+
+            //add the new Node:
+            AddNode(newNode);
+
+            //Change the Connections:
+            //TODO:
+
+            //At end -> Remove old ones!
+            foreach (Node old in nodes) RemoveNode(old);
+        }
+
+
+        #endregion methods
+
+        #region event handlers
+
+        private void cnvBackground_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			this.SelectedNodeViewers.Clear();
 		}
@@ -801,7 +889,7 @@
 		// TODO: (PS) Replace this with a WPF command
 		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
-            if (e.Key == Key.LeftCtrl)
+			if (e.Key == Key.LeftCtrl)
             {
                 leftCtrlPressed = true;
             }
@@ -809,8 +897,24 @@
             {
                 leftShiftPressed = true;
             }
-		}
+			
+            //If delete key -> Delete selected elements!
+			if (e.Key == Key.Delete)
+			{
+				foreach (var nodeViewer in this.SelectedNodeViewers)
+				{
+					this.RemoveNode(nodeViewer);
+				}
+                return;
+			}
 
+
+            //TODO This is only for testing! Remove after working:
+            //If P-Key, do some fancy magic!
+            if(e.Key == Key.P) handleMergeOfSelected();
+		}
+		
+		
         private void This_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftCtrl)

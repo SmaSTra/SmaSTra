@@ -91,7 +91,7 @@ namespace SmaSTraDesigner.BusinessLogic
                 if (connection.HasValue)
                 {
                     //Apply the connection:
-                    applyConnection(connection.Value);
+                    //applyConnection(connection.Value);
                     newConnections.Add(connection.Value);
                 }
                 
@@ -106,14 +106,13 @@ namespace SmaSTraDesigner.BusinessLogic
                     outNode.PosX = node.PosX;
                     outNode.PosY = node.PosY;
                 }
-                else treeDesigner.AddNode(node, true);
+                else treeDesigner.AddNode(node, false);
             }
-
-            //TODO Fix this somehow:
+            
             addConnections();
         }
 
-        public static void addConnections()
+        internal static void addConnections()
         {
             foreach (Connection connection in newConnections) tree.DesignTree.AddConnection(connection);
         }

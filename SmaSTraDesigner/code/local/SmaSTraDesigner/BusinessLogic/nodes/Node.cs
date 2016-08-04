@@ -1,25 +1,23 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
+    using System;
+    using System.ComponentModel;
+    using classhandler;
 
-	/// <summary>
-	/// Base class for all nodes.
-	/// Provides information about a specific node in a TransformationTree.
-	/// Implemented variations are DataSource, Transformation and OutputNode.
-	/// </summary>
-	public class Node : INotifyPropertyChanged, ICloneable
+
+    /// <summary>
+    /// Base class for all nodes.
+    /// Provides information about a specific node in a TransformationTree.
+    /// Implemented variations are DataSource, Transformation and OutputNode.
+    /// </summary>
+    public class Node : INotifyPropertyChanged, ICloneable
 	{
 		#region fields
 
 		/// <summary>
 		/// NodeClass instance that provides information about this node's type.
 		/// </summary>
-		private NodeClass clazz;
+		protected NodeClass clazz;
 
 		/// <summary>
 		/// This node's display name (is used as an identifier).
@@ -177,7 +175,7 @@
 		/// Raises the PropertyChanged event.
 		/// </summary>
 		/// <param name="propertyName">Name of the property that changed values.</param>
-		protected void OnPropertyChanged(string propertyName)
+		protected virtual void OnPropertyChanged(string propertyName)
 		{
 			if (this.PropertyChanged != null)
 			{
@@ -185,6 +183,6 @@
 			}
 		}
 
-		#endregion methods
-	}
+        #endregion methods
+    }
 }

@@ -25,9 +25,10 @@
 		}
 
 		private void Application_Startup(object sender, StartupEventArgs e)
-		{
-			Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "generated"));
-		}
+        {
+            Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "generated"));
+            Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "created"));
+        }
 
 		#endregion event handlers
 	}
