@@ -765,7 +765,7 @@
         private void handleMergeOfSelected()
         {
             //Try to find the top root:
-            var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).ToList();
+            var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).Distinct().ToList();
 
             //Get a name for the New Element:
             MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
