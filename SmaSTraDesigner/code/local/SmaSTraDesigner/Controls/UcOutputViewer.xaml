@@ -21,7 +21,7 @@
             <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
-    <Grid Margin="0,5,0,0">
+    <Grid>
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
@@ -49,8 +49,22 @@
                 </Style>
             </Border.Style>
         </Border>
-        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbOutputName}" Height="100" Source="pack://siteoforigin:,,,/Resources/yellow_window.png"/>
-        <TextBlock Name="tbOutputName" Text="Output" Foreground="White" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
-        <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-10,15,0,0" DataContext="{x:Null}" />
-	</Grid>
+
+        <StackPanel>
+        <Grid>
+            <TextBlock Background="Yellow" Name="tbOutputName" Text="Output" Foreground="Black" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbOutputName}" Height="{Binding ActualHeight, ElementName=tbOutputName}"/>
+        </Grid>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbOutputName}">
+        </Image>
+            <Grid>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Height="{Binding ActualHeight, ElementName=tbOutputName}" Width="{Binding ActualWidth, ElementName=tbOutputName}">
+        </Image>
+                <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-10,0,0,0" DataContext="{x:Null}" />
+            </Grid>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbOutputName}">
+        </Image>
+         </StackPanel>
+        
+    </Grid>
 </local:UcNodeViewer>

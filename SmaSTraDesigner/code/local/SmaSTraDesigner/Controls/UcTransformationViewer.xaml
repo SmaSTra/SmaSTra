@@ -7,11 +7,13 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
     xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
 	xmlns:converters="clr-namespace:Common.Resources.Converters;assembly=PresentationCommonLib"
+    xmlns:logic="clr-namespace:SmaSTraDesigner.BusinessLogic"
 	mc:Ignorable="d"
     ToolTip="{Binding Path=Name}"
 	x:Name="This">
     <local:UcNodeViewer.Resources>
         <converters:LambdaConverter x:Key="InputItemsSourceConverter" />
+        <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
     </local:UcNodeViewer.Resources>
     <local:UcNodeViewer.InputBindings>
         <MouseBinding Gesture="LeftDoubleClick" Command="ctrlSupport:Commands.SelectConnected" />
@@ -26,7 +28,7 @@
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
 
-    <Grid Margin="0,5,0,5">
+    <Grid Margin="5,0,5,0">
 	 	<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 			<Border.Style>
 				<Style TargetType="{x:Type Border}">
@@ -55,7 +57,7 @@
 			</Border.Style>
 		</Border>
 		
-
+<!--
         <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbTransformationName}">
             <Image.Style>
                 <Style TargetType="{x:Type Image}">
@@ -78,19 +80,65 @@
 
         <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=Class.InputTypes, Converter={StaticResource InputItemsSourceConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="True" Margin="-10,15,0,0">
             <ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Vertical" />
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" Margin="0,5,0,5" />
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" Margin="0,5,0,5" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+-->
 
-        <TextBlock Name="tbTransformationName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
-        
-		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-10,0" />
-	</Grid>
+        <StackPanel>
+            <Grid>
+                <TextBlock Name="tbTransformationName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" >
+                    <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Background" Value="{StaticResource ColorDouble}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
+                                    <Setter Property="Background" Value="{StaticResource ColorLong}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                </TextBlock>
+                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="{Binding ActualHeight, ElementName=tbTransformationName}">
+                </Image>
+            </Grid>
+
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7" >
+            </Image>
+
+            <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=Class.InputTypes, Converter={StaticResource InputItemsSourceConverter}}" IsHitTestVisible="True">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" >
+                            </Image>
+                            <WrapPanel>
+                              <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" Margin="-10,5,0,5" />
+                                <TextBlock DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1.Name, Converter={StaticResource InputTypeNameConverter}}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            </WrapPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7">         
+            </Image>
+
+        </StackPanel>
+
+        <local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-15,0" />
+
+    </Grid>
 </local:UcNodeViewer>

@@ -21,7 +21,8 @@
             <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
-    <Grid Margin="0,0,0,5">
+
+    <Grid Margin="5,0,5,0">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
@@ -49,9 +50,22 @@
                 </Style>
             </Border.Style>
         </Border>
-        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbSourceName}" Height="100" Source="pack://siteoforigin:,,,/Resources/green_window.png"/>
-        <!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
-		<TextBlock Name="tbSourceName" Foreground="White" Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,2,10,0" />
-		<local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-10,0" />
-	</Grid>
+
+
+
+        <StackPanel>
+            <Grid>
+                <TextBlock Background="Green" Name="tbSourceName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
+                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbSourceName}" Height="{Binding ActualHeight, ElementName=tbSourceName}">
+                </Image>
+            </Grid>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbSourceName}">
+            </Image>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Height="{Binding ActualHeight, ElementName=tbSourceName}" Width="{Binding ActualWidth, ElementName=tbSourceName}">
+            </Image>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbSourceName}">
+            </Image>
+        </StackPanel>
+        <local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-15,0" />
+    </Grid>
 </local:UcNodeViewer>

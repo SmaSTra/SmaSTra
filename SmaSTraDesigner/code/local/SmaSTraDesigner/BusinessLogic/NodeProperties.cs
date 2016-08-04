@@ -235,7 +235,7 @@ namespace SmaSTraDesigner.BusinessLogic
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-           return value.ToString().Split('.').Last() + ": ";
+           return value.ToString().Split('.').Last();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
