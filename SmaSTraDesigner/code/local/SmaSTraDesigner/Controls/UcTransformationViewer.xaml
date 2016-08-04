@@ -5,70 +5,92 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
+    xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
 	xmlns:converters="clr-namespace:Common.Resources.Converters;assembly=PresentationCommonLib"
 	mc:Ignorable="d"
+    ToolTip="{Binding Path=Name}"
 	x:Name="This">
-	<local:UcNodeViewer.Resources>
-		<converters:LambdaConverter x:Key="InputItemsSourceConverter" />
-	</local:UcNodeViewer.Resources>
-	<Grid Margin="0,5,0,5">
-		<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <local:UcNodeViewer.Resources>
+        <converters:LambdaConverter x:Key="InputItemsSourceConverter" />
+    </local:UcNodeViewer.Resources>
+    <local:UcNodeViewer.InputBindings>
+        <MouseBinding Gesture="LeftDoubleClick" Command="ctrlSupport:Commands.SelectConnected" />
+        <MouseBinding Gesture="CTRL+LeftClick" Command="ctrlSupport:Commands.AddSelected" />
+    </local:UcNodeViewer.InputBindings>
+    <local:UcNodeViewer.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="ctrlSupport:Commands.SelectConnected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+            <MenuItem Command="ctrlSupport:Commands.AddSelected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            <Separator />
+            <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+        </ContextMenu>
+    </local:UcNodeViewer.ContextMenu>
+
+    <Grid Margin="0,5,0,5">
+	 	<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 			<Border.Style>
 				<Style TargetType="{x:Type Border}">
 					<Setter Property="BorderBrush">
 						<Setter.Value>
 							<SolidColorBrush>
 								<SolidColorBrush.Color>
-									<Color R="128" G="192" B="255" A="255" />
+									<Color R="0" G="0" B="0" A="0" />
 								</SolidColorBrush.Color>
 							</SolidColorBrush>
 						</Setter.Value>
 					</Setter>
 					<Setter Property="BorderThickness" Value="2" />
-					<Setter Property="Background" Value="LightBlue" />
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
-							<Setter Property="Background" Value="LightGray" />
-							<Setter Property="BorderBrush" Value="Gray" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
 							<Setter Property="BorderBrush" Value="Black" />
-							<Setter Property="BorderThickness" Value="3" />
+							<Setter Property="BorderThickness" Value="5" />
 						</DataTrigger>
 						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
 							<Setter Property="BorderBrush" Value="DarkBlue" />
+                            <Setter Property="BorderThickness" Value="3" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
 			</Border.Style>
 		</Border>
-		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
+		
 
-		<ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=Class.InputTypes, Converter={StaticResource InputItemsSourceConverter}}" VerticalAlignment="Top" IsHitTestVisible="True">
-			<ItemsControl.Style>
-				<Style TargetType="{x:Type ItemsControl}">
-					<Setter Property="HorizontalAlignment" Value="Left" />
-					<Setter Property="Margin" Value="5,-5,0,0" />
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
-							<Setter Property="HorizontalAlignment" Value="Center" />
-							<Setter Property="Margin" Value="0,-5,0,0" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</ItemsControl.Style>
-			<ItemsControl.ItemsPanel>
+        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbTransformationName}">
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="Source" Value="pack://siteoforigin:,,,/Resources/blue_window.png" />
+                    <Setter Property="Height" Value="100" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
+                            <Setter Property="Source" Value="pack://siteoforigin:,,,/Resources/tuerkis_window.png" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="2">
+                            <Setter Property="Height" Value="115" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="3">
+                            <Setter Property="Height" Value="135" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+
+        <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=Class.InputTypes, Converter={StaticResource InputItemsSourceConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="True" Margin="-10,15,0,0">
+            <ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
+					<StackPanel Orientation="Vertical" />
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" Margin="5,0" />
+					<local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" Margin="0,5,0,5" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
 
-		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
+        <TextBlock Name="tbTransformationName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
+        
+		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-10,0" />
 	</Grid>
 </local:UcNodeViewer>

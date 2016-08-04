@@ -18,8 +18,16 @@
 		<DataTemplate x:Key="OutputNodeTemplate">
 			<ctrl:UcOutputViewer Margin="5,5" IsPreview="True" />
 		</DataTemplate>
-		<DataTemplate x:Key="DataSourceNodeTemplate">
-			<ctrl:UcDataSourceViewer Margin="5,5" IsPreview="True" />
-		</DataTemplate>
-	</Application.Resources>
+        <DataTemplate x:Key="DataSourceNodeTemplate">
+            <ctrl:UcDataSourceViewer Margin="5,5" IsPreview="True" />
+        </DataTemplate>
+
+        <SolidColorBrush x:Key="ColorDefault" Color="White"/>
+        <SolidColorBrush x:Key="ColorBoolean" Color="GreenYellow"/>
+        <SolidColorBrush x:Key="ColorDouble" Color="Blue"/>
+        <SolidColorBrush x:Key="ColorLong" Color="DarkBlue"/>
+        <SolidColorBrush x:Key="ColorMap" Color="Purple"/>
+        <SolidColorBrush x:Key="ColorVector3d" Color="Yellow"/>
+        <SolidColorBrush x:Key="ColorCollection" Color="Brown"/>
+    </Application.Resources>
 </Application>

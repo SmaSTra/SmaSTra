@@ -6,59 +6,85 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:SmaSTraDesigner"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
+    xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
 	mc:Ignorable="d"
-	x:Name="This" Title="MainWindow" d:DesignWidth="800" d:DesignHeight="450">
-	<Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
+	x:Name="This" Title="SmaSTra" d:DesignWidth="900" d:DesignHeight="650">
+    <Window.CommandBindings>
+        <CommandBinding Command="ctrlSupport:Commands.Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Load" CanExecute="Load_CanExecute" Executed="Load_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Exit" CanExecute="Exit_CanExecute" Executed="Exit_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Generate" CanExecute="Generate_CanExecute" Executed="Generate_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Delete" CanExecute="Delete_CanExecute" Executed="Delete_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.SelectConnected" CanExecute="SelectConnected_CanExecute" Executed="SelectConnected_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.AddSelected" CanExecute="AddSelected_CanExecute" Executed="AddSelected_Executed" />
+    </Window.CommandBindings>
+
+    <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="5" />
 			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
 		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
             <MenuItem x:Name="mniFile" Header="File">
-                <MenuItem x:Name="mniSave" Header="Save" Click="mniSave_Click" />
-                <MenuItem x:Name="mniLoad" Header="Load" Click="mniLoad_Click" />
-                <MenuItem x:Name="mniExit" Header="Exit" Click="mniExit_Click" />
+                <MenuItem x:Name="mniSave" Header="Save" Command="ctrlSupport:Commands.Save" />
+                <MenuItem x:Name="mniLoad" Header="Load" Command="ctrlSupport:Commands.Load" />
+                <MenuItem x:Name="mniExit" Header="Exit" Command="ctrlSupport:Commands.Exit" />
 			</MenuItem>
 			<MenuItem x:Name="mniEdit" Header="Edit" />
 			<MenuItem Header="Tree">
-				<MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Click="mniGenerateJava_Click" />
+                <MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Command="ctrlSupport:Commands.Generate" />
 			</MenuItem>
 		</Menu>
 
-		<StackPanel x:Name="spnSideMenu" Grid.Row="1" Orientation="Horizontal">
-			<StackPanel.LayoutTransform>
-				<RotateTransform Angle="90" />
-			</StackPanel.LayoutTransform>
-			<ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
+        <StackPanel x:Name="spnSideMenu" Grid.ColumnSpan="99" Grid.Row="1" Orientation="Horizontal">
+            <ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
 			<ToggleButton x:Name="tglCustomTF" Content="Custom Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 			<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 		</StackPanel>
 
-		<ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
-			<StackPanel x:Name="spnNodeClasses">
+        <ScrollViewer Grid.ColumnSpan="99" Grid.Row="2"  HorizontalScrollBarVisibility="Auto">
+			<StackPanel x:Name="spnNodeClasses" Orientation="Horizontal">
 				<Expander x:Name="expSensors" Header="Data Sources" IsExpanded="True">
 					<Grid>
-						<ItemsControl x:Name="icDefaultDS" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
-						<!-- TODO: (PS) Add ItemControls here for custom and online Sensors -->
+                        <ItemsControl x:Name="icDefaultDS" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <!-- TODO: (PS) Add ItemControls here for custom and online Sensors -->
 					</Grid>
 				</Expander>
 				<Expander x:Name="expConversions" Header="Conversions">
 					<Grid>
-						<ItemsControl x:Name="icDefaultCV" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
-						<!-- TODO: (PS) Add ItemControls here for custom and online Conversions -->
+                        <ItemsControl x:Name="icDefaultCV" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <!-- TODO: (PS) Add ItemControls here for custom and online Conversions -->
 					</Grid>
 				</Expander>
 				<Expander x:Name="expTansformations" Header="Transformations">
 					<Grid>
-						<ItemsControl x:Name="icDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" />
+						<ItemsControl x:Name="icDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
 						<!-- TODO: (PS) Add ItemControls here for custom and online Transformations -->
 					</Grid>
 				</Expander>
@@ -68,6 +94,75 @@
 		<!--<GridSplitter x:Name="gspMain" Grid.Column="2" Grid.Row="1" ResizeBehavior="PreviousAndNext" Width="10" />-->
 		<!-- asdasd asd-->
 
-		<ctrl:UcTreeDesigner x:Name="tdTreeDesigner" Grid.Column="3" Grid.Row="1" />
+		<ctrl:UcTreeDesigner x:Name="tdTreeDesigner" Grid.Column="0" Grid.Row="3" />
+
+        
+        <GridSplitter Grid.Column="1" Grid.Row="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+
+        
+        <Grid Grid.Column="2" Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel x:Name="spnProperties">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="15" />
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="FontSize" Value="15" />
+                    </Style>
+                </StackPanel.Resources>
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <TextBlock Text="Properties" Background="LightGray" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                </Border>
+                <WrapPanel>
+                    <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeName ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Class: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClass ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Input: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassInput ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionX ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionY ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Description: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
+                </WrapPanel>
+            </StackPanel>
+            
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
+
+            <StackPanel x:Name="spnLibrary" Grid.Row="2" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >
+                <Border BorderThickness="1" BorderBrush="Black">
+                    <TextBlock Text="Library" FontSize="15" Background="LightGray" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                </Border>
+                <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock x:Name="txtLibraryNodeName" Text="{Binding Path=Name}"  FontSize="20" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
 	</Grid>
 </Window>

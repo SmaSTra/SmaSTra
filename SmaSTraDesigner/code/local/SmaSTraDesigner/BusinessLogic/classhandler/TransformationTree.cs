@@ -139,7 +139,7 @@
                 if (name.EndsWith(".SmaSTra")) name = name.Remove(".SmaSTra".Count());
 
                 string directory = System.IO.Path.GetDirectoryName(saveFileDialog.FileName);
-                new TreeSerilizer(OutputNode.Tree).Serialize(directory + "\\" + name + ".SmaSTra");
+                TreeSerilizer.Serialize(OutputNode.Tree, directory + "\\" + name + ".SmaSTra");
             }
         }
 
@@ -155,7 +155,7 @@
             //show the dialog and save the file
             if (openFileDialog.ShowDialog() == true)
             {
-                new TreeSerilizer(OutputNode.Tree).Deserialize(openFileDialog.FileName);
+                TreeSerilizer.Deserialize(OutputNode.Tree, openFileDialog.FileName);
             }
         }
 

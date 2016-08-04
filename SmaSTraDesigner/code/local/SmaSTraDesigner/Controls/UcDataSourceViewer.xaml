@@ -5,28 +5,53 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
-	mc:Ignorable="d"
+	xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
+    mc:Ignorable="d"
+    ToolTip="{Binding Path=Name}"
 	x:Name="This">
-	<Grid Margin="0,0,0,5">
-		<Polygon Points="0.0,0.1 0.1,0.0 0.9,0.0 1.0,0.1 1.0,0.9 0.9,1.0 0.1,1.0 0.0,0.9" Fill="LightGreen" Stretch="Fill">
-			<Polygon.Style>
-				<Style TargetType="Polygon">
-					<Setter Property="Stroke" Value="Green" />
-					<Setter Property="StrokeThickness" Value="2" />
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="Stroke" Value="Black" />
-							<Setter Property="StrokeThickness" Value="3" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
-							<Setter Property="Stroke" Value="DarkBlue" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Polygon.Style>
-		</Polygon>
-		<!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
-		<TextBlock Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" />
-		<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-5" />
+    <local:UcNodeViewer.InputBindings>
+        <MouseBinding Gesture="LeftDoubleClick" Command="ctrlSupport:Commands.SelectConnected" />
+        <MouseBinding Gesture="CTRL+LeftClick" Command="ctrlSupport:Commands.AddSelected" />
+    </local:UcNodeViewer.InputBindings>
+    <local:UcNodeViewer.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="ctrlSupport:Commands.SelectConnected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+            <MenuItem Command="ctrlSupport:Commands.AddSelected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            <Separator />
+            <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+        </ContextMenu>
+    </local:UcNodeViewer.ContextMenu>
+    <Grid Margin="0,0,0,5">
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush>
+                                <SolidColorBrush.Color>
+                                    <Color R="0" G="0" B="0" A="0" />
+                                </SolidColorBrush.Color>
+                            </SolidColorBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="2" />
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="5" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
+                            <Setter Property="BorderBrush" Value="DarkBlue" />
+                            <Setter Property="BorderThickness" Value="3" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbSourceName}" Height="100" Source="pack://siteoforigin:,,,/Resources/green_window.png"/>
+        <!--<Polygon Points="0.5,0.0 1.0,0.5 0.5,1.0 0.0,0.5" Stroke="Black" StrokeThickness="2" Fill="LightGreen"  Stretch="Fill" />-->
+		<TextBlock Name="tbSourceName" Foreground="White" Text="{Binding Path=Name}" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,2,10,0" />
+		<local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-10,0" />
 	</Grid>
 </local:UcNodeViewer>

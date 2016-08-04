@@ -159,7 +159,9 @@
 				subject.AdjustZIndex();
 
 				subject.SelectedNodeViewers.CollectionChanged += subject.SelectedNodeViewers_CollectionChanged;
-			}
+                //TODO: update properties window
+               Singleton<NodeProperties>.Instance.NodeViewer = newValue;
+            }
 		}
 
 		/// <summary>
@@ -209,7 +211,7 @@
 			this.SelectedNodeViewers = new ObservableCollection<UcNodeViewer>();
 			this.SelectedNodeViewers.CollectionChanged += SelectedNodeViewers_CollectionChanged;
 
-			this.InitializeComponent();
+            this.InitializeComponent();
 
 			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
@@ -252,15 +254,15 @@
 			}
 		}
 
-		#endregion constructors
+        #endregion constructors
 
-		#region properties
+        #region properties
 
-		/// <summary>
-		/// Gets the value of the ConnectingIOHandle property.
-		/// This is a Dependency Property.
-		/// </summary>
-		public UcIOHandle ConnectingIOHandle
+        /// <summary>
+        /// Gets the value of the ConnectingIOHandle property.
+        /// This is a Dependency Property.
+        /// </summary>
+        public UcIOHandle ConnectingIOHandle
 		{
 			get { return (UcIOHandle)this.GetValue(ConnectingIOHandleProperty); }
 			private set { this.SetValue(ConnectingIOHandlePropertyKey, value); }
@@ -312,15 +314,48 @@
 				throw new Exception(String.Format("OutputNode {0} not found.", connection.OutputNode));
 			}
 			UcNodeViewer iNode = null;
-			if (!this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
+            if(connection.InputNode is OutputNode)
+            {
+                iNode = outOutputViewer;
+            }
+            else if (!this.nodeViewers.TryGetValue(connection.InputNode, out iNode))
 			{
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
 
-			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
-			UcIOHandle iHandle = oNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
+            if (oNode.IoHandles == null)
+            {
+                System.Diagnostics.Debug.Print("ABORT: Connection not Added: oNode.IoHandles == null");
+                return;
+            }
 
-			this.AddConnection(oHandle, iHandle, connection);
+            foreach (UcNodeViewer nodeViewer in nodeViewers.Values)
+            {
+                System.Diagnostics.Debug.Print("nodeViewer.Node.Name: " + nodeViewer.Node.Name);
+            }
+
+            foreach (UcIOHandle handle in iNode.IoHandles)
+            {
+                System.Diagnostics.Debug.Print("iNode: " + iNode.Node.Name+ " handle.IsLoaded :" + handle.IsLoaded + " handle.LoadedCompletely :" + handle.LoadedCompletely);
+            }
+
+			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
+            UcIOHandle iHandle = iNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
+
+            System.Diagnostics.Debug.Print("conection.InputIndex: " + connection.InputIndex);
+            System.Diagnostics.Debug.Print("oNode: " + oNode.Node.Name + " IoHandles.length: " + oNode.IoHandles.Length);
+            System.Diagnostics.Debug.Print("oHandle.Node: " + oHandle.Node.Name);
+            System.Diagnostics.Debug.Print("iNode: " + iNode.Node.Name + " IoHandles.length: " + iNode.IoHandles.Length);
+            System.Diagnostics.Debug.Print("iHandle.Node: " + iHandle.Node.Name);
+
+            if (iHandle != null && iHandle.Node != null)
+            {
+                System.Diagnostics.Debug.Print("Adding Connection: " + oHandle.Node.Name + " / " + iHandle.Node.Name);
+                this.AddConnection(oHandle, iHandle, connection);
+            } else
+            {
+                System.Diagnostics.Debug.Print("iHandle == null or iHandle.Node == null");
+            }
 		}
 
 		public void AddNode(Node node, bool select = false)
@@ -414,11 +449,11 @@
 			{
 				iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
 			}
-
+            
 			Line newLine = new Line()
 			{
 				DataContext = connection.Value,
-				Stroke = Brushes.Black,
+				Stroke = getColorFromType(iHandle.DataTypeName),
 				StrokeThickness = 4
 			};
 			BindingOperations.SetBinding(newLine, Line.X1Property,
@@ -662,6 +697,13 @@
 			this.mousePosOnViewer = null;
 			this.dragStart = null;
 
+            if (movingNodeViewer != null)
+            {
+                foreach (UcNodeViewer nodeViewer in SelectedNodeViewers)
+                {
+                    snapToGrid(nodeViewer);
+                }
+            }
 			this.movingNodeViewer = null;
 			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
 			{
@@ -772,7 +814,7 @@
 
 		private void cnvBackground_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.SelectedNodeViewers.Clear();
+		//	this.SelectedNodeViewers.Clear();
 		}
 
 		private void IoHandle_CustomDrag(object sender, EventArgs e)
@@ -832,13 +874,30 @@
 			Node newNode = (Node)node.Clone();
 			newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
-
 			this.AddNode(newNode, true);
-		}
+            scvCanvas.Focus();
+        }
+
+        public void onDeleteCommand()
+        {
+                foreach (var nodeViewer in this.SelectedNodeViewers)
+                {
+                    this.RemoveNode(nodeViewer);
+                }
+        }
 
 		// TODO: (PS) Replace this with a WPF command
 		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Key == Key.LeftCtrl)
+            {
+                leftCtrlPressed = true;
+            }
+            if (e.Key == Key.LeftShift)
+            {
+                leftShiftPressed = true;
+            }
+			
             //If delete key -> Delete selected elements!
 			if (e.Key == Key.Delete)
 			{
@@ -854,9 +913,21 @@
             //If P-Key, do some fancy magic!
             if(e.Key == Key.P) handleMergeOfSelected();
 		}
+		
+		
+        private void This_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                leftCtrlPressed = false;
+            }
+            if (e.Key == Key.LeftShift)
+            {
+                leftShiftPressed = false;
+            }
+        }
 
-
-		private void This_Loaded(object sender, RoutedEventArgs e)
+        private void This_Loaded(object sender, RoutedEventArgs e)
 		{
 			this.scvCanvas.ScrollToHorizontalOffset(GetOffset(this.vbBackground.ActualWidth, this.scvCanvas.ViewportWidth));
 			this.scvCanvas.ScrollToVerticalOffset(GetOffset(this.vbBackground.ActualHeight, this.scvCanvas.ViewportHeight));
@@ -957,25 +1028,150 @@
                 {
                     scaletransform = new ScaleTransform(1, 1);
                     cnvBackground.RenderTransform = scaletransform;
+                    scaletransform.CenterX = cnvBackground.Width / 2;
+                    scaletransform.CenterY = cnvBackground.Height / 2;
                 }
 
                 if (e.Delta > 0)
                 {
                     scaletransform.ScaleX *= scaleRate;
                     scaletransform.ScaleY *= scaleRate;
-                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset * scaleRate);
-                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset * scaleRate);
                 }
                 else
                 {
                     scaletransform.ScaleX /= scaleRate;
                     scaletransform.ScaleY /= scaleRate;
-                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset / scaleRate);
-                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset / scaleRate);
                 }
+
+                e.Handled = true;
             }
         }
 
         #endregion event handlers
+
+        #region not sorted yet
+
+        private SolidColorBrush getColorFromType(String type)
+        {
+            SolidColorBrush color = new SolidColorBrush();
+
+            switch (type)
+            {
+                case "double":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorDouble");
+                    break;
+                case "boolean":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorBoolean");
+                    break;
+                case "long":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorLong");
+                    break;
+                case "Map":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorMap");
+                    break;
+                case "Vector3d":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorVector3d");
+                    break;
+                case "Collection":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorCollection");
+                    break;
+                default:
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorDefault");
+                    break;
+            }
+
+            return color;
+        }
+
+        public void onNodeViewerSelectAdded(UcNodeViewer nodeViewer)
+        {
+            this.changingSelectedNodeViewers = true;
+            nodeViewer.IsSelected = true;
+            this.changingSelectedNodeViewers = false;
+        }
+
+        public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
+        {
+            nodeViewer.IsSelected = true;
+            List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
+            connectedNodeList.Add(nodeViewer);
+            int i = 0;
+            while (i < connectedNodeList.Count)
+            {
+                foreach(Connection connection in Tree.Connections)
+                {
+                    if (connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) || connection.OutputNode.Equals(connectedNodeList.ElementAt(i).Node))
+                    {
+                        UcNodeViewer connectedViewer;
+                        Node connectedNode = connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) ? connection.OutputNode : connection.InputNode;
+                        if (connectedNode.Equals(outOutputViewer.Node))
+                        {
+                            connectedViewer = outOutputViewer;
+                        }
+                        else
+                        {
+                            nodeViewers.TryGetValue(connectedNode, out connectedViewer);
+                        }
+                        if (!connectedNodeList.Contains(connectedViewer))
+                        {
+                            connectedNodeList.Add(connectedViewer);
+                            this.changingSelectedNodeViewers = true;
+                            connectedViewer.IsSelected = true;
+                            this.changingSelectedNodeViewers = false;
+                        }
+                    }
+                }
+                System.Diagnostics.Debug.Print("connectedNodeList Count: " + connectedNodeList.Count);
+                i++;
+            }
+        }
+
+        private bool leftCtrlPressed = false;
+        private bool leftShiftPressed = false;
+
+        public void onNodeViewerSelected(UcNodeViewer nodeViewer)
+        {
+            scvCanvas.Focus();
+            if (changingSelectedNodeViewers)
+            {
+                SelectedNodeViewers.Add(nodeViewer);
+            } else
+            {
+                SelectedNodeViewer = nodeViewer;
+            }
+        }
+
+        public int gridSize = 50;
+
+        public void snapToGrid(UcNodeViewer nodeViewer)
+        {
+            if (leftShiftPressed)
+            {
+                double left = Canvas.GetLeft(nodeViewer);
+                double deltaX = ((left % gridSize) > (gridSize / 2)) ? (left % gridSize) - gridSize : (left % gridSize);
+                nodeViewer.Node.PosX = nodeViewer.Node.PosX - deltaX;
+                double top = Canvas.GetTop(nodeViewer);
+                double deltaY = ((top % gridSize) > (gridSize / 2)) ? (top % gridSize) - gridSize : (top % gridSize);
+                nodeViewer.Node.PosY = nodeViewer.Node.PosY - deltaY;
+            }
+        }
+
+        public void onUcNodeViewer_LoadedCompletely()
+        {
+            Boolean allNodeViewerLoadedCompletely = true;
+           foreach(UcNodeViewer nodeViewer in this.nodeViewers.Values){
+                if (!nodeViewer.LoadedCompletely)
+                {
+                    allNodeViewerLoadedCompletely = false;
+                    return;
+                }
+            }
+            if (allNodeViewerLoadedCompletely)
+            {
+                TreeSerilizer.addConnections();
+            }
+        }
+
+        #endregion not sorted yet
     }
 }

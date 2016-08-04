@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Json.4.0.20126.16343\lib\net40\System.Json.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +112,21 @@
     <Compile Include="BusinessLogic\nodes\OutputNode.cs" />
     <Compile Include="BusinessLogic\nodes\Transformation.cs" />
     <Compile Include="BusinessLogic\classhandler\TransformationTree.cs" />
+    <Compile Include="Controls\Support\Commands.cs" />
+    <Compile Include="BusinessLogic\Library.cs" />
+    <Compile Include="BusinessLogic\NodeProperties.cs" />
+    <Compile Include="BusinessLogic\Connection.cs" />
+    <Compile Include="BusinessLogic\JavaGenerator.cs" />
+    <Compile Include="BusinessLogic\DataSource.cs" />
+    <Compile Include="BusinessLogic\DataType.cs" />
+    <Compile Include="BusinessLogic\Node.cs" />
+    <Compile Include="BusinessLogic\NodeClass.cs" />
+    <Compile Include="BusinessLogic\ClassManager.cs" />
+    <Compile Include="BusinessLogic\serializers\NodeSerializer.cs" />
+    <Compile Include="BusinessLogic\serializers\TreeSerializer.cs" />
+    <Compile Include="BusinessLogic\OutputNode.cs" />
+    <Compile Include="BusinessLogic\Transformation.cs" />
+    <Compile Include="BusinessLogic\TransformationTree.cs" />
     <Compile Include="Controls\Support\CustomDragDropHelper.cs" />
     <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">
@@ -177,6 +193,36 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\green_window.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\blue_window.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\magenta_window.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\red_window.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\tuerkis_window.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\yellow_window.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cmd /c if exist "$(TargetDir)generated\" rd /s /q  "$(TargetDir)generated\"

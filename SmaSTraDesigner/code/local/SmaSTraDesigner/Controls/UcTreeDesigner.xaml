@@ -8,7 +8,7 @@
 	mc:Ignorable="d" 
 	d:DesignHeight="300" d:DesignWidth="300"
 	x:Name="This" AllowDrop="True" Background="Gray"
-    Loaded="This_Loaded" DragOver="This_DragOver" Drop="This_Drop" MouseMove="This_MouseMove" PreviewMouseLeftButtonUp="This_PreviewMouseLeftButtonUp" MouseLeave="This_MouseLeave" PreviewKeyDown="This_PreviewKeyDown">
+    Loaded="This_Loaded" DragOver="This_DragOver" Drop="This_Drop" MouseMove="This_MouseMove" PreviewMouseLeftButtonUp="This_PreviewMouseLeftButtonUp" MouseLeave="This_MouseLeave" PreviewKeyDown="This_PreviewKeyDown" PreviewKeyUp="This_PreviewKeyUp">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
@@ -25,8 +25,27 @@
 		<Border x:Name="bdrViewPort" />
 		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
 			<Viewbox x:Name="vbBackground">
-				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding ElementName=This, Path=Background}" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
-					<local:UcOutputViewer x:Name="outOutputViewer" />
+				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
+                    <Canvas.Background>
+                        <DrawingBrush TileMode="Tile" Viewport="0,0,50,50" 
+                                     ViewportUnits="Absolute">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry>
+                                            <RectangleGeometry.Rect>
+                                                <Rect X="0" Y="0" Width="50" Height="50" />
+                                            </RectangleGeometry.Rect>
+                                        </RectangleGeometry>
+                                    </GeometryDrawing.Geometry>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="LightGray" Thickness="0.5" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Canvas.Background>
+                    <local:UcOutputViewer x:Name="outOutputViewer" />
 					<Border x:Name="bdrSelectionBorder" BorderBrush="Black" BorderThickness="1" Opacity="0.5" Visibility="Collapsed" SnapsToDevicePixels="True" IsHitTestVisible="False">
 						<Grid>
 							<Border x:Name="bdrSelectionOpacityMask" Background="White" Opacity="0.8" />

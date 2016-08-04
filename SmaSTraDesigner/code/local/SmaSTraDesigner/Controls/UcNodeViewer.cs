@@ -65,7 +65,7 @@
 				UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(subject, true);
 				if (treeDesigner != null)
 				{
-					treeDesigner.SelectedNodeViewer = subject;
+                    treeDesigner.onNodeViewerSelected(subject);
 				}
 			}
 		}
@@ -92,15 +92,16 @@
 			this.MouseRightButtonDown += UcNodeViewer_MouseRightButtonDown;
 			this.Loaded += UcNodeViewer_Loaded;
 		}
+        
 
-		#endregion constructors
+        #endregion constructors
 
-		#region events
+        #region events
 
-		/// <summary>
-		/// Is raised when this control is being dragged.
-		/// </summary>
-		public event EventHandler CustomDrag;
+        /// <summary>
+        /// Is raised when this control is being dragged.
+        /// </summary>
+        public event EventHandler CustomDrag;
 
 		#endregion events
 
@@ -230,19 +231,21 @@
 		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
 		private void UcNodeViewer_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-			{
-				List<UcIOHandle> ioHandles = LayoutHelper.FindAllLogicalChildren<UcIOHandle>(this);
-				if (this is UcTransformationViewer)
-				{
-					ioHandles.AddRange(LayoutHelper.FindAllVisualChildren<UcIOHandle>((ItemsControl)this.FindName("icInputHandles")));
-				}
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            {
+                List<UcIOHandle> ioHandles = LayoutHelper.FindAllLogicalChildren<UcIOHandle>(this);
+                if (this is UcTransformationViewer)
+                {
+                    ioHandles.AddRange(LayoutHelper.FindAllVisualChildren<UcIOHandle>((ItemsControl)this.FindName("icInputHandles")));
+                }
 
-				this.IoHandles = ioHandles.ToArray();
+                this.IoHandles = ioHandles.ToArray();
 
-				this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
-			}
-		}
+                this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
+                
+            }
+            checkCompletelyLoaded();
+        }
 
 		/// <summary>
 		/// Handles the MouseLeftButtonDown event of this control.
@@ -261,9 +264,58 @@
 		/// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
 		private void UcNodeViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			this.OnClick(e);
+			//this.OnClick(e);
 		}
 
-		#endregion event handlers
-	}
+        #endregion event handlers
+
+        #region not sorted yet
+
+        private Boolean loadedCompletely = false;
+        public Boolean LoadedCompletely
+        {
+            get { return loadedCompletely; }
+            set { loadedCompletely = value; }
+        }
+
+        private Boolean loadedallHandles = false;
+        public Boolean LoadedallHandles
+        {
+            get { return loadedallHandles; }
+            set { loadedallHandles = value; }
+        }
+
+        public void onUcIOHandleLoadedCompletely()
+        {
+            Boolean allHandlesLoadedCompletely = true;
+            foreach (UcIOHandle handle in IoHandles)
+            {
+                if (!handle.LoadedCompletely)
+                {
+                    allHandlesLoadedCompletely = false;
+                    return;
+                }
+            }
+            if (allHandlesLoadedCompletely)
+            {
+                loadedallHandles = true;
+                checkCompletelyLoaded();
+            }
+        }
+
+        private void checkCompletelyLoaded()
+        {
+            if (IsLoaded && loadedallHandles)
+            {
+                LoadedCompletely = true;
+                UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this, true);
+                if (treeDesigner != null)
+                {
+                    treeDesigner.onUcNodeViewer_LoadedCompletely();
+                }
+            }
+        }
+
+        #endregion not sorted yet
+    }
 }
