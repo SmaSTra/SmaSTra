@@ -768,7 +768,7 @@
             var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).ToList();
 
             //Get a name for the New Element:
-            MessageBoxResult result = MessageBox.Show("Generate a new Element?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
             
             //TODO ADD New Window for Name!
