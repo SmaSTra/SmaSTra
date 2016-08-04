@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
+using System.Json;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
@@ -59,9 +58,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         #endregion StaticMethods
 
-
-
-
         #region fields
 
         /// <summary>
@@ -91,7 +87,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         #endregion properties
 
-
         #region constructors
 
         public CombinedClassGenerator()
@@ -115,7 +110,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         }
 
         #endregion constructors
-
 
         #region Methods
 
@@ -222,7 +216,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             Directory.CreateDirectory(savePath);
 
             string metaFile = Path.Combine(savePath, "metadata.json");
-            Console.WriteLine("Saving to: " + metaFile);
 
             //Combine the JSON:
             dynamic json = new ExpandoObject();
@@ -232,8 +225,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             json.type = "combined";
 
             //Generate the inputs:
-            dynamic inputs = new ExpandoObject();
-            for (int i = 0; i < toSave.InputTypes.Count(); i++) { inputs["arg" + i] = toSave.InputTypes[i].Name; i++; }
+            JsonObject inputs = new JsonObject();
+            for (int i = 0; i < toSave.InputTypes.Count(); i++) inputs.Add("arg" + i, new JsonPrimitive(toSave.InputTypes[i].Name));
 
             //Generate the Connections:
             dynamic[] connections = new dynamic[toSave.Connections.Count()];

@@ -8,6 +8,7 @@
     using System.IO;
     using System.Json;
     using System.Linq;
+    using System.Windows;
     using static classhandler.CombinedNodeClass;
 
     /// <summary>
@@ -382,11 +383,16 @@
 			foreach (string dir in dirs)
 			{
 				string dirName = Path.GetFileName(dir);
+                string metaDataFilePath = Path.Combine(dir, METADATA_FILENAME);
+
+                //Check if metadata file exists first!
+                if (!File.Exists(metaDataFilePath)) continue;
+
 				try
 				{
 					// Load JSON file as JsonObject.
 					JsonObject jso;
-					using (var stream = File.OpenRead(Path.Combine(dir, METADATA_FILENAME)))
+					using (var stream = File.OpenRead(metaDataFilePath))
 					{
 						jso = (JsonObject)JsonObject.Load(stream);
 					}
@@ -441,7 +447,8 @@
 				}
 				catch (Exception ex)
 				{
-					throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
+                    MessageBox.Show("Error in loading", "Could not load Element in: \n" + path + "\nSkipping this element.");
+					//throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
 				}
 			}
 		}
