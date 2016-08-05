@@ -176,6 +176,15 @@
             this.tdTreeDesigner.onNodeViewerSelectAdded((UcNodeViewer) e.OriginalSource);
         }
 
+        private void ToOutputViewer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        private void ToOutputViewer_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.tdTreeDesigner.outOutputViewer.BringIntoView();
+        }
+
         #endregion test area
 
     }

@@ -361,7 +361,6 @@
 				{
 					this.NodeViewer = LayoutHelper.FindVisualParent<UcNodeViewer>(this, true);
 				}
-                System.Diagnostics.Debug.Print("UcIOHandle Loaded. NodeViewer.Node: " + this.NodeViewer.Node.Name);
 
                 if (this.NodeViewer != null && !this.IsPreview)
 				{

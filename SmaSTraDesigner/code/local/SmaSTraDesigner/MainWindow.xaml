@@ -18,6 +18,7 @@
         <CommandBinding Command="ctrlSupport:Commands.Delete" CanExecute="Delete_CanExecute" Executed="Delete_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.SelectConnected" CanExecute="SelectConnected_CanExecute" Executed="SelectConnected_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.AddSelected" CanExecute="AddSelected_CanExecute" Executed="AddSelected_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.ToOutputViewer" CanExecute="ToOutputViewer_CanExecute" Executed="ToOutputViewer_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">

@@ -86,6 +86,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand ToOutputViewer = new RoutedUICommand
+                        (
+                                "To OutputViewer",
+                                "ToOutputViewer",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.O, ModifierKeys.Control)
+                                }
+                        );
+
 
     }
 }

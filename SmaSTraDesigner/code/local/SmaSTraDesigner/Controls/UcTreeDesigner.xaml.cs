@@ -159,8 +159,9 @@
 				subject.AdjustZIndex();
 
 				subject.SelectedNodeViewers.CollectionChanged += subject.SelectedNodeViewers_CollectionChanged;
-                //TODO: update properties window
                Singleton<NodeProperties>.Instance.NodeViewer = newValue;
+
+                System.Diagnostics.Debug.Print("SelectedNodeViewer: " + newValue);
             }
 		}
 
@@ -325,36 +326,16 @@
 
             if (oNode.IoHandles == null)
             {
-                System.Diagnostics.Debug.Print("ABORT: Connection not Added: oNode.IoHandles == null");
                 return;
             }
 
-            foreach (UcNodeViewer nodeViewer in nodeViewers.Values)
-            {
-                System.Diagnostics.Debug.Print("nodeViewer.Node.Name: " + nodeViewer.Node.Name);
-            }
-
-            foreach (UcIOHandle handle in iNode.IoHandles)
-            {
-                System.Diagnostics.Debug.Print("iNode: " + iNode.Node.Name+ " handle.IsLoaded :" + handle.IsLoaded + " handle.LoadedCompletely :" + handle.LoadedCompletely);
-            }
 
 			UcIOHandle oHandle = oNode.IoHandles.FirstOrDefault(h => !h.IsInput);
             UcIOHandle iHandle = iNode.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
 
-            System.Diagnostics.Debug.Print("conection.InputIndex: " + connection.InputIndex);
-            System.Diagnostics.Debug.Print("oNode: " + oNode.Node.Name + " IoHandles.length: " + oNode.IoHandles.Length);
-            System.Diagnostics.Debug.Print("oHandle.Node: " + oHandle.Node.Name);
-            System.Diagnostics.Debug.Print("iNode: " + iNode.Node.Name + " IoHandles.length: " + iNode.IoHandles.Length);
-            System.Diagnostics.Debug.Print("iHandle.Node: " + iHandle.Node.Name);
-
             if (iHandle != null && iHandle.Node != null)
             {
-                System.Diagnostics.Debug.Print("Adding Connection: " + oHandle.Node.Name + " / " + iHandle.Node.Name);
                 this.AddConnection(oHandle, iHandle, connection);
-            } else
-            {
-                System.Diagnostics.Debug.Print("iHandle == null or iHandle.Node == null");
             }
 		}
 
@@ -860,6 +841,11 @@
 
 			this.previouslySelectedItems = this.SelectedNodeViewers.ToArray();
 
+            for (int i = 0; i < SelectedNodeViewers.Count; i++)
+            {
+                System.Diagnostics.Debug.Print("SelectedNodeViewers_CollectionChanged | selection " + i+" : " + SelectedNodeViewers.ElementAt(i));
+            }
+
 			this.changingSelectedNodeViewers = false;
 		}
 
@@ -1121,7 +1107,6 @@
                         }
                     }
                 }
-                System.Diagnostics.Debug.Print("connectedNodeList Count: " + connectedNodeList.Count);
                 i++;
             }
         }
@@ -1132,7 +1117,7 @@
         public void onNodeViewerSelected(UcNodeViewer nodeViewer)
         {
             scvCanvas.Focus();
-            if (changingSelectedNodeViewers)
+            if (changingSelectedNodeViewers && !SelectedNodeViewers.Contains(nodeViewer))
             {
                 SelectedNodeViewers.Add(nodeViewer);
             } else

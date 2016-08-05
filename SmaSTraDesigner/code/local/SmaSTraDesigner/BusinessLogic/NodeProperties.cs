@@ -24,7 +24,6 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get { return nodeViewer; }
             set {
-                System.Diagnostics.Debug.Print("Set nodeViewer");
                 if (NodeViewer != null)
                 {
                     nodeViewer.Node.PropertyChanged -= OnNodePropertyChanged;
@@ -34,7 +33,6 @@ namespace SmaSTraDesigner.BusinessLogic
                     updateNodeProperties(NodeViewer.Node);
                     OnNodeViewerChanged(NodeViewer);
                     this.NotifyPropertyChanged("NodeViewer");
-                System.Diagnostics.Debug.Print("IOCount: " + NodeViewerIOTypeAndValue.Count);
             }
         }
 
