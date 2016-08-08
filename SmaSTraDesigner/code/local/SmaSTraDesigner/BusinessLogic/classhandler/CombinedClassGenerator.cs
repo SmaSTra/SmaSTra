@@ -165,6 +165,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             List<DataType> inputs = new List<DataType>();
             List<SimpleConnection> connections = new List<SimpleConnection>();
             List<SimpleSubNode> subNodes = new List<SimpleSubNode>();
+
+            double centerX = nodes.Average(n => n.PosX);
+            double centerY = nodes.Average(n => n.PosY);
+
             int input = 0;
 
             foreach ( Node node in nodes)
@@ -172,7 +176,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 NodeClass nodeClass = node.Class;
                 Node[] nodeInputs = GetInputsOfNode(node);
 
-                subNodes.Add(new SimpleSubNode(node));
+                subNodes.Add(new SimpleSubNode(node, centerX, centerY));
                 for(int i = 0; i < nodeInputs.Count(); i++)
                 {
                     Node subNode = nodeInputs[i];
@@ -205,7 +209,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <summary>
         /// Saves the Current state to the disc.
         /// </summary>
-        public bool saveToDisc()
+        public bool SaveToDisc()
         {
             CombinedNodeClass toSave = GenerateClass();
             if (toSave == null) return false;
@@ -261,7 +265,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// Gets the Root node of the Generated class.
         /// </summary>
         /// <returns>the Root node or null</returns>
-        private Node GetRootNode()
+        public Node GetRootNode()
         {
             foreach (Node node in nodes) if (SubTreeContains(node, nodes.ToList())) return node;
             return null;
