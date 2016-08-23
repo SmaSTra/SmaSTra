@@ -52,12 +52,12 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             Properties = properties;
         }
 
-        public SimpleSubNode(Node node) : this()
+        public SimpleSubNode(Node node, double centerX, double centerY) : this()
         {
             Properties.Add("NAME", node.Name);
             Properties.Add("TYPE", node.Class.Name);
-            Properties.Add("POSX", node.PosX+"");
-            Properties.Add("POSY", node.PosY+"");
+            Properties.Add("POSX", (node.PosX - centerX).ToString());
+            Properties.Add("POSY", (node.PosY - centerY).ToString());
         }
 
         public Dictionary<string, string> Properties { private set; get; }

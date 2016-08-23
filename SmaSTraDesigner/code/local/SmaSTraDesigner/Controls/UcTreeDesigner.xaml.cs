@@ -763,7 +763,7 @@
             if (generatedClass == null) return;
 
             //Save the just generated class:
-            generator.saveToDisc();
+            generator.SaveToDisc();
 
             //Register the new Node:
             Singleton<ClassManager>.Instance.AddClass(generatedClass);
@@ -774,10 +774,41 @@
             newNode.PosY = nodes.Average(n => n.PosY);
 
             //add the new Node:
-            AddNode(newNode);
+            AddNode(newNode, false);
 
             //Change the Connections:
-            //TODO:
+            //TODO fix this:
+            /*
+            foreach (Node node in nodes)
+            {
+                NodeClass nodeClass = node.Class;
+                List<Node> nodeInputs = GetInputsOfNode(node);
+                
+                for (int i = 0; i < nodeInputs.Count(); i++)
+                {
+                    int index = 0;
+                    Node subNode = nodeInputs[i];
+                    if (subNode == null || !nodes.Contains(subNode))
+                    {
+                        if(subNode != null) AddConnection(new Connection(subNode, newNode, index));
+                        index++;
+                    }
+                }
+            }
+            */
+
+            //Check for the output connection:
+            Node root = generator.GetRootNode();
+            if(root != null)
+            {
+                //I hate Structs....
+                Connection? rootOutputConnection = Tree.Connections
+                    .Where((c) => c.InputNode == root)
+                    .Cast<Connection?>()
+                    .FirstOrDefault();
+
+                if (rootOutputConnection != null) AddConnection(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
+            }
 
             //At end -> Remove old ones!
             foreach (Node old in nodes) RemoveNode(old);
