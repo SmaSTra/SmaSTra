@@ -23,7 +23,7 @@
 		</StackPanel>
 
 		<Border x:Name="bdrViewPort" />
-		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
 			<Viewbox x:Name="vbBackground">
 				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
                     <Canvas.Background>

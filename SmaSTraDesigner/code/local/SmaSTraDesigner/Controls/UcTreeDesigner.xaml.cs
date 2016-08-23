@@ -435,7 +435,7 @@
 			{
 				DataContext = connection.Value,
 				Stroke = getColorFromType(iHandle.DataTypeName),
-				StrokeThickness = 4
+				StrokeThickness = 2
 			};
 			BindingOperations.SetBinding(newLine, Line.X1Property,
 				new Binding("(Canvas.Left)")
@@ -883,9 +883,9 @@
             {
                 leftShiftPressed = true;
             }
-			
+
             //If delete key -> Delete selected elements!
-			if (e.Key == Key.Delete)
+            if (e.Key == Key.Delete)
 			{
 				foreach (var nodeViewer in this.SelectedNodeViewers)
 				{
@@ -961,8 +961,7 @@
 					this.linPreviewConnection.X2 = mousePos.X;
 					this.linPreviewConnection.Y2 = mousePos.Y;
 				}
-				else
-				{
+				else {
 					this.bdrSelectionBorder.Visibility = Visibility.Visible;
 					double dx = mousePos.X - this.dragStart.Value.X;
 					double dy = mousePos.Y - this.dragStart.Value.Y;

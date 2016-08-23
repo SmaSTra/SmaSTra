@@ -51,20 +51,29 @@
         </Border>
 
         <StackPanel>
-        <Grid>
-            <TextBlock Background="Yellow" Name="tbOutputName" Text="Output" Foreground="Black" FontFamily="Lucida Console" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbOutputName}" Height="{Binding ActualHeight, ElementName=tbOutputName}"/>
-        </Grid>
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbOutputName}">
-        </Image>
             <Grid>
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Height="{Binding ActualHeight, ElementName=tbOutputName}" Width="{Binding ActualWidth, ElementName=tbOutputName}">
-        </Image>
-                <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-10,0,0,0" DataContext="{x:Null}" />
+                <TextBlock Name="tbOutputNodeName" FontFamily="Tahoma Regular" Foreground="Black" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,3,10,3.5" >
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Background" Value="{StaticResource ColorVector3d}" />
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" Height="{Binding ActualHeight, ElementName=tbOutputNodeName}">
+                </Image>
             </Grid>
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbOutputName}">
-        </Image>
-         </StackPanel>
+
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" Height="7" >
+            </Image>
+
+            <Grid>
+                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" />
+                <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-7,5,0,5" DataContext="{x:Null}" />
+            </Grid>
+                
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" Height="7">
+            </Image>
+        </StackPanel>
         
     </Grid>
 </local:UcNodeViewer>

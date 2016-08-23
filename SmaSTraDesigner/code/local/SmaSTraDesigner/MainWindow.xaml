@@ -46,13 +46,13 @@
 			</MenuItem>
 		</Menu>
 
-        <StackPanel x:Name="spnSideMenu" Grid.ColumnSpan="99" Grid.Row="1" Orientation="Horizontal">
+        <StackPanel x:Name="spnSideMenu" Grid.ColumnSpan="99" Grid.Row="1" Orientation="Horizontal" Background="{StaticResource ColorPanelBackground}">
             <ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
 			<ToggleButton x:Name="tglCustomTF" Content="Custom Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 			<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 		</StackPanel>
 
-        <ScrollViewer Grid.ColumnSpan="99" Grid.Row="2"  HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Background="{StaticResource ColorPanelBackground}" Grid.ColumnSpan="99" Grid.Row="2"  HorizontalScrollBarVisibility="Auto">
 			<StackPanel x:Name="spnNodeClasses" Orientation="Horizontal">
 				<Expander x:Name="expSensors" Header="Data Sources" IsExpanded="True">
 					<Grid>
@@ -109,18 +109,17 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel x:Name="spnProperties">
+            <StackPanel x:Name="spnProperties" Background="{StaticResource ColorPanelBackground}">
                 <StackPanel.Resources>
                     <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
-                    <Style TargetType="TextBlock">
+                   <!-- <Style TargetType="TextBlock">
                         <Setter Property="FontSize" Value="15" />
-                    </Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="FontSize" Value="15" />
-                    </Style>
+                    </Style>-->
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
                 </StackPanel.Resources>
                 <Border BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Text="Properties" Background="LightGray" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <TextBlock Text="Properties" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 </Border>
                 <WrapPanel>
                     <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -135,11 +134,15 @@
                     <ItemsControl x:Name="icNodeClassInputTypes" ItemsSource="{Binding Path=NodeViewerIOTypeAndValue, UpdateSourceTrigger=PropertyChanged}" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                                </DataTemplate.Resources>
                                 <StackPanel Orientation="Vertical" >
                                     <WrapPanel>
-                                        <TextBlock Text="{Binding Path=IOTypeName, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" FontSize="15"/>
-                                        <TextBlock Text=": " TextWrapping="Wrap" FontSize="15"/>
-                                        <TextBox Text="{Binding Path=IOValue, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" FontSize="15"/>
+                                        <TextBlock Text="{Binding Path=IOTypeName, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
+                                        <TextBlock Text=": " TextWrapping="Wrap"/>
+                                        <TextBox Text="{Binding Path=IOValue, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </DataTemplate>
@@ -148,32 +151,36 @@
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionX ,UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionX ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionY ,UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionY ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
                 <WrapPanel>
                     <TextBlock Text="Description: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
             </StackPanel>
             
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
 
-            <StackPanel x:Name="spnLibrary" Grid.Row="2" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >
-                <Border BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Text="Library" FontSize="15" Background="LightGray" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" Grid.Row="2" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >
+                <StackPanel.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                    </StackPanel.Resources>
+                        <Border BorderThickness="1" BorderBrush="Black">
+                    <TextBlock Text="Library" FontSize="15" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 </Border>
                 <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeList}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock x:Name="txtLibraryNodeName" Text="{Binding Path=Name}"  FontSize="20" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtLibraryNodeName" Text="{Binding Path=Name}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -94,7 +94,7 @@
 
         <StackPanel>
             <Grid>
-                <TextBlock Name="tbTransformationName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" >
+                <TextBlock Name="tbTransformationName" FontFamily="Tahoma Regular" Foreground="White" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,3,10,3.5" >
                     <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Background" Value="{StaticResource ColorDouble}" />
@@ -125,7 +125,7 @@
                             <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" >
                             </Image>
                             <WrapPanel>
-                              <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" Margin="-10,5,0,5" />
+                              <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" Margin="-7,5,0,5" />
                                 <TextBlock DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1.Name, Converter={StaticResource InputTypeNameConverter}}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" Margin="5,0,0,0" />
                             </WrapPanel>
                         </Grid>

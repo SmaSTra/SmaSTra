@@ -55,7 +55,7 @@
 
         <StackPanel>
             <Grid>
-                <TextBlock Background="Green" Name="tbSourceName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Lucida Console" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,5,10,0" />
+                <TextBlock Background="Green"  Name="tbSourceName" Text="{Binding Path=Name}" Foreground="White" FontFamily="Tahoma Regular" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,3,10,3.5" />
                 <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbSourceName}" Height="{Binding ActualHeight, ElementName=tbSourceName}">
                 </Image>
             </Grid>

@@ -22,6 +22,39 @@
             <ctrl:UcDataSourceViewer Margin="5,5" IsPreview="True" />
         </DataTemplate>
 
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="Tahoma Regular" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+        <Style x:Key="TextBoxtyle" TargetType="TextBox">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="Tahoma Regular" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Background" Value="#898989" />
+        </Style>
+      <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border x:Name="Border"
+                Background="White"
+                BorderThickness="1"
+                                CornerRadius="4">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="Black" />
+                            </Border.BorderBrush>
+                            <StackPanel IsItemsHost="True"
+                      KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <SolidColorBrush x:Key="ColorPanelBackground" Color="#696969"/>
+        <SolidColorBrush x:Key="ColorPanelTitel" Color="LightGray"/>
         <SolidColorBrush x:Key="ColorDefault" Color="White"/>
         <SolidColorBrush x:Key="ColorBoolean" Color="GreenYellow"/>
         <SolidColorBrush x:Key="ColorDouble" Color="Blue"/>
