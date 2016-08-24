@@ -413,23 +413,24 @@
 		private void AddConnection(UcIOHandle oHandle, UcIOHandle iHandle, Connection? connection)
 		{
 			this.RemoveConnection(iHandle, null);
+            System.Diagnostics.Debug.Print("adding connection: oNode: " + oHandle.Node.Name + "  iNode: " + iHandle.Node.Name);
 
 			if (connection == null)
 			{
 				connection = new Connection(oHandle.Node, iHandle.Node, iHandle.InputIndex);
 			}
-
-			this.Tree.Connections.Add(connection.Value);
+            this.Tree.Connections.Add(connection.Value);
 			Transformation iNodeAsTransformation;
 			OutputNode iNodeAsOutputNode;
 			if ((iNodeAsTransformation = connection.Value.InputNode as Transformation) != null)
 			{
 				iNodeAsTransformation.SetInput(connection.Value.InputIndex, connection.Value.OutputNode);
 			}
-			else if ((iNodeAsOutputNode = connection.Value.InputNode as OutputNode) != null)
+			else if ((connection.Value.InputNode as OutputNode) != null)
 			{
-				iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
-			}
+                iNodeAsOutputNode = Tree.OutputNode;
+                iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
+            }
             
 			Line newLine = new Line()
 			{
@@ -1120,7 +1121,7 @@
                     {
                         UcNodeViewer connectedViewer;
                         Node connectedNode = connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) ? connection.OutputNode : connection.InputNode;
-                        if (connectedNode.Equals(outOutputViewer.Node))
+                        if (connectedNode as OutputNode != null)
                         {
                             connectedViewer = outOutputViewer;
                         }
@@ -1128,7 +1129,7 @@
                         {
                             nodeViewers.TryGetValue(connectedNode, out connectedViewer);
                         }
-                        if (!connectedNodeList.Contains(connectedViewer))
+                        if (!connectedNodeList.Contains(connectedViewer) && connectedViewer != null)
                         {
                             connectedNodeList.Add(connectedViewer);
                             this.changingSelectedNodeViewers = true;

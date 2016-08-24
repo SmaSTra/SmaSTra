@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Common;
 using SmaSTraDesigner.Controls;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SmaSTraDesigner.BusinessLogic
 {
@@ -30,6 +31,7 @@ namespace SmaSTraDesigner.BusinessLogic
             if (tree == null || tree.OutputNode.InputNode == null)
             {
                 Console.WriteLine("Root node is not connected to any node! Can not save!");
+                MessageBox.Show("Root node is not connected to any node! Can not save!");
                 return;
             }
 
@@ -102,9 +104,9 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 if(node is OutputNode)
                 {
-                    OutputNode outNode = tree.OutputNode;
-                    outNode.PosX = node.PosX;
-                    outNode.PosY = node.PosY;
+                    tree.OutputNode.PosX = node.PosX;
+                    tree.OutputNode.PosY = node.PosY;
+                    tree.OutputNode.Name = node.Name;
                 }
                 else treeDesigner.AddNode(node, false);
             }
