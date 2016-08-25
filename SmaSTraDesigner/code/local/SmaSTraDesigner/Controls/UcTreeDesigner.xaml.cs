@@ -196,7 +196,8 @@
 		private LambdaConverter connectionLineCoordConverter;
 		private Dictionary<Connection, Line> connectionLines = new Dictionary<Connection, Line>();
 		private Point? dragStart = null;
-		private Point? mousePosOnViewer = null;
+        private Point? lastScrollPosition;
+        private Point? mousePosOnViewer = null;
 		private UcNodeViewer movingNodeViewer = null;
 		private Dictionary<Node, UcNodeViewer> nodeViewers = new Dictionary<Node, UcNodeViewer>();
 		private UcNodeViewer[] previouslySelectedItems = { };
@@ -678,6 +679,7 @@
 		{
 			this.mousePosOnViewer = null;
 			this.dragStart = null;
+            this.lastScrollPosition = null;
 
             if (movingNodeViewer != null)
             {
@@ -993,6 +995,18 @@
 					this.linPreviewConnection.X2 = mousePos.X;
 					this.linPreviewConnection.Y2 = mousePos.Y;
 				}
+                else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0) {
+                    System.Diagnostics.Debug.WriteLine("scvCanvas.HorizontalOffset: " + scvCanvas.HorizontalOffset+ " Mouse.GetPosition(cnvBackground).X: " + Mouse.GetPosition(cnvBackground).X + " dragStart.Value.X: " + dragStart.Value.X);
+                    if(lastScrollPosition == null)
+                    {
+                        lastScrollPosition = Mouse.GetPosition(scvCanvas);
+                    }
+                    double dx = Mouse.GetPosition(scvCanvas).X - lastScrollPosition.Value.X;
+                    double dy = Mouse.GetPosition(scvCanvas).Y - lastScrollPosition.Value.Y;
+                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset + dx);
+                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset + dy);
+                    lastScrollPosition = Mouse.GetPosition(scvCanvas);
+                }
 				else {
 					this.bdrSelectionBorder.Visibility = Visibility.Visible;
 					double dx = mousePos.X - this.dragStart.Value.X;
@@ -1142,7 +1156,7 @@
             }
         }
 
-        private bool leftCtrlPressed = false;
+        private bool leftCtrlPressed = false; // TODO: replace with Keyboard.Modifiers
         private bool leftShiftPressed = false;
 
         public void onNodeViewerSelected(UcNodeViewer nodeViewer)
