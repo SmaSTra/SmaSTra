@@ -337,6 +337,7 @@
         {
             if (IsLoaded && loadedallHandles)
             {
+                System.Diagnostics.Debug.WriteLine("+++ Laoded: " + Node.Name + "IoHandles: " + IoHandles.Length);
                 LoadedCompletely = true;
                 UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this, true);
                 if (treeDesigner != null)
