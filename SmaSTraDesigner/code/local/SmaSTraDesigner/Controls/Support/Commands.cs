@@ -97,6 +97,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand AddToLibrary = new RoutedUICommand
+                        (
+                                "Add to library",
+                                "AddToLibrary",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+
+                                }
+                        );
+
 
     }
 }

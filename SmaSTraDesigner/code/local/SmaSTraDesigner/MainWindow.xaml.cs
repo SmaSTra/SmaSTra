@@ -185,6 +185,31 @@
             this.tdTreeDesigner.outOutputViewer.BringIntoView();
         }
 
+        private void AddToLibrary_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
+                if (nodeViewer.IsPreview)
+                {
+                    e.CanExecute = false;
+                }
+                else
+                {
+                    e.CanExecute = true;
+                }
+                e.Handled = true;
+            }
+            else
+            {
+
+            }
+        }
+        private void AddToLibrary_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Singleton<Library>.Instance.addLibraryNode(((UcNodeViewer)e.OriginalSource).Node);
+        }
+
         #endregion test area
 
     }

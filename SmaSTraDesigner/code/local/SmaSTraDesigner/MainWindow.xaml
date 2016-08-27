@@ -19,6 +19,7 @@
         <CommandBinding Command="ctrlSupport:Commands.SelectConnected" CanExecute="SelectConnected_CanExecute" Executed="SelectConnected_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.AddSelected" CanExecute="AddSelected_CanExecute" Executed="AddSelected_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.ToOutputViewer" CanExecute="ToOutputViewer_CanExecute" Executed="ToOutputViewer_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.AddToLibrary" CanExecute="AddToLibrary_CanExecute" Executed="AddToLibrary_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
@@ -109,6 +110,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
+            <ScrollViewer>
             <StackPanel x:Name="spnProperties" Background="{StaticResource ColorPanelBackground}">
                 <StackPanel.Resources>
                     <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
@@ -166,25 +168,27 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>
             </StackPanel>
-            
+            </ScrollViewer>
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
 
-            <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" Grid.Row="2" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >
-                <StackPanel.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
-                <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+            <ScrollViewer Grid.Row="2">
+            <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
                     </StackPanel.Resources>
-                        <Border BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Text="Library" FontSize="15" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                </Border>
-                <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeList}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock x:Name="txtLibraryNodeName" Text="{Binding Path=Name}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+                    <Border BorderThickness="1" BorderBrush="Black">
+                        <TextBlock Text="Library" FontSize="15" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </Border>
+                    <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeViewerList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 	</Grid>
 </Window>
