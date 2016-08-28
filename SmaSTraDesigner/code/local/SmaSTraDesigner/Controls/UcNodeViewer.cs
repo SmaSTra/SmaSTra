@@ -301,6 +301,19 @@
             }
         }
 
+        public static readonly DependencyProperty IsLibraryProperty =
+            DependencyProperty.Register("IsLibraryProperty", typeof(bool), typeof(UcNodeViewer));
+
+        public bool IsLibrary
+        {
+            get { return (bool)this.GetValue(IsLibraryProperty); }
+            set { this.SetValue(IsLibraryProperty, value);
+                    if (value){
+                        this.SetValue(IsPreviewProperty, true);
+                    }
+                }
+        }
+
         private Boolean loadedCompletely = false;
         public Boolean LoadedCompletely
         {

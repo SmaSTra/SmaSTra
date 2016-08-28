@@ -56,6 +56,13 @@ namespace SmaSTraDesigner.BusinessLogic
 
         public void addLibraryNode(Node node)
         {
+            foreach (UcNodeViewer libraryNode in libraryNodeViewerList)
+            {
+                if (node.Name.Equals(libraryNode.Node.Name))
+                {
+                    return;
+                }
+            }
             Transformation nodeAsTransformation;
             DataSource nodeAsDataSource;
             OutputNode nodeAsOutputNode;
@@ -82,12 +89,19 @@ namespace SmaSTraDesigner.BusinessLogic
 
             LibraryNodeViewerList.Add(nodeViewer);
             nodeViewer.DataContext = node;
-            nodeViewer.IsPreview = true;
+            nodeViewer.IsLibrary = true;
+        }
+
+        public void removeLibraryNode(UcNodeViewer nodeViewer)
+        {
+            LibraryNodeViewerList.Remove(nodeViewer);
         }
 
         public void Library_Drop(object sender, DragEventArgs e)
         {
-            addLibraryNode(((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1);
+            Node node = (Node)((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1.Clone();
+            
+            addLibraryNode(node);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

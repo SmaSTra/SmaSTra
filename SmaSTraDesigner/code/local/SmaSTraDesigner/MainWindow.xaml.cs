@@ -108,7 +108,11 @@
             if (e.OriginalSource as UcNodeViewer != null)
             {
                 UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
-                if (nodeViewer.IsPreview || !nodeViewer.IsSelected)
+                if (nodeViewer.IsLibrary)
+                {
+                    e.CanExecute = true;
+                }
+                else if (nodeViewer.IsPreview || !nodeViewer.IsSelected)
                 {
                     e.CanExecute = false;
                 }
@@ -125,7 +129,14 @@
         }
         private void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.onDeleteCommand();
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                Singleton<Library>.Instance.removeLibraryNode((UcNodeViewer)e.OriginalSource);
+            }
+            else
+            {
+                this.tdTreeDesigner.onDeleteCommand();
+            }
         }
 
         private void SelectConnected_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -190,7 +201,7 @@
             if (e.OriginalSource as UcNodeViewer != null)
             {
                 UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
-                if (nodeViewer.IsPreview)
+                if (nodeViewer.IsLibrary)
                 {
                     e.CanExecute = false;
                 }
@@ -207,7 +218,7 @@
         }
         private void AddToLibrary_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Singleton<Library>.Instance.addLibraryNode(((UcNodeViewer)e.OriginalSource).Node);
+            Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Clone());
         }
 
         #endregion test area

@@ -23,7 +23,7 @@
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
 
-    <Grid Margin="5,0,5,0">
+    <Grid HorizontalAlignment="Center"  Margin="5,0,5,0">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
@@ -51,7 +51,6 @@
                 </Style>
             </Border.Style>
         </Border>
-
 
 
         <StackPanel>

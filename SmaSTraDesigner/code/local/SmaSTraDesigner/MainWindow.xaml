@@ -181,11 +181,12 @@
                         <TextBlock Text="Library" FontSize="15" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     </Border>
                     <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeViewerList}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <WrapPanel/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel>
+                                </StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </StackPanel>
             </ScrollViewer>
