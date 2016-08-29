@@ -129,7 +129,8 @@
         }
         private void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (e.OriginalSource as UcNodeViewer != null)
+            UcNodeViewer sourceAsNodeViewer = e.OriginalSource as UcNodeViewer;
+            if (sourceAsNodeViewer != null && sourceAsNodeViewer.IsLibrary)
             {
                 Singleton<Library>.Instance.removeLibraryNode((UcNodeViewer)e.OriginalSource);
             }

@@ -203,12 +203,13 @@
 		private UcNodeViewer[] previouslySelectedItems = { };
 		private HashSet<UcIOHandle> registeredIoHandles = new HashSet<UcIOHandle>();
         private ScaleTransform scaletransform;
+        private int gridSize = 50; // TODO: Make to global variable
 
-		#endregion fields
+        #endregion fields
 
-		#region constructors
+        #region constructors
 
-		public UcTreeDesigner()
+        public UcTreeDesigner()
 		{
 			this.SelectedNodeViewers = new ObservableCollection<UcNodeViewer>();
 			this.SelectedNodeViewers.CollectionChanged += SelectedNodeViewers_CollectionChanged;
@@ -342,7 +343,7 @@
 
 		public void AddNode(Node node, bool select = false)
 		{
-			if (node == null)
+            if (node == null)
 			{
 				throw new ArgumentNullException("node");
 			}
@@ -376,7 +377,6 @@
                 if (node.Class.InputTypes.Count() > 0) nodeViewer = new UcTransformationViewer();
                 else nodeViewer = new UcDataSourceViewer();
             }
-
             this.nodeViewers.Add(node, nodeViewer);
 
             nodeViewer.DataContext = node;
@@ -389,7 +389,7 @@
 				nodeViewer.IsSelected = true;
 				nodeViewer.BringIntoView();
 			}
-		}
+        }
 
 		public void RemoveConnection(Connection connection)
 		{
@@ -473,7 +473,39 @@
 			this.cnvBackground.Children.Add(newLine);
 		}
 
-		private void AdjustZIndex()
+        private SolidColorBrush getColorFromType(String type)
+        {
+            SolidColorBrush color = new SolidColorBrush();
+
+            switch (type)
+            {
+                case "double":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorDouble");
+                    break;
+                case "boolean":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorBoolean");
+                    break;
+                case "long":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorLong");
+                    break;
+                case "Map":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorMap");
+                    break;
+                case "Vector3d":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorVector3d");
+                    break;
+                case "Collection":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorCollection");
+                    break;
+                default:
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorDefault");
+                    break;
+            }
+
+            return color;
+        }
+
+        private void AdjustZIndex()
 		{
 			int i = 0;
 			foreach (var nodeViewer in this.cnvBackground.Children.OfType<UcNodeViewer>().OrderBy(Panel.GetZIndex))
@@ -683,9 +715,12 @@
 
             if (movingNodeViewer != null)
             {
-                foreach (UcNodeViewer nodeViewer in SelectedNodeViewers)
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 {
-                    snapToGrid(nodeViewer);
+                    foreach (UcNodeViewer nodeViewer in SelectedNodeViewers)
+                    {
+                        snapToGrid(nodeViewer);
+                    }
                 }
             }
 			this.movingNodeViewer = null;
@@ -888,13 +923,21 @@
 		}
 
 		private void This_Drop(object sender, DragEventArgs e)
-		{
-			Node node = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1;
+        {
+            Node node = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1;
 			Point mousePos = e.GetPosition(this.cnvBackground);
 			Node newNode = (Node)node.Clone();
-			newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
+            foreach (Node oldNode in nodeViewers.Keys)
+            {
+                System.Diagnostics.Debug.Print("+++++ first oldNode: " + oldNode.Name);
+            }
+            newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
-			this.AddNode(newNode, true);
+            foreach (Node oldNode in nodeViewers.Keys)
+            {
+                System.Diagnostics.Debug.Print("+++++ second oldNode: " + oldNode.Name);
+            }
+            this.AddNode(newNode, true);
             scvCanvas.Focus();
         }
 
@@ -906,29 +949,92 @@
                 }
         }
 
-		// TODO: (PS) Replace this with a WPF command
-		private void This_PreviewKeyDown(object sender, KeyEventArgs e)
+
+        public void onNodeViewerSelectAdded(UcNodeViewer nodeViewer)
+        {
+            this.changingSelectedNodeViewers = true;
+            nodeViewer.IsSelected = true;
+            this.changingSelectedNodeViewers = false;
+        }
+
+        public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
+        {
+            nodeViewer.IsSelected = true;
+            List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
+            connectedNodeList.Add(nodeViewer);
+            int i = 0;
+            while (i < connectedNodeList.Count)
+            {
+                foreach (Connection connection in Tree.Connections)
+                {
+                    if (connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) || connection.OutputNode.Equals(connectedNodeList.ElementAt(i).Node))
+                    {
+                        UcNodeViewer connectedViewer;
+                        Node connectedNode = connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) ? connection.OutputNode : connection.InputNode;
+                        if (connectedNode as OutputNode != null)
+                        {
+                            connectedViewer = outOutputViewer;
+                        }
+                        else
+                        {
+                            nodeViewers.TryGetValue(connectedNode, out connectedViewer);
+                        }
+                        if (!connectedNodeList.Contains(connectedViewer) && connectedViewer != null)
+                        {
+                            connectedNodeList.Add(connectedViewer);
+                            this.changingSelectedNodeViewers = true;
+                            connectedViewer.IsSelected = true;
+                            this.changingSelectedNodeViewers = false;
+                        }
+                    }
+                }
+                i++;
+            }
+        }
+
+        public void onNodeViewerSelected(UcNodeViewer nodeViewer)
+        {
+            scvCanvas.Focus();
+            if (changingSelectedNodeViewers && !SelectedNodeViewers.Contains(nodeViewer))
+            {
+                SelectedNodeViewers.Add(nodeViewer);
+            }
+            else
+            {
+                SelectedNodeViewer = nodeViewer;
+            }
+        }
+
+        public void onUcNodeViewer_LoadedCompletely()
+        {
+            Boolean allNodeViewerLoadedCompletely = true;
+            foreach (UcNodeViewer nodeViewer in this.nodeViewers.Values)
+            {
+                if (!nodeViewer.LoadedCompletely)
+                {
+                    allNodeViewerLoadedCompletely = false;
+                    return;
+                }
+            }
+            if (allNodeViewerLoadedCompletely)
+            {
+                TreeSerilizer.addConnections();
+            }
+        }
+
+        private void snapToGrid(UcNodeViewer nodeViewer)
+        {
+            double left = Canvas.GetLeft(nodeViewer);
+            double deltaX = ((left % gridSize) > (gridSize / 2)) ? (left % gridSize) - gridSize : (left % gridSize);
+            nodeViewer.Node.PosX = nodeViewer.Node.PosX - deltaX;
+            double top = Canvas.GetTop(nodeViewer);
+            double deltaY = ((top % gridSize) > (gridSize / 2)) ? (top % gridSize) - gridSize : (top % gridSize);
+            nodeViewer.Node.PosY = nodeViewer.Node.PosY - deltaY;
+        }
+
+        // TODO: (PS) Replace this with a WPF command
+        private void This_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.LeftCtrl)
-            {
-                leftCtrlPressed = true;
-            }
-            if (e.Key == Key.LeftShift)
-            {
-                leftShiftPressed = true;
-            }
-
-            //If delete key -> Delete selected elements!
-            if (e.Key == Key.Delete)
-			{
-				foreach (var nodeViewer in this.SelectedNodeViewers)
-				{
-					this.RemoveNode(nodeViewer);
-				}
-                return;
-			}
-
-
             //TODO This is only for testing! Remove after working:
             //If P-Key, do some fancy magic!
             if(e.Key == Key.P) handleMergeOfSelected();
@@ -937,14 +1043,6 @@
 		
         private void This_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.LeftCtrl)
-            {
-                leftCtrlPressed = false;
-            }
-            if (e.Key == Key.LeftShift)
-            {
-                leftShiftPressed = false;
-            }
         }
 
         private void This_Loaded(object sender, RoutedEventArgs e)
@@ -1003,8 +1101,8 @@
                     }
                     double dx = Mouse.GetPosition(scvCanvas).X - lastScrollPosition.Value.X;
                     double dy = Mouse.GetPosition(scvCanvas).Y - lastScrollPosition.Value.Y;
-                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset + dx);
-                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset + dy);
+                    scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset - dx);
+                    scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset - dy);
                     lastScrollPosition = Mouse.GetPosition(scvCanvas);
                 }
 				else {
@@ -1081,126 +1179,7 @@
         #endregion event handlers
 
         #region not sorted yet
-
-        private SolidColorBrush getColorFromType(String type)
-        {
-            SolidColorBrush color = new SolidColorBrush();
-
-            switch (type)
-            {
-                case "double":
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorDouble");
-                    break;
-                case "boolean":
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorBoolean");
-                    break;
-                case "long":
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorLong");
-                    break;
-                case "Map":
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorMap");
-                    break;
-                case "Vector3d":
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorVector3d");
-                    break;
-                case "Collection":
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorCollection");
-                    break;
-                default:
-                    color = (SolidColorBrush)Application.Current.FindResource("ColorDefault");
-                    break;
-            }
-
-            return color;
-        }
-
-        public void onNodeViewerSelectAdded(UcNodeViewer nodeViewer)
-        {
-            this.changingSelectedNodeViewers = true;
-            nodeViewer.IsSelected = true;
-            this.changingSelectedNodeViewers = false;
-        }
-
-        public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
-        {
-            nodeViewer.IsSelected = true;
-            List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
-            connectedNodeList.Add(nodeViewer);
-            int i = 0;
-            while (i < connectedNodeList.Count)
-            {
-                foreach(Connection connection in Tree.Connections)
-                {
-                    if (connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) || connection.OutputNode.Equals(connectedNodeList.ElementAt(i).Node))
-                    {
-                        UcNodeViewer connectedViewer;
-                        Node connectedNode = connection.InputNode.Equals(connectedNodeList.ElementAt(i).Node) ? connection.OutputNode : connection.InputNode;
-                        if (connectedNode as OutputNode != null)
-                        {
-                            connectedViewer = outOutputViewer;
-                        }
-                        else
-                        {
-                            nodeViewers.TryGetValue(connectedNode, out connectedViewer);
-                        }
-                        if (!connectedNodeList.Contains(connectedViewer) && connectedViewer != null)
-                        {
-                            connectedNodeList.Add(connectedViewer);
-                            this.changingSelectedNodeViewers = true;
-                            connectedViewer.IsSelected = true;
-                            this.changingSelectedNodeViewers = false;
-                        }
-                    }
-                }
-                i++;
-            }
-        }
-
-        private bool leftCtrlPressed = false; // TODO: replace with Keyboard.Modifiers
-        private bool leftShiftPressed = false;
-
-        public void onNodeViewerSelected(UcNodeViewer nodeViewer)
-        {
-            scvCanvas.Focus();
-            if (changingSelectedNodeViewers && !SelectedNodeViewers.Contains(nodeViewer))
-            {
-                SelectedNodeViewers.Add(nodeViewer);
-            } else
-            {
-                SelectedNodeViewer = nodeViewer;
-            }
-        }
-
-        public int gridSize = 50;
-
-        public void snapToGrid(UcNodeViewer nodeViewer)
-        {
-            if (leftShiftPressed)
-            {
-                double left = Canvas.GetLeft(nodeViewer);
-                double deltaX = ((left % gridSize) > (gridSize / 2)) ? (left % gridSize) - gridSize : (left % gridSize);
-                nodeViewer.Node.PosX = nodeViewer.Node.PosX - deltaX;
-                double top = Canvas.GetTop(nodeViewer);
-                double deltaY = ((top % gridSize) > (gridSize / 2)) ? (top % gridSize) - gridSize : (top % gridSize);
-                nodeViewer.Node.PosY = nodeViewer.Node.PosY - deltaY;
-            }
-        }
-
-        public void onUcNodeViewer_LoadedCompletely()
-        {
-            Boolean allNodeViewerLoadedCompletely = true;
-           foreach(UcNodeViewer nodeViewer in this.nodeViewers.Values){
-                if (!nodeViewer.LoadedCompletely)
-                {
-                    allNodeViewerLoadedCompletely = false;
-                    return;
-                }
-            }
-            if (allNodeViewerLoadedCompletely)
-            {
-                TreeSerilizer.addConnections();
-            }
-        }
+        
 
         #endregion not sorted yet
     }
