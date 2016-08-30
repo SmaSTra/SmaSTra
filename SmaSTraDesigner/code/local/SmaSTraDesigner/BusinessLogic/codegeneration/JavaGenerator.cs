@@ -6,6 +6,7 @@
     using System.Linq;
 
     using Newtonsoft.Json.Linq;
+    using nodes;
 
     /// <summary>
     /// Class handling all necessary functionality for the generation of java-code
@@ -468,48 +469,63 @@
                 return code;
 			}
 
-			//else: process child nodes, then process this one
-			Transformation transformNode = (Transformation)currentNode;
-			List<string>[] temp;
-			foreach (Node child in transformNode.InputNodes)
-			{
-				temp = traverse(child, visited, numbers, false, targetDirectory);
-				imports.AddRange(temp[0]);
-				inits.AddRange(temp[1]);
-				transforms.AddRange(temp[2]);
-				returnValues.AddRange(temp[3]);
-				functionCalls.AddRange(temp[4]);
-			}
-			List<string>[] transformData = processTransform(currentNode, numbers[0], returnValues, functionCalls, first, targetDirectory);
-			imports.AddRange(transformData[0]);
-			inits.AddRange(transformData[1]);
-			transforms.AddRange(transformData[2]);
-			returnValues = transformData[3];
-			functionCalls = transformData[4];
+            //If node is transformation:
+            if (currentNode is Transformation)
+            {
+                Transformation transformNode = (Transformation)currentNode;
+                List<string>[] temp;
+                foreach (Node child in transformNode.InputNodes)
+                {
+                    temp = traverse(child, visited, numbers, false, targetDirectory);
+                    imports.AddRange(temp[0]);
+                    inits.AddRange(temp[1]);
+                    transforms.AddRange(temp[2]);
+                    returnValues.AddRange(temp[3]);
+                    functionCalls.AddRange(temp[4]);
+                }
+                List<string>[] transformData = processTransform(currentNode, numbers[0], returnValues, functionCalls, first, targetDirectory);
+                imports.AddRange(transformData[0]);
+                inits.AddRange(transformData[1]);
+                transforms.AddRange(transformData[2]);
+                returnValues = transformData[3];
+                functionCalls = transformData[4];
 
-			List<string>[] dictionaryValue = new List<string>[2];
-			dictionaryValue[0] = returnValues;
-			dictionaryValue[1] = functionCalls;
+                List<string>[] dictionaryValue = new List<string>[2];
+                dictionaryValue[0] = returnValues;
+                dictionaryValue[1] = functionCalls;
 
-			visited.Add(currentNode, dictionaryValue);
+                visited.Add(currentNode, dictionaryValue);
 
-			numbers[0]++;
+                numbers[0]++;
 
-			if (first)
-			{
-				functionCalls.Clear();
-				functionCalls.Add(numbers[0].ToString()); //at this point we are at the last node before returning all code snippets. numbers[0] will contain the number of transformations.
-                string sourceDirectory = "generated\\";
-                FinalizeCopy(sourceDirectory, targetDirectory);
-			}
+                if (first)
+                {
+                    functionCalls.Clear();
+                    functionCalls.Add(numbers[0].ToString()); //at this point we are at the last node before returning all code snippets. numbers[0] will contain the number of transformations.
+                    string sourceDirectory = "generated\\";
+                    FinalizeCopy(sourceDirectory, targetDirectory);
+                }
 
-			code[0] = imports;
-			code[1] = inits;
-			code[2] = transforms;
-			code[3] = returnValues;
-			code[4] = functionCalls;
+                code[0] = imports;
+                code[1] = inits;
+                code[2] = transforms;
+                code[3] = returnValues;
+                code[4] = functionCalls;
 
-			return code;
+                return code;
+            }
+
+
+            //If node is Combined:
+            if (currentNode is CombinedNode)
+            {
+                CombinedNode combinedNode = (CombinedNode)currentNode;
+                //TODO add this somehow.
+                return code;
+            }
+
+
+            return code;
 		}
 
 		#endregion methods
