@@ -22,7 +22,25 @@
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
     <Grid>
+        <StackPanel>
+            <Grid>
+                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/output.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}">
+                </Image>
+                <TextBlock Name="tbOutputNodeName" FontFamily="Tahoma Regular" Foreground="Black" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10,3,10,3.5" >
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-7,5,0,5" DataContext="{x:Null}" />
+            </Grid>
+        </StackPanel>
+
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border.LayoutTransform>
+                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="45"/>
+            </Border.LayoutTransform>
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="BorderBrush">
@@ -50,30 +68,5 @@
             </Border.Style>
         </Border>
 
-        <StackPanel>
-            <Grid>
-                <TextBlock Name="tbOutputNodeName" FontFamily="Tahoma Regular" Foreground="Black" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,3,10,3.5" >
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Background" Value="{StaticResource ColorVector3d}" />
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" Height="{Binding ActualHeight, ElementName=tbOutputNodeName}">
-                </Image>
-            </Grid>
-
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" Height="7" >
-            </Image>
-
-            <Grid>
-                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" />
-                <local:UcIOHandle IsInput="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-7,5,0,5" DataContext="{x:Null}" />
-            </Grid>
-                
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Width="{Binding ActualWidth, ElementName=tbOutputNodeName}" Height="7">
-            </Image>
-        </StackPanel>
-        
     </Grid>
 </local:UcNodeViewer>

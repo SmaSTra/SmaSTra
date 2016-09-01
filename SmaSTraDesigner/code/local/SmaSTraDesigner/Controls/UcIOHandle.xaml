@@ -20,7 +20,7 @@
 		</Style>
 	</UserControl.Style>
 	<Grid>
-		<Ellipse Stretch="UniformToFill">
+		<Ellipse x:Name="inputEllipse" Stretch="Uniform" Margin="0.3,0.3,0.3,0.3">
 			<Ellipse.Style>
                 <Style TargetType="Ellipse">
                     <Setter Property="Fill" Value="{StaticResource ColorDefault}" />
@@ -70,7 +70,9 @@
 				</Style>
 			</Ellipse.Style>
 		</Ellipse>
-		<Polygon Points="0.0,0.0 1.0,0.5 0.0,1.0"  Stretch="Fill">
+        <Image Stretch="Uniform" Visibility="{Binding ElementName=inputEllipse, Path=Visibility}" Source="pack://siteoforigin:,,,/Resources/input_trans.png"/>
+
+        <Polygon x:Name="outputPolygon" Points="0.0,0.0 1.0,0.5 0.0,1.0"  Stretch="Fill" Margin="0.9,0.5,2.0,0.5">
 			<Polygon.Style>
 				<Style TargetType="Polygon">
                     <Setter Property="Fill" Value="{StaticResource ColorDefault}" />
@@ -120,5 +122,6 @@
 				</Style>
 			</Polygon.Style>
 		</Polygon>
+        <Image Stretch="Uniform" Visibility="{Binding ElementName=outputPolygon, Path=Visibility}" Source="pack://siteoforigin:,,,/Resources/target_trans.png"/>
 	</Grid>
 </UserControl>

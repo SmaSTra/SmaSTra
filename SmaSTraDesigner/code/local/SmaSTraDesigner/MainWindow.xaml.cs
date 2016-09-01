@@ -31,7 +31,7 @@
 		public MainWindow()
 		{
 			this.InitializeComponent();
-			this.spnNodeClasses.DataContext = Singleton<ClassManager>.Instance;
+            this.spnNodeClasses.DataContext = Singleton<ClassManager>.Instance;
             this.spnProperties.DataContext = Singleton<NodeProperties>.Instance;
             this.spnLibrary.DataContext = Singleton<Library>.Instance;
         }
@@ -65,7 +65,7 @@
 
         #endregion event handlers
 
-        #region test area
+        #region command handlers
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -222,7 +222,7 @@
             Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Clone());
         }
 
-        #endregion test area
+        #endregion command handlers
 
     }
 }

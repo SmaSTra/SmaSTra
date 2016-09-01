@@ -139,7 +139,7 @@
 
         </StackPanel>
 
-        <local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-15,0" />
+        <local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-14,0" />
 
     </Grid>
 </local:UcNodeViewer>

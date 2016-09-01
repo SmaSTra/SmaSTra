@@ -248,9 +248,13 @@
 					{
 						Tuple<bool, UcIOHandle> paramz = (Tuple<bool, UcIOHandle>)parameter;
 						Point p = this.GetCanvasElementPosition(paramz.Item2, true);
+                        if (!paramz.Item2.IsInput) // Place Connection at the tip of outputHandles
+                        {
+                            p.X = p.X - 2 + paramz.Item2.Width / 2;
+                        }
+                        return paramz.Item1 ? p.X : p.Y;
 
-						return paramz.Item1 ? p.X : p.Y;
-					}
+                    }
 				};
 
 				this.MakeBindings(this.outOutputViewer);
@@ -532,7 +536,14 @@
 			return element.TransformToAncestor(this.cnvBackground).Transform(p);
 		}
 
-		private void MakeBindings(UcNodeViewer nodeViewer)
+        private Point GetAncestorElementPosition(FrameworkElement element, FrameworkElement ancestor, bool center)
+        {
+            Point p = center ? new Point(element.ActualWidth / 2, element.ActualHeight / 2) : new Point();
+
+            return element.TransformToAncestor(ancestor).Transform(p);
+        }
+
+        private void MakeBindings(UcNodeViewer nodeViewer)
 		{
 			this.MakeCanvasOffsetBinding(nodeViewer, false);
 			this.MakeCanvasOffsetBinding(nodeViewer, true);
@@ -927,7 +938,7 @@
             Node node = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1;
 			Point mousePos = e.GetPosition(this.cnvBackground);
 			Node newNode = (Node)node.Clone();
-            foreach (Node oldNode in nodeViewers.Keys)
+            foreach (Node oldNode in nodeViewers.Keys) // Loading a Node from Library causes odd behavior of the currently selected Node
             {
                 System.Diagnostics.Debug.Print("+++++ first oldNode: " + oldNode.Name);
             }
@@ -1094,7 +1105,6 @@
 					this.linPreviewConnection.Y2 = mousePos.Y;
 				}
                 else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0) {
-                    System.Diagnostics.Debug.WriteLine("scvCanvas.HorizontalOffset: " + scvCanvas.HorizontalOffset+ " Mouse.GetPosition(cnvBackground).X: " + Mouse.GetPosition(cnvBackground).X + " dragStart.Value.X: " + dragStart.Value.X);
                     if(lastScrollPosition == null)
                     {
                         lastScrollPosition = Mouse.GetPosition(scvCanvas);
@@ -1151,7 +1161,7 @@
 
         private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.LeftAlt))
             {
                 if (scaletransform == null)
                 {
@@ -1178,9 +1188,9 @@
 
         #endregion event handlers
 
-        #region not sorted yet
-        
+        #region test area / not sorted yet
 
-        #endregion not sorted yet
+
+        #endregion test area / not sorted yet
     }
 }
