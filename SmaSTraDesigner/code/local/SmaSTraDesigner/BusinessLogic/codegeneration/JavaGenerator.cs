@@ -231,11 +231,10 @@
 
             //imports
             imports.Add(json["mainClass"].ToString());
-			foreach (string need in json["needs"])
-			{
-				imports.Add(need);
-				DirectoryCopy(sourceDirectory, targetDirectory, true);
-			}
+			foreach (string need in json["needs"]) imports.Add(need);
+
+            //Be sure to add all contents of the folder to the Result!
+			DirectoryCopy(sourceDirectory, targetDirectory, true);
 
             string sensorMainClass = minimizeToClass(json["mainClass"].ToString());
             string prep = "\tprivate " + sensorMainClass + " sensor" + number + ";\n";
