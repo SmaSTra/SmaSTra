@@ -450,8 +450,15 @@
                 return;
             }
             Point center = new Point(this.ActualWidth / 2, this.ActualHeight / 2);
-            Point centerRelativeToNodeViewer = this.TransformToAncestor(treeDesigner.cnvBackground).Transform(center);
-            Position = centerRelativeToNodeViewer;
+            try
+            {
+                Point centerRelativeToNodeViewer = this.TransformToAncestor(treeDesigner.cnvBackground).Transform(center);
+                Position = centerRelativeToNodeViewer;
+            }
+            catch (InvalidOperationException)
+            {
+                LayoutUpdated -= UcIOHandle_LayoutUpdated;
+            }
         }
 
         #endregion not sorted yet
