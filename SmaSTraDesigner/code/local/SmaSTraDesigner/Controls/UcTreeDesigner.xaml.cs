@@ -247,7 +247,7 @@
 					ConvertMethod = (value, targetType, parameter, culture) =>
 					{
 						Tuple<bool, UcIOHandle> paramz = (Tuple<bool, UcIOHandle>)parameter;
-						Point p = this.GetCanvasElementPosition(paramz.Item2, true);
+                        Point p = (Point)value;
                         if (!paramz.Item2.IsInput) // Place Connection at the tip of outputHandles
                         {
                             p.X = p.X - 2 + paramz.Item2.Width / 2;
@@ -444,30 +444,30 @@
 				StrokeThickness = 2
 			};
 			BindingOperations.SetBinding(newLine, Line.X1Property,
-				new Binding("(Canvas.Left)")
+				new Binding("(Position)")
 				{
-					Source = oHandle.NodeViewer,
+					Source = oHandle,
 					Converter = this.connectionLineCoordConverter,
 					ConverterParameter = new Tuple<bool, UcIOHandle>(true, oHandle)
 				});
 			BindingOperations.SetBinding(newLine, Line.Y1Property,
-				new Binding("(Canvas.Top)")
+				new Binding("(Position)")
 				{
-					Source = oHandle.NodeViewer,
+					Source = oHandle,
 					Converter = this.connectionLineCoordConverter,
 					ConverterParameter = new Tuple<bool, UcIOHandle>(false, oHandle)
 				});
 			BindingOperations.SetBinding(newLine, Line.X2Property,
-				new Binding("(Canvas.Left)")
+				new Binding("(Position)")
 				{
-					Source = iHandle.NodeViewer,
+					Source = iHandle,
 					Converter = this.connectionLineCoordConverter,
 					ConverterParameter = new Tuple<bool, UcIOHandle>(true, iHandle)
 				});
 			BindingOperations.SetBinding(newLine, Line.Y2Property,
-				new Binding("(Canvas.Top)")
+				new Binding("(Position)")
 				{
-					Source = iHandle.NodeViewer,
+					Source = iHandle,
 					Converter = this.connectionLineCoordConverter,
 					ConverterParameter = new Tuple<bool, UcIOHandle>(false, iHandle)
 				});

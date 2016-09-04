@@ -22,6 +22,15 @@
             <ctrl:UcDataSourceViewer Margin="5,5" IsPreview="True" />
         </DataTemplate>
 
+
+        <ToolTip x:Key="nodeViewerToolTip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" Visibility="{Binding Path=IsPreview, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}" Background="Transparent">
+            <Rectangle Width="{Binding ActualWidth}" Height="{Binding ActualHeight}" >
+                <Rectangle.Fill>
+                    <VisualBrush Visual="{Binding}"/>
+                </Rectangle.Fill>
+            </Rectangle>
+        </ToolTip>
+
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontFamily" Value="Tahoma Regular" />

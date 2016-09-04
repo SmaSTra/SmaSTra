@@ -9,7 +9,7 @@
 	xmlns:converters="clr-namespace:Common.Resources.Converters;assembly=PresentationCommonLib"
     xmlns:logic="clr-namespace:SmaSTraDesigner.BusinessLogic"
 	mc:Ignorable="d"
-    ToolTip="{Binding Path=Name}"
+    ToolTip="{StaticResource nodeViewerToolTip}"
 	x:Name="This">
     <local:UcNodeViewer.Resources>
         <converters:LambdaConverter x:Key="InputItemsSourceConverter" />

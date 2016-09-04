@@ -139,16 +139,17 @@
 			this.customDragDropHelper = new CustomDragDropHelper(this, this.OnCustomDragDrop);
 
             DataContextChanged += OnDataContextChanged;
+            this.LayoutUpdated += UcIOHandle_LayoutUpdated;
 		}
 
-		#endregion constructors
+        #endregion constructors
 
-		#region events
+        #region events
 
-		/// <summary>
-		/// Is raised when this io handle is being dragged.
-		/// </summary>
-		public event EventHandler CustomDrag;
+        /// <summary>
+        /// Is raised when this io handle is being dragged.
+        /// </summary>
+        public event EventHandler CustomDrag;
 
 		#endregion events
 
@@ -424,6 +425,33 @@
                     NodeViewer.onUcIOHandleLoadedCompletely();
                 }
             }
+        }
+
+        public static readonly DependencyProperty PositionProperty =
+        DependencyProperty.Register("Position", typeof(Point), typeof(UcIOHandle));
+         
+
+    public Point Position
+        {
+            get
+            {
+                return (Point)GetValue(PositionProperty);
+            }
+            set
+            {
+                SetValue(PositionProperty, value);
+            }
+        }
+
+        private void UcIOHandle_LayoutUpdated(object sender, EventArgs e)
+        {
+            if (this.NodeViewer == null || treeDesigner == null)
+            {
+                return;
+            }
+            Point center = new Point(this.ActualWidth / 2, this.ActualHeight / 2);
+            Point centerRelativeToNodeViewer = this.TransformToAncestor(treeDesigner.cnvBackground).Transform(center);
+            Position = centerRelativeToNodeViewer;
         }
 
         #endregion not sorted yet

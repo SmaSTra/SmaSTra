@@ -7,7 +7,7 @@
 	xmlns:local="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
     mc:Ignorable="d"
-    ToolTip="{Binding Path=Name}"
+    ToolTip="{StaticResource nodeViewerToolTip}"
 	x:Name="This">
     <local:UcNodeViewer.InputBindings>
         <MouseBinding Gesture="LeftDoubleClick" Command="ctrlSupport:Commands.SelectConnected" />
