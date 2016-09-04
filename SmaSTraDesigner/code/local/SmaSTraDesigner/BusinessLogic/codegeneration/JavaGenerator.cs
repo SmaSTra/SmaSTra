@@ -47,6 +47,9 @@
 
 			foreach (FileInfo file in files)
 			{
+                //Do not copy the Metadata files:
+                if (file.Name.EndsWith("metadata.json")) continue;
+
 				// Create the path to the new copy of the file.
 				string temppath = Path.Combine(destDirName, file.Name);
 
