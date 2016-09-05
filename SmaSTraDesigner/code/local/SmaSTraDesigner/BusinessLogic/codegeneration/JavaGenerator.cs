@@ -153,6 +153,8 @@
 
 			/////////import section///////
 			List<string> imports = code[0];
+            //Do not forget to add Android context!
+            imports.Add("android.content.Context");
 			imports = imports.Distinct().ToList();
 			string import = "";
 
