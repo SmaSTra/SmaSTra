@@ -19,13 +19,12 @@ public class AndroidAccelerometerSensor extends Abstract3dAndroidSensor {
     /**
      * Generates the Sensor.
      * <br>It needs a Context for the SensorManager
-     * and a delay (defined in ).
+     * and a delay (defined in ms).
      *
      * @param context          for the SensorManager.
-     * @param samplingPeriodUs to use.
      */
-    public AndroidAccelerometerSensor(Context context, int samplingPeriodUs) {
-        super(context, Sensor.TYPE_ACCELEROMETER, samplingPeriodUs);
+    public AndroidAccelerometerSensor(Context context) {
+        super(context, Sensor.TYPE_ACCELEROMETER);
     }
 
 }

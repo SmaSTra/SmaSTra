@@ -6,13 +6,12 @@
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.math.Math3d",
-    "de.tu_darmstadt.smastra.sensors.Vector3d",
-    "de.tu_darmstadt.smastra.collectors.WindowCollection"
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
   "method": "variance",
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "input": {
-    "arg0": "de.tu_darmstadt.smastra.collectors.WindowCollection"
+    "arg0": "de.tu_darmstadt.smastra.markers.interfaces.Buffer"
   }
 }

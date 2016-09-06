@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 
+import java.util.Map;
+
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
@@ -36,6 +38,13 @@ public class AndroidChargerSensor implements Sensor {
     @SensorStop
     @Override
     public void stop(){}
+
+    @Override
+    public void configure(Map<String, Object> configuration) {}
+
+    @Override
+    public void configure(String key, Object value) {}
+
 
     /**
      * Gets the Status of the Charger.

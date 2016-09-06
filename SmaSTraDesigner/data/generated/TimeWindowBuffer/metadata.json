@@ -1,0 +1,17 @@
+{
+  "type": "buffer",
+  "mainClass": "de.tu_darmstadt.smastra.buffers.TimeWindowBuffer",
+  "display": "TimeWindowBuffer",
+  "description": "A buffer capturing over time.",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [
+    {
+      "key": "time",
+      "description": "The time in MS that is buffered.",
+      "classType": "java.lang.Integer"
+    }
+  ],
+  "bufferAdd": "addData",
+  "bufferGet": "getData"
+}

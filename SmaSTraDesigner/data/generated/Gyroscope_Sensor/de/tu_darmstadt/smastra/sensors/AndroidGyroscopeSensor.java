@@ -18,14 +18,12 @@ public class AndroidGyroscopeSensor extends Abstract3dAndroidSensor {
 
     /**
      * Generates the Sensor.
-     * <br>It needs a Context for the SensorManager
-     * and a delay (defined in ).
+     * <br>It needs a Context for the SensorManager.
      *
      * @param context          for the SensorManager.
-     * @param samplingPeriodUs to use.
      */
-    public AndroidGyroscopeSensor(Context context, int samplingPeriodUs) {
-        super(context, Sensor.TYPE_GYROSCOPE, samplingPeriodUs);
+    public AndroidGyroscopeSensor(Context context) {
+        super(context, Sensor.TYPE_GYROSCOPE);
     }
 
 }

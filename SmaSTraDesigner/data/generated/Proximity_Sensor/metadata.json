@@ -5,6 +5,13 @@
   "description": "Captures the nearest distance for the Proximity Sensor",
   "neededPermissions": [],
   "needs": [],
+  "config": [
+    {
+      "key": "SamplingRate",
+      "description": "Sets the sampling rate. This is the delay in Miliseconds between 2 Events.",
+      "classType": "java.lang.Integer"
+    }
+  ],
   "dataMethod": "getLastData",
   "output": "double",
   "start": "start",
