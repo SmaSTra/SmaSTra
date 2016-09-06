@@ -430,8 +430,8 @@
 			if ((iNodeAsTransformation = connection.Value.InputNode as Transformation) != null)
 			{
 				iNodeAsTransformation.SetInput(connection.Value.InputIndex, connection.Value.OutputNode);
-			}
-			else if ((connection.Value.InputNode as OutputNode) != null)
+            }
+            else if ((connection.Value.InputNode as OutputNode) != null)
 			{
                 iNodeAsOutputNode = Tree.OutputNode;
                 iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
@@ -760,9 +760,9 @@
 				int zIndex = Int32.MinValue;
 				foreach (var ioHandle in this.registeredIoHandles)
 				{
-					if (ioHandle != this.ConnectingIOHandle)
+                    if (ioHandle != this.ConnectingIOHandle)
 					{
-						Point handlePos = this.GetCanvasElementPosition(ioHandle, false);
+                        Point handlePos = this.GetCanvasElementPosition(ioHandle, false);
 						if (new Rect(handlePos, ioHandle.RenderSize).Contains(mousePos) &&
 							(handleUnderCursor == null || Panel.GetZIndex(ioHandle) > zIndex))
 						{

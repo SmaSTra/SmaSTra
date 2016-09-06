@@ -38,16 +38,23 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             double posX = Double.Parse( obj["PosX"].ToString());
             double posY = Double.Parse( obj["PosY"].ToString());
 
+            Node newNode;
+
             //This is the special case when we have the output node:
-            if (nodeType == "OutputNode") return new OutputNode();
-
-            //Normal node:
-            Node newNode = getNode(nodeType, classManager);
-            if (newNode == null) return null;
-
+            if (nodeType == "OutputNode")
+            {
+                newNode = new OutputNode();
+            }
+            else
+            {
+                //Normal node:
+                newNode = getNode(nodeType, classManager);
+                if (newNode == null) return null;
+                newNode = (Node)newNode.Clone();
+                newNode.Name = nodeName;
+            }
+            
             //Do not forget to set x,y:
-            newNode = (Node) newNode.Clone();
-            newNode.Name = nodeName;
             newNode.PosX = posX;
             newNode.PosY = posY;
 

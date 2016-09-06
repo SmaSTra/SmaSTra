@@ -126,8 +126,14 @@ namespace SmaSTraDesigner.BusinessLogic
             if (input == null) return;
 
             //Add the input:
-            if (input is OutputNode) ((OutputNode)tree.OutputNode).InputNode = connection.OutputNode;
-            if (input is Transformation) ((Transformation)input).InputNodes[connection.InputIndex] = output;
+            if (input is OutputNode)
+            {
+                ((OutputNode)tree.OutputNode).InputNode = connection.OutputNode;
+            }
+            if (input is Transformation)
+            {
+                ((Transformation)input).InputNodes[connection.InputIndex] = output;
+            }
         }
     }
 }

@@ -28,6 +28,10 @@
 			{
 				return this.inputNodes.ToArray();
 			}
+            set
+            {
+                this.inputNodes = value;
+            }
 		}
 
 		#endregion properties
@@ -46,16 +50,23 @@
 			this.inputNodes = new Node[this.Class.InputTypes.Length];
 		}
 
-		#endregion overrideable methods
+        public override object Clone()
+        {
+            Transformation clonedNode = (Transformation)base.Clone();
+            clonedNode.InputNodes = this.InputNodes;
+            return clonedNode;
+        }
 
-		#region methods
+        #endregion overrideable methods
 
-		/// <summary>
-		/// Adds an input node at the first free space.
-		/// </summary>
-		/// <param name="inputNode"></param>
-		/// <returns></returns>
-		public bool AddInput(Node inputNode)
+        #region methods
+
+        /// <summary>
+        /// Adds an input node at the first free space.
+        /// </summary>
+        /// <param name="inputNode"></param>
+        /// <returns></returns>
+        public bool AddInput(Node inputNode)
 		{
 			if (this.Class == null)
 			{
@@ -83,12 +94,15 @@
 		public void SetInput(int index, Node inputNode)
 		{
 			if (this.Class == null)
-			{
+			{//TODO: start debugging here
 				throw new InvalidOperationException("This transformation has no set class.");
 			}
-
+            if(this.inputNodes[index] != null && inputNode != null)
+            {
+                throw new InvalidOperationException("This InputNode is already occupied.");
+            }
 			this.inputNodes[index] = inputNode;
-		}
+        }
 
 		#endregion methods
 	}

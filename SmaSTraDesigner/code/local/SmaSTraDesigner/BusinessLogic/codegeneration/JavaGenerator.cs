@@ -418,6 +418,7 @@
 		/// will be needed for generating the complete file.</returns>
 		public List<string>[] traverse(Node currentNode, Dictionary<Node, List<string>[]> visited, int[] numbers, bool first, string targetDirectory)
 		{
+            System.Diagnostics.Debug.Print("starting traverse");
             //checking for valid input
             if(currentNode == null)
             {
@@ -478,6 +479,7 @@
                 List<string>[] temp;
                 foreach (Node child in transformNode.InputNodes)
                 {
+                    System.Diagnostics.Debug.Print("starting foreach in transformation: " + transformNode.Name);
                     temp = traverse(child, visited, numbers, false, targetDirectory);
                     imports.AddRange(temp[0]);
                     inits.AddRange(temp[1]);
