@@ -1,6 +1,8 @@
-package de.tu_darmstadt.smastra.collectors;
+package de.tu_darmstadt.smastra.buffers;
 
 import org.junit.Test;
+
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -9,7 +11,7 @@ import static junit.framework.Assert.assertTrue;
  * Test for Timed Window Collectors.
  * @author Tobias Welther
  */
-public class TimeWindowCollectorTest {
+public class TimeWindowBufferTest {
 
 
 
@@ -18,7 +20,7 @@ public class TimeWindowCollectorTest {
         String element = "TeSt";
 
         long now = System.currentTimeMillis();
-        TimeWindowCollector<String> sut = new TimeWindowCollector<>(1000);
+        TimeWindowBuffer<String> sut = new TimeWindowBuffer<>();
         sut.addData(now, element);
 
         assertEquals(1, sut.getData().size());
@@ -33,7 +35,8 @@ public class TimeWindowCollectorTest {
         String element3 = "TeSt3";
 
         long now = System.currentTimeMillis();
-        TimeWindowCollector<String> sut = new TimeWindowCollector<>(300);
+        TimeWindowBuffer<String> sut = new TimeWindowBuffer<>();
+        sut.configure("time",300);
         sut.addData(now - 100, element1);
         sut.addData(now - 200, element2);
         sut.addData(now - 500, element3);
@@ -50,14 +53,15 @@ public class TimeWindowCollectorTest {
         String element3 = "TeSt3";
 
         long now = System.currentTimeMillis();
-        TimeWindowCollector<String> sut = new TimeWindowCollector<>(300);
+        TimeWindowBuffer<String> sut = new TimeWindowBuffer<>();
+        sut.configure("time",300);
         sut.addData(now - 100, element1);
         sut.addData(now - 200, element2);
         sut.addData(now - 500, element3);
 
         assertEquals(2, sut.getData().size());
-        assertEquals(element1, sut.getDataList().get(0));
-        assertEquals(element2, sut.getDataList().get(1));
+        assertEquals(element1, ((List<String>)sut.getData()).get(0));
+        assertEquals(element2, ((List<String>)sut.getData()).get(1));
     }
 
 

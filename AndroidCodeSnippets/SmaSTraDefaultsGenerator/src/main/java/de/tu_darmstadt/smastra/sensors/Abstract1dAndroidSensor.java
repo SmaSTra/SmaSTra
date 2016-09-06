@@ -98,6 +98,13 @@ public abstract class Abstract1dAndroidSensor implements SensorEventListener ,de
         this.samplingPeriodUs = ConfigParserUtils.parseInt(config.get(CONFIG_SAMPLING_RATE), this.samplingPeriodUs);
     }
 
+    @Override
+    public void configure(String key, Object value) {
+        if(CONFIG_SAMPLING_RATE.equals(key)){
+            this.samplingPeriodUs = ConfigParserUtils.parseInt(value, this.samplingPeriodUs);
+        }
+    }
+
     /**
      * Gets the last Data received.
      * @return the last data.

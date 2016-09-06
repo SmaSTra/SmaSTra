@@ -55,6 +55,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
 
     }
 
@@ -85,6 +86,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
     }
 
 
@@ -106,6 +108,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
     }
 
 
@@ -128,6 +131,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
     }
 
 
@@ -153,6 +157,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
     }
 
 
@@ -179,6 +184,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
 
         @SensorStart public void testStart() {}
         @SensorStop public void testStop() {}
@@ -207,6 +213,7 @@ public class SensorParserTest {
         @Override public void start(){}
         @Override public void stop(){}
         @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
     }
 
 }

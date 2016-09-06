@@ -1,4 +1,4 @@
-package de.tu_darmstadt.smastra.generator.sensor;
+package de.tu_darmstadt.smastra.generator.buffer;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,23 +9,21 @@ import java.util.List;
 import java.util.Set;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
-import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.BufferGet;
+import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
 import de.tu_darmstadt.smastra.markers.elements.Configuration;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
-import de.tu_darmstadt.smastra.markers.elements.SensorStart;
-import de.tu_darmstadt.smastra.markers.elements.SensorStop;
-import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
+import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
 
 /**
  * Parses a class to a bunch of SmaSTra Sensors.
  *
  * @author Tobias Welther
  */
-public class SmaSTraClassSensorParser {
+public class SmaSTraClassBufferParser {
 
 
     /**
@@ -33,27 +31,24 @@ public class SmaSTraClassSensorParser {
      * @param clazz to read from.
      * @return the Transactions
      */
-    public static SmaSTraSensor readFromClass(Class<?> clazz){
+    public static SmaSTraBuffer readFromClass(Class<?> clazz){
         if(clazz == null) return null;
 
         //Read the class:
-        if(!isSensor(clazz)) return null;
+        if(!isBuffer(clazz)) return null;
 
         try{
-            SmaSTraSensorBuilder builder = new SmaSTraSensorBuilder();
+            SmaSTraBufferBuilder builder = new SmaSTraBufferBuilder();
             builder.setClass(clazz);
 
             builder.setDisplayName(readDisplayName(clazz));
-            builder.setDataMethodName(readDataMethodName(clazz));
+            builder.setBufferGetMethodName(readBufferGetMethodName(clazz));
+            builder.setBufferAddMethodName(readBufferAddMethodName(clazz));
             builder.setDescription(readDescription(clazz));
-            builder.setOutput(readOutput(clazz));
             builder.setAndroidPermissions(readNeededPermissions(clazz));
             builder.addNeededClass(readNeededClasses(clazz));
 
             builder.addConfigurationElements(readConfigElements(clazz));
-
-            builder.setStartMethod(readStartMethod(clazz));
-            builder.setStopMethod(readStopMethod(clazz));
 
            return builder.build();
         }catch(ElementGenerationFailedException exp){
@@ -63,39 +58,6 @@ public class SmaSTraClassSensorParser {
         return null;
     }
 
-    /**
-     * Reads the start method from the Class passed.
-     * @return the name of the start Method.
-     */
-    private static String readStartMethod(Class<?> clazz) {
-        //Check for Super-Definitions:
-        while(clazz != null && clazz != Object.class){
-            for(Method method : clazz.getMethods()){
-                if(method.isAnnotationPresent(SensorStart.class)) return method.getName();
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return null;
-    }
-
-    /**
-     * Reads the stop method from the Class passed.
-     * @return the name of the Stop Method.
-     */
-    private static String readStopMethod(Class<?> clazz) {
-        //Check for Super-Definitions:
-        while(clazz != null && clazz != Object.class){
-            for(Method method : clazz.getMethods()){
-                if(method.isAnnotationPresent(SensorStop.class)) return method.getName();
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return null;
-    }
 
     /**
      * Reads the needed Permissions from the Class.
@@ -122,10 +84,28 @@ public class SmaSTraClassSensorParser {
      * @param clazz to parse
      * @return the name of the Method.
      */
-    private static String readDataMethodName(Class<?> clazz) {
+    private static String readBufferGetMethodName(Class<?> clazz) {
         while(clazz != null && clazz != Object.class){
             for(Method method : clazz.getMethods()){
-                if(method.isAnnotationPresent(SensorOutput.class)) return method.getName();
+                if(method.isAnnotationPresent(BufferGet.class)) return method.getName();
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return null;
+    }
+
+    /**
+     * Reads the Data Method from the Class.
+     * <br>If not found, null is returned.
+     * @param clazz to parse
+     * @return the name of the Method.
+     */
+    private static String readBufferAddMethodName(Class<?> clazz) {
+        while(clazz != null && clazz != Object.class){
+            for(Method method : clazz.getMethods()){
+                if(method.isAnnotationPresent(BufferAdd.class)) return method.getName();
             }
 
             clazz = clazz.getSuperclass();
@@ -140,8 +120,8 @@ public class SmaSTraClassSensorParser {
      * @param clazz to check.
      * @return true if is sensor.
      */
-    private static boolean isSensor(Class<?> clazz) {
-        return clazz != null && Sensor.class.isAssignableFrom(clazz) && clazz.isAnnotationPresent(SensorConfig.class);
+    private static boolean isBuffer(Class<?> clazz) {
+        return clazz != null && Buffer.class.isAssignableFrom(clazz) && clazz.isAnnotationPresent(BufferInfo.class);
     }
 
     /**
@@ -150,27 +130,8 @@ public class SmaSTraClassSensorParser {
      * @return the displayName.
      */
     private static String readDisplayName(Class<?> clazz) {
-        SensorConfig sensorConfig = clazz.getAnnotation(SensorConfig.class);
+        BufferInfo sensorConfig = clazz.getAnnotation(BufferInfo.class);
         return sensorConfig == null ? null : sensorConfig.displayName();
-    }
-
-    /**
-     * Reads an Output from the Sensor-Class passed.
-     * @param clazz to read from.
-     * @return the read Output.
-     */
-    private static Output readOutput(Class<?> clazz) {
-        while(clazz != null && clazz != Object.class) {
-            for (Method method : clazz.getMethods()) {
-                if (method.getAnnotation(SensorOutput.class) != null) {
-                    return new Output(method.getReturnType());
-                }
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return null;
     }
 
 
@@ -179,7 +140,7 @@ public class SmaSTraClassSensorParser {
      * @return the read Description or 'None' if none given.
      */
     private static String readDescription(Class<?> clazz) {
-        SensorConfig sensorConfig = clazz.getAnnotation(SensorConfig.class);
+        BufferInfo sensorConfig = clazz.getAnnotation(BufferInfo.class);
         return sensorConfig == null ? "None" : sensorConfig.description();
     }
 
@@ -218,7 +179,7 @@ public class SmaSTraClassSensorParser {
      * @param classToInspect to read from.
      * @return a list of all Elements present.
      */
-    private static List<ConfigurationElement> readConfigElements(Class<? extends Object> classToInspect){
+    private static List<ConfigurationElement> readConfigElements(Class<?> classToInspect){
         if(classToInspect == null) return new ArrayList<>();
 
         List<ConfigurationElement> elements = new ArrayList<>();

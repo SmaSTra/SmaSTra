@@ -42,6 +42,9 @@ public class AndroidChargerSensor implements Sensor {
     @Override
     public void configure(Map<String, Object> configuration) {}
 
+    @Override
+    public void configure(String key, Object value) {}
+
 
     /**
      * Gets the Status of the Charger.

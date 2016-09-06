@@ -24,4 +24,11 @@ public interface Sensor {
      * @param configuration to use.
      */
     void configure(Map<String,Object> configuration);
+
+    /**
+     * Sets the configuration wanted.
+     * @param key to use.
+     * @param value to set
+     */
+    void configure(String key, Object value);
 }
