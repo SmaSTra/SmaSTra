@@ -2,16 +2,17 @@ package de.tu_darmstadt.smastra.math;
 
 import java.util.Collection;
 
-import de.tu_darmstadt.smastra.collectors.WindowCollection;
+import de.tu_darmstadt.smastra.buffers.FixedWindowSizeBuffer;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 /**
  * This class does math functions with collections of 3d-Data.
  * @author Tobias Welther
  */
-@NeedsOtherClass( {Math3d.class, Vector3d.class, WindowCollection.class} )
+@NeedsOtherClass( {Math3d.class, Vector3d.class} )
 public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
 
@@ -55,7 +56,7 @@ public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interf
      * @return the mean of the data.
      */
     @Transformation(displayName = "Vectors mean Window")
-    public static Vector3d mean(WindowCollection<? extends  Vector3d> toMean){
+    public static Vector3d mean(Buffer<? extends  Vector3d> toMean){
         return mean(toMean.getData());
     }
 
@@ -66,7 +67,7 @@ public class Math3dCollections implements de.tu_darmstadt.smastra.markers.interf
      * @return the mean of the data.
      */
     @Transformation(displayName = "Vectors variance Collection")
-    public static Vector3d variance(WindowCollection<? extends  Vector3d> toVariance){
+    public static Vector3d variance(Buffer<? extends  Vector3d> toVariance){
         return variance(toVariance.getData());
     }
 

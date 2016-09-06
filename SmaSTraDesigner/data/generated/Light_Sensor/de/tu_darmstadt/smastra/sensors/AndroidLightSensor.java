@@ -13,8 +13,8 @@ import static android.hardware.Sensor.TYPE_LIGHT;
 public class AndroidLightSensor extends Abstract1dAndroidSensor {
 
 
-    public AndroidLightSensor(Context context, int samplingPeriodUs) {
-        super(context, TYPE_LIGHT, samplingPeriodUs);
+    public AndroidLightSensor(Context context) {
+        super(context, TYPE_LIGHT);
     }
 
 }

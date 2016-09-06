@@ -13,8 +13,8 @@ import static android.hardware.Sensor.TYPE_PROXIMITY;
 public class AndroidProximitySensor extends Abstract1dAndroidSensor {
 
 
-    public AndroidProximitySensor(Context context, int samplingPeriodUs) {
-        super(context, TYPE_PROXIMITY, samplingPeriodUs);
+    public AndroidProximitySensor(Context context) {
+        super(context, TYPE_PROXIMITY);
     }
 
 }

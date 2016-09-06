@@ -1,12 +1,19 @@
-package de.tu_darmstadt.smastra.collectors;
+package de.tu_darmstadt.smastra.buffers;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.BufferGet;
+import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
+import de.tu_darmstadt.smastra.markers.elements.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
+import de.tu_darmstadt.smastra.utils.ConfigParserUtils;
 
 /**
  * This is a window which is used for timed collections.
@@ -15,14 +22,18 @@ import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
  *
  * @author Tobias Welther
  */
-@NeedsOtherClass(WindowCollection.class)
-public class TimeWindowCollector <T> implements WindowCollection<T> {
+@Configuration(elements =  {
+        @ConfigurationElement(key = TimeWindowBuffer.TIME_PATH, configClass = Integer.class, description = "The time in MS that is buffered.")
+})
+@BufferInfo(displayName = "TimeWindowBuffer", description = "A buffer capturing over time.")
+public class TimeWindowBuffer<T> implements Buffer<T> {
 
+    static final String TIME_PATH = "time";
 
     /**
      * The Time in MS to keep.
      */
-    private final long timeForWindow;
+    private long timeForWindow = 2000;
 
     /**
      * The List of data to use.
@@ -30,11 +41,7 @@ public class TimeWindowCollector <T> implements WindowCollection<T> {
     private final List<TimeWrappedObject> data = new LinkedList<>();
 
 
-    public TimeWindowCollector(long timeForWindow) {
-        this.timeForWindow = timeForWindow;
-    }
-
-
+    @BufferAdd
     @Override
     public void addData(T element) {
         addData(System.currentTimeMillis(), element);
@@ -58,15 +65,9 @@ public class TimeWindowCollector <T> implements WindowCollection<T> {
         }
     }
 
-
+    @BufferGet
     @Override
     public Collection<T> getData() {
-        return getDataList();
-    }
-
-
-    @Override
-    public List<T> getDataList() {
         List<T> data = new ArrayList<>();
         long now = System.currentTimeMillis();
         synchronized (this.data){
@@ -88,6 +89,18 @@ public class TimeWindowCollector <T> implements WindowCollection<T> {
         return data;
     }
 
+
+    @Override
+    public void configure(Map<String, Object> configuration) {
+        this.timeForWindow = ConfigParserUtils.parseInt(configuration.get(TIME_PATH), 2000);
+    }
+
+    @Override
+    public void configure(String key, Object value) {
+        if(TIME_PATH.equals(key)){
+            this.timeForWindow = ConfigParserUtils.parseInt(value, 2000);
+        }
+    }
 
     /**
      * Small inner class that wraps an Object with a timestamp.

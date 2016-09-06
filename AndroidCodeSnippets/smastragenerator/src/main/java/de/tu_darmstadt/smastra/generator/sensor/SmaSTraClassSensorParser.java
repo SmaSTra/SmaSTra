@@ -33,7 +33,7 @@ public class SmaSTraClassSensorParser {
      * @param clazz to read from.
      * @return the Transactions
      */
-    public static SmaSTraSensor readFromClass(Class<? extends Sensor> clazz){
+    public static SmaSTraSensor readFromClass(Class<?> clazz){
         if(clazz == null) return null;
 
         //Read the class:

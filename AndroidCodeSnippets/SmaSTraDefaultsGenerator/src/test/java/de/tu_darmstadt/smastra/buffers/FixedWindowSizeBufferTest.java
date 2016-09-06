@@ -1,8 +1,8 @@
-package de.tu_darmstadt.smastra.collectors;
-
-import junit.framework.Assert;
+package de.tu_darmstadt.smastra.buffers;
 
 import org.junit.Test;
+
+import java.util.List;
 
 import static junit.framework.Assert.*;
 
@@ -10,7 +10,7 @@ import static junit.framework.Assert.*;
  * Test for Fixed Window Collectors.
  * @author Tobias Welther
  */
-public class FixedWindowSizeCollectorTest {
+public class FixedWindowSizeBufferTest {
 
 
 
@@ -18,7 +18,7 @@ public class FixedWindowSizeCollectorTest {
     public void testAddingItemWorks(){
         String element = "TeSt";
 
-        FixedWindowSizeCollector<String> sut = new FixedWindowSizeCollector<>(10);
+        FixedWindowSizeBuffer<String> sut = new FixedWindowSizeBuffer<>();
         sut.addData(element);
 
         assertEquals(1, sut.getData().size());
@@ -32,7 +32,8 @@ public class FixedWindowSizeCollectorTest {
         String element2 = "TeSt2";
         String element3 = "TeSt3";
 
-        FixedWindowSizeCollector<String> sut = new FixedWindowSizeCollector<>(2);
+        FixedWindowSizeBuffer<String> sut = new FixedWindowSizeBuffer<>();
+        sut.configure("size",2);
         sut.addData(element1);
         sut.addData(element2);
         sut.addData(element3);
@@ -48,14 +49,15 @@ public class FixedWindowSizeCollectorTest {
         String element2 = "TeSt2";
         String element3 = "TeSt3";
 
-        FixedWindowSizeCollector<String> sut = new FixedWindowSizeCollector<>(2);
+        FixedWindowSizeBuffer<String> sut = new FixedWindowSizeBuffer<>();
+        sut.configure("size",2);
         sut.addData(element1);
         sut.addData(element2);
         sut.addData(element3);
 
         assertEquals(2, sut.getData().size());
-        assertEquals(element2, sut.getDataList().get(0));
-        assertEquals(element3, sut.getDataList().get(1));
+        assertEquals(element2, ((List<String>)sut.getData()).get(0));
+        assertEquals(element3, ((List<String>)sut.getData()).get(1));
     }
 
 

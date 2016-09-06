@@ -66,6 +66,9 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     @Override
     public void configure(Map<String, Object> configuration) {}
 
+    @Override
+    public void configure(String key, Object value) {}
+
 
     /**
      * Gets the last GPS data.
