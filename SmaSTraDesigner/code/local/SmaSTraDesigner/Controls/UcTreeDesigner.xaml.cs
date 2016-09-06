@@ -21,6 +21,7 @@
     using SmaSTraDesigner.BusinessLogic;
     using BusinessLogic.classhandler;
     using BusinessLogic.nodes;
+    using Support;
 
     // TODO: (PS) Comment this.
     // TODO: (PS) Adapt for dynamic size changes for canvas.
@@ -861,6 +862,13 @@
 
             //At end -> Remove old ones!
             foreach (Node old in nodes) RemoveNode(old);
+
+            DialogCombinedName dialog = new DialogCombinedName();
+            dialog.ResponseText = newNode.Name;
+            if (dialog.ShowDialog() == true && dialog.ResponseText.Length > 0)
+            {
+                newNode.Name = dialog.ResponseText;
+            }
         }
 
 

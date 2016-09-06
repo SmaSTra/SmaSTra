@@ -88,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\Support\DialogCombinedName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\UcDataSourceViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -136,6 +140,9 @@
     <Compile Include="BusinessLogic\NodeProperties.cs" />
     <Compile Include="Controls\Support\CustomDragDropHelper.cs" />
     <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
+    <Compile Include="Controls\Support\DialogCombinedName.xaml.cs">
+      <DependentUpon>DialogCombinedName.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">
       <DependentUpon>UcDataSourceViewer.xaml</DependentUpon>
     </Compile>
