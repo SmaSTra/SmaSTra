@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.BufferGet;
 import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
 import de.tu_darmstadt.smastra.markers.elements.Configuration;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
@@ -39,6 +41,7 @@ public class TimeWindowBuffer<T> implements Buffer<T> {
     private final List<TimeWrappedObject> data = new LinkedList<>();
 
 
+    @BufferAdd
     @Override
     public void addData(T element) {
         addData(System.currentTimeMillis(), element);
@@ -62,7 +65,7 @@ public class TimeWindowBuffer<T> implements Buffer<T> {
         }
     }
 
-
+    @BufferGet
     @Override
     public Collection<T> getData() {
         List<T> data = new ArrayList<>();

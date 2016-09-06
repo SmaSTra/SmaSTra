@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import de.tu_darmstadt.smastra.generator.buffer.SmaSTraBuffer;
+import de.tu_darmstadt.smastra.generator.buffer.SmaSTraBufferSerializer;
 import de.tu_darmstadt.smastra.generator.buffer.SmaSTraClassBufferParser;
 import de.tu_darmstadt.smastra.generator.sensor.SmaSTraClassSensorParser;
 import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
@@ -41,6 +42,7 @@ public class ElementGenerator {
             //Register Serializers:
             .registerTypeAdapter(SmaSTraTransformation.class, new SmaSTraTransformationSerializer())
             .registerTypeAdapter(SmaSTraSensor.class, new SmaSTraSensorSerializer())
+            .registerTypeAdapter(SmaSTraBuffer.class, new SmaSTraBufferSerializer())
 
             //Set the Rest of the config:
             .setPrettyPrinting()
