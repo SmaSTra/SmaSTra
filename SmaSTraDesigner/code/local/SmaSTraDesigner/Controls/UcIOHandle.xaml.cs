@@ -160,7 +160,16 @@
 		/// </summary>
 		public DataType DataType
 		{
-			get { return this.DataContext as DataType; }
+			get {
+                if (this.IsInput)
+                {
+                    if (this.Node.InputIOData.Count > 0)
+                    {
+                        return this.Node.InputIOData[InputIndex].Type as DataType;
+                    } else { return null;}
+                }
+                else { return this.Node.OutputIOData.Type as DataType; }
+            }
 		}
 
 		/// <summary>
@@ -450,15 +459,14 @@
                 return;
             }
             Point center = new Point(this.ActualWidth / 2, this.ActualHeight / 2);
-            try
-            {
                 Point centerRelativeToNodeViewer = this.TransformToAncestor(treeDesigner.cnvBackground).Transform(center);
                 Position = centerRelativeToNodeViewer;
-            }
-            catch (InvalidOperationException)
-            {
-                LayoutUpdated -= UcIOHandle_LayoutUpdated;
-            }
+        }
+
+        public void unregisterHandlers()
+        {
+            DataContextChanged -= OnDataContextChanged;
+            this.LayoutUpdated -= UcIOHandle_LayoutUpdated;
         }
 
         #endregion not sorted yet

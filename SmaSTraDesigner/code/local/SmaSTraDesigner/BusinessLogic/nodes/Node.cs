@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
     using classhandler;
+    using System.Collections.ObjectModel;
 
 
     /// <summary>
@@ -150,7 +151,13 @@
 		/// <returns>A clone of this node.</returns>
 		public virtual object Clone()
 		{
-			return this.MemberwiseClone();
+			Node clone = (Node)this.MemberwiseClone();
+            clone.InputIOData = new ObservableCollection<IOData>();
+            foreach(IOData ioData in this.InputIOData)
+            {
+                clone.InputIOData.Add(new IOData(ioData.Type, " "));
+            }
+            return clone;
 		}
 
 		/// <summary>
@@ -160,6 +167,12 @@
 		/// <param name="newValue">The new value.</param>
 		protected virtual void OnClassChanged(NodeClass oldValue, NodeClass newValue)
 		{
+            InputIOData.Clear();
+            foreach(DataType inputType in newValue.InputTypes)
+            {
+                InputIOData.Add(new IOData(inputType, " "));
+            }
+            OutputIOData = new IOData(newValue.OutputType, null);
 		}
 
 		public override string ToString()
@@ -184,5 +197,41 @@
 		}
 
         #endregion methods
+
+        #region not sorted yet
+
+        private IOData outputIOData;
+        public IOData OutputIOData
+        {
+            get
+            {
+                return outputIOData;
+            }
+            set
+            {
+                if(outputIOData != value)
+                {
+                    outputIOData = value;
+                }
+            }
+        }
+
+        private ObservableCollection<IOData> inputIOData = new ObservableCollection<IOData>();
+        public ObservableCollection<IOData> InputIOData
+        {
+            get
+            {
+                return inputIOData;
+            }
+            set
+            {
+                if (inputIOData != value)
+                {
+                    inputIOData = value;
+                }
+            }
+        }
+
+        #endregion not sorted yet
     }
 }

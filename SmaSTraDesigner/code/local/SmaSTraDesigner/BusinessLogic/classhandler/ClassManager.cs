@@ -447,7 +447,7 @@
 				}
 				catch (Exception ex)
 				{
-                    MessageBox.Show("Error in loading", "Could not load Element in: \n" + path + "\nSkipping this element.");
+                    MessageBox.Show("Could not load Element "+ dirName + " in:" + "\n" + path + "\nSkipping this element.", "Error in loading");
 					//throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
 				}
 			}

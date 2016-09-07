@@ -94,7 +94,7 @@
 		public void SetInput(int index, Node inputNode)
 		{
 			if (this.Class == null)
-			{//TODO: start debugging here
+			{
 				throw new InvalidOperationException("This transformation has no set class.");
 			}
             if(this.inputNodes[index] != null && inputNode != null)

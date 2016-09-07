@@ -16,6 +16,7 @@
     using Support;
     using System.ComponentModel;
     using System.Collections.ObjectModel;
+    using BusinessLogic.classhandler;
 
     /// <summary>
     /// Base class for the different node viewers.
@@ -273,34 +274,6 @@
 
         #region not sorted yet
 
-        private ObservableCollection<IOTypeAndValue> nodeViewerIOTypeAndValue = new ObservableCollection<IOTypeAndValue>();
-        public ObservableCollection<IOTypeAndValue> NodeViewerIOTypeAndValue
-        {
-            get
-            {
-                return nodeViewerIOTypeAndValue;
-            }
-            set
-            {
-                nodeViewerIOTypeAndValue = value;
-            }
-        }
-
-        private void updateNodeViewerIOTypesAndValues()
-        {
-            NodeViewerIOTypeAndValue.Clear();
-            if (IoHandles != null)
-            {
-                foreach (UcIOHandle handle in IoHandles)
-                {
-                    if (handle.IsInput)
-                    {
-                        NodeViewerIOTypeAndValue.Add(new IOTypeAndValue(handle.DataTypeName, handle.DataTypeName));
-                    }
-                }
-            }
-        }
-
         public static readonly DependencyProperty IsLibraryProperty =
             DependencyProperty.Register("IsLibraryProperty", typeof(bool), typeof(UcNodeViewer));
 
@@ -354,7 +327,7 @@
                 UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this, true);
                 if (treeDesigner != null)
                 {
-                    updateNodeViewerIOTypesAndValues();
+                 //   updateNodeViewerIOData();
                     treeDesigner.onUcNodeViewer_LoadedCompletely();
                     Singleton<NodeProperties>.Instance.onUcNodeViewer_LoadedCompletely(this);
                 }
@@ -362,52 +335,5 @@
         }
 
         #endregion not sorted yet
-    }
-
-    public class IOTypeAndValue : INotifyPropertyChanged
-    {
-        private string ioTypeName;
-        private string ioValue;
-        public string IOTypeName
-        {
-            get { return this.ioTypeName; }
-            set
-            {
-                if (this.ioTypeName != value)
-                {
-                    this.ioTypeName = value;
-                    this.NotifyPropertyChanged("IOTypeName");
-                }
-            }
-        }
-
-        public string IOValue
-        {
-            get { return this.ioValue; }
-            set
-            {
-                if (this.ioValue != value)
-                {
-                    this.ioValue = value;
-                    this.NotifyPropertyChanged("IOValue");
-                }
-            }
-        }
-
-        public IOTypeAndValue(string name, string value)
-        {
-            IOTypeName = name;
-            IOValue = value;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
-
-
     }
 }

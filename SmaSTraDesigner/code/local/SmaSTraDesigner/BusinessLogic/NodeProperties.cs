@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.Controls;
+﻿using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,40 +72,32 @@ namespace SmaSTraDesigner.BusinessLogic
             }
         }
 
-        public UcIOHandle[] NodeViewerIOHandles
-        {
-            get
-            {
-                if (NodeViewer != null)
-                {
-                    return NodeViewer.IoHandles;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        //public UcIOHandle[] NodeViewerIOHandles
+        //{
+        //    get
+        //    {
+        //        if (NodeViewer != null)
+        //        {
+        //            return NodeViewer.IoHandles;
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //}
 
-        public ObservableCollection<IOTypeAndValue> NodeViewerIOTypeAndValue
+        public ObservableCollection<IOData> NodeInputIOData
         {
             get
             {
                 if (NodeViewer != null)
                 {
-                    return NodeViewer.NodeViewerIOTypeAndValue;
+                    return NodeViewer.Node.InputIOData;
                 } else
                 {
                     return null;
                 }
-            }
-            set
-            {
-                if (value != NodeViewer.NodeViewerIOTypeAndValue)
-                {
-                    NodeViewer.NodeViewerIOTypeAndValue = value;
-                }
-                this.NotifyPropertyChanged("NodeViewerIOTypeAndValue");
             }
         }
 
@@ -197,7 +190,7 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             this.NotifyPropertyChanged("NodeClass");
             this.NotifyPropertyChanged("NodeClassDescription");
-            this.NotifyPropertyChanged("NodeViewerIOTypeAndValue");
+            this.NotifyPropertyChanged("NodeInputIOData");
             this.NotifyPropertyChanged("NodeClassOutput");
 
 

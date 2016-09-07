@@ -715,6 +715,7 @@
 			nodeViewer.CustomDrag -= this.UcNodeViewer_StartedMoving;
 			foreach (var handle in nodeViewer.IoHandles)
 			{
+                handle.unregisterHandlers();
 				this.registeredIoHandles.Remove(handle);
 			}
 		}
