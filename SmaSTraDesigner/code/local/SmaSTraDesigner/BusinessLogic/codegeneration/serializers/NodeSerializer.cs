@@ -48,7 +48,7 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             else
             {
                 //Normal node:
-                newNode = getNode(nodeType, classManager);
+                newNode = classManager.GetNewNodeForType(nodeType);
                 if (newNode == null) return null;
                 newNode = (Node)newNode.Clone();
                 newNode.Name = nodeName;
@@ -71,16 +71,6 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             Node output = nodes.FirstOrDefault<Node>(n => n.Name.Equals(outputName));
             if (input == null || output == null) return null;
             return new Connection(output, input, inputIndex);
-        }
-
-
-        private Node getNode(String type, ClassManager classManager)
-        {
-            return classManager.BaseConversions
-                .Concat<Node>(classManager.BaseDataSources)
-                .Concat<Node>(classManager.BaseTransformations)
-                .Concat<Node>(classManager.BaseCombinedNodes)
-                .FirstOrDefault(x => x.Class.Name == type);
         }
 
 

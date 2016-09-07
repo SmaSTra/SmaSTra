@@ -183,7 +183,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                     if (subNode == null || !nodes.Contains(subNode))
                     {
                         inputs.Add(nodeClass.InputTypes[i]);
-                        connections.Add(new SimpleConnection(node.Name, "input"+input, i));
+                        connections.Add(new SimpleConnection(node.Name, "input"+input, input));
                         input++;
                     }else{
                         connections.Add(new SimpleConnection(node.Name, subNode.Name, i));
@@ -195,9 +195,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             DataType output = root.Class.OutputType;
             CombinedNode baseNode = new CombinedNode();
             baseNode.Name = Name;
+            baseNode.outputNode = root;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, baseNode, subNodes, connections, output, inputs.ToArray());
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, baseNode, subNodes, connections, output, root.Name, inputs.ToArray());
             finalNodeClass.Description = Description;
             finalNodeClass.DisplayName = Name;
 
@@ -231,17 +232,29 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
             //Generate the inputs:
             JsonObject inputs = new JsonObject();
-            for (int i = 0; i < toSave.InputTypes.Count(); i++) inputs.Add("arg" + i, new JsonPrimitive(toSave.InputTypes[i].Name));
+            for (int i = 0; i < toSave.InputTypes.Count(); i++)
+            {
+                inputs.Add("arg" + i, new JsonPrimitive(toSave.InputTypes[i].Name));
+            }
 
             //Generate the Connections:
             dynamic[] connections = new dynamic[toSave.Connections.Count()];
-            for (int i = 0; i < connections.Count(); i++) connections[i] = toSave.Connections.ElementAt(i);
+            for (int i = 0; i < connections.Count(); i++)
+            {
+                connections[i] = toSave.Connections.ElementAt(i);
+            }
+
             json.connections = connections;
 
             //Generate the Nodes:
             dynamic[] nodes = new dynamic[toSave.SubElements.Count()];
-            for (int i = 0; i < toSave.SubElements.Count(); i++) nodes[i] = toSave.SubElements.ElementAt(i);
+            for (int i = 0; i < toSave.SubElements.Count(); i++)
+            {
+                nodes[i] = toSave.SubElements.ElementAt(i);
+            }
+
             json.subElements = nodes;
+            json.outputNodeName = toSave.OutputNodeName;
 
 
 

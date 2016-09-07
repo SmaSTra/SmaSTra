@@ -526,6 +526,9 @@
             if (currentNode is CombinedNode)
             {
                 CombinedNode combinedNode = (CombinedNode)currentNode;
+                //Build up the Combined Node from the Origin:
+
+
                 //TODO add this somehow.
                 return code;
             }
