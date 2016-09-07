@@ -54,6 +54,11 @@
         private const string JSON_PROP_SUB_ELEMENTS = "subElements";
 
         /// <summary>
+        /// Name of the path for the Output Node in a Combined Node.
+        /// </summary>
+        private const string JSON_PROP_OUTPUT_NODE_NAME = "outputNodeName";
+
+        /// <summary>
         /// Filename for metadata.
         /// </summary>
         private const string METADATA_FILENAME = "metadata.json";
@@ -213,7 +218,7 @@
             {
                 if (this.baseCombinedNodes == null)
                 {
-                    this.baseCombinedNodes = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length > 1)
+                    this.baseCombinedNodes = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode)
                         .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
                 }
 
@@ -282,7 +287,7 @@
 		/// <param name="displayName">Node class's display name for the GUI.</param>
 		/// <param name="description"></param>
 		/// <returns>The interpreted node class.</returns>
-		public NodeClass AddClass(string name, string type, string outputType, string[] inputTypes, string displayName = null, string description = null, List<SimpleSubNode> subNodes = null, List<SimpleConnection> connections = null)
+		public NodeClass AddClass(string name, string type, string outputType, string[] inputTypes, string displayName = null, string description = null, List<SimpleSubNode> subNodes = null, List<SimpleConnection> connections = null, string outputNodeName = null)
 		{
 			NodeClass result;
 			if (this.classes.TryGetValue(name, out result))
@@ -336,7 +341,7 @@
                     break;
 
                 case NodeType.Combined:
-                    result = new CombinedNodeClass(nodeType, name, baseNode, subNodes, connections, this.AddDataType(outputType), actualInputTypes)
+                    result = new CombinedNodeClass(nodeType, name, baseNode, subNodes, connections, this.AddDataType(outputType), outputNodeName, actualInputTypes)
                     {
                         DisplayName = displayName,
                         Description = description
@@ -416,9 +421,14 @@
 						description = value == null ? "No description" : value.ReadAs<string>();
 					}
 
-                    //If combined, read this!
+                    //If combined, read these:
+                    string outputNodeName = null;
+                    if (jso.TryGetValue(JSON_PROP_OUTPUT_NODE_NAME, out value))
+                    {
+                        outputNodeName = value.ReadAs<string>();
+                    }
+                    
                     List<SimpleConnection> connections = null;
-
                     if (jso.TryGetValue(JSON_PROP_CONNECTIONS, out value))
                     {
                         connections = new List<SimpleConnection>();
@@ -443,15 +453,32 @@
                     }
 
                     // Use data to create new node class.
-                    this.AddClass(dirName, type, jso["output"].ReadAs<string>(), inputTypes, displayName, description, subElements, connections);
+                    this.AddClass(dirName, type, jso["output"].ReadAs<string>(), inputTypes, displayName, description, subElements, connections, outputNodeName);
 				}
 				catch (Exception ex)
 				{
-                    MessageBox.Show("Error in loading", "Could not load Element in: \n" + path + "\nSkipping this element.");
+                    MessageBox.Show("Could not load " + dirName + " in: \n" + dir + "\nSkipping this element.", "Error in loading " + dirName);
 					//throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
 				}
 			}
 		}
+
+        /// <summary>
+        /// Gets the First node found with that type name.
+        /// Node types should be unique.
+        /// Returns null if none found.
+        /// </summary>
+        /// <param name="typeName">To search.</param>
+        /// <returns>The first found node with that name, null if none found.</returns>
+        public Node GetNewNodeForType(String typeName)
+        {
+            return this.BaseConversions
+                .Concat<Node>(BaseDataSources)
+                .Concat<Node>(BaseTransformations)
+                .Concat<Node>(BaseCombinedNodes)
+                .FirstOrDefault(x => x.Class.Name == typeName);
+        }
+
 
 		/// <summary>
 		/// Raises the PropertyChanged event.
