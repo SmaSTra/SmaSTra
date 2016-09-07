@@ -115,6 +115,14 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
             }
         }
 
+        public override object Clone()
+        {
+            CombinedNode clonedNode = (CombinedNode)base.Clone();
+            clonedNode.clazz = this.clazz;
+            clonedNode.inputNodes = this.inputNodes.ToArray();
+            return clonedNode;
+        }
+
         #endregion methods
 
     }
