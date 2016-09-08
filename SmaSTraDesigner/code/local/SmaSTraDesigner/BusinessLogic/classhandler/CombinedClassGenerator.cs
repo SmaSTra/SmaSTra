@@ -239,10 +239,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             json.type = "combined";
 
             //Generate the inputs:
-            JsonObject inputs = new JsonObject();
+            Dictionary<string,string> inputs = new Dictionary<string, string>();
             for (int i = 0; i < toSave.InputTypes.Count(); i++)
             {
-                inputs.Add("arg" + i, new JsonPrimitive(toSave.InputTypes[i].Name));
+                inputs.Add("arg" + i, toSave.InputTypes[i].Name);
+            }
+
+            //do not forget to set it:
+            if (toSave.InputTypes.Count() > 0) {
+                json.input = inputs;
             }
 
             //Generate the Connections:
