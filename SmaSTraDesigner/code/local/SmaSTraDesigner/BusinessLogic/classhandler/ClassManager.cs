@@ -435,7 +435,7 @@
                         foreach (dynamic obj in jso[JSON_PROP_CONNECTIONS])
                         {
                             dynamic obj2 = obj.Value;
-                            connections.Add(new SimpleConnection(obj2.firstNode.ToString(), obj2.secondNode.ToString(), Int32.Parse(obj2.position.ToString())));
+                            connections.Add(new SimpleConnection(obj2.firstNode.ReadAs<string>().Replace("\"",""), obj2.secondNode.ReadAs<string>().Replace("\"",""), Int32.Parse(obj2.position.ToString())));
                         }
                     }
 
@@ -447,7 +447,7 @@
                         {
                             dynamic obj2 = obj.Value.Properties;
                             Dictionary<string, string> properties = new Dictionary<string,string>();
-                            foreach (KeyValuePair<string, JsonValue> kvp in obj2) properties.Add(kvp.Key, kvp.Value.ToString());
+                            foreach (KeyValuePair<string, JsonValue> kvp in obj2) properties.Add(kvp.Key.Replace("\"",""), kvp.Value.ReadAs<string>().Replace("\"",""));
                             subElements.Add(new SimpleSubNode(properties));
                         }
                     }

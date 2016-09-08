@@ -1,5 +1,6 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic.classhandler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,11 +15,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         /// The nodes included in the Combined Nodes.
         /// </summary>
         public Node[] includedNodes{ get; private set; }
-
-        /// <summary>
-        /// The conenctions included in the Combined Node.
-        /// </summary>
-        public Connection[] includedConnections{ get; private set; }
 
         /// <summary>
         /// The output node to link.
@@ -60,7 +56,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
 
                     ClassManager classManager = Singleton<ClassManager>.Instance;
                     this.includedNodes = new Node[ownClass.SubElements.Count];
-                    this.includedConnections = new Connection[ownClass.Connections.Count];
                     this.inputNodes = new Node[ownClass.Connections.Count(c => c.secondNode.StartsWith("input"))];
                     this.inputConnections = new Dictionary<Node, int>();
 
@@ -68,7 +63,14 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                     //Generate the Nodes:
                     foreach (SimpleSubNode simpleNode in ownClass.SubElements)
                     {
-                        this.includedNodes[i] = simpleNode.GetAsRealNode(classManager);
+                        Node subNode = simpleNode.GetAsRealNode(classManager);
+                        if (subNode == null)
+                        {
+                            //We have some types that are not registered?!?
+                            Console.WriteLine("Could not load Node: " + simpleNode.Properties.FirstOrDefault(n => n.Key == "TYPE").Value);
+                        }
+
+                        this.includedNodes[i] = subNode;
                         i++;
                     }
 
@@ -93,20 +95,20 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         //We have an internal connection:
                         if(secondNode != null && firstNode != null)
                         {
-                            Transformation transformation = secondNode as Transformation;
-                            CombinedNode combined = secondNode as CombinedNode;
+                            Transformation transformation = firstNode as Transformation;
+                            CombinedNode combined = firstNode as CombinedNode;
 
                             //We connect a Transformation:
                             if(transformation != null)
                             {
-                                transformation.InputNodes[index] = secondNode;
+                                transformation.InputNodes[index] = firstNode;
                                 continue;
                             }
 
                             //We connect a CombinedNode:
                             if (combined != null)
                             {
-                                combined.inputNodes[index] = secondNode;
+                                combined.inputNodes[index] = firstNode;
                                 continue;
                             }
                         }
@@ -118,8 +120,8 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         public override object Clone()
         {
             CombinedNode clonedNode = (CombinedNode)base.Clone();
-            clonedNode.clazz = this.clazz;
-            clonedNode.inputNodes = this.inputNodes.ToArray();
+            //We call this for initing!
+            clonedNode.OnClassChanged(null, this.clazz);
             return clonedNode;
         }
 
