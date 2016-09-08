@@ -472,11 +472,12 @@
         /// <returns>The first found node with that name, null if none found.</returns>
         public Node GetNewNodeForType(String typeName)
         {
-            return this.BaseConversions
+            Node node = this.BaseConversions
                 .Concat<Node>(BaseDataSources)
                 .Concat<Node>(BaseTransformations)
                 .Concat<Node>(BaseCombinedNodes)
                 .FirstOrDefault(x => x.Class.Name == typeName);
+            return node == null ? node : (Node)node.Clone();
         }
 
 

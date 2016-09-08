@@ -37,20 +37,28 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         private static Node[] GetInputsOfNode(Node node)
         {
-            if (node == null) return new Node[0];
-            if (node is DataSource) return new Node[0];
-
-            if (node is OutputNode)
+            if (node == null || node is DataSource)
             {
-                OutputNode outNode = (OutputNode)node;
-                if (outNode.InputNode != null) return new Node[] { outNode.InputNode };
                 return new Node[0];
             }
 
-            if (node is Transformation)
+            OutputNode nodeAsOut;
+            Transformation nodeAsTransform;
+            CombinedNode nodeAsCombined;
+            if ((nodeAsOut = node as OutputNode) != null)
             {
-                Transformation outNode = (Transformation)node;
-                return outNode.InputNodes;
+                if (nodeAsOut.InputNode != null) return new Node[] { nodeAsOut.InputNode };
+                return new Node[0];
+            }
+
+            if ((nodeAsTransform = node as Transformation) != null)
+            {
+                return nodeAsTransform.InputNodes;
+            }
+
+            if((nodeAsCombined = node as CombinedNode) != null)
+            {
+                return nodeAsCombined.inputNodes;
             }
 
             return new Node[0];
