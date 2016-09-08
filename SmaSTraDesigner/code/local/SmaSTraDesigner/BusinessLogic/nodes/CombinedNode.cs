@@ -43,6 +43,9 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         /// <param name="newValue">The new value.</param>
         protected override void OnClassChanged(NodeClass oldValue, NodeClass newValue)
         {
+            //Do not forget to call super to set DATA.
+            base.OnClassChanged(oldValue, newValue);
+
             if (newValue != null && oldValue != newValue)
             {
                 //First update the Input nodes as Size:
