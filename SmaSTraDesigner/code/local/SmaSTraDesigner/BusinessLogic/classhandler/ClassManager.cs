@@ -320,6 +320,7 @@
 					break;
 
                 case NodeType.Combined:
+                    actualInputTypes = inputTypes.Select(this.AddDataType).ToArray();
                     baseNode = new CombinedNode();
                     break;
 			}
@@ -404,9 +405,9 @@
 
 					// Read necessary data from JSON.
 					string type = jso[JSON_PROP_TYPE].ReadAs<string>();
-					string[] inputTypes = GetNodeType(type) == NodeType.Transformation ?
-						jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray() :
-						null;
+                    string[] inputTypes = GetNodeType(type) == NodeType.Sensor ?
+                        null :
+                        jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray();
 
 					JsonValue value;
 					string displayName = null;
