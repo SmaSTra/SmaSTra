@@ -429,17 +429,22 @@
             this.Tree.Connections.Add(connection.Value);
 			Transformation iNodeAsTransformation;
 			OutputNode iNodeAsOutputNode;
+            CombinedNode iNodeAsCombined;
 			if ((iNodeAsTransformation = connection.Value.InputNode as Transformation) != null)
 			{
 				iNodeAsTransformation.SetInput(connection.Value.InputIndex, connection.Value.OutputNode);
             }
+            else if ((iNodeAsCombined = connection.Value.InputNode as CombinedNode) != null)
+            {
+                iNodeAsCombined.SetInput(connection.Value.InputIndex, connection.Value.OutputNode);
+            }
             else if ((connection.Value.InputNode as OutputNode) != null)
-			{
+            {
                 iNodeAsOutputNode = Tree.OutputNode;
                 iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
             }
-            
-			Line newLine = new Line()
+
+            Line newLine = new Line()
 			{
 				DataContext = connection.Value,
 				Stroke = getColorFromType(iHandle.DataTypeName),
@@ -672,12 +677,17 @@
 
 				Node iNode = connection.Value.InputNode;
 				Transformation iNodeAsTransformation;
+                CombinedNode iNodeAsCombined;
 				OutputNode iNodeAsOutputNode;
 				if ((iNodeAsTransformation = iNode as Transformation) != null)
 				{
 					iNodeAsTransformation.SetInput(connection.Value.InputIndex, null);
 				}
-				else if ((iNodeAsOutputNode = iNode as OutputNode) != null)
+                else if ((iNodeAsCombined = iNode as CombinedNode) != null)
+                {
+                    iNodeAsCombined.SetInput(connection.Value.InputIndex, null);
+                }
+                else if ((iNodeAsOutputNode = iNode as OutputNode) != null)
 				{
 					iNodeAsOutputNode.InputNode = null;
 				}

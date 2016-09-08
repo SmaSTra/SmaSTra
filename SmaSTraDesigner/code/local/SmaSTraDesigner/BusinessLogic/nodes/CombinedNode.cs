@@ -125,6 +125,21 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
             return clonedNode;
         }
 
+        /// <summary>
+        /// Creates the Input on that index.
+        /// </summary>
+        /// <param name="inputIndex">to set</param>
+        /// <param name="outputNode">to set</param>
+        internal void SetInput(int inputIndex, Node inputNode)
+        {
+            if(inputIndex < 0 || inputIndex >= inputNodes.Count())
+            {
+                throw new InvalidOperationException("Got input index: " + inputIndex + " but only got " + inputNodes.Count() + " Slots.");
+            }
+
+            inputNodes[inputIndex] = inputNode;
+        }
+
         #endregion methods
 
     }
