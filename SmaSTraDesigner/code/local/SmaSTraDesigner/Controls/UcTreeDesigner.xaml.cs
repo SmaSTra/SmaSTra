@@ -139,7 +139,9 @@
 			UcNodeViewer newValue = (UcNodeViewer)e.NewValue;
 			UcNodeViewer oldValue = (UcNodeViewer)e.OldValue;
 
-			if (!subject.changingSelectedNodeViewers)
+            Singleton<NodeProperties>.Instance.ActiveNode = newValue != null ? newValue.Node : null;
+
+            if (!subject.changingSelectedNodeViewers)
 			{
 				subject.SelectedNodeViewers.CollectionChanged -= subject.SelectedNodeViewers_CollectionChanged;
 
@@ -160,7 +162,6 @@
 				subject.AdjustZIndex();
 
 				subject.SelectedNodeViewers.CollectionChanged += subject.SelectedNodeViewers_CollectionChanged;
-               Singleton<NodeProperties>.Instance.NodeViewer = newValue;
 
                 System.Diagnostics.Debug.Print("SelectedNodeViewer: " + newValue);
             }
@@ -967,6 +968,7 @@
                 {
                     this.RemoveNode(nodeViewer);
                 }
+            SelectedNodeViewer = null;
         }
 
 

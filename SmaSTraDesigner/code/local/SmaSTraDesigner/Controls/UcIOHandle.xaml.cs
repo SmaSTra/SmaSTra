@@ -459,8 +459,15 @@
                 return;
             }
             Point center = new Point(this.ActualWidth / 2, this.ActualHeight / 2);
+            try {
                 Point centerRelativeToNodeViewer = this.TransformToAncestor(treeDesigner.cnvBackground).Transform(center);
                 Position = centerRelativeToNodeViewer;
+            }
+            catch (InvalidOperationException exeption)
+            { // this Exception only occured while debug breakpoints are set. Should not occur during normal usage
+                System.Diagnostics.Debug.Print("ERROR while TransformToAncestor: " + exeption.Message);
+                return;
+            }
         }
 
         public void unregisterHandlers()

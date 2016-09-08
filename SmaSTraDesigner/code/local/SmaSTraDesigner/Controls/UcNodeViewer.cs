@@ -327,9 +327,7 @@
                 UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this, true);
                 if (treeDesigner != null)
                 {
-                 //   updateNodeViewerIOData();
                     treeDesigner.onUcNodeViewer_LoadedCompletely();
-                    Singleton<NodeProperties>.Instance.onUcNodeViewer_LoadedCompletely(this);
                 }
             }
         }

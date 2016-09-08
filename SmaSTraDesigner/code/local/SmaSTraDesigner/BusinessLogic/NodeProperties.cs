@@ -20,20 +20,23 @@ namespace SmaSTraDesigner.BusinessLogic
 
         
 
-        private UcNodeViewer nodeViewer = null;
-        public UcNodeViewer NodeViewer
+        private Node activeNode = null;
+        public Node ActiveNode
         {
-            get { return nodeViewer; }
+            get { return activeNode; }
             set {
-                if (NodeViewer != null)
+                if (ActiveNode != null)
                 {
-                    nodeViewer.Node.PropertyChanged -= OnNodePropertyChanged;
+                    activeNode.PropertyChanged -= OnNodePropertyChanged;
                 }
-                    nodeViewer = value;
-                    NodeViewer.Node.PropertyChanged += OnNodePropertyChanged;
-                    updateNodeProperties(NodeViewer.Node);
-                    OnNodeViewerChanged(NodeViewer);
-                    this.NotifyPropertyChanged("NodeViewer");
+                    activeNode = value;
+                if (ActiveNode != null)
+                {
+                    ActiveNode.PropertyChanged += OnNodePropertyChanged;
+                }
+                    updateNodeProperties(ActiveNode);
+                    OnActiveNodeChanged(ActiveNode);
+                    this.NotifyPropertyChanged("ActiveNode");
             }
         }
 
@@ -41,9 +44,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (nodeViewer != null)
+                if (ActiveNode != null)
                 {
-                    return nodeViewer.Node.Name;
+                    return ActiveNode.Name;
                 }
                 else
                 {
@@ -52,8 +55,10 @@ namespace SmaSTraDesigner.BusinessLogic
             }
             set
             {
-                nodeViewer.Node.Name = value;
-                this.NotifyPropertyChanged("NodeName");
+                if (ActiveNode != null) {
+                    ActiveNode.Name = value;
+                    this.NotifyPropertyChanged("NodeName");
+                }
             }
         }
 
@@ -61,9 +66,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (nodeViewer != null && nodeViewer.Node.Class != null)
+                if (ActiveNode != null && ActiveNode.Class != null)
                 {
-                    return nodeViewer.Node.Class.DisplayName;
+                    return ActiveNode.Class.DisplayName;
                 }
                 else
                 {
@@ -91,9 +96,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (NodeViewer != null)
+                if (ActiveNode != null)
                 {
-                    return NodeViewer.Node.InputIOData;
+                    return ActiveNode.InputIOData;
                 } else
                 {
                     return null;
@@ -105,9 +110,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (NodeViewer != null && NodeViewer.Node.Class != null && NodeViewer.Node.Class.OutputType != null)
+                if (ActiveNode != null && ActiveNode.Class != null && ActiveNode.Class.OutputType != null)
                 {
-                        return NodeViewer.Node.Class.OutputType.Name.Split('.').Last();
+                        return ActiveNode.Class.OutputType.Name.Split('.').Last();
                 }
                 else
                 {
@@ -120,9 +125,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (nodeViewer != null)
+                if (ActiveNode != null)
                 {
-                    return nodeViewer.Node.PosX;
+                    return ActiveNode.PosX;
                 }
                 else
                 {
@@ -131,9 +136,9 @@ namespace SmaSTraDesigner.BusinessLogic
             }
             set
             {
-                if (value != nodeViewer.Node.PosX)
+                if (ActiveNode != null && value != ActiveNode.PosX)
                 {
-                    nodeViewer.Node.PosX = value;
+                    ActiveNode.PosX = value;
                 }
                 this.NotifyPropertyChanged("NodePositionX");
             }
@@ -143,9 +148,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (nodeViewer != null)
+                if (ActiveNode != null)
                 {
-                    return nodeViewer.Node.PosY;
+                    return ActiveNode.PosY;
                 }
                 else
                 {
@@ -154,9 +159,9 @@ namespace SmaSTraDesigner.BusinessLogic
             }
             set
             {
-                if (value != nodeViewer.Node.PosY)
+                if (ActiveNode != null && value != ActiveNode.PosY)
                 {
-                    nodeViewer.Node.PosY = value;
+                    ActiveNode.PosY = value;
                 }
                 this.NotifyPropertyChanged("NodePositionY");
 
@@ -167,9 +172,9 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             get
             {
-                if (nodeViewer != null && nodeViewer.Node.Class != null)
+                if (ActiveNode != null && ActiveNode.Class != null)
                 {
-                    return nodeViewer.Node.Class.Description;
+                    return ActiveNode.Class.Description;
                 }
                 else
                 {
@@ -182,11 +187,11 @@ namespace SmaSTraDesigner.BusinessLogic
 
         protected virtual void OnNodePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Node node = sender as Node;
+            Node node = sender as Node; //TODO: Update only relevant properties instead of all
             updateNodeProperties(node);
         }
 
-        protected virtual void OnNodeViewerChanged(UcNodeViewer nodeViewer)
+        protected virtual void OnActiveNodeChanged(Node node)
         {
             this.NotifyPropertyChanged("NodeClass");
             this.NotifyPropertyChanged("NodeClassDescription");
@@ -198,16 +203,16 @@ namespace SmaSTraDesigner.BusinessLogic
 
         private void updateNodeProperties(Node node)
         {
-            NodeName = node.Name;
-            NodePositionX = node.PosX;
-            NodePositionY = node.PosY;
-        }
-
-        public void onUcNodeViewer_LoadedCompletely(UcNodeViewer loadedNodeViewer)
-        {
-            if (loadedNodeViewer.Equals(NodeViewer))
+            if (node != null)
             {
-                NodeViewer = loadedNodeViewer;
+                NodeName = node.Name;
+                NodePositionX = node.PosX;
+                NodePositionY = node.PosY;
+            } else
+            {
+                this.NotifyPropertyChanged("NodeName");
+                this.NotifyPropertyChanged("NodePositionX");
+                this.NotifyPropertyChanged("NodePositionY");
             }
         }
 
