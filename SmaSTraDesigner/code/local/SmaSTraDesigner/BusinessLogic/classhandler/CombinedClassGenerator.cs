@@ -191,10 +191,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                     if (subNode == null || !nodes.Contains(subNode))
                     {
                         inputs.Add(nodeClass.InputTypes[i]);
-                        connections.Add(new SimpleConnection(node.Name, "input"+input, input));
+                        connections.Add(new SimpleConnection(node.NodeUUID, "input"+input, input));
                         input++;
                     }else{
-                        connections.Add(new SimpleConnection(node.Name, subNode.Name, i));
+                        connections.Add(new SimpleConnection(node.NodeUUID, subNode.NodeUUID, i));
                     }
                 }
             }
@@ -206,7 +206,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             baseNode.outputNode = root;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, baseNode, subNodes, connections, output, root.Name, inputs.ToArray());
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, baseNode, subNodes, connections, output, root.NodeUUID, inputs.ToArray());
             finalNodeClass.Description = Description;
             finalNodeClass.DisplayName = Name;
 
@@ -245,10 +245,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 inputs.Add("arg" + i, toSave.InputTypes[i].Name);
             }
 
-            //do not forget to set it:
-            if (toSave.InputTypes.Count() > 0) {
-                json.input = inputs;
-            }
+            json.input = inputs;
 
             //Generate the Connections:
             dynamic[] connections = new dynamic[toSave.Connections.Count()];
@@ -267,7 +264,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             }
 
             json.subElements = nodes;
-            json.outputNodeName = toSave.OutputNodeName;
+            json.outputNodeName = toSave.OutputNodeUUID;
 
 
 

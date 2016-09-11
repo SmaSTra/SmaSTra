@@ -10,6 +10,7 @@
         public OutputNode()
         {
             this.Name = "OutputNode";
+            this.NodeUUID = System.Guid.NewGuid().ToString();
         }
 
 

@@ -54,6 +54,7 @@
         {
             Transformation clonedNode = (Transformation)base.Clone();
             clonedNode.InputNodes = this.InputNodes;
+
             return clonedNode;
         }
 

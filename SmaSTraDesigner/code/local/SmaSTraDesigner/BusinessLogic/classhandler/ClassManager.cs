@@ -394,20 +394,22 @@
                 //Check if metadata file exists first!
                 if (!File.Exists(metaDataFilePath)) continue;
 
-				try
-				{
-					// Load JSON file as JsonObject.
-					JsonObject jso;
-					using (var stream = File.OpenRead(metaDataFilePath))
-					{
-						jso = (JsonObject)JsonObject.Load(stream);
-					}
+                try
+                {
+                    // Load JSON file as JsonObject.
+                    JsonObject jso;
+                    using (var stream = File.OpenRead(metaDataFilePath))
+                    {
+                        jso = (JsonObject)JsonObject.Load(stream);
+                    }
 
-					// Read necessary data from JSON.
-					string type = jso[JSON_PROP_TYPE].ReadAs<string>();
-                    string[] inputTypes = GetNodeType(type) == NodeType.Sensor ?
-                        null :
-                        jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray();
+                    // Read necessary data from JSON.
+                    string type = jso[JSON_PROP_TYPE].ReadAs<string>();
+                    string[] inputTypes = new string[0];
+                    if (jso.ContainsKey(JSON_PROP_INPUT))
+                    {
+                        inputTypes = jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray();
+                    }
 
 					JsonValue value;
 					string displayName = null;

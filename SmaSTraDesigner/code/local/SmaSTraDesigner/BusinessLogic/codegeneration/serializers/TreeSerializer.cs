@@ -76,7 +76,7 @@ namespace SmaSTraDesigner.BusinessLogic
             newNodes = new List<Node>();
             newConnections = new List<Connection>();
 
-            dynamic json = JObject.Parse(File.ReadAllText(targetFile));
+            JObject json = JObject.Parse(File.ReadAllText(targetFile));
 
             //Seems like this is the only way this is synthactically correct....
             //Read Nodes:

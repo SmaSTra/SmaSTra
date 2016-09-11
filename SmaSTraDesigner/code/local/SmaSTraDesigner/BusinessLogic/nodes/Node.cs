@@ -20,10 +20,10 @@
 		/// </summary>
 		protected NodeClass clazz;
 
-		/// <summary>
-		/// This node's display name (is used as an identifier).
-		/// </summary>
-		private string name = null;
+        /// <summary>
+        /// This node's display name (is used as an identifier).
+        /// </summary>
+        private string name = null;
 
 		/// <summary>
 		/// This node's X position on the transformation tree's graph (spread out on a 2D plane).
@@ -47,6 +47,11 @@
 		#endregion events
 
 		#region properties
+
+        /// <summary>
+        /// This is the Unique identifier for the Node.
+        /// </summary>
+        public string NodeUUID{ get; protected set; }
 
 		/// <summary>
 		/// Gets or sets the Class property value.
@@ -152,6 +157,8 @@
 		public virtual object Clone()
 		{
 			Node clone = (Node)this.MemberwiseClone();
+            clone.NodeUUID = Guid.NewGuid().ToString();
+
             clone.InputIOData = new ObservableCollection<IOData>();
             foreach(IOData ioData in this.InputIOData)
             {
@@ -172,7 +179,11 @@
             {
                 InputIOData.Add(new IOData(inputType, " "));
             }
+
             OutputIOData = new IOData(newValue.OutputType, null);
+
+            //Set a new UUID for the node:
+            this.NodeUUID = Guid.NewGuid().ToString();
 		}
 
 		public override string ToString()
@@ -195,6 +206,19 @@
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+
+        /// <summary>
+        /// Forces a Change of the Node UUID.
+        /// THIS SHOULD ONLY BE USED FOR DESERIALIZATION!!!
+        /// </summary>
+        /// <param name="NewUUID">To set.</param>
+        public void ForceUUID(string NewUUID)
+        {
+            if (NewUUID != null)
+            {
+                this.NodeUUID = NewUUID;
+            }
+        }
 
         #endregion methods
 

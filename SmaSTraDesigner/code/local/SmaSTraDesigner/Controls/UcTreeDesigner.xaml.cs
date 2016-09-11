@@ -813,12 +813,19 @@
             //Get a name for the New Element:
             MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
-            
-            //TODO ADD New Window for Name!
-            //
-            //
 
-            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+            DialogCombinedName dialog = new DialogCombinedName();
+            dialog.ResponseText = "New Name";
+            string newName = "";
+            if (dialog.ShowDialog() == true && dialog.ResponseText.Length > 0)
+            {
+                newName = dialog.ResponseText;
+            }
+
+            //No name => Return:
+            if (newName.Count() <= 0) return;
+
+            CombinedClassGenerator generator = new CombinedClassGenerator(newName, nodes);
             if (!generator.IsConnected()) return;
 
             NodeClass generatedClass = generator.GenerateClass();
@@ -874,13 +881,6 @@
 
             //At end -> Remove old ones!
             foreach (Node old in nodes) RemoveNode(old);
-
-            DialogCombinedName dialog = new DialogCombinedName();
-            dialog.ResponseText = newNode.Name;
-            if (dialog.ShowDialog() == true && dialog.ResponseText.Length > 0)
-            {
-                newNode.Name = dialog.ResponseText;
-            }
         }
 
 

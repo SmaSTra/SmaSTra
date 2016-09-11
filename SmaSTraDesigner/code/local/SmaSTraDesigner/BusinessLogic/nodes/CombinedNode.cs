@@ -1,5 +1,6 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +74,12 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                             Console.WriteLine("Could not load Node: " + simpleNode.Properties.FirstOrDefault(n => n.Key == "TYPE").Value);
                         }
 
+                        //We have our output node:
+                        if(subNode != null && subNode.NodeUUID == ownClass.OutputNodeUUID)
+                        {
+                            this.outputNode = subNode;
+                        }
+
                         this.includedNodes[i] = subNode;
                         i++;
                     }
@@ -85,8 +92,8 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         int index = connection.position;
 
                         //Search for the 2 nodes:
-                        Node firstNode = this.includedNodes.FirstOrDefault(n => n.Name == first);
-                        Node secondNode = this.includedNodes.FirstOrDefault(n => n.Name == second);
+                        Node firstNode = this.includedNodes.FirstOrDefault(n => n.NodeUUID == first);
+                        Node secondNode = this.includedNodes.FirstOrDefault(n => n.NodeUUID == second);
 
                         //We have an Input node:
                         if (second.StartsWith("input"))
@@ -116,6 +123,9 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                             }
                         }
                     }
+
+                    //After building from base -> We unify the UUIDs, so they are now unique again!
+                    includedNodes.forEach(n => n.ForceUUID(Guid.NewGuid().ToString()));
                 }
             }
         }
