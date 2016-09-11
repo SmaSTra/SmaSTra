@@ -526,10 +526,36 @@
             if (currentNode is CombinedNode)
             {
                 CombinedNode combinedNode = (CombinedNode)currentNode;
-                //Build up the Combined Node from the Origin:
 
+                List<string>[] temp;
+                System.Diagnostics.Debug.Print("starting foreach in combinedNode: " + combinedNode.Name);
+                temp = traverse(combinedNode.outputNode, visited, numbers, false, targetDirectory);
+                imports.AddRange(temp[0]);
+                inits.AddRange(temp[1]);
+                transforms.AddRange(temp[2]);
+                returnValues.AddRange(temp[3]);
+                functionCalls.AddRange(temp[4]);
 
-                //TODO add this somehow.
+                List<string>[] dictionaryValue = new List<string>[2];
+                dictionaryValue[0] = returnValues;
+                dictionaryValue[1] = functionCalls;
+
+                visited.Add(currentNode, dictionaryValue);
+
+                if (first)
+                {
+                    functionCalls.Clear();
+                    functionCalls.Add(numbers[0].ToString()); //at this point we are at the last node before returning all code snippets. numbers[0] will contain the number of transformations.
+                    string sourceDirectory = "generated\\";
+                    FinalizeCopy(sourceDirectory, targetDirectory);
+                }
+
+                code[0] = imports;
+                code[1] = inits;
+                code[2] = transforms;
+                code[3] = returnValues;
+                code[4] = functionCalls;
+
                 return code;
             }
 

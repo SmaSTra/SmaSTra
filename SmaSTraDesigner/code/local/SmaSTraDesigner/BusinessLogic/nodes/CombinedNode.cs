@@ -111,14 +111,14 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                             //We connect a Transformation:
                             if(transformation != null)
                             {
-                                transformation.InputNodes[index] = firstNode;
+                                transformation.SetInput(index, secondNode);
                                 continue;
                             }
 
                             //We connect a CombinedNode:
                             if (combined != null)
                             {
-                                combined.inputNodes[index] = firstNode;
+                                combined.SetInput(index, secondNode);
                                 continue;
                             }
                         }
