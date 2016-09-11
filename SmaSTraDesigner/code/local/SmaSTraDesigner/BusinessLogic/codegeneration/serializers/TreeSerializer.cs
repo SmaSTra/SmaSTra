@@ -23,6 +23,8 @@ namespace SmaSTraDesigner.BusinessLogic
         private static List<Node> newNodes = new List<Node>();
         private static List<Connection> newConnections = new List<Connection>();
 
+        public static bool isDeserializing = false;
+
 
         public static void Serialize(TransformationTree transformationTree, string targetFile)
         {
@@ -61,6 +63,7 @@ namespace SmaSTraDesigner.BusinessLogic
 
         public static void Deserialize(TransformationTree transformationTree, string targetFile)
         {
+            isDeserializing = true;
             tree = transformationTree;
             //Read the singleton ClassManager.
             ClassManager classManager = Singleton<ClassManager>.Instance;
@@ -110,13 +113,17 @@ namespace SmaSTraDesigner.BusinessLogic
                 }
                 else treeDesigner.AddNode(node, false);
             }
-            
-            addConnections();
+
+            //   addConnections(); // UcTreeDesigner is now responsible for calling this method after all NodeViewers are loaded
         }
 
         internal static void addConnections()
         {
-            foreach (Connection connection in newConnections) tree.DesignTree.AddConnection(connection);
+            foreach (Connection connection in newConnections)
+            {
+                tree.DesignTree.AddConnection(connection);
+            }
+            isDeserializing = false;
         }
 
         private static void applyConnection(Connection connection)

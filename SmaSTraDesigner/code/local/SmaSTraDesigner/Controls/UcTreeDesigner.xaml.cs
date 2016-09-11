@@ -1050,9 +1050,10 @@
             }
             if (allNodeViewerLoadedCompletely)
             {
-                //TODO - Gerhard: This crashed Sometimes?!? Gerhard -> Schau mal bitte rein!
-                //Nach dem Laden -> Löschen -> irgendwas machen, z.b. Neues Element Rausziehen.
-                TreeSerilizer.addConnections();
+                if (TreeSerilizer.isDeserializing)
+                {
+                    TreeSerilizer.addConnections();
+                }
             }
         }
 
