@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SmaSTraDesigner.BusinessLogic;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +21,50 @@ namespace SmaSTraDesigner.Controls.Support
     /// </summary>
     public partial class DialogCreateCustomElement : Window
     {
+        private string elementName;
+        private DataType outputType;
+        private ObservableCollection<DataType> inputTypes;
+
+        public string ElementName
+        {
+            get
+            {
+                return elementName;
+            }
+            set
+            {
+                if(elementName != value)
+                elementName = value;
+            }
+        }
+
+        public DataType OutputType
+        {
+            get
+            {
+                return outputType;
+            }
+            set
+            {
+                if (outputType != value)
+                    outputType = value;
+            }
+        }
+
+        public ObservableCollection<DataType> InputTypes
+        {
+            get
+            {
+                return inputTypes;
+            }
+            set
+            {
+                if (inputTypes != value)
+                    inputTypes = value;
+            }
+        }
+
+
         public DialogCreateCustomElement()
         {
             InitializeComponent();

@@ -4,6 +4,7 @@
     using nodes;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.IO;
     using System.Json;
@@ -375,6 +376,11 @@
 
 			return this.dataTypes[dataTypeName];
 		}
+
+        public DataType[] getDataTypes()
+        {
+            return dataTypes.Values.ToArray();
+        }
 
 		/// <summary>
 		/// Load all node classes from a directory path.

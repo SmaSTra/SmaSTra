@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="Window1" Height="150" Width="300">
+        Title="Window1" Height="auto" Width="auto">
     <StackPanel>
-        
+        <Grid Height="50"></Grid>
+        <TextBlock Text="Enter a name for the new element" TextAlignment="Center" />
+        <TextBox x:Name="tboxNewElementName" />
+        <Button Content="OK" Width="100" />
     </StackPanel>
 </Window>
