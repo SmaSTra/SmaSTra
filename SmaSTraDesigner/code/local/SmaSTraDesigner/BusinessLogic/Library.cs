@@ -1,9 +1,15 @@
-﻿using SmaSTraDesigner.BusinessLogic.nodes;
+﻿using Common;
+using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.serializers;
+using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +19,8 @@ namespace SmaSTraDesigner.BusinessLogic
 {
     class Library : INotifyPropertyChanged
     {
+
+        private const string LIB_FILE_NAME = "SmaStraLib";
 
         private ObservableCollection<UcNodeViewer> libraryNodeViewerList = new ObservableCollection<UcNodeViewer>();
 
@@ -51,11 +59,24 @@ namespace SmaSTraDesigner.BusinessLogic
 
         public void Library_DragEnter(object sender, DragEventArgs e)
         {
-           
+
         }
 
         public void addLibraryNode(Node node)
         {
+            addLibraryNodeWithoutSaving(node);
+            saveLibrary();
+        }
+        
+
+
+        private void addLibraryNodeWithoutSaving(Node node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
             foreach (UcNodeViewer libraryNode in libraryNodeViewerList)
             {
                 if (node.Name.Equals(libraryNode.Node.Name))
@@ -92,9 +113,60 @@ namespace SmaSTraDesigner.BusinessLogic
             nodeViewer.IsLibrary = true;
         }
 
+
+        /// <summary>
+        /// Saves the library in a File.
+        /// </summary>
+        private void saveLibrary()
+        {
+            NodeSerializer serializer = new NodeSerializer();
+
+            JObject lib = new JObject();
+            JArray array = new JArray();
+            lib.Add("lib", array);
+
+            this.libraryNodeViewerList
+                .Select(n => (Node)n.DataContext)
+                .Select(serializer.serializeNode)
+                .forEach(array.Add);
+
+            File.WriteAllText(LIB_FILE_NAME, lib.ToString());
+        }
+
+
+        /// <summary>
+        /// Loads the Library from a file.
+        /// </summary>
+        public void loadLibrary()
+        {
+            this.libraryNodeViewerList.Clear();
+
+            if (!File.Exists(LIB_FILE_NAME))
+            {
+                return;
+            }
+
+            NodeSerializer serializer = new NodeSerializer();
+            ClassManager cManager = Singleton<ClassManager>.Instance;
+
+            JObject json = JObject.Parse(File.ReadAllText(LIB_FILE_NAME));
+            JToken arrayToken = new JObject();
+            json.TryGetValue("lib", out arrayToken);
+
+            JArray array = arrayToken as JArray;
+            if (array != null)
+            {
+                array
+                    .Select(n => serializer.deserializeNode(n as JObject, cManager))
+                    .forEach(addLibraryNode);
+            }
+        }
+
+
         public void removeLibraryNode(UcNodeViewer nodeViewer)
         {
             LibraryNodeViewerList.Remove(nodeViewer);
+            saveLibrary();
         }
 
         public void Library_Drop(object sender, DragEventArgs e)

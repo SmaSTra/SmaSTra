@@ -3,6 +3,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +13,14 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
     class NodeSerializer
     {
 
-        public ExpandoObject serializeNode(Node node)
+        public JObject serializeNode(Node node)
         {
-            dynamic obj = new ExpandoObject();
-            obj.NodeType = node is OutputNode ? "OutputNode" : node.Class.Name;
-            obj.NodeName = node.Name;
-            obj.PosX = node.PosX;
-            obj.PosY = node.PosY;
-            obj.NodeUUID = node.NodeUUID;
+            JObject obj = new JObject();
+            obj.Add("NodeType", node is OutputNode ? "OutputNode" : node.Class.Name);
+            obj.Add("NodeName", node.Name);
+            obj.Add("PosX", node.PosX);
+            obj.Add("PosY", node.PosY);
+            obj.Add("NodeUUID", node.NodeUUID);
 
             return obj;
         }
@@ -27,6 +28,8 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
 
         public Node deserializeNode(JObject obj, ClassManager classManager)
         {
+            if (obj == null || classManager == null) return null;
+
             String nodeType = obj.GetValueAsString("NodeType", null);
             String nodeName = obj.GetValueAsString("NodeName", nodeName = nodeType.Replace("_", " "));
             string uuid = obj.GetValueAsString("NodeUUID", Guid.NewGuid().ToString());

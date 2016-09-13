@@ -155,7 +155,9 @@
 			List<string> imports = code[0];
             //Do not forget to add Android context!
             imports.Add("android.content.Context");
-			imports = imports.Distinct().ToList();
+            imports.Add("de.tu_darmstadt.smastra.base.SmaSTraTreeExecutor");
+
+            imports = imports.Distinct().ToList();
 			string import = "";
 
             foreach (string s in imports)
