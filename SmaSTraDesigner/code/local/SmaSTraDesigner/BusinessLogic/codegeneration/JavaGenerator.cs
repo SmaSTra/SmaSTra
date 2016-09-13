@@ -338,15 +338,17 @@
 			foreach (string need in json["needs"])
 			{
 				imports.Add(need);
-				DirectoryCopy(sourceDirectory, targetDirectory, true);
 			}
 
             //First shorten classes:
             mainClass = minimizeToClass(mainClass);
             output = minimizeToClass(output);
 
-			//transforms
-			string transform = "";
+            //Fix copiing when no needs classes.
+            DirectoryCopy(sourceDirectory, targetDirectory, true);
+
+            //transforms
+            string transform = "";
 			string methodCall = "";
 			if (!first)
 			{
