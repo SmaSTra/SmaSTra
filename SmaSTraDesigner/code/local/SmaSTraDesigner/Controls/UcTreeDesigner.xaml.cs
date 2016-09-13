@@ -12,8 +12,6 @@
     using System.Windows.Media;
     using System.Windows.Shapes;
 
-    using Microsoft.VisualBasic;
-
     using Common;
     using Common.ExtensionMethods;
     using Common.Resources.Converters;

@@ -23,6 +23,8 @@
         {
             Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "generated"));
             Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "created"));
+
+            Singleton<Library>.Instance.loadLibrary();
         }
 
 		#endregion event handlers
