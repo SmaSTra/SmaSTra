@@ -7,9 +7,6 @@
         mc:Ignorable="d"
         Title="Window1" Height="150" Width="300">
     <StackPanel>
-        <Grid Height="50"></Grid>
-        <TextBlock Text="Enter a Name for the new Combined Node" TextAlignment="Center" />
-        <TextBox x:Name="ResponseTextBox" />
-        <Button Content="OK" Click="OK_Clicked" Width="100" />
+        
     </StackPanel>
 </Window>
