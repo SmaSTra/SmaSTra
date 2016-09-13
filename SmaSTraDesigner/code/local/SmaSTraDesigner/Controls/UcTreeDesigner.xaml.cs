@@ -20,6 +20,7 @@
     using BusinessLogic.classhandler;
     using BusinessLogic.nodes;
     using Support;
+    using BusinessLogic.utils;
 
     // TODO: (PS) Comment this.
     // TODO: (PS) Adapt for dynamic size changes for canvas.
@@ -808,6 +809,13 @@
             //Try to find the top root:
             var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).Distinct().ToList();
 
+            //Check if any nodes highlighted:
+            if (nodes.Empty()) return;
+
+            //Check if connected:
+            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+            if (!generator.IsConnected()) return;
+
             //Get a name for the New Element:
             MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
@@ -820,12 +828,11 @@
                 newName = dialog.ResponseText;
             }
 
+
             //No name => Return:
             if (newName.Count() <= 0) return;
 
-            CombinedClassGenerator generator = new CombinedClassGenerator(newName, nodes);
-            if (!generator.IsConnected()) return;
-
+            generator.Name = newName;
             NodeClass generatedClass = generator.GenerateClass();
             if (generatedClass == null) return;
 

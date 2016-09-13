@@ -177,7 +177,7 @@
             InputIOData.Clear();
             foreach(DataType inputType in newValue.InputTypes)
             {
-                InputIOData.Add(new IOData(inputType, " "));
+                InputIOData.Add(new IOData(inputType, ""));
             }
 
             OutputIOData = new IOData(newValue.OutputType, null);
