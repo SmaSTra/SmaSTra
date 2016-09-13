@@ -85,7 +85,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <summary>
         /// The Name to set.
         /// </summary>
-        public String Name { get; private set; }
+        public String Name { get; set; }
 
         /// <summary>
         /// The Description to set.

@@ -73,6 +73,17 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             }
         }
 
+
+        /// <summary>
+        /// Simple check if collection is empty.
+        /// </summary>
+        /// <typeparam name="T">To use in the Function / Collection</typeparam>
+        /// <param name="elements">To Iterate</param>
+        public static bool Empty<T>(this IEnumerable<T> elements)
+        {
+            return !elements.Any();
+        }
+
     }
 
 }
