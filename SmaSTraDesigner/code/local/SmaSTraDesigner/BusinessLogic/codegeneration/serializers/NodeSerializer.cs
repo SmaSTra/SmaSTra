@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Common;
+using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Json;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmaSTraDesigner.BusinessLogic.serializers
 {
@@ -21,6 +20,22 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             obj.Add("PosX", node.PosX);
             obj.Add("PosY", node.PosY);
             obj.Add("NodeUUID", node.NodeUUID);
+
+            JArray inputProperties = new JArray();
+            node.InputIOData
+                .Select(serialize)
+                .forEach(inputProperties.Add);
+            obj.Add("InputIOData", inputProperties);
+
+            return obj;
+        }
+
+
+        private JObject serialize(IOData data)
+        {
+            JObject obj = new JObject();
+            obj.Add("type", data.Type.Name);
+            obj.Add("value", data.Value);
 
             return obj;
         }
@@ -58,7 +73,28 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             newNode.PosY = posY;
             newNode.ForceUUID(uuid);
 
+            JArray ioDataArray = obj.GetValue("InputIOData", new JArray()) as JArray;
+            if(ioDataArray != null)
+            {
+                for(int i = 0; i < ioDataArray.Count; i++)
+                {
+                    IOData data = deserializeIOData(ioDataArray[i] as JObject);
+                    if (data != null) newNode.InputIOData[i].Value = data.Value;
+                }
+            }
+
             return newNode;
+        }
+
+        private IOData deserializeIOData(JObject obj)
+        {
+            if (obj == null) return null;
+
+            ClassManager cManager = Singleton<ClassManager>.Instance;
+            string typeName = obj.GetValueAsString("type", "");
+            string value = obj.GetValueAsString("value", "");
+
+            return new IOData(cManager.AddDataType(typeName), value);
         }
 
         public Connection? deserializeConnection(dynamic obj, IEnumerable<Node> nodes)
