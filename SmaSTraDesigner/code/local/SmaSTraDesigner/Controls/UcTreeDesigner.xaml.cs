@@ -956,15 +956,13 @@
                         }
                     }else
                     {
+                        MessageBox.Show("An empty name is not supported. Aborting.", "Abort Merging");
                         return;
                     }
                 }else
                 {
                     return;
                 }
-
-                //No name => Return:
-                if (string.IsNullOrWhiteSpace(newName)) return;
             }
 
             generator.Name = newName;
@@ -1010,7 +1008,7 @@
             {
                 //I hate Structs....
                 Connection? rootOutputConnection = Tree.Connections
-                    .Where((c) => c.InputNode == root)
+                    .Where((c) => c.OutputNode == root)
                     .Cast<Connection?>()
                     .FirstOrDefault();
 
