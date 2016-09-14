@@ -324,11 +324,6 @@
             if (IsLoaded && loadedallHandles)
             {
                 LoadedCompletely = true;
-                UcTreeDesigner treeDesigner = LayoutHelper.FindLogicalParent<UcTreeDesigner>(this, true);
-                if (treeDesigner != null)
-                {
-                    treeDesigner.onUcNodeViewer_LoadedCompletely();
-                }
             }
         }
 

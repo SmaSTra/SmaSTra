@@ -21,6 +21,8 @@
     using BusinessLogic.nodes;
     using Support;
     using BusinessLogic.utils;
+    using System.Diagnostics;
+    using System.Windows.Threading;
 
     // TODO: (PS) Comment this.
     // TODO: (PS) Adapt for dynamic size changes for canvas.
@@ -56,7 +58,7 @@
             if (!nodes.Any()) return true;
 
             //Check recursivcely:
-            foreach (Node input in GetInputsOfNode(root))
+            foreach (Node input in GetInputsOfNode(root, false))
             {
                 if (SubTreeContains(input, nodes)) return true;
             }
@@ -65,7 +67,7 @@
         }
 
 
-        private static List<Node> GetInputsOfNode(Node node)
+        private static List<Node> GetInputsOfNode(Node node, bool includeNull)
         {
             List<Node> result = new List<Node>();
             if (node == null) return result;
@@ -74,7 +76,7 @@
             if (node is OutputNode)
             {
                 OutputNode outNode = (OutputNode)node;
-                if (outNode.InputNode != null) result.Add(outNode.InputNode);
+                if (includeNull || outNode.InputNode != null) result.Add(outNode.InputNode);
                 return result;
             }
 
@@ -82,7 +84,7 @@
             {
                 Transformation outNode = (Transformation)node;
                 result.AddRange(outNode.InputNodes);
-                result.RemoveAll(item => item == null);
+                if(!includeNull) result.RemoveAll(item => item == null);
                 return result;
             }
 
@@ -207,6 +209,9 @@
         private ScaleTransform scaletransform;
         private int gridSize = 50; // TODO: Make to global variable
 
+        private UIConnectionRefresher connectionRefresher;
+        private DispatcherTimer timer;
+
         #endregion fields
 
         #region constructors
@@ -215,10 +220,18 @@
 		{
 			this.SelectedNodeViewers = new ObservableCollection<UcNodeViewer>();
 			this.SelectedNodeViewers.CollectionChanged += SelectedNodeViewers_CollectionChanged;
+            this.connectionRefresher = new UIConnectionRefresher(AddConnection);
 
             this.InitializeComponent();
 
-			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            //Start a timer to update the connections:
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Tick += timer_tick;
+            timer.Start();
+
+
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
 				this.Tree = new TransformationTree(this);
 
@@ -332,13 +345,10 @@
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
 
-            //TODO This is a temp FIX:
-            //This should actually not happen, but it does....
-            //Seems like the IO Handles from the Nodes directly added are not inited yet. :(
-            //Please fix this somehow...
-            //Probably somewhere else though... As in AddNode(Node node);
+            //Fix for Not inited Node Vierwers:
             if (oNode.IoHandles == null || iNode.IoHandles == null)
             {
+                connectionRefresher.AddPendingConnection(connection, iNode, oNode);
                 return;
             }
 
@@ -351,6 +361,13 @@
                 this.AddConnection(oHandle, iHandle, connection);
             }
 		}
+
+
+        void timer_tick(object sender, EventArgs e)
+        {
+            connectionRefresher.Tick();
+        }
+
 
 		public void AddNode(Node node, bool select = false)
 		{
@@ -840,7 +857,7 @@
             MessageBoxResult result = MessageBox.Show("Do you want to unmerge " + node.Name + "?", "Unmerge " + node.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
 
-            //Preserve the Connections:
+            //Preserve the input Connections:
             List<Connection> newConnections = new List<Connection>();
             for(int i = 0; i < node.inputNodes.Count(); i++)
             {
@@ -849,6 +866,17 @@
                 if (input != null && output != null)
                 {
                     newConnections.Add(new Connection(output, input, i));
+                }
+            }
+
+            //Build the internal Connections:
+            foreach(Node internalNode in node.includedNodes)
+            {
+                List<Node> inputs = GetInputsOfNode(internalNode, true);
+                for(int i = 0; i < inputs.Count(); i++)
+                {
+                    Node internalInput = inputs[i];
+                    if (internalInput != null) newConnections.Add(new Connection(internalInput, internalNode, i));
                 }
             }
 
@@ -906,23 +934,38 @@
 
             //Get a name for the New Element:
             IEnumerable<Node> nodes = this.SelectedNodeViewers.Select(v => v.Node).Distinct();
+            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+
             MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
 
-            DialogCombinedName dialog = new DialogCombinedName();
-            dialog.ResponseText = "New Name";
             string newName = "";
-            if (dialog.ShowDialog() == true && dialog.ResponseText.Length > 0)
+            while (newName == "")
             {
-                newName = dialog.ResponseText;
+                DialogCombinedName dialog = new DialogCombinedName();
+                dialog.ResponseText = "New Name";
+                if (dialog.ShowDialog() == true)
+                {
+                    if (!string.IsNullOrWhiteSpace(dialog.ResponseText))
+                    {
+                        newName = dialog.ResponseText;
+                        if (generator.ExistsName(newName))
+                        {
+                            MessageBox.Show("The name " + newName + " already exists. Please choose another one!", "Name taken");
+                            newName = "";
+                        }
+                    }else
+                    {
+                        return;
+                    }
+                }else
+                {
+                    return;
+                }
+
+                //No name => Return:
+                if (string.IsNullOrWhiteSpace(newName)) return;
             }
-
-
-            //No name => Return:
-            if (string.IsNullOrWhiteSpace(newName)) return;
-
-            //Get all selected Nodes:
-            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
 
             generator.Name = newName;
             NodeClass generatedClass = generator.GenerateClass();
@@ -947,7 +990,7 @@
             foreach (Node node in nodes)
             {
                 NodeClass nodeClass = node.Class;
-                List<Node> nodeInputs = GetInputsOfNode(node);
+                List<Node> nodeInputs = GetInputsOfNode(node, false);
                 
                 for (int i = 0; i < nodeInputs.Count(); i++)
                 {
@@ -1133,26 +1176,6 @@
             else
             {
                 SelectedNodeViewer = nodeViewer;
-            }
-        }
-
-        public void onUcNodeViewer_LoadedCompletely()
-        {
-            Boolean allNodeViewerLoadedCompletely = true;
-            foreach (UcNodeViewer nodeViewer in this.nodeViewers.Values)
-            {
-                if (!nodeViewer.LoadedCompletely)
-                {
-                    allNodeViewerLoadedCompletely = false;
-                    return;
-                }
-            }
-            if (allNodeViewerLoadedCompletely)
-            {
-                if (TreeSerilizer.isDeserializing)
-                {
-                    TreeSerilizer.addConnections();
-                }
             }
         }
 

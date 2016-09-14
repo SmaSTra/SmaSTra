@@ -294,6 +294,17 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             return null;
         }
 
+        /// <summary>
+        /// Returns true if the Name already exists.
+        /// </summary>
+        /// <param name="newName"></param>
+        /// <returns></returns>
+        internal bool ExistsName(string newName)
+        {
+            return File.Exists(Path.Combine("created", newName, "metadata.json"))
+                || File.Exists(Path.Combine("generated", newName, "metadata.json"));
+        }
+
         #endregion Methods
 
     }
