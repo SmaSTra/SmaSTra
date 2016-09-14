@@ -12,25 +12,111 @@ namespace SmaSTraDesigner.BusinessLogic.utils
     static class JsonExtensions
     {
 
-        public static JToken GetValue(this JObject obj, string key, JToken defaultValue)
+        public static JToken GetValue(this JObject obj, string key, JToken defaultValue = null)
         {
             JToken token = obj.GetValue(key);
             return token == null ? defaultValue : token;
         }
 
 
-        public static JObject GetValueAsJObject(this JObject obj, string key, JObject defaultValue)
+        public static JObject GetValueAsJObject(this JObject obj, string key, JObject defaultValue = null)
         {
             JObject token = obj.GetValue(key) as JObject;
             return token == null ? defaultValue : token;
         }
 
 
-        public static string GetValueAsString(this JObject obj, string key, string defaultValue)
+        public static JArray GetValueAsJArray(this JObject obj, string key, JArray defaultValue = null)
+        {
+            JArray token = obj.GetValue(key) as JArray;
+            return token == null ? defaultValue : token;
+        }
+
+
+        public static string GetValueAsString(this JObject obj, string key, string defaultValue = "")
         {
             JToken token = obj.GetValue(key);
             return token == null ? defaultValue : token.ToString();
         }
+
+
+        public static int GetValueAsInt(this JObject obj, string key, int defaultValue = 0)
+        {
+            JToken token = obj.GetValue(key);
+            if (token != null)
+            {
+                Int32.TryParse(token.ToString(), out defaultValue);
+            }
+
+            return defaultValue;
+        }
+
+
+        public static string[] GetValueAsStringArray(this JObject obj, string key, string[] defaultValue = null )
+        {
+            JArray array = obj.GetValue(key) as JArray;
+            return array == null ? defaultValue : array.CollectToStringArray();
+        }
+
+
+        /// <summary>
+        /// Collects an Json Array to a string[].
+        /// </summary>
+        /// <param name="array">To collect</param>
+        /// <returns>the String array. Returns an empty array if null.</returns>
+        public static string[] CollectToStringArray(this JArray array)
+        {
+            if (array == null) return new string[0];
+            return array
+                .Select(t => t.ToString())
+                .ToArray();
+        }
+
+        public static T[] Collect<T>(this JArray array, Func<JToken, T> func)
+        {
+            return array
+                .Select(t => func.Invoke(t))
+                .ToArray();
+        }
+        
+
+        public static IEnumerable<JObject> ToJObj(this JArray array)
+        {
+            return array
+                .Select(t => t as JObject);
+        }
+
+
+        /// <summary>
+        /// Creates a String -> String dict from an String -> Object dict.
+        /// </summary>
+        /// <param name="dic">To convert</param>
+        /// <returns>The converted Dict.</returns>
+        public static IDictionary<string, string> ToStringString(this IDictionary<string, JToken> dic)
+        {
+            Dictionary<string, string> newDict = new Dictionary<string, string>();
+            dic.forEach(e => newDict.Add(e.Key, e.Value.ToString()));
+
+            return newDict;
+        }
+
+
+        public static IEnumerable<T> NonNull<T>(this IEnumerable<T> collection)
+        {
+            return collection.Where(e => e != null);
+        }
+
+    }
+
+
+    static class StringExtensions
+    {
+
+        public static string EmptyDefault(this string val, string defaultValue)
+        {
+            return String.IsNullOrEmpty(val) ? defaultValue : val;
+        }
+
     }
 
 

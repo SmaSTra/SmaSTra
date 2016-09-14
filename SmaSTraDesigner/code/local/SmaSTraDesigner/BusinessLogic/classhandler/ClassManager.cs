@@ -1,6 +1,7 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
     using classhandler;
+    using codegeneration.loader;
     using nodes;
     using System;
     using System.Collections.Generic;
@@ -17,96 +18,6 @@
     /// </summary>
     public class ClassManager : INotifyPropertyChanged
 	{
-		#region constants
-
-		/// <summary>
-		/// Name of the description property field in JSON metadata.
-		/// </summary>
-		private const string JSON_PROP_DESCRIPTION = "description";
-
-		/// <summary>
-		/// Name of the display name property field in JSON metadata.
-		/// </summary>
-		private const string JSON_PROP_DISPLAY = "display";
-
-		/// <summary>
-		/// Name of the input type(s) property field in JSON metadata.
-		/// </summary>
-		private const string JSON_PROP_INPUT = "input";
-
-		/// <summary>
-		/// Name of the output type property field in JSON metadata.
-		/// </summary>
-		private const string JSON_PROP_OUTPUT = "output";
-
-        /// <summary>
-        /// Name of the node type (sensor/transformation) property field in JSON metadata.
-        /// </summary>
-        private const string JSON_PROP_TYPE = "type";
-
-        /// <summary>
-        /// Name of the connections if this is a Combined node.
-        /// </summary>
-        private const string JSON_PROP_CONNECTIONS = "connections";
-
-        /// <summary>
-        /// Name of the path to the sub-Elements if this is a CombinedNode.
-        /// </summary>
-        private const string JSON_PROP_SUB_ELEMENTS = "subElements";
-
-        /// <summary>
-        /// Name of the path for the Output Node in a Combined Node.
-        /// </summary>
-        private const string JSON_PROP_OUTPUT_NODE_NAME = "outputNodeName";
-
-        /// <summary>
-        /// Filename for metadata.
-        /// </summary>
-        private const string METADATA_FILENAME = "metadata.json";
-
-        /// <summary>
-        /// Possible value for node type.
-        /// </summary>
-        private const string NODE_TYPE_SENSOR = "sensor";
-
-        /// <summary>
-        /// Possible value for node type.
-        /// </summary>
-        private const string NODE_TYPE_TRANSFORMATION = "transformation";
-
-        /// <summary>
-        /// Possible value for node type.
-        /// </summary>
-        private const string NODE_TYPE_COMBINED = "combined";
-
-        #endregion constants
-
-        #region static methods
-
-        /// <summary>
-        /// Determins and verifies node type read from metadata.
-        /// </summary>
-        /// <param name="type">Node type as string.</param>
-        /// <returns>Verified node type</returns>
-        private static NodeType GetNodeType(string type)
-		{
-			switch (type)
-			{
-				case NODE_TYPE_TRANSFORMATION:
-					return NodeType.Transformation;
-
-                case NODE_TYPE_SENSOR:
-                    return NodeType.Sensor;
-
-                case NODE_TYPE_COMBINED:
-                    return NodeType.Combined;
-
-                default:
-					throw new Exception(String.Format("Unrecognized node type \"{0}\".", type));
-			}
-		}
-
-		#endregion static methods
 
 		#region fields
 
@@ -277,85 +188,6 @@
             return nodeClass;
         }
 
-
-		/// <summary>
-		/// Add a node class resulting from the interpretation of the input strings.
-		/// </summary>
-		/// <param name="name">Name of the node class</param>
-		/// <param name="type">Node type (sensor/transformation)</param>
-		/// <param name="outputType">Node output type name.</param>
-		/// <param name="inputTypes">Input type names</param>
-		/// <param name="displayName">Node class's display name for the GUI.</param>
-		/// <param name="description"></param>
-		/// <returns>The interpreted node class.</returns>
-		public NodeClass AddClass(string name, string type, string outputType, string[] inputTypes, string displayName = null, string description = null, List<SimpleSubNode> subNodes = null, List<SimpleConnection> connections = null, string outputNodeName = null)
-		{
-			NodeClass result;
-			if (this.classes.TryGetValue(name, out result))
-			{
-				return result;
-			}
-
-
-            // Use displayname if possible for base node.
-            if (String.IsNullOrWhiteSpace(displayName))
-            {
-                displayName = name;
-            }
-
-
-            // Build baseNode for use with the nodeclass from type parameter.
-            Node baseNode;
-			DataType[] actualInputTypes = null;
-			NodeType nodeType = GetNodeType(type);
-			switch (nodeType)
-			{
-				default:
-				case NodeType.Transformation:
-					baseNode = new Transformation();
-					actualInputTypes = inputTypes.Select(this.AddDataType).ToArray();
-					break;
-
-				case NodeType.Sensor:
-					baseNode = new DataSource();
-					break;
-
-                case NodeType.Combined:
-                    actualInputTypes = inputTypes.Select(this.AddDataType).ToArray();
-                    baseNode = new CombinedNode();
-                    break;
-			}
-
-
-            baseNode.Name = displayName;
-
-            // Build NodeClass instance.
-            switch (nodeType)
-            {
-                default:
-                case NodeType.Transformation:
-                case NodeType.Sensor:
-                    result = new NodeClass(nodeType, name, baseNode, this.AddDataType(outputType), actualInputTypes)
-                    {
-                        DisplayName = displayName,
-                        Description = description
-                    };
-                    break;
-
-                case NodeType.Combined:
-                    result = new CombinedNodeClass(nodeType, name, baseNode, subNodes, connections, this.AddDataType(outputType), outputNodeName, actualInputTypes)
-                    {
-                        DisplayName = displayName,
-                        Description = description
-                    };
-                    break;
-            }
-			
-
-            AddClass(result);
-			return result;
-		}
-
 		/// <summary>
 		/// Interpret and load a DataType from given name.
 		/// </summary>
@@ -390,85 +222,24 @@
 		{
 			if (!Directory.Exists(path)) return;
 
+            //TEST: New Method:
+            NodeLoader loader = new NodeLoader(this);
+
 			// Subdirectories are presumed to contain a node class each.
 			string[] dirs = Directory.GetDirectories(path);
 			foreach (string dir in dirs)
 			{
-				string dirName = Path.GetFileName(dir);
-                string metaDataFilePath = Path.Combine(dir, METADATA_FILENAME);
-
-                //Check if metadata file exists first!
-                if (!File.Exists(metaDataFilePath)) continue;
+                string dirName = Path.GetFileName(dir);
 
                 try
                 {
-                    // Load JSON file as JsonObject.
-                    JsonObject jso;
-                    using (var stream = File.OpenRead(metaDataFilePath))
-                    {
-                        jso = (JsonObject)JsonObject.Load(stream);
-                    }
-
-                    // Read necessary data from JSON.
-                    string type = jso[JSON_PROP_TYPE].ReadAs<string>();
-                    string[] inputTypes = new string[0];
-                    if (jso.ContainsKey(JSON_PROP_INPUT))
-                    {
-                        inputTypes = jso[JSON_PROP_INPUT].Select(kvp => kvp.Value.ReadAs<string>()).ToArray();
-                    }
-
-					JsonValue value;
-					string displayName = null;
-					if (jso.TryGetValue(JSON_PROP_DISPLAY, out value))
-					{
-						displayName = value.ReadAs<string>();
-					}
-
-					string description = null;
-					if (jso.TryGetValue(JSON_PROP_DESCRIPTION, out value))
-					{
-						description = value == null ? "No description" : value.ReadAs<string>();
-					}
-
-                    //If combined, read these:
-                    string outputNodeName = null;
-                    if (jso.TryGetValue(JSON_PROP_OUTPUT_NODE_NAME, out value))
-                    {
-                        outputNodeName = value.ReadAs<string>();
-                    }
-                    
-                    List<SimpleConnection> connections = null;
-                    if (jso.TryGetValue(JSON_PROP_CONNECTIONS, out value))
-                    {
-                        connections = new List<SimpleConnection>();
-                        foreach (dynamic obj in jso[JSON_PROP_CONNECTIONS])
-                        {
-                            dynamic obj2 = obj.Value;
-                            connections.Add(new SimpleConnection(obj2.firstNode.ReadAs<string>().Replace("\"",""), obj2.secondNode.ReadAs<string>().Replace("\"",""), Int32.Parse(obj2.position.ToString())));
-                        }
-                    }
-
-                    List<SimpleSubNode> subElements = null;
-                    if (jso.TryGetValue(JSON_PROP_SUB_ELEMENTS, out value))
-                    {
-                        subElements = new List<SimpleSubNode>();
-                        foreach (dynamic obj in jso[JSON_PROP_SUB_ELEMENTS])
-                        {
-                            dynamic obj2 = obj.Value.Properties;
-                            Dictionary<string, string> properties = new Dictionary<string,string>();
-                            foreach (KeyValuePair<string, JsonValue> kvp in obj2) properties.Add(kvp.Key.Replace("\"",""), kvp.Value.ReadAs<string>().Replace("\"",""));
-                            subElements.Add(new SimpleSubNode(properties));
-                        }
-                    }
-
-                    // Use data to create new node class.
-                    this.AddClass(dirName, type, jso["output"].ReadAs<string>(), inputTypes, displayName, description, subElements, connections, outputNodeName);
-				}
-				catch (Exception ex)
-				{
-                    MessageBox.Show("Could not load " + dirName + " in: \n" + dir + "\nSkipping this element.", "Error in loading " + dirName);
-					//throw new Exception(String.Format("Unable to read metadata for node class \"{0}\" in \"{1}\".", dirName, path), ex);
-				}
+                    NodeClass loadedClass = loader.loadFromFolder(dir);
+                    if (loadedClass == null) throw new Exception("Could not Load Class.... *Mumble... Mumble*");
+                    AddClass(loadedClass);
+                }catch(Exception exp)
+                {
+                    MessageBox.Show("Could not load " + dirName + " Error: \n" + exp.Message + "\nSkipping this element.", "Error in loading " + dirName);
+                }
 			}
 		}
 
