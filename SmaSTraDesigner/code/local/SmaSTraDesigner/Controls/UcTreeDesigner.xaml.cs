@@ -1166,17 +1166,6 @@
             nodeViewer.Node.PosY = nodeViewer.Node.PosY - deltaY;
         }
 
-        // TODO: (PS) Replace this with a WPF command
-        /*private void This_PreviewKeyDown(object sender, KeyEventArgs e)
-		{
-            if(e.Key == Key.M) TryMergeCurrentSelection();
-            if(e.Key == Key.U) TryUnmergeSelectedNode();
-        }
-		
-		
-        private void This_PreviewKeyUp(object sender, KeyEventArgs e)
-        {
-        }*/ //TODO REMOVE!!!
 
         private void This_Loaded(object sender, RoutedEventArgs e)
 		{
