@@ -128,7 +128,7 @@ namespace SmaSTraDesigner.BusinessLogic
             this.libraryNodeViewerList
                 .Select(n => (Node)n.DataContext)
                 .Select(serializer.serializeNode)
-                .forEach(array.Add);
+                .ForEach(array.Add);
 
             File.WriteAllText(LIB_FILE_NAME, lib.ToString());
         }
@@ -158,7 +158,7 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 array
                     .Select(n => serializer.deserializeNode(n as JObject, cManager))
-                    .forEach(addLibraryNode);
+                    .ForEach(addLibraryNode);
             }
         }
 

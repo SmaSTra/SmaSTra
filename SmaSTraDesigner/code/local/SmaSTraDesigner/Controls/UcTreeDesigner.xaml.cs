@@ -26,6 +26,7 @@
     // TODO: (PS) Adapt for dynamic size changes for canvas.
     /// <summary>
     /// Interaction logic for UcTreeDesigner.xaml
+    /// Also this is the mighty ZEUS God-Class!
     /// </summary>
     public partial class UcTreeDesigner : UserControl
 	{
@@ -808,6 +809,59 @@
 			}
 		}
 
+        /// <summary>
+        /// Tries to unmerge a Node.
+        /// Only works for Combined nodes.
+        /// Null is a valid node arg.
+        /// </summary>
+        /// <param name="node">To unmerge</param>
+        private void UnmergeNode(CombinedNode node)
+        {
+            if(node == null)
+            {
+                return;
+            }
+
+            //Get a name for the New Element:
+            MessageBoxResult result = MessageBox.Show("Do you want to unmerge " + node.Name + "?", "Unmerge " + node.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            if (result != MessageBoxResult.OK) return;
+
+            //Preserve the Connections:
+            List<Connection> newConnections = new List<Connection>();
+            for(int i = 0; i < node.inputNodes.Count(); i++)
+            {
+                Node output = node.inputNodes[i];
+                Node input = node.inputConnections.GetKeyForValue(i, null);
+                if (input != null && output != null)
+                {
+                    newConnections.Add(new Connection(output, input, i));
+                }
+            }
+
+            //find if output node is connected:
+            Connection outputConnection = Tree.Connections
+                .FirstOrDefault(c => c.OutputNode == node);
+
+            if(outputConnection.InputNode != null && outputConnection.OutputNode != null)
+            {
+                RemoveConnection(outputConnection);
+                newConnections.Add(new Connection(node.outputNode, outputConnection.InputNode, outputConnection.InputIndex));
+            }
+
+            //Remove the old node:
+            RemoveNode(node);
+
+            //add all internal nodes to the System:
+            node.includedNodes
+                .ForEach(n => n.ClearInputs())
+                .ForEach(n => n.PosX += node.PosX)
+                .ForEach(n => n.PosY += node.PosY)
+                .ForEach(n => AddNode(n));
+
+            //Now add the Connections:
+            newConnections.ForEach(AddConnection);
+        }
+
 
         private void handleMergeOfSelected()
         {
@@ -845,10 +899,11 @@
             generator.SaveToDisc();
 
             //Register the new Node:
-            Singleton<ClassManager>.Instance.AddClass(generatedClass);
+            ClassManager classManager = Singleton<ClassManager>.Instance;
+            classManager.AddClass(generatedClass);
 
             //Generate the own Node:
-            Node newNode = generatedClass.BaseNode.MemberwiseClone();
+            Node newNode = classManager.GetNewNodeForType(newName);
             newNode.PosX = nodes.Average(n => n.PosX);
             newNode.PosY = nodes.Average(n => n.PosY);
 
@@ -1083,8 +1138,9 @@
 		{
             //TODO This is only for testing! Remove after working:
             //If P-Key, do some fancy magic!
-            if(e.Key == Key.P) handleMergeOfSelected();
-		}
+            if(e.Key == Key.M) handleMergeOfSelected();
+            if(e.Key == Key.U && SelectedNodeViewers.Count == 1) UnmergeNode(SelectedNodeViewers[0].Node as CombinedNode);
+        }
 		
 		
         private void This_PreviewKeyUp(object sender, KeyEventArgs e)

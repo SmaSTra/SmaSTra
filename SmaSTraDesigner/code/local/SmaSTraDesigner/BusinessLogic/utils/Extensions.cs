@@ -95,7 +95,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         public static IDictionary<string, string> ToStringString(this IDictionary<string, JToken> dic)
         {
             Dictionary<string, string> newDict = new Dictionary<string, string>();
-            dic.forEach(e => newDict.Add(e.Key, e.Value.ToString()));
+            dic.ForEach(e => newDict.Add(e.Key, e.Value.ToString()));
 
             return newDict;
         }
@@ -124,7 +124,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
     {
 
 
-        public static TValue TryGetValue<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> dic, TKey key, TValue defaultValue)
+        public static TValue GetValue<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> dic, TKey key, TValue defaultValue)
         {
             try
             {
@@ -135,6 +135,42 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             catch (Exception e)
 #pragma warning restore CS0168 // Variable is declared but never used
             {
+                return defaultValue;
+            }
+        }
+
+
+        public static TKey GetKeyForValue<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> dic, TValue value, TKey defaultValue)
+        {
+            try
+            {
+                var val = dic.First(e => object.Equals(e.Value, value));
+                return val.Key;
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception e)
+#pragma warning restore CS0168 // Variable is declared but never used
+            {
+                return defaultValue;
+            }
+        }
+
+
+        public static double TryGetValueAsDouble(this IEnumerable<KeyValuePair<string, string>> dic, string key, out double outVal, double defaultValue)
+        {
+            try
+            {
+                var val = dic.First(e => object.Equals(e.Key, key)).Value;
+                if (val != null) Double.TryParse(val, out defaultValue);
+
+                outVal = defaultValue;
+                return defaultValue;
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception e)
+#pragma warning restore CS0168 // Variable is declared but never used
+            {
+                outVal = defaultValue;
                 return defaultValue;
             }
         }
@@ -150,13 +186,15 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         /// <typeparam name="T">To use in the Function / Collection</typeparam>
         /// <param name="elements">To Iterate</param>
         /// <param name="func">To execute</param>
-        public static void forEach<T>(this IEnumerable<T> elements, Action<T> func)
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> elements, Action<T> func)
         {
-            if (elements == null || func == null) return;
+            if (func == null) return elements;
             foreach( T element in elements )
             {
                 func.Invoke(element);
             }
+
+            return elements;
         }
 
 

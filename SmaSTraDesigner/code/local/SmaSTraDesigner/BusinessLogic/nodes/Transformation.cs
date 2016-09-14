@@ -105,6 +105,11 @@
 			this.inputNodes[index] = inputNode;
         }
 
-		#endregion methods
-	}
+        public override void ClearInputs()
+        {
+            this.inputNodes = new Node[inputNodes.Count()];
+        }
+
+        #endregion methods
+    }
 }
