@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace SmaSTraDesigner.Controls.Support
 {
@@ -105,6 +100,29 @@ namespace SmaSTraDesigner.Controls.Support
                                 new InputGestureCollection()
                                 {
 
+                                }
+                        );
+
+
+        public static readonly RoutedUICommand Merge = new RoutedUICommand
+                        (
+                                "Merge current selection",
+                                "Merge",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.M, ModifierKeys.Control)
+                                }
+                        );
+
+        public static readonly RoutedUICommand Unmerge = new RoutedUICommand
+                        (
+                                "Unmerges current selection",
+                                "Unmerge",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.U, ModifierKeys.Control)
                                 }
                         );
 

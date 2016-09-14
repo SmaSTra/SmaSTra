@@ -20,6 +20,7 @@
 
     using SmaSTraDesigner.BusinessLogic;
     using Controls;
+    using BusinessLogic.nodes;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -238,6 +239,30 @@
         private void AddToLibrary_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Clone());
+        }
+
+
+        private void Merge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = this.tdTreeDesigner.CanMergeCurrentSelection();
+        }
+
+
+        private void Merge_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.tdTreeDesigner.TryMergeCurrentSelection();
+        }
+
+
+        private void Unmerge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = this.tdTreeDesigner.CanUnmerge();
+        }
+
+
+        private void Unmerge_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.tdTreeDesigner.TryUnmergeSelectedNode();
         }
 
         #endregion command handlers

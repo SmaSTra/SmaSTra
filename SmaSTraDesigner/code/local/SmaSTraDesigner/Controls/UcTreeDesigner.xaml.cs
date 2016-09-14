@@ -809,14 +809,28 @@
 			}
 		}
 
+
+
+        public bool CanUnmerge()
+        {
+            return this.SelectedNodeViewers.Count == 1
+                && this.SelectedNodeViewers[0].Node is CombinedNode;
+        }
+
         /// <summary>
         /// Tries to unmerge a Node.
         /// Only works for Combined nodes.
         /// Null is a valid node arg.
         /// </summary>
         /// <param name="node">To unmerge</param>
-        private void UnmergeNode(CombinedNode node)
+        public void TryUnmergeSelectedNode()
         {
+            if (!CanUnmerge())
+            {
+                return;
+            }
+
+            CombinedNode node = this.SelectedNodeViewers[0].Node as CombinedNode;
             if(node == null)
             {
                 return;
@@ -863,19 +877,35 @@
         }
 
 
-        private void handleMergeOfSelected()
+        /// <summary>
+        /// Checks if we can merge the current selection. 
+        /// </summary>
+        /// <returns>true if can be merged.</returns>
+        public bool CanMergeCurrentSelection()
         {
-            //Try to find the top root:
+            //Get all selected Nodes:
             var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).Distinct().ToList();
 
             //Check if any nodes highlighted:
-            if (nodes.Count <= 1) return;
+            if (nodes.Count <= 1) return false;
 
             //Check if connected:
             CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
-            if (!generator.IsConnected()) return;
+            if (!generator.IsConnected()) return false;
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Does a Merge action on the current selection.
+        /// </summary>
+        public void TryMergeCurrentSelection()
+        {
+            if (!CanMergeCurrentSelection()) return;
 
             //Get a name for the New Element:
+            IEnumerable<Node> nodes = this.SelectedNodeViewers.Select(v => v.Node).Distinct();
             MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
 
@@ -891,6 +921,9 @@
             //No name => Return:
             if (string.IsNullOrWhiteSpace(newName)) return;
 
+            //Get all selected Nodes:
+            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+
             generator.Name = newName;
             NodeClass generatedClass = generator.GenerateClass();
             if (generatedClass == null) return;
@@ -903,7 +936,7 @@
             classManager.AddClass(generatedClass);
 
             //Generate the own Node:
-            Node newNode = classManager.GetNewNodeForType(newName);
+            Node newNode = (Node) generatedClass.BaseNode.Clone();
             newNode.PosX = nodes.Average(n => n.PosX);
             newNode.PosY = nodes.Average(n => n.PosY);
 
@@ -1134,18 +1167,16 @@
         }
 
         // TODO: (PS) Replace this with a WPF command
-        private void This_PreviewKeyDown(object sender, KeyEventArgs e)
+        /*private void This_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
-            //TODO This is only for testing! Remove after working:
-            //If P-Key, do some fancy magic!
-            if(e.Key == Key.M) handleMergeOfSelected();
-            if(e.Key == Key.U && SelectedNodeViewers.Count == 1) UnmergeNode(SelectedNodeViewers[0].Node as CombinedNode);
+            if(e.Key == Key.M) TryMergeCurrentSelection();
+            if(e.Key == Key.U) TryUnmergeSelectedNode();
         }
 		
 		
         private void This_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-        }
+        }*/ //TODO REMOVE!!!
 
         private void This_Loaded(object sender, RoutedEventArgs e)
 		{
