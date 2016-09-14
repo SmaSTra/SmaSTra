@@ -1,7 +1,9 @@
-﻿using SmaSTraDesigner.BusinessLogic;
+﻿using Common;
+using SmaSTraDesigner.BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +22,23 @@ namespace SmaSTraDesigner.Controls.Support
     /// Interaktionslogik für DialogCreateCustomElement.xaml
     /// </summary>
     public partial class DialogCreateCustomElement : Window
+
     {
         private string elementName;
         private DataType outputType;
-        private ObservableCollection<DataType> inputTypes;
+        private ObservableCollection<DataType> inputTypes = new ObservableCollection<DataType>();
+
+        private ObservableCollection<string> inputTypesString = new ObservableCollection<string>();
+        private string outputTypeString = "output type String";
+        private DataType[] allDataTypes;
+
+        public DialogCreateCustomElement()
+        {
+            InitializeComponent();
+            this.DataContext = this;
+            allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
+            InputTypesString.Add("input type string");
+        }
 
         public string ElementName
         {
@@ -64,10 +79,38 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
-
-        public DialogCreateCustomElement()
+        public ObservableCollection<string> InputTypesString
         {
-            InitializeComponent();
+            get
+            {
+                return inputTypesString;
+            }
+            set
+            {
+                if (inputTypesString != value)
+                    inputTypesString = value;
+            }
+        }
+
+        public string OutputTypeString
+        {
+            get
+            {
+                return outputTypeString;
+            }
+            set
+            {
+                if (outputTypeString != value)
+                    outputTypeString = value;
+            }
+        }
+
+        public DataType[] AllDataTypes
+        {
+            get
+            {
+                return allDataTypes;
+            }
         }
     }
 }

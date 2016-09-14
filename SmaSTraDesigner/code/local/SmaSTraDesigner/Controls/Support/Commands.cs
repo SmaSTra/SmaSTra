@@ -9,6 +9,17 @@ namespace SmaSTraDesigner.Controls.Support
 {
    static class Commands
     {
+        public static readonly RoutedUICommand DebugTest = new RoutedUICommand
+                        (
+                                "DebugTest",
+                                "DebugTest",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                        new KeyGesture(Key.T, ModifierKeys.Control)
+                                }
+                        );
+
         public static readonly RoutedUICommand Save = new RoutedUICommand
                         (
                                 "Save",

@@ -11,6 +11,7 @@
 	mc:Ignorable="d"
 	x:Name="This" Title="SmaSTra" d:DesignWidth="900" d:DesignHeight="650">
     <Window.CommandBindings>
+        <CommandBinding Command="ctrlSupport:Commands.DebugTest" CanExecute="DebugTest_CanExecute" Executed="DebugTest_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Load" CanExecute="Load_CanExecute" Executed="Load_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Exit" CanExecute="Exit_CanExecute" Executed="Exit_Executed" />

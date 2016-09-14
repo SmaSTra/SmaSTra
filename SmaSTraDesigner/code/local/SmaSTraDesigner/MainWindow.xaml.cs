@@ -20,6 +20,7 @@
 
     using SmaSTraDesigner.BusinessLogic;
     using Controls;
+    using Controls.Support;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -66,6 +67,17 @@
         #endregion event handlers
 
         #region command handlers
+
+        private void DebugTest_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            // Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
+            DialogCreateCustomElement dialog = new DialogCreateCustomElement();
+            dialog.ShowDialog();
+        }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {

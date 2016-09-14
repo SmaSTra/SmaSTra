@@ -1190,7 +1190,7 @@
 
         private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.LeftAlt))
+            if (Keyboard.IsKeyDown(Key.LeftAlt))
             {
                 if (scaletransform == null)
                 {
@@ -1202,13 +1202,25 @@
 
                 if (e.Delta > 0)
                 {
-                    scaletransform.ScaleX *= scaleRate;
-                    scaletransform.ScaleY *= scaleRate;
+                    if (scaletransform.ScaleX < 10)
+                    {
+                        scaletransform.ScaleX *= scaleRate;
+                    }
+                    if (scaletransform.ScaleY < 10)
+                    {
+                        scaletransform.ScaleY *= scaleRate;
+                    }
                 }
                 else
                 {
-                    scaletransform.ScaleX /= scaleRate;
-                    scaletransform.ScaleY /= scaleRate;
+                    if (scaletransform.ScaleX > 0.1)
+                    {
+                        scaletransform.ScaleX /= scaleRate;
+                    }
+                    if (scaletransform.ScaleY > 0.1)
+                    {
+                        scaletransform.ScaleY /= scaleRate;
+                    }
                 }
 
                 e.Handled = true;

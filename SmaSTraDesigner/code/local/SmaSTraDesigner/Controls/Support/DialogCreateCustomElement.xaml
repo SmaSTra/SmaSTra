@@ -10,6 +10,38 @@
         <Grid Height="50"></Grid>
         <TextBlock Text="Enter a name for the new element" TextAlignment="Center" />
         <TextBox x:Name="tboxNewElementName" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+            <ItemsControl Grid.Column="0" ItemsSource="{Binding Path=InputTypesString}" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DataTemplate.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                        </DataTemplate.Resources>
+                        <StackPanel Orientation="Vertical" >
+                            <WrapPanel>
+                                <ComboBox ItemsSource="{Binding Path=AllDataTypes}">
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Path=Name}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox>
+                                <TextBox Text="{Binding Path=., UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+                <Button Content="Add" Width="100"/>
+            </StackPanel>
+            <TextBox Grid.Column="1" Text="{Binding Path=OutputTypeString, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
         <Button Content="OK" Width="100" />
     </StackPanel>
 </Window>
