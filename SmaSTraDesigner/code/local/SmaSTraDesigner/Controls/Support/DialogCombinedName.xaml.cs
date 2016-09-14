@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace SmaSTraDesigner.Controls.Support
 {
-    /// <summary>
-    /// Interaktionslogik für Window1.xaml
-    /// </summary>
     public partial class DialogCombinedName : Window
     {
         public DialogCombinedName()

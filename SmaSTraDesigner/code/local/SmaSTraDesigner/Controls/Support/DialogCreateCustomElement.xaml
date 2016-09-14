@@ -16,8 +16,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
-            <ItemsControl Grid.Column="0" ItemsSource="{Binding Path=InputTypesString}" >
-                <ItemsControl.ItemTemplate>
+            <ItemsControl x:Name="icInputTypes" Grid.Column="0" ItemsSource="{Binding Path=InputTypesViewModels}" >
+                    <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DataTemplate.Resources>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
@@ -25,23 +25,36 @@
                         </DataTemplate.Resources>
                         <StackPanel Orientation="Vertical" >
                             <WrapPanel>
-                                <ComboBox ItemsSource="{Binding Path=AllDataTypes}">
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Path=Name}" />
-                                            </StackPanel>
-                                        </DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Path=AllTypesString}" SelectionChanged="cboxTypesString_SelectionChanged">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                <TextBox Text="{Binding Path=., UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50"/>
-                            </WrapPanel>
+                                    <TextBox Text="{Binding Path=InputTypeString, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Visibility="Visible" />
+                                </WrapPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-                <Button Content="Add" Width="100"/>
+                <Button x:Name="btnAddInput" Content="Add" Width="100" Click="btnAddInput_Click"/>
             </StackPanel>
-            <TextBox Grid.Column="1" Text="{Binding Path=OutputTypeString, UpdateSourceTrigger=PropertyChanged}"/>
+            <WrapPanel Grid.Column="1">
+                <ComboBox x:Name="cboxOutputTypeString" ItemsSource="{Binding Path=AllTypesString}" SelectionChanged="cboxTypesString_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBox Text="{Binding Path=InputTypeString, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Visibility="Visible" />
+            </WrapPanel>
         </Grid>
-        <Button Content="OK" Width="100" />
+        <Button x:Name="btnIOFinished" Content="OK" Width="100" Click="btnIOFinished_Click" />
     </StackPanel>
 </Window>

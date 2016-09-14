@@ -42,6 +42,7 @@
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Background" Value="#898989" />
         </Style>
+
       <Style TargetType="{x:Type ContextMenu}">
             <Setter Property="Template">
                 <Setter.Value>

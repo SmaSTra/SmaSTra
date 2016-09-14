@@ -852,7 +852,7 @@
 
             //Change the Connections:
             //TODO fix this:
-            /*
+            
             foreach (Node node in nodes)
             {
                 NodeClass nodeClass = node.Class;
@@ -864,12 +864,13 @@
                     Node subNode = nodeInputs[i];
                     if (subNode == null || !nodes.Contains(subNode))
                     {
-                        if(subNode != null) AddConnection(new Connection(subNode, newNode, index));
+                        if(subNode != null)
+                            AddConnection(new Connection(subNode, newNode, index));
                         index++;
                     }
                 }
             }
-            */
+            
 
             //Check for the output connection:
             Node root = generator.GetRootNode();

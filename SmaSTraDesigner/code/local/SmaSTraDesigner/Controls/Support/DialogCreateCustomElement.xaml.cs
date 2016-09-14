@@ -28,16 +28,20 @@ namespace SmaSTraDesigner.Controls.Support
         private DataType outputType;
         private ObservableCollection<DataType> inputTypes = new ObservableCollection<DataType>();
 
-        private ObservableCollection<string> inputTypesString = new ObservableCollection<string>();
+        private DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
+        private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
         private string outputTypeString = "output type String";
-        private DataType[] allDataTypes;
+        
 
         public DialogCreateCustomElement()
         {
             InitializeComponent();
             this.DataContext = this;
             allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
-            InputTypesString.Add("input type string");
+            cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "output type string" };
+            InputTypesViewModels.Add(new InputTypeViewModel() {InputTypeString = "input type string"});
+            
+            
         }
 
         public string ElementName
@@ -79,16 +83,24 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
-        public ObservableCollection<string> InputTypesString
+        public DataType[] AllDataTypes
         {
             get
             {
-                return inputTypesString;
+                return allDataTypes;
+            }
+        }
+
+        public ObservableCollection<InputTypeViewModel> InputTypesViewModels
+        {
+            get
+            {
+                return inputTypesViewModels;
             }
             set
             {
-                if (inputTypesString != value)
-                    inputTypesString = value;
+                if (inputTypesViewModels != value)
+                    inputTypesViewModels = value;
             }
         }
 
@@ -105,11 +117,109 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
-        public DataType[] AllDataTypes
+        private void cboxTypesString_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            DataType selectedType;
+            InputTypeViewModel inputTypeViewModel = (InputTypeViewModel)((ComboBox)sender).DataContext;
+            int typeIndex = ((ComboBox)sender).SelectedIndex - 1;
+            if (typeIndex >= 0) {
+                selectedType = allDataTypes[typeIndex];
+            } else
+            {
+                //TODO: create new DataType instead of úsing the first
+                selectedType = allDataTypes[0];
+            }
+            inputTypeViewModel.SelectedDataType = selectedType;
+        }
+
+        private void cboxOutputTypeString_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            DataType selectedType;
+            int index = ((ComboBox)sender).SelectedIndex - 1;
+            if (index >= 0)
+            {
+                selectedType = allDataTypes[index];
+            }
+            else
+            {
+                //TODO: create new DataType instead of úsing the first
+                selectedType = allDataTypes[0];
+            }
+            OutputType = selectedType;
+        }
+
+        private void btnAddInput_Click(object sender, RoutedEventArgs e)
+        {
+            InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "input type string" });
+        }
+
+        private void btnIOFinished_Click(object sender, RoutedEventArgs e)
+        {
+            InputTypes.Clear();
+            foreach(InputTypeViewModel inputTypeViewModel in InputTypesViewModels)
+            {
+                if (inputTypeViewModel.SelectedDataType != null)
+                {
+                    InputTypes.Add(inputTypeViewModel.SelectedDataType);
+                }
+            }
+            //TODO next Dialog
+            DialogResult = true;
+        }
+    }
+
+    public class InputTypeViewModel
+    {
+
+        public InputTypeViewModel()
+        {
+            DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
+            allTypesString = new string[allDataTypes.Length + 1];
+            for (int i = 1; i <= allDataTypes.Length; i++)
+            {
+                allTypesString[i] = allDataTypes[i - 1].Name;
+            }
+            allTypesString[0] = "[Add new DataType]";
+        }
+
+        private string[] allTypesString;
+        public string[] AllTypesString
         {
             get
             {
-                return allDataTypes;
+                return allTypesString;
+            }
+        }
+
+        private string inputTypeString;
+        public string InputTypeString
+        {
+            get
+            {
+                return inputTypeString;
+            }
+            set
+            {
+                if(inputTypeString != value)
+                {
+                    inputTypeString = value;
+                }
+            }
+        }
+
+        private DataType selectedDataType;
+        public DataType SelectedDataType
+        {
+            get
+            {
+                return selectedDataType;
+            }
+            set
+            {
+                if (selectedDataType != value)
+                {
+                    selectedDataType = value;
+                }
             }
         }
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="Window1" Height="150" Width="300">
+        Title="DialogCombinedName" Height="150" Width="300">
     <StackPanel>
         <Grid Height="50"></Grid>
         <TextBlock Text="Enter a Name for the new Combined Node" TextAlignment="Center" />
