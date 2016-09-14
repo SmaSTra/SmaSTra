@@ -810,7 +810,7 @@
             var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).Distinct().ToList();
 
             //Check if any nodes highlighted:
-            if (nodes.Empty()) return;
+            if (nodes.Count <= 1) return;
 
             //Check if connected:
             CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
