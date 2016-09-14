@@ -21,11 +21,14 @@
     using BusinessLogic.nodes;
     using Support;
     using BusinessLogic.utils;
+    using System.Diagnostics;
+    using System.Windows.Threading;
 
     // TODO: (PS) Comment this.
     // TODO: (PS) Adapt for dynamic size changes for canvas.
     /// <summary>
     /// Interaction logic for UcTreeDesigner.xaml
+    /// Also this is the mighty ZEUS God-Class!
     /// </summary>
     public partial class UcTreeDesigner : UserControl
 	{
@@ -55,7 +58,7 @@
             if (!nodes.Any()) return true;
 
             //Check recursivcely:
-            foreach (Node input in GetInputsOfNode(root))
+            foreach (Node input in GetInputsOfNode(root, false))
             {
                 if (SubTreeContains(input, nodes)) return true;
             }
@@ -64,7 +67,7 @@
         }
 
 
-        private static List<Node> GetInputsOfNode(Node node)
+        private static List<Node> GetInputsOfNode(Node node, bool includeNull)
         {
             List<Node> result = new List<Node>();
             if (node == null) return result;
@@ -73,7 +76,7 @@
             if (node is OutputNode)
             {
                 OutputNode outNode = (OutputNode)node;
-                if (outNode.InputNode != null) result.Add(outNode.InputNode);
+                if (includeNull || outNode.InputNode != null) result.Add(outNode.InputNode);
                 return result;
             }
 
@@ -81,7 +84,7 @@
             {
                 Transformation outNode = (Transformation)node;
                 result.AddRange(outNode.InputNodes);
-                result.RemoveAll(item => item == null);
+                if(!includeNull) result.RemoveAll(item => item == null);
                 return result;
             }
 
@@ -206,6 +209,9 @@
         private ScaleTransform scaletransform;
         private int gridSize = 50; // TODO: Make to global variable
 
+        private UIConnectionRefresher connectionRefresher;
+        private DispatcherTimer timer;
+
         #endregion fields
 
         #region constructors
@@ -214,10 +220,18 @@
 		{
 			this.SelectedNodeViewers = new ObservableCollection<UcNodeViewer>();
 			this.SelectedNodeViewers.CollectionChanged += SelectedNodeViewers_CollectionChanged;
+            this.connectionRefresher = new UIConnectionRefresher(AddConnection);
 
             this.InitializeComponent();
 
-			if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            //Start a timer to update the connections:
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Tick += timer_tick;
+            timer.Start();
+
+
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
 			{
 				this.Tree = new TransformationTree(this);
 
@@ -331,8 +345,10 @@
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
 
-            if (oNode.IoHandles == null)
+            //Fix for Not inited Node Vierwers:
+            if (oNode.IoHandles == null || iNode.IoHandles == null)
             {
+                connectionRefresher.AddPendingConnection(connection, iNode, oNode);
                 return;
             }
 
@@ -345,6 +361,13 @@
                 this.AddConnection(oHandle, iHandle, connection);
             }
 		}
+
+
+        void timer_tick(object sender, EventArgs e)
+        {
+            connectionRefresher.Tick();
+        }
+
 
 		public void AddNode(Node node, bool select = false)
 		{
@@ -804,33 +827,145 @@
 		}
 
 
-        private void handleMergeOfSelected()
+
+        public bool CanUnmerge()
         {
-            //Try to find the top root:
+            return this.SelectedNodeViewers.Count == 1
+                && this.SelectedNodeViewers[0].Node is CombinedNode;
+        }
+
+        /// <summary>
+        /// Tries to unmerge a Node.
+        /// Only works for Combined nodes.
+        /// Null is a valid node arg.
+        /// </summary>
+        /// <param name="node">To unmerge</param>
+        public void TryUnmergeSelectedNode()
+        {
+            if (!CanUnmerge())
+            {
+                return;
+            }
+
+            CombinedNode node = this.SelectedNodeViewers[0].Node as CombinedNode;
+            if(node == null)
+            {
+                return;
+            }
+
+            //Get a name for the New Element:
+            MessageBoxResult result = MessageBox.Show("Do you want to unmerge " + node.Name + "?", "Unmerge " + node.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            if (result != MessageBoxResult.OK) return;
+
+            //Preserve the input Connections:
+            List<Connection> newConnections = new List<Connection>();
+            for(int i = 0; i < node.inputNodes.Count(); i++)
+            {
+                Node output = node.inputNodes[i];
+                Node input = node.inputConnections.GetKeyForValue(i, null);
+                if (input != null && output != null)
+                {
+                    newConnections.Add(new Connection(output, input, i));
+                }
+            }
+
+            //Build the internal Connections:
+            foreach(Node internalNode in node.includedNodes)
+            {
+                List<Node> inputs = GetInputsOfNode(internalNode, true);
+                for(int i = 0; i < inputs.Count(); i++)
+                {
+                    Node internalInput = inputs[i];
+                    if (internalInput != null) newConnections.Add(new Connection(internalInput, internalNode, i));
+                }
+            }
+
+            //find if output node is connected:
+            Connection outputConnection = Tree.Connections
+                .FirstOrDefault(c => c.OutputNode == node);
+
+            if(outputConnection.InputNode != null && outputConnection.OutputNode != null)
+            {
+                RemoveConnection(outputConnection);
+                newConnections.Add(new Connection(node.outputNode, outputConnection.InputNode, outputConnection.InputIndex));
+            }
+
+            //Remove the old node:
+            RemoveNode(node);
+
+            //add all internal nodes to the System:
+            node.includedNodes
+                .ForEach(n => n.ClearInputs())
+                .ForEach(n => n.PosX += node.PosX)
+                .ForEach(n => n.PosY += node.PosY)
+                .ForEach(n => AddNode(n));
+
+            //Now add the Connections:
+            newConnections.ForEach(AddConnection);
+        }
+
+
+        /// <summary>
+        /// Checks if we can merge the current selection. 
+        /// </summary>
+        /// <returns>true if can be merged.</returns>
+        public bool CanMergeCurrentSelection()
+        {
+            //Get all selected Nodes:
             var nodes = new List<UcNodeViewer>(this.SelectedNodeViewers).Select(v => v.Node).Distinct().ToList();
 
             //Check if any nodes highlighted:
-            if (nodes.Empty()) return;
+            if (nodes.Count <= 1) return false;
 
             //Check if connected:
             CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
-            if (!generator.IsConnected()) return;
+            if (!generator.IsConnected()) return false;
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Does a Merge action on the current selection.
+        /// </summary>
+        public void TryMergeCurrentSelection()
+        {
+            if (!CanMergeCurrentSelection()) return;
 
             //Get a name for the New Element:
+            IEnumerable<Node> nodes = this.SelectedNodeViewers.Select(v => v.Node).Distinct();
+            CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
+
             MessageBoxResult result = MessageBox.Show("Generate a new Element out of " + nodes.Count() + " Elements?", "Merge", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
 
-            DialogCombinedName dialog = new DialogCombinedName();
-            dialog.ResponseText = "New Name";
             string newName = "";
-            if (dialog.ShowDialog() == true && dialog.ResponseText.Length > 0)
+            while (newName == "")
             {
-                newName = dialog.ResponseText;
+                DialogCombinedName dialog = new DialogCombinedName();
+                dialog.ResponseText = "New Name";
+                if (dialog.ShowDialog() == true)
+                {
+                    if (!string.IsNullOrWhiteSpace(dialog.ResponseText))
+                    {
+                        newName = dialog.ResponseText;
+                        if (generator.ExistsName(newName))
+                        {
+                            MessageBox.Show("The name " + newName + " already exists. Please choose another one!", "Name taken");
+                            newName = "";
+                        }
+                    }else
+                    {
+                        return;
+                    }
+                }else
+                {
+                    return;
+                }
+
+                //No name => Return:
+                if (string.IsNullOrWhiteSpace(newName)) return;
             }
-
-
-            //No name => Return:
-            if (newName.Count() <= 0) return;
 
             generator.Name = newName;
             NodeClass generatedClass = generator.GenerateClass();
@@ -840,10 +975,11 @@
             generator.SaveToDisc();
 
             //Register the new Node:
-            Singleton<ClassManager>.Instance.AddClass(generatedClass);
+            ClassManager classManager = Singleton<ClassManager>.Instance;
+            classManager.AddClass(generatedClass);
 
             //Generate the own Node:
-            Node newNode = generatedClass.BaseNode.MemberwiseClone();
+            Node newNode = (Node) generatedClass.BaseNode.Clone();
             newNode.PosX = nodes.Average(n => n.PosX);
             newNode.PosY = nodes.Average(n => n.PosY);
 
@@ -851,12 +987,10 @@
             AddNode(newNode, false);
 
             //Change the Connections:
-            //TODO fix this:
-            
             foreach (Node node in nodes)
             {
                 NodeClass nodeClass = node.Class;
-                List<Node> nodeInputs = GetInputsOfNode(node);
+                List<Node> nodeInputs = GetInputsOfNode(node, false);
                 
                 for (int i = 0; i < nodeInputs.Count(); i++)
                 {
@@ -864,13 +998,11 @@
                     Node subNode = nodeInputs[i];
                     if (subNode == null || !nodes.Contains(subNode))
                     {
-                        if(subNode != null)
-                            AddConnection(new Connection(subNode, newNode, index));
+                        if(subNode != null) AddConnection(new Connection(subNode, newNode, index));
                         index++;
                     }
                 }
             }
-            
 
             //Check for the output connection:
             Node root = generator.GetRootNode();
@@ -882,7 +1014,11 @@
                     .Cast<Connection?>()
                     .FirstOrDefault();
 
-                if (rootOutputConnection != null) AddConnection(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
+                if (rootOutputConnection != null)
+                {
+                    RemoveConnection(rootOutputConnection.Value);
+                    AddConnection(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
+                }
             }
 
             //At end -> Remove old ones!
@@ -1043,26 +1179,6 @@
             }
         }
 
-        public void onUcNodeViewer_LoadedCompletely()
-        {
-            Boolean allNodeViewerLoadedCompletely = true;
-            foreach (UcNodeViewer nodeViewer in this.nodeViewers.Values)
-            {
-                if (!nodeViewer.LoadedCompletely)
-                {
-                    allNodeViewerLoadedCompletely = false;
-                    return;
-                }
-            }
-            if (allNodeViewerLoadedCompletely)
-            {
-                if (TreeSerilizer.isDeserializing)
-                {
-                    TreeSerilizer.addConnections();
-                }
-            }
-        }
-
         private void snapToGrid(UcNodeViewer nodeViewer)
         {
             double left = Canvas.GetLeft(nodeViewer);
@@ -1073,18 +1189,6 @@
             nodeViewer.Node.PosY = nodeViewer.Node.PosY - deltaY;
         }
 
-        // TODO: (PS) Replace this with a WPF command
-        private void This_PreviewKeyDown(object sender, KeyEventArgs e)
-		{
-            //TODO This is only for testing! Remove after working:
-            //If P-Key, do some fancy magic!
-            if(e.Key == Key.P) handleMergeOfSelected();
-		}
-		
-		
-        private void This_PreviewKeyUp(object sender, KeyEventArgs e)
-        {
-        }
 
         private void This_Loaded(object sender, RoutedEventArgs e)
 		{
@@ -1191,7 +1295,7 @@
 
         private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftAlt))
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.LeftAlt))
             {
                 if (scaletransform == null)
                 {
@@ -1203,25 +1307,13 @@
 
                 if (e.Delta > 0)
                 {
-                    if (scaletransform.ScaleX < 10)
-                    {
-                        scaletransform.ScaleX *= scaleRate;
-                    }
-                    if (scaletransform.ScaleY < 10)
-                    {
-                        scaletransform.ScaleY *= scaleRate;
-                    }
+                    scaletransform.ScaleX *= scaleRate;
+                    scaletransform.ScaleY *= scaleRate;
                 }
                 else
                 {
-                    if (scaletransform.ScaleX > 0.1)
-                    {
-                        scaletransform.ScaleX /= scaleRate;
-                    }
-                    if (scaletransform.ScaleY > 0.1)
-                    {
-                        scaletransform.ScaleY /= scaleRate;
-                    }
+                    scaletransform.ScaleX /= scaleRate;
+                    scaletransform.ScaleY /= scaleRate;
                 }
 
                 e.Handled = true;

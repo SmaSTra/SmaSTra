@@ -71,7 +71,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         if (subNode == null)
                         {
                             //We have some types that are not registered?!?
-                            Console.WriteLine("Could not load Node: " + simpleNode.Properties.FirstOrDefault(n => n.Key == "TYPE").Value);
+                            throw new NullNodeException("Could not load Node: " + simpleNode.Properties.FirstOrDefault(n => n.Key == "Type").Value);
                         }
 
                         //We have our output node:
@@ -125,9 +125,15 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                     }
 
                     //After building from base -> We unify the UUIDs, so they are now unique again!
-                    includedNodes.forEach(n => n.ForceUUID(Guid.NewGuid().ToString()));
+                    includedNodes.ForEach(n => n.ForceUUID(Guid.NewGuid().ToString()));
                 }
             }
+        }
+
+        
+        public override void ClearInputs()
+        {
+            this.inputNodes = new Node[inputNodes.Count()];
         }
 
         public override object Clone()

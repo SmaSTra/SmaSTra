@@ -23,6 +23,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         private const string JSON_PROP_SUB_ELEMENTS = "subElements";
 
         /// <summary>
+        /// The path to the Properties of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_PROPERTIES = "Properties";
+
+        /// <summary>
         /// Name of the path for the Output Node in a Combined Node.
         /// </summary>
         private const string JSON_PROP_OUTPUT_NODE_NAME = "outputNodeName";
@@ -63,8 +68,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             return root
                 .GetValueAsJArray(JSON_PROP_SUB_ELEMENTS, new JArray())
-                .ToJObj()
-                .NonNull()
+                .ToJObj().NonNull()
+                .Select(n => n.GetValueAsJObject(JSON_PROP_SUB_ELEMENTS_PROPERTIES)).NonNull()
                 .Select(o => o.ToStringString())
                 .Select(m => new SimpleSubNode(m))
                 .ToList();

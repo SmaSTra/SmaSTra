@@ -20,7 +20,7 @@
 
     using SmaSTraDesigner.BusinessLogic;
     using Controls;
-    using Controls.Support;
+    using BusinessLogic.nodes;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -67,17 +67,6 @@
         #endregion event handlers
 
         #region command handlers
-
-        private void DebugTest_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-        private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            // Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
-            DialogCreateCustomElement dialog = new DialogCreateCustomElement();
-            dialog.ShowDialog();
-        }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -250,6 +239,30 @@
         private void AddToLibrary_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Clone());
+        }
+
+
+        private void Merge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = this.tdTreeDesigner.CanMergeCurrentSelection();
+        }
+
+
+        private void Merge_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.tdTreeDesigner.TryMergeCurrentSelection();
+        }
+
+
+        private void Unmerge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = this.tdTreeDesigner.CanUnmerge();
+        }
+
+
+        private void Unmerge_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.tdTreeDesigner.TryUnmergeSelectedNode();
         }
 
         #endregion command handlers

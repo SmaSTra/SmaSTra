@@ -20,11 +20,6 @@ namespace SmaSTraDesigner.BusinessLogic
 
         private static TransformationTree tree;
 
-        private static List<Node> newNodes = new List<Node>();
-        private static List<Connection> newConnections = new List<Connection>();
-
-        public static bool isDeserializing = false;
-
 
         public static void Serialize(TransformationTree transformationTree, string targetFile)
         {
@@ -63,7 +58,6 @@ namespace SmaSTraDesigner.BusinessLogic
 
         public static void Deserialize(TransformationTree transformationTree, string targetFile)
         {
-            isDeserializing = true;
             tree = transformationTree;
             //Read the singleton ClassManager.
             ClassManager classManager = Singleton<ClassManager>.Instance;
@@ -76,8 +70,8 @@ namespace SmaSTraDesigner.BusinessLogic
             var nodeSerializer = new NodeSerializer();
             UcTreeDesigner treeDesigner = tree.DesignTree;
 
-            newNodes = new List<Node>();
-            newConnections = new List<Connection>();
+            List<Node> newNodes = new List<Node>();
+            List<Connection> newConnections = new List<Connection>();
 
             JObject json = JObject.Parse(File.ReadAllText(targetFile));
 
@@ -96,7 +90,6 @@ namespace SmaSTraDesigner.BusinessLogic
                 if (connection.HasValue)
                 {
                     //Apply the connection:
-                    //applyConnection(connection.Value);
                     newConnections.Add(connection.Value);
                 }
                 
@@ -114,33 +107,9 @@ namespace SmaSTraDesigner.BusinessLogic
                 else treeDesigner.AddNode(node, false);
             }
 
-            //   addConnections(); // UcTreeDesigner is now responsible for calling this method after all NodeViewers are loaded
+            //Apply the Connections at last.
+            newConnections.ForEach(treeDesigner.AddConnection);
         }
 
-        internal static void addConnections()
-        {
-            foreach (Connection connection in newConnections)
-            {
-                tree.DesignTree.AddConnection(connection);
-            }
-            isDeserializing = false;
-        }
-
-        private static void applyConnection(Connection connection)
-        {
-            Node input = connection.InputNode;
-            Node output = connection.OutputNode;
-            if (input == null) return;
-
-            //Add the input:
-            if (input is OutputNode)
-            {
-                ((OutputNode)tree.OutputNode).InputNode = connection.OutputNode;
-            }
-            if (input is Transformation)
-            {
-                ((Transformation)input).InputNodes[connection.InputIndex] = output;
-            }
-        }
     }
 }

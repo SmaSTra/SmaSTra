@@ -146,15 +146,23 @@
 			internal set;
 		}
 
-		#endregion properties
+        #endregion properties
 
-		#region overrideable methods
+        #region overrideable methods
 
-		/// <summary>
-		/// Clones this node.
-		/// </summary>
-		/// <returns>A clone of this node.</returns>
-		public virtual object Clone()
+
+        /// <summary>
+        /// This indicates to clear all inputs of the node programmatically.
+        /// No UI stuff going on here!
+        /// </summary>
+        public virtual void ClearInputs()
+        { }
+
+        /// <summary>
+        /// Clones this node.
+        /// </summary>
+        /// <returns>A clone of this node.</returns>
+        public virtual object Clone()
 		{
 			Node clone = (Node)this.MemberwiseClone();
             clone.NodeUUID = Guid.NewGuid().ToString();

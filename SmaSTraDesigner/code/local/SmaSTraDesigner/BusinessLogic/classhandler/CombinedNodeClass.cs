@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SmaSTraDesigner.BusinessLogic.utils;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -77,10 +78,14 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             string type = "";
             string name = "";
             string UUID = "";
+            double posX = 0;
+            double posY = 0;
 
             Properties.TryGetValue("TYPE", out type);
             Properties.TryGetValue("NAME", out name);
             Properties.TryGetValue("UUID", out UUID);
+            Properties.TryGetValueAsDouble("POSX", out posX, 0);
+            Properties.TryGetValueAsDouble("POSY", out posY, 0);
 
             //If no name -> give it the Type name:
             if(name == null || name.Count() == 0)
@@ -100,6 +105,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             {
                 node.Name = name;
                 node.ForceUUID(UUID);
+                node.PosX = posX;
+                node.PosY = posY;
             }
 
             return node;

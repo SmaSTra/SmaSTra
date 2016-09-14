@@ -24,7 +24,7 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             JArray inputProperties = new JArray();
             node.InputIOData
                 .Select(serialize)
-                .forEach(inputProperties.Add);
+                .ForEach(inputProperties.Add);
             obj.Add("InputIOData", inputProperties);
 
             return obj;
