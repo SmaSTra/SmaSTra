@@ -331,7 +331,12 @@
 				throw new Exception(String.Format("InputNode {0} not found.", connection.InputNode));
 			}
 
-            if (oNode.IoHandles == null)
+            //TODO This is a temp FIX:
+            //This should actually not happen, but it does....
+            //Seems like the IO Handles from the Nodes directly added are not inited yet. :(
+            //Please fix this somehow...
+            //Probably somewhere else though... As in AddNode(Node node);
+            if (oNode.IoHandles == null || iNode.IoHandles == null)
             {
                 return;
             }
@@ -830,7 +835,7 @@
 
 
             //No name => Return:
-            if (newName.Count() <= 0) return;
+            if (string.IsNullOrWhiteSpace(newName)) return;
 
             generator.Name = newName;
             NodeClass generatedClass = generator.GenerateClass();
@@ -851,8 +856,6 @@
             AddNode(newNode, false);
 
             //Change the Connections:
-            //TODO fix this:
-            /*
             foreach (Node node in nodes)
             {
                 NodeClass nodeClass = node.Class;
@@ -869,7 +872,6 @@
                     }
                 }
             }
-            */
 
             //Check for the output connection:
             Node root = generator.GetRootNode();
@@ -881,7 +883,11 @@
                     .Cast<Connection?>()
                     .FirstOrDefault();
 
-                if (rootOutputConnection != null) AddConnection(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
+                if (rootOutputConnection != null)
+                {
+                    RemoveConnection(rootOutputConnection.Value);
+                    AddConnection(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
+                }
             }
 
             //At end -> Remove old ones!
