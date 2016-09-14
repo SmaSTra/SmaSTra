@@ -53,7 +53,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             this.Properties = new Dictionary<string, string>();
         }
 
-        public SimpleSubNode(Dictionary<string, string> properties)
+        public SimpleSubNode(IDictionary<string, string> properties)
         {
             Properties = properties;
         }
@@ -105,7 +105,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             return node;
         }
 
-        public Dictionary<string, string> Properties { private set; get; }
+        public IDictionary<string, string> Properties { private set; get; }
     }
 
 

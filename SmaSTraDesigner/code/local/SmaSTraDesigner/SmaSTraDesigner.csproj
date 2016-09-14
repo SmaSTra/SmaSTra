@@ -127,6 +127,11 @@
     <Compile Include="BusinessLogic\classhandler\CombinedClassGenerator.cs" />
     <Compile Include="BusinessLogic\classhandler\CombinedNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\IOData.cs" />
+    <Compile Include="BusinessLogic\codegeneration\loader\AbstractNodeLoader.cs" />
+    <Compile Include="BusinessLogic\codegeneration\loader\CombinedLoader.cs" />
+    <Compile Include="BusinessLogic\codegeneration\loader\NodeLoader.cs" />
+    <Compile Include="BusinessLogic\codegeneration\loader\SensorLoader.cs" />
+    <Compile Include="BusinessLogic\codegeneration\loader\TransformationLoader.cs" />
     <Compile Include="BusinessLogic\nodes\Connection.cs" />
     <Compile Include="BusinessLogic\codegeneration\JavaGenerator.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />
