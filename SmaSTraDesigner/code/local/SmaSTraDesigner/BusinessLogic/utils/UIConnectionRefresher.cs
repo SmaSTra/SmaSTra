@@ -29,6 +29,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
 
         public void AddPendingConnection(Connection connection, UcNodeViewer inView, UcNodeViewer outView)
         {
+            if (inView == null || outView == null) return;
             this.pending.Add(new PendingConnection(connection, inView, outView));
         }
 
