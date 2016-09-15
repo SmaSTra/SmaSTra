@@ -24,9 +24,10 @@ namespace SmaSTraDesigner.Controls.Support
     public partial class DialogCreateCustomElement : Window
 
     {
-        private string elementName;
+        private string elementName = "";
         private DataType outputType;
-        private ObservableCollection<DataType> inputTypes = new ObservableCollection<DataType>();
+        private List<DataType> inputTypes = new List<DataType>();
+        private string methodCode = "";
 
         private DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
         private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
@@ -70,7 +71,7 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
-        public ObservableCollection<DataType> InputTypes
+        public List<DataType> InputTypes
         {
             get
             {
@@ -80,6 +81,19 @@ namespace SmaSTraDesigner.Controls.Support
             {
                 if (inputTypes != value)
                     inputTypes = value;
+            }
+        }
+
+        public string MethodCode
+        {
+            get
+            {
+                return methodCode;
+            }
+            set
+            {
+                if (methodCode != value)
+                    methodCode = value;
             }
         }
 
@@ -120,7 +134,11 @@ namespace SmaSTraDesigner.Controls.Support
         private void cboxTypesString_SelectionChanged(object sender, RoutedEventArgs e)
         {
             DataType selectedType;
-            InputTypeViewModel inputTypeViewModel = (InputTypeViewModel)((ComboBox)sender).DataContext;
+            InputTypeViewModel inputTypeViewModel = ((ComboBox)sender).DataContext as InputTypeViewModel;
+            if(inputTypeViewModel == null)
+            {
+                return;
+            }
             int typeIndex = ((ComboBox)sender).SelectedIndex - 1;
             if (typeIndex >= 0) {
                 selectedType = allDataTypes[typeIndex];
@@ -132,22 +150,6 @@ namespace SmaSTraDesigner.Controls.Support
             inputTypeViewModel.SelectedDataType = selectedType;
         }
 
-        private void cboxOutputTypeString_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            DataType selectedType;
-            int index = ((ComboBox)sender).SelectedIndex - 1;
-            if (index >= 0)
-            {
-                selectedType = allDataTypes[index];
-            }
-            else
-            {
-                //TODO: create new DataType instead of úsing the first
-                selectedType = allDataTypes[0];
-            }
-            OutputType = selectedType;
-        }
-
         private void btnAddInput_Click(object sender, RoutedEventArgs e)
         {
             InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "input type string" });
@@ -155,16 +157,44 @@ namespace SmaSTraDesigner.Controls.Support
 
         private void btnIOFinished_Click(object sender, RoutedEventArgs e)
         {
+            if(ElementName.Length < 1)
+            {
+                tbStatus.Text = "Bitte einen Namen für das neue Element angeben.";
+                return;
+            }
+
+            OutputType = ((InputTypeViewModel)cboxOutputTypeString.DataContext).SelectedDataType;
+            if(OutputType == null)
+            {
+                tbStatus.Text = "Bitte einen Output Typ für das neue Element angeben.";
+                return;
+            }
+
             InputTypes.Clear();
             foreach(InputTypeViewModel inputTypeViewModel in InputTypesViewModels)
             {
-                if (inputTypeViewModel.SelectedDataType != null)
+                if (inputTypeViewModel.SelectedDataType == null)
                 {
-                    InputTypes.Add(inputTypeViewModel.SelectedDataType);
+                    tbStatus.Text = "Ein Input hat keinen Typ ausgewählt. Bitte wählen Sie einen Typ aus";
+                    return;
                 }
+                InputTypes.Add(inputTypeViewModel.SelectedDataType);
             }
+
+            if(MethodCode.Length < 1)
+            {
+                tbStatus.Text = "Die Methode ist leer. Bitte geben sie den Methodentext ein";
+                return;
+            }
+
             //TODO next Dialog
             DialogResult = true;
+        }
+
+        private void btnDeleteInputType_Click(object sender, RoutedEventArgs e)
+        {
+            InputTypeViewModel inputToDelete = (InputTypeViewModel)((Button)sender).DataContext;
+            InputTypesViewModels.Remove(inputToDelete);
         }
     }
 
@@ -191,6 +221,7 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
+        //Used to create new DataType if selectedDataType == 0
         private string inputTypeString;
         public string InputTypeString
         {

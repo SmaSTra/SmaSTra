@@ -76,8 +76,23 @@
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             // Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
-            DialogCreateCustomElement dialog = new DialogCreateCustomElement();
-            dialog.ShowDialog();
+            DialogCreateCustomElement dialogNewElement = new DialogCreateCustomElement();
+            if (dialogNewElement.ShowDialog() == true)
+            {
+                string newElementName = dialogNewElement.ElementName;
+                List<DataType> inputTypes = dialogNewElement.InputTypes;
+                DataType outputType = dialogNewElement.OutputType;
+                string methodCode = dialogNewElement.MethodCode;
+
+                //Debug check if everything is correct
+                Console.WriteLine("+++++ New Element Name: " + newElementName);
+                foreach (DataType inType in inputTypes)
+                {
+                    Console.WriteLine("+++++ inType: " + inType.Name);
+                }
+                Console.WriteLine("+++++ OutputType: " + outputType.Name);
+                Console.WriteLine("+++++ MethodCode: " + methodCode);
+            }
         }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
