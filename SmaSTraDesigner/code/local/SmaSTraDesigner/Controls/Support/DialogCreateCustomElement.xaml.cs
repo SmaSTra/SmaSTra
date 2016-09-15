@@ -39,8 +39,8 @@ namespace SmaSTraDesigner.Controls.Support
             InitializeComponent();
             this.DataContext = this;
             allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
-            cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "output type string" };
-            InputTypesViewModels.Add(new InputTypeViewModel() {InputTypeString = "input type string"});
+            cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "outputType", SelectedDataType = allDataTypes[0] };
+            InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "inputType", SelectedDataType = allDataTypes [0]});
             
             
         }
@@ -103,6 +103,13 @@ namespace SmaSTraDesigner.Controls.Support
             {
                 return allDataTypes;
             }
+            set
+            {
+                if(allDataTypes != value)
+                {
+                    allDataTypes = value;
+                }
+            }
         }
 
         public ObservableCollection<InputTypeViewModel> InputTypesViewModels
@@ -141,18 +148,17 @@ namespace SmaSTraDesigner.Controls.Support
             }
             int typeIndex = ((ComboBox)sender).SelectedIndex - 1;
             if (typeIndex >= 0) {
-                selectedType = allDataTypes[typeIndex];
+                selectedType = AllDataTypes[typeIndex];
             } else
-            {
-                //TODO: create new DataType instead of úsing the first
-                selectedType = allDataTypes[0];
+            {               
+                selectedType = null;
             }
             inputTypeViewModel.SelectedDataType = selectedType;
         }
 
         private void btnAddInput_Click(object sender, RoutedEventArgs e)
         {
-            InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "input type string" });
+            InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "inputType", SelectedDataType = allDataTypes[0] });
         }
 
         private void btnIOFinished_Click(object sender, RoutedEventArgs e)
@@ -162,21 +168,45 @@ namespace SmaSTraDesigner.Controls.Support
                 tbStatus.Text = "Bitte einen Namen für das neue Element angeben.";
                 return;
             }
-
+            ClassManager classManager = Singleton<ClassManager>.Instance;
             OutputType = ((InputTypeViewModel)cboxOutputTypeString.DataContext).SelectedDataType;
             if(OutputType == null)
-            {
-                tbStatus.Text = "Bitte einen Output Typ für das neue Element angeben.";
-                return;
+            {   //Check new DataType name
+                if (OutputTypeString.Length < 1)
+                {
+                    tbStatus.Text = "Bitte einen Namen für den neuen Output Typ angeben.";
+                    return;
+                } else
+                {   //create new DataType and update AllDataTypes[]
+                    DataType newDataType = new DataType(OutputTypeString);
+                    OutputType = newDataType;
+                    if (!AllDataTypes.Contains(newDataType))
+                    {
+                        classManager.AddDataType(newDataType.Name);
+                        AllDataTypes = classManager.getDataTypes();
+                    }
+                }
             }
 
             InputTypes.Clear();
             foreach(InputTypeViewModel inputTypeViewModel in InputTypesViewModels)
             {
                 if (inputTypeViewModel.SelectedDataType == null)
-                {
-                    tbStatus.Text = "Ein Input hat keinen Typ ausgewählt. Bitte wählen Sie einen Typ aus";
-                    return;
+                {   //Check new DataType name
+                    if (inputTypeViewModel.InputTypeString.Length < 1)
+                    {
+                        tbStatus.Text = "Bitte einen Namen für den neuen Input Typ angeben.";
+                        return;
+                    } else
+                    {   //create new DataType and update AllDataTypes[]
+                        DataType newDataType = new DataType(inputTypeViewModel.InputTypeString);
+                        inputTypeViewModel.SelectedDataType = newDataType;
+                        if (!AllDataTypes.Contains(newDataType))
+                        {
+                            classManager.AddDataType(newDataType.Name);
+                            AllDataTypes = classManager.getDataTypes();
+                        }
+                    }
                 }
                 InputTypes.Add(inputTypeViewModel.SelectedDataType);
             }
@@ -254,4 +284,31 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
     }
+
+    public class ConverterCountToVisibility : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is int)
+            {
+                if ((int)value != 0)
+                {
+                    Console.WriteLine("Visibility.Collapsed");
+                    return Visibility.Collapsed;
+                }
+                else
+                {
+                    Console.WriteLine("Visibility.Visible");
+                    return Visibility.Visible;
+                }
+            }
+            Console.WriteLine("Visibility.Collapsed");
+            return Visibility.Collapsed;        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return 0;
+        }
+    }
+
 }
