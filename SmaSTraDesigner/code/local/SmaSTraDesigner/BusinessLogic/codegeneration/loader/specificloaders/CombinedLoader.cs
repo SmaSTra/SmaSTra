@@ -4,6 +4,7 @@ using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -31,6 +32,21 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// Name of the path for the Output Node in a Combined Node.
         /// </summary>
         private const string JSON_PROP_OUTPUT_NODE_NAME = "outputNodeName";
+
+        /// <summary>
+        /// The uuid of the first node of the connection.
+        /// </summary>
+        private const string JSON_PROP_CONNECTION_FIRST_NODE = "firstNode";
+
+        /// <summary>
+        /// The uuid of the second node of the connection.
+        /// </summary>
+        private const string JSON_PROP_CONNECTION_SECOND_NODE = "secondNode";
+
+        /// <summary>
+        /// The index of the connection on the input.
+        /// </summary>
+        private const string JSON_PROP_CONNECTION_INDEX_NODE = "position";
 
         #endregion consts
 
@@ -62,7 +78,26 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             };
         }
 
+        public override JObject classToJson(NodeClass nodeClass)
+        {
+            CombinedNodeClass combinedClass = nodeClass as CombinedNodeClass;
+            if(combinedClass == null)
+            {
+                return null;
+            }
 
+            JObject root = new JObject();
+            AddOwnType(root);
+            AddDescription(root, nodeClass.Description);
+            AddDisplayName(root, nodeClass.DisplayName);
+            AddOutput(root, nodeClass.OutputType);
+            AddInputs(root, nodeClass.InputTypes);
+            AddConnections(root, combinedClass.Connections);
+            AddSubNodes(root, combinedClass.SubElements);
+            AddOutputNodeID(root, combinedClass.OutputNodeUUID);  
+
+            return root;
+        }
 
         private List<SimpleSubNode> ReadSubNodes(JObject root)
         {
@@ -89,9 +124,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             JObject obj = tObj as JObject;
             if (obj == null) return null;
 
-            string firstNode = obj.GetValueAsString("firstNode");
-            string secondNode = obj.GetValueAsString("secondNode");
-            int position = obj.GetValueAsInt("position");
+            string firstNode = obj.GetValueAsString(JSON_PROP_CONNECTION_FIRST_NODE);
+            string secondNode = obj.GetValueAsString(JSON_PROP_CONNECTION_SECOND_NODE);
+            int position = obj.GetValueAsInt(JSON_PROP_CONNECTION_INDEX_NODE);
             return new SimpleConnection(firstNode, secondNode, position);
         }
 
@@ -104,6 +139,40 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             return root.GetValueAsString(JSON_PROP_OUTPUT_NODE_NAME, "");
         }
+
+
+        private void AddSubNodes(JObject root, List<SimpleSubNode> subElements)
+        {
+            root.Add(JSON_PROP_SUB_ELEMENTS,
+                subElements.Select(s => s.Properties)
+                .Select(p => p.ToJObject())
+                .Select(p =>
+                    { var tmp = new JObject();
+                        tmp.Add(JSON_PROP_SUB_ELEMENTS_PROPERTIES, p);
+                        return tmp;
+                    }).ToJArray()
+            );
+        }
+
+        private void AddConnections(JObject root, List<SimpleConnection> connections)
+        {
+            root.Add(JSON_PROP_CONNECTIONS,
+                connections.Select(c =>
+                {
+                    JObject obj = new JObject();
+                    obj.Add(JSON_PROP_CONNECTION_FIRST_NODE, c.firstNode);
+                    obj.Add(JSON_PROP_CONNECTION_SECOND_NODE, c.secondNode);
+                    obj.Add(JSON_PROP_CONNECTION_INDEX_NODE, c.position);
+                    return obj;
+                }).ToJArray()
+            );
+        }
+
+        private void AddOutputNodeID(JObject root, string outputNodeUUID)
+        {
+            root.Add(JSON_PROP_OUTPUT_NODE_NAME, outputNodeUUID);
+        }
+
 
     }
 }

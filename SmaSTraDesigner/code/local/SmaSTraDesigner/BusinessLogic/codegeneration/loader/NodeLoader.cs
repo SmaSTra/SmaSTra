@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Common;
+using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
@@ -76,8 +77,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
         #region Constructor
 
-        public NodeLoader(ClassManager cManager)
+        public NodeLoader()
         {
+            ClassManager cManager = Singleton<ClassManager>.Instance;
             addLoader(new TransformationLoader(cManager));
             addLoader(new SensorLoader(cManager));
             addLoader(new CombinedLoader(cManager));
@@ -143,6 +145,49 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             return loader.loadFromJson(name, root);
         }
+
+        /// <summary>
+        /// Saves the Node passed to the path passed.
+        /// The passed path is taken AS IS. No fiddeling with names afterwards.
+        /// </summary>
+        /// <param name="nodeClass">To Save</param>
+        /// <param name="path">To save to</param>
+        public void saveToFolder(NodeClass nodeClass, string path)
+        {
+            if(path == null)
+            {
+                throw new ArgumentException("Path may not be null!");
+            }
+
+            if(nodeClass == null)
+            {
+                throw new ArgumentException("NodeClass may not be null!");
+            }
+
+            string metadataPath = Path.Combine(path, METADATA_FILENAME);
+            if (File.Exists(path))
+            {
+                throw new FileAlreadyPresentException("Folder: " + path + " already exists.");
+            }
+
+            AbstractNodeLoader loader = loaders[nodeClass.NodeType];
+            if (loader == null)
+            {
+                throw new MissingTypeException("Did not recognize Type for serialization: " + nodeClass.NodeType);
+            }
+
+            JObject toWrite = loader.classToJson(nodeClass);
+            if(toWrite == null)
+            {
+                throw new Exception("Ehhh, Something gone wrong, doc!");
+            }
+
+            //Write the Metadata:
+            File.WriteAllText(metadataPath, toWrite.ToBeautifulJson());
+
+            //TODO add other stuff to add, like dependencies, etc.
+        }
+
     }
 
 
@@ -152,6 +197,15 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         public FileNotParseableException(string reason)
             :base(reason)
         {}
+
+    }
+
+    class FileAlreadyPresentException : Exception
+    {
+
+        public FileAlreadyPresentException(string reason)
+            : base(reason)
+        { }
 
     }
 

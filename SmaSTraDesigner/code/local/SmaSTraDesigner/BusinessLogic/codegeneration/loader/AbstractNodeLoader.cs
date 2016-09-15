@@ -71,7 +71,15 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <returns></returns>
         public abstract NodeClass loadFromJson(string name, JObject root);
 
-        #endregion AbstractMethods
+
+        /// <summary>
+        /// Serializes the Nodeclass to a Json respective for the Meta-Data.
+        /// </summary>
+        /// <param name="nodeClass">to generate for.</param>
+        /// <returns>The generated root object</returns>
+        public abstract JObject classToJson(NodeClass nodeClass);
+
+        #endregion AbsstractMethods
 
 
         #region Methods
@@ -128,6 +136,64 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         protected DataType ReadOutput(JObject root)
         {
             return cManager.AddDataType(root.GetValueAsString(JSON_PROP_OUTPUT, ""));
+        }
+
+        /// <summary>
+        /// Adds the own type to the Obj.
+        /// </summary>
+        /// <param name="toAddTo">ToAdd to.</param>
+        protected void AddOwnType(JObject toAddTo)
+        {
+            toAddTo.Add("type", this.nodeType.ToString().ToLower());
+        }
+
+        /// <summary>
+        /// Adds the Output to the Node passed.
+        /// </summary>
+        /// <param name="toAddTo">the Json Object to add to</param>
+        /// <param name="type">To add</param>
+        protected void AddOutput(JObject toAddTo, DataType type)
+        {
+            toAddTo.Add(JSON_PROP_OUTPUT, type.Name);
+        }
+
+        /// <summary>
+        /// Adds the description passed to the Object.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="description">to add.</param>
+        protected void AddDescription(JObject toAddTo, string description)
+        {
+            toAddTo.Add(JSON_PROP_DESCRIPTION, description);
+        }
+
+
+        /// <summary>
+        /// Adds the Display name passed to the Object.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="display">to add.</param>
+        protected void AddDisplayName(JObject toAddTo, string display)
+        {
+            toAddTo.Add(JSON_PROP_DISPLAY, display);
+        }
+
+        /// <summary>
+        /// Adds the inputs to the JObject.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="inputs">to add</param>
+        public void AddInputs(JObject toAddTo, DataType[] inputs)
+        {
+            if (inputs == null) inputs = new DataType[0];
+
+            JObject inputObj = new JObject();
+            for(int i = 0; i < inputs.Count(); i++)
+            {
+                inputObj.Add("arg" + i, inputs[i].Name);
+            }
+
+            toAddTo.Add(JSON_PROP_INPUT, inputObj);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.utils;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
@@ -24,6 +25,17 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 DisplayName = displayName,
                 Description = description
             };
+        }
+
+        public override JObject classToJson(NodeClass nodeClass)
+        {
+            JObject root = new JObject();
+            AddOwnType(root);
+            AddDescription(root, nodeClass.Description);
+            AddDisplayName(root, nodeClass.DisplayName);
+            AddOutput(root, nodeClass.OutputType);
+
+            return root;
         }
 
     }

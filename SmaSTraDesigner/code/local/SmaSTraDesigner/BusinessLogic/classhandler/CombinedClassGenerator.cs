@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Common;
+using Newtonsoft.Json;
+using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using System;
 using System.Collections.Generic;
@@ -229,57 +231,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             if (Directory.Exists(savePath)) return false;
             Directory.CreateDirectory(savePath);
 
-            string metaFile = Path.Combine(savePath, "metadata.json");
-
-            //Combine the JSON:
-            dynamic json = new ExpandoObject();
-            json.description = toSave.Description;
-            json.display = toSave.DisplayName;
-            json.output = toSave.OutputType.Name;
-            json.type = "combined";
-
-            //Generate the inputs:
-            Dictionary<string,string> inputs = new Dictionary<string, string>();
-            for (int i = 0; i < toSave.InputTypes.Count(); i++)
-            {
-                inputs.Add("arg" + i, toSave.InputTypes[i].Name);
-            }
-
-            json.input = inputs;
-
-            //Generate the Connections:
-            dynamic[] connections = new dynamic[toSave.Connections.Count()];
-            for (int i = 0; i < connections.Count(); i++)
-            {
-                connections[i] = toSave.Connections.ElementAt(i);
-            }
-
-            json.connections = connections;
-
-            //Generate the Nodes:
-            dynamic[] nodes = new dynamic[toSave.SubElements.Count()];
-            for (int i = 0; i < toSave.SubElements.Count(); i++)
-            {
-                nodes[i] = toSave.SubElements.ElementAt(i);
-            }
-
-            json.subElements = nodes;
-            json.outputNodeName = toSave.OutputNodeUUID;
-
-
-
-            //Create the Json settings:
-            var jsonSettings = new JsonSerializerSettings()
-            {
-                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                Formatting = Newtonsoft.Json.Formatting.Indented
-            };
-
-            //Generate a string and write it to the file:
-            string text = JsonConvert.SerializeObject(json, jsonSettings);
-            File.WriteAllText(metaFile, text);
-
+            Singleton<NodeLoader>.Instance.saveToFolder(toSave, savePath);
             return true;
         }
 

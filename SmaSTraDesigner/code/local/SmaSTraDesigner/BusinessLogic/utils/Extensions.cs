@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -87,6 +88,14 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         }
 
 
+        public static JArray ToJArray(this IEnumerable<JToken> array)
+        {
+            JArray jArray = new JArray();
+            array.ForEach(jArray.Add);
+            return jArray;
+        }
+
+
         /// <summary>
         /// Creates a String -> String dict from an String -> Object dict.
         /// </summary>
@@ -100,10 +109,30 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return newDict;
         }
 
+        public static JObject ToJObject(this IDictionary<string,string> dic)
+        {
+            JObject obj = new JObject();
+            dic.ForEach(e => obj.Add(e.Key, e.Value));
+            return obj;
+        }
+
 
         public static IEnumerable<T> NonNull<T>(this IEnumerable<T> collection)
         {
             return collection.Where(e => e != null);
+        }
+
+        public static string ToBeautifulJson(this JToken token)
+        {
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Newtonsoft.Json.Formatting.Indented
+            };
+
+            //Generate a string and write it to the file:
+            return JsonConvert.SerializeObject(token, jsonSettings);
         }
 
     }

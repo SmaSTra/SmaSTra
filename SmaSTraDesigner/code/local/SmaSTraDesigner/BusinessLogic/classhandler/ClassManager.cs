@@ -2,6 +2,7 @@
 {
     using classhandler;
     using codegeneration.loader;
+    using Common;
     using nodes;
     using System;
     using System.Collections.Generic;
@@ -223,10 +224,10 @@
 			if (!Directory.Exists(path)) return;
 
             //TEST: New Method:
-            NodeLoader loader = new NodeLoader(this);
+            NodeLoader loader = Singleton<NodeLoader>.Instance;
 
-			// Subdirectories are presumed to contain a node class each.
-			string[] dirs = Directory.GetDirectories(path);
+            // Subdirectories are presumed to contain a node class each.
+            string[] dirs = Directory.GetDirectories(path);
 			foreach (string dir in dirs)
 			{
                 string dirName = Path.GetFileName(dir);

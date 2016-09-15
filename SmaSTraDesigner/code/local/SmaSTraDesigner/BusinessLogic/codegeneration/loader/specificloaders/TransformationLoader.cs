@@ -27,5 +27,17 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             };
         }
 
+        public override JObject classToJson(NodeClass nodeClass)
+        {
+            JObject root = new JObject();
+            AddOwnType(root);
+            AddDescription(root, nodeClass.Description);
+            AddDisplayName(root, nodeClass.DisplayName);
+            AddOutput(root, nodeClass.OutputType);
+            AddInputs(root, nodeClass.InputTypes);
+
+            return root;
+        }
+
     }
 }
