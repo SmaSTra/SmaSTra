@@ -17,7 +17,7 @@
     public class TransformationTree
 	{
 
-        private bool USE_NEW_GEN = false;
+        private bool USE_NEW_GEN = true;
 
         #region constructors
 

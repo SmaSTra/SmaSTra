@@ -100,7 +100,10 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
 
 
             //Set the root node:
-            codeExtension.RootNode = rootNode.InputNodes[0];
+            Node root = tree.OutputNode.InputNodes[0];
+            if (root is CombinedNode) root = (root as CombinedNode).outputNode;
+
+            codeExtension.RootNode = root;
             codeExtension.Package = "Test";
 
             //Get our Output type.
@@ -109,12 +112,15 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
 
             //Generate the Traverse Data:
             Stack<QueueStatus> stack = new Stack<QueueStatus>();
+            Stack<Node> executeStack = new Stack<Node>();
+
             stack.Push(new QueueStatus(tree.OutputNode, 0));
+            executeStack.Push(root);
 
             //Get the loader for generating.
             NodeLoader loader = Singleton<NodeLoader>.Instance;
 
-            //Process the Queue:
+            //Pre-Process the Stack:
             while (!stack.Empty())
             {
                 QueueStatus current = stack.Pop();
@@ -129,9 +135,6 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
                     node = (node as CombinedNode).outputNode;
                 }
 
-                //Now really process:
-                loader.CreateCode(node, codeExtension);
-
                 //Add next all to Stack:
                 if (current != null)
                 {
@@ -139,10 +142,26 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
                         .ForEachNonNull((n, i) => {
                             //Prevent doubles:
                             QueueStatus status = new QueueStatus(n, i);
-                            if (!stack.Contains(status)) stack.Push(new QueueStatus(node, i));
+                            if (!stack.Contains(status))
+                            {
+                                stack.Push(new QueueStatus(node, i));
+                                executeStack.Push(node.InputNodes[i]);
+                            }
                         });
                 }
             }
+
+            //Now lets execute!
+            while (!executeStack.Empty())
+            {
+                Node next = executeStack.Pop();
+                if (next == null) continue;
+
+                //Now really process:
+                loader.CreateCode(next, codeExtension);
+                DirCopy.DirectoryCopy(DirCopy.GetPathForNode(next.Class), destinationFolder, true);
+            }
+
 
             //Build the rest:
             string codeSteps = codeExtension.BuildCodeSteps();
@@ -167,7 +186,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
 
             //Write the code:
             File.WriteAllText(Path.Combine(destinationFolder, name), TheCode);
-            //TODO do copiing!
+            DirCopy.FinalizeCopy("generated\\", destinationFolder);
         }
 
 

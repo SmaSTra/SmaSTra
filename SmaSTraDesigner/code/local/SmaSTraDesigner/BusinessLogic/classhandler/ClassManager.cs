@@ -177,8 +177,8 @@
                     break;
 
                 case NodeType.Combined:
-                    this.baseConversions = null;
-                    this.OnPropertyChanged("BaseDataConversions");
+                    this.baseCombinedNodes = null;
+                    this.OnPropertyChanged("BaseCombined");
                     break;
             }
 
