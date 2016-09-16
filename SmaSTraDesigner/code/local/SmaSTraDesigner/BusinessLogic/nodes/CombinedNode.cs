@@ -65,7 +65,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         if (subNode == null)
                         {
                             //We have some types that are not registered?!?
-                            throw new NullNodeException("Could not load Node: " + simpleNode.Properties.FirstOrDefault(n => n.Key == "Type").Value);
+                            throw new NullNodeException("Could not load Node: " + simpleNode.Type);
                         }
 
                         //We have our output node:
@@ -116,6 +116,13 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                                 continue;
                             }
                         }
+                    }
+
+                    //Now we apply the Node-IO-Options:
+                    for(i = 0; i < inputConnections.Count(); i++)
+                    {
+                        Tuple<Node, int> tuple = inputConnections[i];
+                        this.inputIOData[i] = tuple.Item1.InputIOData[tuple.Item2];
                     }
 
                     //After building from base -> We unify the UUIDs, so they are now unique again!

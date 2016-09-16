@@ -48,6 +48,17 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return defaultValue;
         }
 
+        public static double GetValueAsDouble(this JObject obj, string key, double defaultValue = 0)
+        {
+            JToken token = obj.GetValue(key);
+            if (token != null)
+            {
+                Double.TryParse(token.ToString(), out defaultValue);
+            }
+
+            return defaultValue;
+        }
+
         public static bool GetValueAsBool(this JObject obj, string key, bool defaultValue = true)
         {
             JToken token = obj.GetValue(key);

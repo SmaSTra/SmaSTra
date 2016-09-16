@@ -4,6 +4,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Common;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -21,11 +22,6 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// Name of the path to the sub-Elements if this is a CombinedNode.
         /// </summary>
         private const string JSON_PROP_SUB_ELEMENTS = "subElements";
-
-        /// <summary>
-        /// The path to the Properties of the Sub-Elements.
-        /// </summary>
-        private const string JSON_PROP_SUB_ELEMENTS_PROPERTIES = "Properties";
 
         /// <summary>
         /// Name of the path for the Output Node in a Combined Node.
@@ -46,6 +42,48 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// The index of the connection on the input.
         /// </summary>
         private const string JSON_PROP_CONNECTION_INDEX_NODE = "position";
+
+
+        /// <summary>
+        /// The path to the name Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_NAME = "name";
+
+        /// <summary>
+        /// The path to the uuid Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_UUID = "uuid";
+
+        /// <summary>
+        /// The path to the type Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_TYPE = "type";
+
+        /// <summary>
+        /// The path to the posx Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_POSX = "posx";
+
+        /// <summary>
+        /// The path to the posy Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_POSY = "posy";
+
+        /// <summary>
+        /// The path to the Input-Data Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_INPUT_DATA = "inputData";
+
+
+        /// <summary>
+        /// The path to the Input-Data Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_INPUT_DATA_TYPE = "type";
+
+        /// <summary>
+        /// The path to the Input-Data Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE = "value";
 
         #endregion consts
 
@@ -91,12 +129,28 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
         private List<SimpleSubNode> ReadSubNodes(JObject root)
         {
+            ClassManager cManager = Singleton<ClassManager>.Instance;
             return root
                 .GetValueAsJArray(JSON_PROP_SUB_ELEMENTS, new JArray())
                 .ToJObj().NonNull()
-                .Select(n => n.GetValueAsJObject(JSON_PROP_SUB_ELEMENTS_PROPERTIES)).NonNull()
-                .Select(o => o.ToStringString())
-                .Select(m => new SimpleSubNode(m))
+                .Select(o =>
+                {
+                    string name = o.GetValueAsString(JSON_PROP_SUB_ELEMENTS_NAME, "");
+                    string uuid = o.GetValueAsString(JSON_PROP_SUB_ELEMENTS_UUID, "");
+                    string type = o.GetValueAsString(JSON_PROP_SUB_ELEMENTS_TYPE, "");
+                    double posx = o.GetValueAsDouble(JSON_PROP_SUB_ELEMENTS_POSX, 0);
+                    double posy = o.GetValueAsDouble(JSON_PROP_SUB_ELEMENTS_POSY, 0);
+                    IOData[] data = o.GetValueAsJArray(JSON_PROP_SUB_ELEMENTS_INPUT_DATA, new JArray())
+                        .ToJObj()
+                        .Select(o2 =>
+                        {
+                            string key = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_TYPE, "");
+                            string value = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE, "");
+                            return new IOData(cManager.AddDataType(key), value);
+                        }).ToArray();
+
+                    return new SimpleSubNode(name, uuid, type, posx, posy, data);
+                })
                 .ToList();
         }
 
@@ -134,13 +188,26 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         private void AddSubNodes(JObject root, List<SimpleSubNode> subElements)
         {
             root.Add(JSON_PROP_SUB_ELEMENTS,
-                subElements.Select(s => s.Properties)
-                .Select(p => p.ToJObject())
-                .Select(p =>
-                    { var tmp = new JObject();
-                        tmp.Add(JSON_PROP_SUB_ELEMENTS_PROPERTIES, p);
-                        return tmp;
-                    }).ToJArray()
+                subElements.Select(s =>
+                {
+                JObject obj = new JObject();
+                obj.Add(JSON_PROP_SUB_ELEMENTS_NAME, s.Name);
+                obj.Add(JSON_PROP_SUB_ELEMENTS_UUID, s.Uuid);
+                obj.Add(JSON_PROP_SUB_ELEMENTS_TYPE, s.Type);
+                obj.Add(JSON_PROP_SUB_ELEMENTS_POSX, s.PosX);
+                obj.Add(JSON_PROP_SUB_ELEMENTS_POSY, s.PosY);
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA,
+                        s.Data.Select(d =>
+                        {
+                            JObject obj2 = new JObject();
+                            obj2.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_TYPE, d.Type.Name);
+                            obj2.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE, d.Value);
+
+                            return obj2;
+                        }).ToJArray());
+
+                    return obj;
+                }).ToJArray()
             );
         }
 

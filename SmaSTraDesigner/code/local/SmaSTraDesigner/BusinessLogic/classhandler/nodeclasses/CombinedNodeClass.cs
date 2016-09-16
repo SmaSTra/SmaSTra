@@ -57,23 +57,35 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
     public class SimpleSubNode
     {
 
-        public SimpleSubNode()
+        public string Name { get; private set; }
+        public string Uuid { get; private set; }
+        public string Type { get; private set; }
+        public double PosX { get; private set; }
+        public double PosY { get; private set; }
+
+        public IOData[] Data { get; set; }
+
+        
+
+        public SimpleSubNode(Node node, double centerX, double centerY)
         {
-            this.Properties = new Dictionary<string, string>();
+            this.Name = node.Name;
+            this.Uuid = node.NodeUUID;
+            this.Type = node.Class.Name;
+            this.PosX = node.PosX - centerX;
+            this.PosY = node.PosY - centerY;
+
+            this.Data = node.InputIOData.Select(d => (IOData) d.Clone()).ToArray();
         }
 
-        public SimpleSubNode(IDictionary<string, string> properties)
+        public SimpleSubNode(string name, string uuid, string type, double posX, double posY, IOData[] data)
         {
-            Properties = properties;
-        }
-
-        public SimpleSubNode(Node node, double centerX, double centerY) : this()
-        {
-            Properties.Add("NAME", node.Name);
-            Properties.Add("UUID", node.NodeUUID);
-            Properties.Add("TYPE", node.Class.Name);
-            Properties.Add("POSX", (node.PosX - centerX).ToString());
-            Properties.Add("POSY", (node.PosY - centerY).ToString());
+            this.Name = name;
+            this.Uuid = uuid;
+            this.Type = type;
+            this.PosX = posX;
+            this.PosY = posY;
+            this.Data = data;
         }
 
         /// <summary>
@@ -83,44 +95,36 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <returns></returns>
         public Node GetAsRealNode(ClassManager classManager)
         {
-            string type = "";
-            string name = "";
-            string UUID = "";
-            double posX = 0;
-            double posY = 0;
-
-            Properties.TryGetValue("TYPE", out type);
-            Properties.TryGetValue("NAME", out name);
-            Properties.TryGetValue("UUID", out UUID);
-            Properties.TryGetValueAsDouble("POSX", out posX, 0);
-            Properties.TryGetValueAsDouble("POSY", out posY, 0);
-
             //If no name -> give it the Type name:
-            if(name == null || name.Count() == 0)
+            if(Name == null || Name.Count() == 0)
             {
-                name = type;
+                Name = Type;
             }
 
             //If no UUID -> Give it a new one!
-            if(UUID == null || UUID.Count() == 0)
+            if(Uuid == null || Uuid.Count() == 0)
             {
-                UUID = System.Guid.NewGuid().ToString();
+                Uuid = System.Guid.NewGuid().ToString();
             }
 
-            Node node = classManager.GetNewNodeForType(type);
+            Node node = classManager.GetNewNodeForType(Type);
             //Set the node property if present:
             if (node != null)
             {
-                node.Name = name;
-                node.ForceUUID(UUID);
-                node.PosX = posX;
-                node.PosY = posY;
+                node.Name = Name;
+                node.ForceUUID(Uuid);
+                node.PosX = PosX;
+                node.PosY = PosY;
+
+                for(int i = 0; i < node.InputIOData.Count(); i++)
+                {
+                    node.InputIOData[i].Value = Data[i].Value;
+                }
             }
 
             return node;
         }
-
-        public IDictionary<string, string> Properties { private set; get; }
+        
     }
 
 

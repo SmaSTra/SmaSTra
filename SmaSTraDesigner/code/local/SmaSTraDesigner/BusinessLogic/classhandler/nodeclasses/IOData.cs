@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
-    public class IOData : INotifyPropertyChanged
+    public class IOData : INotifyPropertyChanged, ICloneable
     {
 
         private DataType type;
@@ -54,6 +55,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             return !string.IsNullOrWhiteSpace(Value);
         }
+
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
