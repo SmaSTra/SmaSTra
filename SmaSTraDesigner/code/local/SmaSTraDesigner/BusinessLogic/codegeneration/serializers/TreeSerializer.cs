@@ -8,7 +8,6 @@ using System;
 using Newtonsoft.Json.Linq;
 using Common;
 using SmaSTraDesigner.Controls;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace SmaSTraDesigner.BusinessLogic

@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.utils;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader

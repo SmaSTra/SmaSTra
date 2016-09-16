@@ -1,12 +1,9 @@
 ﻿using Common;
-using Newtonsoft.Json;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
-using System.Json;
 using System.Linq;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 

@@ -1,7 +1,6 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
     using System;
-    using System.Linq;
 
     /// <summary>
     /// Stores information about a data type used by nodes for their inpot or output data.

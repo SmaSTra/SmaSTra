@@ -1,6 +1,5 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
-    using Newtonsoft.Json;
     using System;
     using static ClassManager;
 

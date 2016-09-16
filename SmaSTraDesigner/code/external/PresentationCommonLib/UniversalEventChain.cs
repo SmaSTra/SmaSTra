@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections.ObjectModel;
 
 namespace Common
 {
-	// TODO: (PS) Comment this.
-	// TODO: (PS) Finish this.
-	public class UniversalEventChain
+    // TODO: (PS) Comment this.
+    // TODO: (PS) Finish this.
+    public class UniversalEventChain
 	{
 		public UniversalEventHandle[] Handles
 		{

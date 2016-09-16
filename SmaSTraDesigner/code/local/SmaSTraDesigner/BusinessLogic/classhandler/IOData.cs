@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
-   public class IOData : INotifyPropertyChanged
+    public class IOData : INotifyPropertyChanged
     {
 
         private DataType type;

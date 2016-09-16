@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Common.ExtensionMethods
 {
-	// TODO: (PS) Comment this.
-	public static class ICollectionExtensions
+    // TODO: (PS) Comment this.
+    public static class ICollectionExtensions
 	{
 		/// <summary>
 		/// Adds all items of the given list to this one.

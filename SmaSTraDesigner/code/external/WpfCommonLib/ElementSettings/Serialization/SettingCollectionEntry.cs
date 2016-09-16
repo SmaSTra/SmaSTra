@@ -1,12 +1,11 @@
 ﻿namespace Common.ElementSettings.Serialization
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Runtime.Serialization;
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
 
-	// TODO: (PS) Comment this.
-	[Serializable]
+    // TODO: (PS) Comment this.
+    [Serializable]
 	public class SettingCollectionEntry : ISerializable
 	{
 		#region properties

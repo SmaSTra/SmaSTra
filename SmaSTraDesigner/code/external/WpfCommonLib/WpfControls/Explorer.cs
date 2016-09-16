@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace Common.WpfControls
 {
-	// TODO: (PS) Comment this.
-	[TemplatePart(Type = typeof(TreeView), Name = Explorer.PartNames.DirectoryTree)]
+    // TODO: (PS) Comment this.
+    [TemplatePart(Type = typeof(TreeView), Name = Explorer.PartNames.DirectoryTree)]
 	public class Explorer : Control
 	{
 		private TreeView directoryTree = null;

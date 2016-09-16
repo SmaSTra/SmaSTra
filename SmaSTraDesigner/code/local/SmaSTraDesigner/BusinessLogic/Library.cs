@@ -5,14 +5,10 @@ using SmaSTraDesigner.BusinessLogic.serializers;
 using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.Controls;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Json;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace SmaSTraDesigner.BusinessLogic
