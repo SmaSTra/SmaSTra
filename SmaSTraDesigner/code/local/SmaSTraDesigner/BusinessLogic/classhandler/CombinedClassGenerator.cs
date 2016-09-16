@@ -180,7 +180,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
             foreach ( Node node in nodes)
             {
-                NodeClass nodeClass = node.Class;
+                AbstractNodeClass nodeClass = node.Class;
                 Node[] nodeInputs = GetInputsOfNode(node);
 
                 subNodes.Add(new SimpleSubNode(node, centerX, centerY));
@@ -200,14 +200,9 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
             //Generate the BaseNode:
             DataType output = root.Class.OutputType;
-            CombinedNode baseNode = new CombinedNode();
-            baseNode.Name = Name;
-            baseNode.outputNode = root;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, baseNode, subNodes, connections, output, root.NodeUUID, inputs.ToArray());
-            finalNodeClass.Description = Description;
-            finalNodeClass.DisplayName = Name;
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, Name, Description, subNodes, connections, output, root.NodeUUID, inputs.ToArray());
 
             this.cachedNodeClass = finalNodeClass;
             return finalNodeClass;

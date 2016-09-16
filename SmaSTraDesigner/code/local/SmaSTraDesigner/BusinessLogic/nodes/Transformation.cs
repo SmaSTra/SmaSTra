@@ -43,7 +43,7 @@
 		/// </summary>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		protected override void OnClassChanged(NodeClass oldValue, NodeClass newValue)
+		protected override void OnClassChanged(AbstractNodeClass oldValue, AbstractNodeClass newValue)
 		{
 			base.OnClassChanged(oldValue, newValue);
 

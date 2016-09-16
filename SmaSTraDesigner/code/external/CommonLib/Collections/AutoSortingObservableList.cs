@@ -16,8 +16,6 @@
 		#region fields
 
 		private Func<T, T, int> compareMethod;
-		private IComparer comparer = null;
-		private IComparer<T> genericComparer = null;
 		private ObservableCollection<T> sortedCollection = new ObservableCollection<T>();
 		private ICollection<T> wrappedCollection;
 

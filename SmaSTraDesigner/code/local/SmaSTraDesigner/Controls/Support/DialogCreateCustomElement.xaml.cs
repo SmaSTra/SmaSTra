@@ -1,5 +1,7 @@
 ﻿using Common;
+using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
@@ -222,15 +224,55 @@ namespace SmaSTraDesigner.Controls.Support
         }
 
 
-        public NodeClass GenerateClassFromInputs()
+        public AbstractNodeClass GenerateClassFromInputs()
         {
             NodeType type = InputTypes.Empty() ?  NodeType.Sensor : NodeType.Transformation;
-
-            Node baseNode = type == NodeType.Sensor ? (Node) new DataSource() : (Node) new Transformation();
-            baseNode.Name = ElementName;
-
-            return new NodeClass(type, ElementName, baseNode, outputType, inputTypes.ToArray());
+            switch (type)
+            {
+                case NodeType.Transformation: return GenerateClassAsTransformation();
+                case NodeType.Sensor: return GenerateClassAsDataSource();
+                case NodeType.Combined:
+                default:
+                    throw new ArgumentException("Can not create " + type.ToString() + " Element in the Creation GUI!");
+            }
         }
+
+        private TransformationNodeClass GenerateClassAsTransformation()
+        {
+            string javaFreandlyName = ElementName.RemoveAll(" ","_");
+
+            string description = "No description";
+            string mainClass = "created." + javaFreandlyName;
+            string[] neededOtherClasses = new string[0];
+            string[] neededPermissions = new string[0];
+            ConfigElement[] config = new ConfigElement[0];
+            string methodName = javaFreandlyName;
+            bool isStatic = true;
+
+            return new TransformationNodeClass(javaFreandlyName, ElementName, description, OutputType, InputTypes.ToArray(), 
+                mainClass, neededOtherClasses, neededPermissions, config, 
+                methodName, isStatic);
+        }
+
+
+        private DataSourceNodeClass GenerateClassAsDataSource()
+        {
+            string javaFreandlyName = ElementName.RemoveAll(" ", "_");
+
+            string description = "No description";
+            string mainClass = "created." + javaFreandlyName;
+            string[] neededOtherClasses = new string[0];
+            string[] neededPermissions = new string[0];
+            ConfigElement[] config = new ConfigElement[0];
+            string dataMethod = "getData";
+            string startMethod = "start";
+            string stopMethod = "stop";
+
+            return new DataSourceNodeClass(javaFreandlyName, ElementName, description, OutputType, 
+                mainClass, neededOtherClasses, neededPermissions, config,
+                dataMethod, startMethod, stopMethod);
+        }
+
     }
 
     public class InputTypeViewModel

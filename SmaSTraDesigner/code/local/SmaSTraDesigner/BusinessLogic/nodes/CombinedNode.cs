@@ -42,7 +42,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         /// </summary>
         /// <param name="oldValue">The old value.</param>
         /// <param name="newValue">The new value.</param>
-        protected override void OnClassChanged(NodeClass oldValue, NodeClass newValue)
+        protected override void OnClassChanged(AbstractNodeClass oldValue, AbstractNodeClass newValue)
         {
             //Do not forget to call super to set DATA.
             base.OnClassChanged(oldValue, newValue);

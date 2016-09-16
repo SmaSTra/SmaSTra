@@ -2,6 +2,8 @@
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
 using System;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using Common;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -29,6 +31,42 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// Name of the output type property field in JSON metadata.
         /// </summary>
         private const string JSON_PROP_OUTPUT = "output";
+
+        /// <summary>
+        /// Name of the needed classes property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_NEEDED_CLASSES = "needs";
+
+        /// <summary>
+        /// Name of the needed Permissions property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_NEEDED_PERMISSIONS = "neededPermissions";
+
+        /// <summary>
+        /// Name of the Config property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_CONFIG = "config";
+
+        /// <summary>
+        /// Name of the Config Key property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_CONFIG_KEY = "key";
+
+        /// <summary>
+        /// Name of the Config Description property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_CONFIG_DESCRIPTION = "description";
+
+        /// <summary>
+        /// Name of the Config Type property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_CONFIG_CLASS_TYPE = "classType";
+
+
+        /// <summary>
+        /// Name of the mainClass property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_MAIN_CLASS = "mainClass";
 
         #endregion constants
 
@@ -66,7 +104,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="root">To read from.</param>
         /// <returns></returns>
-        public abstract NodeClass loadFromJson(string name, JObject root);
+        public abstract AbstractNodeClass loadFromJson(string name, JObject root);
 
 
         /// <summary>
@@ -74,7 +112,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="nodeClass">to generate for.</param>
         /// <returns>The generated root object</returns>
-        public abstract JObject classToJson(NodeClass nodeClass);
+        public abstract JObject classToJson(AbstractNodeClass nodeClass);
 
         #endregion AbsstractMethods
 
@@ -136,6 +174,60 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         }
 
         /// <summary>
+        /// Reads the needed other classes.
+        /// </summary>
+        /// <param name="root">to read from</param>
+        /// <returns>The needed other classes.</returns>
+        protected string[] ReadNeededClasses(JObject root)
+        {
+            return root.GetValueAsStringArray(JSON_PROP_NEEDED_CLASSES, new string[0]);
+        }
+
+        /// <summary>
+        /// Reads the needed permissions.
+        /// </summary>
+        /// <param name="root">to read from</param>
+        /// <returns>The needed permissions.</returns>
+        protected string[] ReadNeededPermissions(JObject root)
+        {
+            return root.GetValueAsStringArray(JSON_PROP_NEEDED_PERMISSIONS, new string[0]);
+        }
+
+        /// <summary>
+        /// Reads the Java MainClass for this element.
+        /// </summary>
+        /// <param name="root">to read from</param>
+        /// <returns>The Java MainClass</returns>
+        protected string ReadMainClass(JObject root)
+        {
+            return root.GetValueAsString(JSON_PROP_MAIN_CLASS, "");
+        }
+
+        /// <summary>
+        /// Reads the configuration of this element from the Root.
+        /// </summary>
+        /// <param name="root">To read from</param>
+        /// <returns>The loaded Config</returns>
+        protected ConfigElement[] ReadConfig(JObject root)
+        {
+            ClassManager cManager = Singleton<ClassManager>.Instance;
+            return root
+                .GetValueAsJArray(JSON_PROP_CONFIG, new JArray())
+                .ToJObj()
+                .Select(o =>
+                    {
+                        string key = o.GetValueAsString(JSON_PROP_CONFIG_KEY);
+                        string description = o.GetValueAsString(JSON_PROP_DESCRIPTION);
+                        DataType type = cManager.AddDataType(o.GetValueAsString(JSON_PROP_CONFIG_CLASS_TYPE));
+                        return new ConfigElement(key, description, type);
+                    }
+                ).NonNull().ToArray(); ;
+        }
+
+
+
+
+        /// <summary>
         /// Adds the own type to the Obj.
         /// </summary>
         /// <param name="toAddTo">ToAdd to.</param>
@@ -180,7 +272,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="toAddTo">The JObject to add to</param>
         /// <param name="inputs">to add</param>
-        public void AddInputs(JObject toAddTo, DataType[] inputs)
+        protected void AddInputs(JObject toAddTo, DataType[] inputs)
         {
             if (inputs == null) inputs = new DataType[0];
 
@@ -194,12 +286,64 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         }
 
         /// <summary>
+        /// Adds the Main class to the JObject passed.
+        /// </summary>
+        /// <param name="toAddTo">JObject to add to</param>
+        /// <param name="mainClass">The Main class to add</param>
+        protected void AddMainClass(JObject toAddTo, string mainClass)
+        {
+            toAddTo.Add(JSON_PROP_MAIN_CLASS, mainClass);
+        }
+
+        /// <summary>
+        /// Adds the Permissions to the JObject passed.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="permissions">The permissions to add</param>
+        protected void AddPermissions(JObject toAddTo, string[] permissions)
+        {
+            toAddTo.Add(JSON_PROP_NEEDED_PERMISSIONS, permissions.ToJArray());
+        }
+
+        /// <summary>
+        /// Adds the needed Classes to the JObject passed.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="permissions">The needed classes to add</param>
+        protected void AddNeededClasses(JObject toAddTo, string[] neededClasses)
+        {
+            toAddTo.Add(JSON_PROP_NEEDED_CLASSES, neededClasses.ToJArray());
+        }
+
+        /// <summary>
+        /// Adds the config to the JObject passed.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="config">to add</param>
+        protected void AddConfig(JObject toAddTo, ConfigElement[] config)
+        {
+            toAddTo.Add(JSON_PROP_CONFIG,
+                config.Select(c =>
+                {
+                    JObject obj = new JObject();
+                    obj.Add(JSON_PROP_CONFIG_KEY, c.Key);
+                    obj.Add(JSON_PROP_CONFIG_DESCRIPTION, c.Description);
+                    obj.Add(JSON_PROP_CONFIG_CLASS_TYPE, c.DataType.Name);
+
+                    return obj;
+                }).NonNull().ToJArray()
+            );
+        }
+        
+
+
+        /// <summary>
         /// Generates a new Class from a snippet.
         /// </summary>
         /// <param name="methodCode">to use.</param>
         /// <param name="nodeClass">to use.</param>
         /// <returns>the generated Java class</returns>
-        public abstract string GenerateClassFromSnippet(NodeClass nodeClass, string methodCode);
+        public abstract string GenerateClassFromSnippet(AbstractNodeClass nodeClass, string methodCode);
 
 
         #endregion Methods

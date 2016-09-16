@@ -1,11 +1,11 @@
 ﻿using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
-
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
-    class CombinedNodeClass : NodeClass
+    class CombinedNodeClass : AbstractNodeClass
     {
 
         #region Properties
@@ -29,10 +29,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         #region Constructor
 
-        public CombinedNodeClass(ClassManager.NodeType nodeType, string name, Node baseNode,
+        public CombinedNodeClass(ClassManager.NodeType nodeType, string name,
+                string displayName, string description,
                 List<SimpleSubNode> subElements, List<SimpleConnection> connections,
                 DataType outputType, string outputNodeUUID, DataType[] inputTypes = null)
-                    : base(nodeType, name, baseNode, outputType, inputTypes)
+                    : base(nodeType, name, displayName, description, outputType, "", null, null, null, inputTypes)
         {
             this.SubElements = subElements == null ? new List<SimpleSubNode>() : subElements;
             this.Connections = connections == null ? new List<SimpleConnection>() : connections;
@@ -43,6 +44,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         #endregion Constructor
 
+        protected override Node generateBaseNode()
+        {
+            return new CombinedNode()
+            {
+                Name = this.DisplayName
+            };
+        }
     }
 
     #region SubClasses

@@ -18,7 +18,7 @@
 		/// <summary>
 		/// NodeClass instance that provides information about this node's type.
 		/// </summary>
-		protected NodeClass clazz;
+		protected AbstractNodeClass clazz;
 
         /// <summary>
         /// This node's display name (is used as an identifier).
@@ -57,7 +57,7 @@
 		/// Gets or sets the Class property value.
 		/// NodeClass instance that provides information about this node's type.
 		/// </summary>
-		public NodeClass Class
+		public AbstractNodeClass Class
 		{
 			get
 			{
@@ -67,7 +67,7 @@
 			{
 				if (value != this.clazz)
 				{
-					NodeClass oldValue = this.clazz;
+					AbstractNodeClass oldValue = this.clazz;
 					this.clazz = value;
 					this.OnClassChanged(oldValue, value);
 				}
@@ -180,7 +180,7 @@
 		/// </summary>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		protected virtual void OnClassChanged(NodeClass oldValue, NodeClass newValue)
+		protected virtual void OnClassChanged(AbstractNodeClass oldValue, AbstractNodeClass newValue)
 		{
             InputIOData.Clear();
             foreach(DataType inputType in newValue.InputTypes)

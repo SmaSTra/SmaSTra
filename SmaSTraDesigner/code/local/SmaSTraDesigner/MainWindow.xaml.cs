@@ -84,7 +84,7 @@
                 Console.WriteLine("+++++ OutputType: " + outputType.Name);
                 Console.WriteLine("+++++ MethodCode: " + methodCode);
 
-                NodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
+                AbstractNodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
                 Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
                 Singleton<ClassManager>.Instance.AddClass(generatedClass);
             }

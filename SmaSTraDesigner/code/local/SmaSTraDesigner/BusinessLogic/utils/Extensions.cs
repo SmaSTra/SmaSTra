@@ -48,6 +48,17 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return defaultValue;
         }
 
+        public static bool GetValueAsBool(this JObject obj, string key, bool defaultValue = true)
+        {
+            JToken token = obj.GetValue(key);
+            if (token != null)
+            {
+                bool.TryParse(token.ToString(), out defaultValue);
+            }
+
+            return defaultValue;
+        }
+
 
         public static string[] GetValueAsStringArray(this JObject obj, string key, string[] defaultValue = null )
         {
@@ -83,8 +94,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
                 .Select(t => t as JObject);
         }
 
-
-        public static JArray ToJArray(this IEnumerable<JToken> array)
+        public static JArray ToJArray(this IEnumerable<Object> array)
         {
             JArray jArray = new JArray();
             array.ForEach(jArray.Add);
@@ -232,6 +242,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         {
             return !elements.Any();
         }
+        
 
     }
 

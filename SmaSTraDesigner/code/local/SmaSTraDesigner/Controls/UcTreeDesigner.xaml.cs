@@ -965,7 +965,7 @@
             }
 
             generator.Name = newName;
-            NodeClass generatedClass = generator.GenerateClass();
+            AbstractNodeClass generatedClass = generator.GenerateClass();
             if (generatedClass == null) return;
 
             //Save the just generated class:
@@ -986,7 +986,7 @@
             //Change the Connections:
             foreach (Node node in nodes)
             {
-                NodeClass nodeClass = node.Class;
+                AbstractNodeClass nodeClass = node.Class;
                 List<Node> nodeInputs = GetInputsOfNode(node, false);
                 
                 for (int i = 0; i < nodeInputs.Count(); i++)

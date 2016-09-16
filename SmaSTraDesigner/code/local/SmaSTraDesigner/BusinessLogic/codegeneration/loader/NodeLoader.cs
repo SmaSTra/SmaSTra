@@ -110,7 +110,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="path">To load</param>
         /// <returns>The loaded Class or an exception</returns>
-        public NodeClass loadFromFolder(string path)
+        public AbstractNodeClass loadFromFolder(string path)
         {
             if(path == null)
             {
@@ -159,7 +159,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <param name="nodeClass">To Save</param>
         /// <param name="path">To save to</param>
         /// <param name="methodCode">To save, can be null.</param>
-        public void saveToFolder(NodeClass nodeClass, string path, string methodCode = null)
+        public void saveToFolder(AbstractNodeClass nodeClass, string path, string methodCode = null)
         {
             if(path == null)
             {

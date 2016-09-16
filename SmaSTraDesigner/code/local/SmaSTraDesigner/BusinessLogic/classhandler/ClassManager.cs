@@ -42,7 +42,7 @@
         /// <summary>
         /// Dictionary that keeps track of loaded node classes to ensure no ambiguity.
         /// </summary>
-        private Dictionary<string, NodeClass> classes = new Dictionary<string, NodeClass>();
+        private Dictionary<string, AbstractNodeClass> classes = new Dictionary<string, AbstractNodeClass>();
 
 		/// <summary>
 		/// Dictionary that keeps track of loaded data types to ensure no ambiguity.
@@ -145,12 +145,12 @@
         /// </summary>
         /// <param name="nodeClass"> to add. </param>
         /// <returns></returns>
-        public NodeClass AddClass(NodeClass nodeClass)
+        public AbstractNodeClass AddClass(AbstractNodeClass nodeClass)
         {
             if (nodeClass == null) return null;
 
             //If already present -> Do not add!
-            NodeClass result;
+            AbstractNodeClass result;
             if (this.classes.TryGetValue(nodeClass.Name, out result)) return result;
 
             this.classes.Add(nodeClass.Name, nodeClass);
@@ -230,7 +230,7 @@
 
                 try
                 {
-                    NodeClass loadedClass = loader.loadFromFolder(dir);
+                    AbstractNodeClass loadedClass = loader.loadFromFolder(dir);
                     if (loadedClass == null) throw new Exception("Could not Load Class.... *Mumble... Mumble*");
                     AddClass(loadedClass);
                 }catch(Exception exp)

@@ -56,7 +56,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         { }
 
 
-        public override NodeClass loadFromJson(string name, JObject root)
+        public override AbstractNodeClass loadFromJson(string name, JObject root)
         {
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
@@ -65,20 +65,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             List<SimpleSubNode> subNodes = ReadSubNodes(root);
             List<SimpleConnection> connection = ReadConnections(root);
             string outputNodeID = ReadOutputNodeID(root);
-                
-            Node baseNode = new CombinedNode()
-            {
-                Name = displayName
-            };
 
-            return new CombinedNodeClass(nodeType, name, baseNode, subNodes, connection, output, outputNodeID, inputs)
-            {
-                DisplayName = displayName,
-                Description = description
-            };
+            return new CombinedNodeClass(nodeType, name, name, description, subNodes, connection, output, outputNodeID, inputs);
         }
 
-        public override JObject classToJson(NodeClass nodeClass)
+        public override JObject classToJson(AbstractNodeClass nodeClass)
         {
             CombinedNodeClass combinedClass = nodeClass as CombinedNodeClass;
             if(combinedClass == null)
@@ -174,7 +165,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         }
 
         
-        public override string GenerateClassFromSnippet(NodeClass nodeClass, string methodCode)
+        public override string GenerateClassFromSnippet(AbstractNodeClass nodeClass, string methodCode)
         {
             //Combined node have nothing to generate on classes.
             return null;

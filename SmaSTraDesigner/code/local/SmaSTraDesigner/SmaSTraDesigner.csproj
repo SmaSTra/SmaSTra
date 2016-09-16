@@ -126,8 +126,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\classhandler\CombinedClassGenerator.cs" />
-    <Compile Include="BusinessLogic\classhandler\CombinedNodeClass.cs" />
-    <Compile Include="BusinessLogic\classhandler\IOData.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\CombinedNodeClass.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\ConfigElement.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\DataSourceNodeClass.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\IOData.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\TransformationNodeClass.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\AbstractNodeLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\ClassTemplates.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\CombinedLoader.cs" />
@@ -138,9 +141,9 @@
     <Compile Include="BusinessLogic\codegeneration\JavaGenerator.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />
     <Compile Include="BusinessLogic\nodes\DataSource.cs" />
-    <Compile Include="BusinessLogic\classhandler\DataType.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\DataType.cs" />
     <Compile Include="BusinessLogic\nodes\Node.cs" />
-    <Compile Include="BusinessLogic\classhandler\NodeClass.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\AbstractNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\ClassManager.cs" />
     <Compile Include="BusinessLogic\codegeneration\serializers\NodeSerializer.cs" />
     <Compile Include="BusinessLogic\codegeneration\serializers\TreeSerializer.cs" />
