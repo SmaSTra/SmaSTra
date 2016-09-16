@@ -1,6 +1,7 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
     using System;
+    using System.Linq;
 
     /// <summary>
     /// Stores information about a data type used by nodes for their inpot or output data.
@@ -22,6 +23,7 @@
 			}
 
 			this.Name = name;
+            this.MinimizedName = minimizeToClass(name);
 		}
 
 		#endregion constructors
@@ -31,11 +33,13 @@
 		/// <summary>
 		/// Data type name (is used as a unique identifier)
 		/// </summary>
-		public string Name
-		{
-			get;
-			private set;
-		}
+		public string Name { get; }
+
+        /// <summary>
+        /// The Name of the Class minimized to Java criteria.
+        /// </summary>
+        public string MinimizedName { get; }
+
 
         #endregion properties
 
@@ -80,6 +84,17 @@
 			return this.Equals(other);
 		}
 
-		#endregion methods
-	}
+        /// <summary>
+        /// This gets the last part of a class from an complete Class name.
+        /// Eg.: java.util.List -> List.
+        /// </summary>
+        /// <param name="completeClassName"> This is the complete class name. For example 'java.util.List'</param>
+        /// <returns>The last part of the Class name.</returns>
+        private string minimizeToClass(string completeClassName)
+        {
+            return completeClassName.Split('.').Last();
+        }
+
+        #endregion methods
+    }
 }

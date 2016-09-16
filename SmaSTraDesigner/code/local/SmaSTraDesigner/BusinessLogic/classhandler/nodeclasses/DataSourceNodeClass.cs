@@ -1,7 +1,4 @@
-﻿
-using System;
-
-namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
+﻿namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
     class DataSourceNodeClass : AbstractNodeClass
     {

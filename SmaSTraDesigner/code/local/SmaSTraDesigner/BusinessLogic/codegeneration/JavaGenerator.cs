@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
-    using Newtonsoft.Json.Linq;
+    
     using nodes;
+    using classhandler.nodeclasses;
 
     /// <summary>
     /// Class handling all necessary functionality for the generation of java-code
@@ -113,6 +113,19 @@
 
             File.Delete(temppath);
         }
+
+
+        private static string GetPathForNode(AbstractNodeClass nodeClass)
+        {
+            string path = Path.Combine("generated",nodeClass.Name);
+            if (Directory.Exists(path))
+            {
+                return path;
+            }
+
+            return Path.Combine("created", nodeClass.Name);
+        }
+
 
         #endregion static methods
 
@@ -221,11 +234,10 @@
 		/// <returns>An array of five string-Lists. First element is imports, second is inits (of which every first element is the initialization of the sensor as a variable and the second element
         /// are the calls needed to actually initalize it), third is transforms (empty in this case, but added for consistency), fourth are the 
 		/// functions' returnValues, which in this case contains an int, the number of the current sensor, last are the methodcalls needed to fetch data from these sensors</returns>
-		public List<string>[] processSensor(Node currentNode, int number, bool first, string targetDirectory)
+		public List<string>[] processSensor(DataSource currentNode, int number, bool first, string targetDirectory)
 		{
 			string fileName = currentNode.Class.Name;
-			string sourceDirectory = "generated\\" + fileName;
-            var json = JObject.Parse(File.ReadAllText(sourceDirectory + "\\metadata.json"));
+            DataSourceNodeClass nodeClass = currentNode.Class as DataSourceNodeClass;
 
 			List<string>[] code = new List<string>[5];
 			List<string> imports = new List<string>();
@@ -237,20 +249,20 @@
 			Console.WriteLine("sensor processing called!");
 
             //imports
-            imports.Add(json["mainClass"].ToString());
-			foreach (string need in json["needs"]) imports.Add(need);
+            imports.Add(nodeClass.MainClass.ToString());
+            imports.Add(nodeClass.OutputType.Name);
 
             //Be sure to add all contents of the folder to the Result!
-			DirectoryCopy(sourceDirectory, targetDirectory, true);
+			DirectoryCopy(GetPathForNode(nodeClass), targetDirectory, true);
 
-            string sensorMainClass = minimizeToClass(json["mainClass"].ToString());
+            string sensorMainClass = minimizeToClass(nodeClass.MainClass);
             string prep = "\tprivate " + sensorMainClass + " sensor" + number + ";\n";
 
             //initiating sensor
             string init = "\t\t" + "sensor" + number + " = new " + sensorMainClass + "(context);\n";
             
-            //Start the sensor if startable. This means that .start is present in the dynamic json:
-            if(json["start"] != null) init += "\t\tsensor" + number + "." + json["start"] + "();\n";
+            //Start the sensor if startable.
+            if(!string.IsNullOrWhiteSpace(nodeClass.StartMethod)) init += "\t\tsensor" + number + "." + nodeClass.StartMethod + "();\n";
 
             inits.Add(prep);
 			inits.Add(init);
@@ -258,19 +270,19 @@
             if (first)
             {
                 string transform = "\tprivate void transform0(){\n";
-                string methodCall = "\t\tdata = sensor0." + json["dataMethod"] + "();\n";
+                string methodCall = "\t\tdata = sensor0." + nodeClass.DataMethod + "();\n";
 
                 transform = transform + methodCall + "\t}\n";
 
                 transforms.Add(transform);
 
-                newReturnValues.Add(minimizeToClass( json["output"].ToString() )); //Needed so the text-assembly will know what to derive from
+                newReturnValues.Add(nodeClass.OutputType.MinimizedName); //Needed so the text-assembly will know what to derive from
                 newFunctionCalls.Add("1");
             }
             else
             {
                 newReturnValues.Add(number.ToString()); //in every other case this will be needed for the following transform
-                newFunctionCalls.Add(json["dataMethod"].ToString());
+                newFunctionCalls.Add(nodeClass.DataMethod);
             } 
 			
 			
@@ -313,11 +325,10 @@
 		/// transforms returnValues (containing one element, the name of the outputVariable), last are methodcalls (empty in this case). Important note: If the transform is the last one before the 
 		/// output-node is reached, "first" will be true (this is a bad name choice, but whatever), so the fourth List will contain no variable name but the type of the last return. It is needed
 		/// for initializing the class just right.</returns>
-		public List<string>[] processTransform(Node currentNode, int number, List<string> returnValues, List<string> functionCalls, bool first, string targetDirectory)
+		public List<string>[] processTransform(Transformation currentNode, int number, List<string> returnValues, List<string> functionCalls, bool first, string targetDirectory)
 		{
             string fileName = currentNode.Class.Name;
-			string sourceDirectory = "generated\\" + fileName;
-            var json = JObject.Parse(File.ReadAllText(sourceDirectory + "\\metadata.json"));
+            TransformationNodeClass nodeClass = currentNode.Class as TransformationNodeClass;
 
             Console.WriteLine("transform processing called!");
 			List<string>[] code = new List<string>[5];
@@ -327,25 +338,21 @@
 			List<string> newReturnValues = new List<string>();
 			List<string> newFunctionCalls = new List<string>();
 
-            string mainClass = json["mainClass"].ToString();
-            string method = json["method"].ToString();
-            string output = json["output"].ToString();
+            string mainClass = nodeClass.MainClass;
+            string method = nodeClass.Method;
+            string output = nodeClass.OutputType.Name;
 
 
             //imports
             imports.Add(mainClass);
             imports.Add(output);
-			foreach (string need in json["needs"])
-			{
-				imports.Add(need);
-			}
 
             //First shorten classes:
             mainClass = minimizeToClass(mainClass);
             output = minimizeToClass(output);
 
             //Fix copiing when no needs classes.
-            DirectoryCopy(sourceDirectory, targetDirectory, true);
+            DirectoryCopy(GetPathForNode(nodeClass), targetDirectory, true);
 
             //transforms
             string transform = "";
@@ -362,15 +369,14 @@
 			string prep = "";
 			if (!first) { prep = "\tprivate " + output + " resultTransform" + number + ";\n"; }
 			transform = "\tprivate void transform" + number + "(){\n";
-
-			dynamic temp = json["input"];
+            
             int currentSensorNumber;
 			int counter = 0;
-			foreach (JProperty property in temp.Properties())
+			foreach (DataType input in nodeClass.InputTypes)
 			{
 				if (Int32.TryParse(returnValues[counter], out currentSensorNumber)) //-> this one is a sensor
 				{
-                    string dataType = minimizeToClass(property.Value.ToString());
+                    string dataType = minimizeToClass(input.MinimizedName);
                     methodCall = methodCall + "data" + counter + ", ";
 					transform += "\t\t" + dataType + " data" + counter + " = sensor" + currentSensorNumber + "." + functionCalls[counter] + "();\n";
 				}
@@ -388,7 +394,7 @@
 			transforms.Add(transform);
 			if (first)
 			{
-				newReturnValues.Add(json["output"].ToString()); //Needed so the text-assembly will know what to derive from
+				newReturnValues.Add(nodeClass.OutputType.MinimizedName); //Needed so the text-assembly will know what to derive from
 			}
 			else
 			{
@@ -458,7 +464,7 @@
 			//anchor 2: is end node -> sensor
 			if (currentNode is DataSource)
 			{
-				List<string>[] sensorData = processSensor(currentNode, numbers[1], first, targetDirectory);
+				List<string>[] sensorData = processSensor(currentNode as DataSource, numbers[1], first, targetDirectory);
 
 				numbers[1]++;
 
@@ -493,7 +499,8 @@
                     returnValues.AddRange(temp[3]);
                     functionCalls.AddRange(temp[4]);
                 }
-                List<string>[] transformData = processTransform(currentNode, numbers[0], returnValues, functionCalls, first, targetDirectory);
+
+                List<string>[] transformData = processTransform(currentNode as Transformation, numbers[0], returnValues, functionCalls, first, targetDirectory);
                 imports.AddRange(transformData[0]);
                 inits.AddRange(transformData[1]);
                 transforms.AddRange(transformData[2]);

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
+﻿namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 {
     static class ClassTemplates
     {
@@ -21,8 +15,15 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
                 "package created;" + NL +
                 "" + NL +
                 "import android.content.Context;" + NL +
+                "import de.tu_darmstadt.smastra.markers.interfaces.Sensor;" + NL +
                 "" + NL +
-                "public class {0} implements de.tu_darmstadt.smastra.markers.interfaces.Sensor {{" + NL +
+                "public class {0} implements Sensor {{" + NL +
+                "" + NL +
+                "   private final Context context;" + NL +
+                "" + NL +
+                "   public {0}(Context context) {{" + NL +
+                "       this.context = context;" + NL +
+                "   }}" + NL +
                 "" + NL +
                 "   @Override public void start() {{}}" + NL +
                 "   @Override public void stop(){{}}" + NL +
