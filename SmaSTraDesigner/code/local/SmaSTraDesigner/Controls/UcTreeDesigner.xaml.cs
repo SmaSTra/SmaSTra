@@ -57,7 +57,7 @@
             if (!nodes.Any()) return true;
 
             //Check recursivcely:
-            foreach (Node input in GetInputsOfNode(root, false))
+            foreach ( Node input in root.InputNodes.NonNull() )
             {
                 if (SubTreeContains(input, nodes)) return true;
             }
@@ -65,30 +65,6 @@
             return false;
         }
 
-
-        private static List<Node> GetInputsOfNode(Node node, bool includeNull)
-        {
-            List<Node> result = new List<Node>();
-            if (node == null) return result;
-            if (node is DataSource) return result;
-
-            if (node is OutputNode)
-            {
-                OutputNode outNode = (OutputNode)node;
-                if (includeNull || outNode.InputNode != null) result.Add(outNode.InputNode);
-                return result;
-            }
-
-            if (node is Transformation)
-            {
-                Transformation outNode = (Transformation)node;
-                result.AddRange(outNode.InputNodes);
-                if(!includeNull) result.RemoveAll(item => item == null);
-                return result;
-            }
-
-            return result;
-        }
 
         #endregion static methods
 
@@ -462,7 +438,7 @@
             else if ((connection.Value.InputNode as OutputNode) != null)
             {
                 iNodeAsOutputNode = Tree.OutputNode;
-                iNodeAsOutputNode.InputNode = connection.Value.OutputNode;
+                iNodeAsOutputNode.SetInput(0, connection.Value.OutputNode);
             }
 
             Line newLine = new Line()
@@ -710,7 +686,7 @@
                 }
                 else if ((iNodeAsOutputNode = iNode as OutputNode) != null)
 				{
-					iNodeAsOutputNode.InputNode = null;
+					iNodeAsOutputNode.SetInput(0, null);
 				}
 
 				Line line = null;
@@ -858,9 +834,9 @@
 
             //Preserve the input Connections:
             List<Connection> newConnections = new List<Connection>();
-            for(int i = 0; i < node.inputNodes.Count(); i++)
+            for(int i = 0; i < node.InputNodes.Count(); i++)
             {
-                Node output = node.inputNodes[i];
+                Node output = node.InputNodes[i];
                 Node input = node.inputConnections.GetKeyForValue(i, null);
                 if (input != null && output != null)
                 {
@@ -871,7 +847,7 @@
             //Build the internal Connections:
             foreach(Node internalNode in node.includedNodes)
             {
-                List<Node> inputs = GetInputsOfNode(internalNode, true);
+                List<Node> inputs = internalNode.InputNodes.ToList();
                 for(int i = 0; i < inputs.Count(); i++)
                 {
                     Node internalInput = inputs[i];
@@ -987,7 +963,7 @@
             foreach (Node node in nodes)
             {
                 AbstractNodeClass nodeClass = node.Class;
-                List<Node> nodeInputs = GetInputsOfNode(node, false);
+                List<Node> nodeInputs = node.InputNodes.NonNull().ToList();
                 
                 for (int i = 0; i < nodeInputs.Count(); i++)
                 {

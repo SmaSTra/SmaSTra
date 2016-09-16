@@ -77,6 +77,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddNeededClasses(root, nodeClass.NeedsOtherClasses);
             AddPermissions(root, nodeClass.NeedsPermissions);
             AddConfig(root, nodeClass.Configuration);
+            AddInputs(root, nodeClass.InputTypes);
 
             AddMethodName(root, transClass.Method);
             AddStatic(root, transClass.IsStatic);

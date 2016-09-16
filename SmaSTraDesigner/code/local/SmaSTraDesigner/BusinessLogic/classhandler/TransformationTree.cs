@@ -107,7 +107,7 @@
                 Console.WriteLine(directory);
                 try
                 {
-                    code = javaGenerator.traverse(OutputNode.InputNode, visited, numbers, true, directory);
+                    code = javaGenerator.traverse(OutputNode.InputNodes[0], visited, numbers, true, directory);
                     string completeJavaText = javaGenerator.assembleText(className, code);
                     File.WriteAllText(saveFileDialog.FileName, completeJavaText);
                 }

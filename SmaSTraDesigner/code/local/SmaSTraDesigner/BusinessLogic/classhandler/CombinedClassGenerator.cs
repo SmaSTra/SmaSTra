@@ -25,42 +25,12 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             if (!nodes.Any()) return true;
 
             //Check recursivcely:
-            foreach (Node input in GetInputsOfNode(root))
+            foreach (Node input in root.InputNodes)
             {
                 if (SubTreeContains(input, nodes)) return true;
             }
 
             return false;
-        }
-
-
-        private static Node[] GetInputsOfNode(Node node)
-        {
-            if (node == null || node is DataSource)
-            {
-                return new Node[0];
-            }
-
-            OutputNode nodeAsOut;
-            Transformation nodeAsTransform;
-            CombinedNode nodeAsCombined;
-            if ((nodeAsOut = node as OutputNode) != null)
-            {
-                if (nodeAsOut.InputNode != null) return new Node[] { nodeAsOut.InputNode };
-                return new Node[0];
-            }
-
-            if ((nodeAsTransform = node as Transformation) != null)
-            {
-                return nodeAsTransform.InputNodes;
-            }
-
-            if((nodeAsCombined = node as CombinedNode) != null)
-            {
-                return nodeAsCombined.inputNodes;
-            }
-
-            return new Node[0];
         }
 
         #endregion StaticMethods
@@ -181,7 +151,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             foreach ( Node node in nodes)
             {
                 AbstractNodeClass nodeClass = node.Class;
-                Node[] nodeInputs = GetInputsOfNode(node);
+                Node[] nodeInputs = node.InputNodes;
 
                 subNodes.Add(new SimpleSubNode(node, centerX, centerY));
                 for(int i = 0; i < nodeInputs.Count(); i++)

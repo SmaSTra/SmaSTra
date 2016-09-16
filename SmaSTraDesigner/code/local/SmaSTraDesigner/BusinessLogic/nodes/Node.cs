@@ -4,6 +4,7 @@
     using System.ComponentModel;
     using classhandler;
     using System.Collections.ObjectModel;
+    using System.Linq;
 
 
     /// <summary>
@@ -12,139 +13,150 @@
     /// Implemented variations are DataSource, Transformation and OutputNode.
     /// </summary>
     public class Node : INotifyPropertyChanged, ICloneable
-	{
-		#region fields
+    {
+        #region fields
 
-		/// <summary>
-		/// NodeClass instance that provides information about this node's type.
-		/// </summary>
-		protected AbstractNodeClass clazz;
+        /// <summary>
+        /// NodeClass instance that provides information about this node's type.
+        /// </summary>
+        protected AbstractNodeClass clazz;
+
+        /// <summary>
+        /// The Input nodes to use.
+        /// </summary>
+        protected Node[] inputNodes = new Node[0];
 
         /// <summary>
         /// This node's display name (is used as an identifier).
         /// </summary>
         private string name = null;
 
-		/// <summary>
-		/// This node's X position on the transformation tree's graph (spread out on a 2D plane).
-		/// </summary>
-		private double posX = 0;
+        /// <summary>
+        /// This node's X position on the transformation tree's graph (spread out on a 2D plane).
+        /// </summary>
+        private double posX = 0;
 
-		/// <summary>
-		/// This node's Y position on the transformation tree's graph (spread out on a 2D plane).
-		/// </summary>
-		private double posY = 0;
+        /// <summary>
+        /// This node's Y position on the transformation tree's graph (spread out on a 2D plane).
+        /// </summary>
+        private double posY = 0;
 
-		#endregion fields
+        #endregion fields
 
-		#region events
+        #region events
 
-		/// <summary>
-		/// Is raised whenever a compatible property changes its value.
-		/// </summary>
-		public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// Is raised whenever a compatible property changes its value.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		#endregion events
+        #endregion events
 
-		#region properties
+        #region properties
 
         /// <summary>
         /// This is the Unique identifier for the Node.
         /// </summary>
-        public string NodeUUID{ get; protected set; }
+        public string NodeUUID { get; protected set; }
 
-		/// <summary>
-		/// Gets or sets the Class property value.
-		/// NodeClass instance that provides information about this node's type.
-		/// </summary>
-		public AbstractNodeClass Class
-		{
-			get
-			{
-				return this.clazz;
-			}
-			internal set
-			{
-				if (value != this.clazz)
-				{
-					AbstractNodeClass oldValue = this.clazz;
-					this.clazz = value;
-					this.OnClassChanged(oldValue, value);
-				}
-			}
-		}
+        /// <summary>
+        /// Gets or sets the Class property value.
+        /// NodeClass instance that provides information about this node's type.
+        /// </summary>
+        public AbstractNodeClass Class
+        {
+            get
+            {
+                return this.clazz;
+            }
+            internal set
+            {
+                if (value != this.clazz)
+                {
+                    AbstractNodeClass oldValue = this.clazz;
+                    this.clazz = value;
+                    this.OnClassChanged(oldValue, value);
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the Name property value.
-		/// This node's display name (is used as an identifier).
-		/// </summary>
-		public string Name
-		{
-			get
-			{
-				return this.name;
-			}
-			set
-			{
-				if (value != this.name)
-				{
-					string oldValue = this.name;
-					this.name = value;
-					this.OnPropertyChanged("Name");
-				}
-			}
-		}
+        /// <summary>
+        /// Gets or sets the Name property value.
+        /// This node's display name (is used as an identifier).
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            set
+            {
+                if (value != this.name)
+                {
+                    string oldValue = this.name;
+                    this.name = value;
+                    this.OnPropertyChanged("Name");
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the PosX property value.
-		/// This node's X position on the transformation tree's graph (spread out on a 2D plane).
-		/// </summary>
-		public double PosX
-		{
-			get
-			{
-				return this.posX;
-			}
-			set
-			{
-				if (value != this.posX)
-				{
-					double oldValue = this.posX;
-					this.posX = value;
-					this.OnPropertyChanged("PosX");
-				}
-			}
-		}
+        /// <summary>
+        /// Gets or sets the PosX property value.
+        /// This node's X position on the transformation tree's graph (spread out on a 2D plane).
+        /// </summary>
+        public double PosX
+        {
+            get
+            {
+                return this.posX;
+            }
+            set
+            {
+                if (value != this.posX)
+                {
+                    double oldValue = this.posX;
+                    this.posX = value;
+                    this.OnPropertyChanged("PosX");
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets or sets the PosY property value.
-		/// This node's Y position on the transformation tree's graph (spread out on a 2D plane).
-		/// </summary>
-		public double PosY
-		{
-			get
-			{
-				return this.posY;
-			}
-			set
-			{
-				if (value != this.posY)
-				{
-					double oldValue = this.posY;
-					this.posY = value;
-					this.OnPropertyChanged("PosY");
-				}
-			}
-		}
+        /// <summary>
+        /// Gets or sets the PosY property value.
+        /// This node's Y position on the transformation tree's graph (spread out on a 2D plane).
+        /// </summary>
+        public double PosY
+        {
+            get
+            {
+                return this.posY;
+            }
+            set
+            {
+                if (value != this.posY)
+                {
+                    double oldValue = this.posY;
+                    this.posY = value;
+                    this.OnPropertyChanged("PosY");
+                }
+            }
+        }
 
-		/// <summary>
-		/// Gets the TransformationTree instance this node belongs to.
-		/// </summary>
-		public TransformationTree Tree
-		{
-			get;
-			internal set;
-		}
+        /// <summary>
+        /// Gets the TransformationTree instance this node belongs to.
+        /// </summary>
+        public TransformationTree Tree
+        {
+            get;
+            internal set;
+        }
+
+        public Node[] InputNodes
+        {
+            get { return inputNodes.ToArray();  }
+            protected set { this.inputNodes = value; }
+        }
 
         #endregion properties
 
@@ -156,7 +168,25 @@
         /// No UI stuff going on here!
         /// </summary>
         public virtual void ClearInputs()
-        { }
+        {
+            this.InputNodes = new Node[InputNodes.Count()];
+        }
+
+
+        /// <summary>
+        /// Creates the Input on that index.
+        /// </summary>
+        /// <param name="inputIndex">to set</param>
+        /// <param name="outputNode">to set</param>
+        internal void SetInput(int inputIndex, Node inputNode)
+        {
+            if (inputIndex < 0 || inputIndex >= inputNodes.Count())
+            {
+                throw new InvalidOperationException("Got input index: " + inputIndex + " but only got " + inputNodes.Count() + " Slots.");
+            }
+
+            inputNodes[inputIndex] = inputNode;
+        }
 
         /// <summary>
         /// Clones this node.
@@ -175,15 +205,15 @@
             return clone;
 		}
 
-		/// <summary>
-		/// Called when the Class property changed its value.
-		/// </summary>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		protected virtual void OnClassChanged(AbstractNodeClass oldValue, AbstractNodeClass newValue)
-		{
+        /// <summary>
+        /// Called when the Class property changed its value.
+        /// </summary>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        protected virtual void OnClassChanged(AbstractNodeClass oldValue, AbstractNodeClass newValue)
+        {
             InputIOData.Clear();
-            foreach(DataType inputType in newValue.InputTypes)
+            foreach (DataType inputType in newValue.InputTypes)
             {
                 InputIOData.Add(new IOData(inputType, ""));
             }
@@ -192,6 +222,9 @@
 
             //Set a new UUID for the node:
             this.NodeUUID = Guid.NewGuid().ToString();
+
+            //Set the Input data:
+            this.InputNodes = new Node[newValue.InputTypes.Count()];
 		}
 
 		public override string ToString()

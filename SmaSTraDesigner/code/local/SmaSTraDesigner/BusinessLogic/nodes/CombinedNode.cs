@@ -23,11 +23,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         public Node outputNode { get; set; }
 
         /// <summary>
-        /// The Input nodes to 
-        /// </summary>
-        public Node[] inputNodes { get; private set; }
-
-        /// <summary>
         /// The dictionary from node -> Input.
         /// </summary>
         public Dictionary<Node,int> inputConnections { get; private set; }
@@ -60,7 +55,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
 
                     ClassManager classManager = Singleton<ClassManager>.Instance;
                     this.includedNodes = new Node[ownClass.SubElements.Count];
-                    this.inputNodes = new Node[ownClass.Connections.Count(c => c.secondNode.StartsWith("input"))];
                     this.inputConnections = new Dictionary<Node, int>();
 
                     int i = 0;
@@ -130,11 +124,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
             }
         }
 
-        
-        public override void ClearInputs()
-        {
-            this.inputNodes = new Node[inputNodes.Count()];
-        }
 
         public override object Clone()
         {
@@ -142,21 +131,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
             //We call this for initing!
             clonedNode.OnClassChanged(null, this.clazz);
             return clonedNode;
-        }
-
-        /// <summary>
-        /// Creates the Input on that index.
-        /// </summary>
-        /// <param name="inputIndex">to set</param>
-        /// <param name="outputNode">to set</param>
-        internal void SetInput(int inputIndex, Node inputNode)
-        {
-            if(inputIndex < 0 || inputIndex >= inputNodes.Count())
-            {
-                throw new InvalidOperationException("Got input index: " + inputIndex + " but only got " + inputNodes.Count() + " Slots.");
-            }
-
-            inputNodes[inputIndex] = inputNode;
         }
 
         #endregion methods

@@ -24,7 +24,7 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             tree = transformationTree;
             //Before we start -> Check if we are connected at all:
-            if (tree == null || tree.OutputNode.InputNode == null)
+            if (tree == null || tree.OutputNode.InputNodes[0] == null)
             {
                 Console.WriteLine("Root node is not connected to any node! Can not save!");
                 MessageBox.Show("Root node is not connected to any node! Can not save!");
