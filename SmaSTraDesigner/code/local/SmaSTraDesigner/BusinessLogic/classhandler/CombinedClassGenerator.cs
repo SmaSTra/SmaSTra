@@ -160,7 +160,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                     if (subNode == null || !nodes.Contains(subNode))
                     {
                         inputs.Add(nodeClass.InputTypes[i]);
-                        connections.Add(new SimpleConnection(node.NodeUUID, "input"+input, input));
+                        connections.Add(new SimpleConnection(node.NodeUUID, "input"+input, i));
                         input++;
                     }else{
                         connections.Add(new SimpleConnection(node.NodeUUID, subNode.NodeUUID, i));

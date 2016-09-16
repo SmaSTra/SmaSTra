@@ -4,6 +4,8 @@ using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
+using System;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -118,6 +120,80 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             return string.Format(ClassTemplates.TRANSFORMATION_TEMPLATE,
                 nodeClass.Name, nodeClass.OutputType.Name.RemoveAll(" ", "_"), methodArgs, methodCode);
+        }
+
+
+
+        public override void CreateCode(Node node, CodeExtension codeExtension)
+        {
+            codeExtension.AddTransformation(node as Transformation);
+
+            TransformationNodeClass nodeClass = node.Class as TransformationNodeClass;
+            string content = "";
+            string args = "(";
+            int currentTransform = codeExtension.GetCurrentStep();
+
+            for(int i = 0; i < nodeClass.InputTypes.Count(); i++)
+            {
+                DataType inputType = nodeClass.InputTypes[i];
+                Node inputNode = node.InputNodes[i];
+                IOData ioData = node.InputIOData[i];
+
+                //Add the args:
+                if (i != 0) args += ", ";
+                args += "data" + i;
+
+                if(inputNode == null)
+                {
+                    //We have a default value in the GUI:
+                    content += string.Format(ClassTemplates.GENERATION_TEMPLATE_TRANSFORM_VAR_LINE_STATIC,
+                        inputType.MinimizedName,
+                        i,
+                        ioData.Value);
+                }
+                else
+                {
+                    DataSource inAsSource = inputNode as DataSource;
+
+                    string typeName = inputNode.Class.NodeType.ToString().ToLower();
+                    int outputIndex = codeExtension.GetOutputIndex(inputNode);
+                    string optionalSensorCall = inputNode is DataSource 
+                        ? "."+ (inAsSource.Class as DataSourceNodeClass).DataMethod + "()"
+                        : "";
+
+                    content += string.Format(ClassTemplates.GENERATION_TEMPLATE_TRANSFORM_VAR_LINE,
+                        inputType.MinimizedName,
+                        i.ToString(),
+                        typeName,
+                        outputIndex,
+                        optionalSensorCall);
+                }
+
+            }
+
+            args += ")";
+
+            //Extract the method call:
+            string methodCall = (nodeClass.IsStatic
+                ? (DataType.minimizeToClass(nodeClass.MainClass))
+                : (nodeClass.NodeType.ToString() + codeExtension.GetTransformId(node as Transformation) + "."))
+                + "." + nodeClass.Method + args;
+
+            string template = codeExtension.RootNode == node 
+                ? ClassTemplates.GENERATION_TEMPLATE_TRANSFORM_LAST 
+                : ClassTemplates.GENERATION_TEMPLATE_TRANSFORM;
+
+            string code = string.Format( 
+                template,
+                currentTransform,
+                content,
+                methodCall
+                );
+
+            //At last add the important stuff:
+            codeExtension.AddCodeStep(code);
+            codeExtension.AddImport(nodeClass.MainClass);
+            codeExtension.AddImport(nodeClass.OutputType.Name);
         }
 
     }

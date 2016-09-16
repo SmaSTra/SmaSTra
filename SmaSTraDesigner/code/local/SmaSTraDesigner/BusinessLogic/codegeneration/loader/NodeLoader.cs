@@ -5,6 +5,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
@@ -150,6 +151,21 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             }
 
             return loader.loadFromJson(name, root);
+        }
+
+
+        /// <summary>
+        /// Creates the Java source-Code for this element and stores it in the CodeExtension.
+        /// </summary>
+        /// <param name="node">To Generate for</param>
+        /// <param name="codeExtension">To store in</param>
+        public void CreateCode(Node node, CodeExtension codeExtension)
+        {
+            loaders
+                .ExecuteOnFirst(
+                e => e.Key == node.Class.NodeType, 
+                l => l.Value.CreateCode(node, codeExtension)
+            );
         }
 
         /// <summary>

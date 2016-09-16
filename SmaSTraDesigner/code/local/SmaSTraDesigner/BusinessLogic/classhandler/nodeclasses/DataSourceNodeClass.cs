@@ -25,9 +25,9 @@
                   mainClass, needsOtherClasses, needsPermissions,
                   config, new DataType[0])
         {
-            this.DataMethod = DataMethod;
-            this.StartMethod = StartMethod;
-            this.StopMethod = StopMethod;
+            this.DataMethod = dataMethod;
+            this.StartMethod = startMethod;
+            this.StopMethod = stopMethod;
         }
 
 

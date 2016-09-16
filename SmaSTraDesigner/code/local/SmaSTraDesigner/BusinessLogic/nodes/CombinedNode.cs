@@ -23,9 +23,9 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         public Node outputNode { get; set; }
 
         /// <summary>
-        /// The dictionary from node -> Input.
+        /// The dictionary from input index -> Node.
         /// </summary>
-        public Dictionary<int,Node> inputConnections { get; private set; }
+        public Dictionary<int, Tuple<Node,int>> inputConnections { get; private set; }
 
         #endregion properties
 
@@ -55,7 +55,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
 
                     ClassManager classManager = Singleton<ClassManager>.Instance;
                     this.includedNodes = new Node[ownClass.SubElements.Count];
-                    this.inputConnections = new Dictionary<int,Node>();
+                    this.inputConnections = new Dictionary<int,Tuple<Node,int>>();
 
                     int i = 0;
                     //Generate the Nodes:
@@ -92,7 +92,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         //We have an Input node:
                         if (second.StartsWith("input"))
                         {
-                            this.inputConnections.Add(index,firstNode);
+                            this.inputConnections.Add(Int32.Parse(second.Substring("input".Count())), new Tuple<Node,int>(firstNode,index));
                             continue;
                         }
 
@@ -131,6 +131,19 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
             //We call this for initing!
             clonedNode.OnClassChanged(null, this.clazz);
             return clonedNode;
+        }
+
+
+        public override void SetInput(int index, Node output)
+        {
+            base.SetInput(index, output);
+
+            Tuple<Node,int> input = inputConnections.GetValue(index, null);
+            if(input != null)
+            {
+                int internalIndex = input.Item2;
+                input.Item1.SetInput(internalIndex, output);
+            }
         }
 
         #endregion methods

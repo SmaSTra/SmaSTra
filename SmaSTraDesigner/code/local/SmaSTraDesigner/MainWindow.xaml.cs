@@ -123,24 +123,6 @@
         }
         private void Generate_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            foreach(Node con in this.tdTreeDesigner.Tree.Nodes)
-            {
-                Transformation nodeAsTrans = con as Transformation;
-                if (nodeAsTrans != null)
-                {
-                    foreach (Node child in nodeAsTrans.InputNodes)
-                    {
-                        System.Diagnostics.Debug.Print("++++ nodeAsTrans: " + nodeAsTrans.Name + "InputNode: " + child.Name);
-                    }
-                } else
-                {
-                    DataSource nodeAsSource = con as DataSource;
-                    if (nodeAsSource != null)
-                    {
-                        System.Diagnostics.Debug.Print("++++ nodeAsSource: " + nodeAsSource.Name );
-                    }
-                }
-            }
             this.tdTreeDesigner.Tree.createJava();
         }
 

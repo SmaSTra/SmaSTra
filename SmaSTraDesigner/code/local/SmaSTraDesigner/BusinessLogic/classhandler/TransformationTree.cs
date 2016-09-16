@@ -9,12 +9,15 @@
     using Microsoft.Win32;
     using System.Windows;
     using Controls;
+    using codegeneration;
 
     /// <summary>
     /// Represents a tree graph of data transformations.
     /// </summary>
     public class TransformationTree
 	{
+
+        private const bool USE_NEW_GEN = false;
 
         #region constructors
 
@@ -107,9 +110,17 @@
                 Console.WriteLine(directory);
                 try
                 {
-                    code = javaGenerator.traverse(OutputNode.InputNodes[0], visited, numbers, true, directory);
-                    string completeJavaText = javaGenerator.assembleText(className, code);
-                    File.WriteAllText(saveFileDialog.FileName, completeJavaText);
+                    if (USE_NEW_GEN)
+                    {
+                        new NewJavaGenerator(this).CreateJavaSource(directory, className);
+                    }
+                    else
+                    {
+                        code = javaGenerator.traverse(OutputNode.InputNodes[0], visited, numbers, true, directory);
+                        string completeJavaText = javaGenerator.assembleText(className, code);
+                        File.WriteAllText(saveFileDialog.FileName, completeJavaText);
+                    }
+                    
                 }
                 catch (NullNodeException e)
                 {

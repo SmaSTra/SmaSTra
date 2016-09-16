@@ -65,12 +65,15 @@
         /// <br> {2} : ClassName
         /// <br> {3} : Class return value
         /// <br> {4} : Amount of steps
-        /// <br> {5} : Sensor-Inits
-        /// <br> {6} : switchTransfor
-        /// <br> {7} : transformations
+        /// <br> {5} : Sensor Vars
+        /// <br> {6} : Transform Vars
+        /// <br> {7} : Sensor-Inits
+        /// <br> {8} : switchTransfor
+        /// <br> {9} : transformations
         /// </summary>
-        public const string GENERATION_TEMPLATE =
-            "package {0}" + NL +
+        public const string GENERATION_TEMPLATE_TOTAL =
+            "package {0};" + NL +
+            "" + NL +
             "{1}" + NL + 
             "" + NL +
             "public class {2} extends SmaSTraTreeExecutor<{3}> {{" + NL + 
@@ -81,17 +84,73 @@
             "" + NL +
             "{5}" + NL +
             "" + NL +
+            "{6}" + NL +
+            "" + NL +
+            "   protected void init(){{" + NL +
+            "{7}" + NL +
+            "   }}" + NL +
+            "" + NL +
             "   @Override" + NL +
             "   protected void transform(int level) {{" + NL +
             "       switch(level) {{" + NL +
-            "           {6}" + NL +
+            "{8}" + NL +
             "       }}" + NL +
             "   }}" + NL +
             "" + NL +
-            "{7}" + NL +
+            "{9}" + NL +
             "" + NL +
             "}}";
-            
+
+
+        /// <summary>
+        /// The Constant for a transformation:
+        /// <br>{0} : the index.
+        /// <br>{1} : the content
+        /// <br>{2} : Method call
+        /// </summary>
+        public const string GENERATION_TEMPLATE_TRANSFORM = 
+            "   private void transform{0}(){{" + NL +
+            "{1}" +
+            "       transformation{0} = {2};" + NL +
+            "   }}"
+
+            ;
+
+        /// <summary>
+        /// The Constant for a transformation:
+        /// <br>{0} : the index.
+        /// <br>{1} : the content.
+        /// <br>{2} : method call
+        /// </summary>
+        public const string GENERATION_TEMPLATE_TRANSFORM_LAST =
+            "   private void transform{0}(){{" + NL +
+            "{1}" +
+            "       data = {2};" + NL +
+            "   }}"
+
+            ;
+
+        /// <summary>
+        /// The Constant for a transformation:
+        /// <br>{0} : the type.
+        /// <br>{1} : data index (0-x).
+        /// <br>{2} : typeName (sensor,transform,...)
+        /// <br>{3} : typeId
+        /// <br>{4} : optional Sensor call
+        /// </summary>
+        public const string GENERATION_TEMPLATE_TRANSFORM_VAR_LINE =
+            "       {0} data{1} = {2}{3}{4};\n";
+
+
+        /// <summary>
+        /// The Constant for a transformation:
+        /// <br>{0} : the type.
+        /// <br>{1} : data index (0-x).
+        /// <br>{2} : the static data to put there.
+        /// </summary>
+        public const string GENERATION_TEMPLATE_TRANSFORM_VAR_LINE_STATIC =
+            "       {0} data{1} = {2};\n";
+
 
     }
 }

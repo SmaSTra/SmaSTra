@@ -3,6 +3,7 @@ using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -167,6 +168,12 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             //Combined node have nothing to generate on classes.
             return null;
+        }
+
+
+        public override void CreateCode(Node node, CodeExtension codeExtension)
+        {
+            //Nothing to generate!
         }
 
     }

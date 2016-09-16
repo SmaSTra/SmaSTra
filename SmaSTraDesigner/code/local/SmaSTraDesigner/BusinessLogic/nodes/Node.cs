@@ -178,7 +178,7 @@
         /// </summary>
         /// <param name="inputIndex">to set</param>
         /// <param name="outputNode">to set</param>
-        internal void SetInput(int inputIndex, Node inputNode)
+        public virtual void SetInput(int inputIndex, Node inputNode)
         {
             if (inputIndex < 0 || inputIndex >= inputNodes.Count())
             {
@@ -288,7 +288,7 @@
             }
         }
 
-        private ObservableCollection<IOData> inputIOData = new ObservableCollection<IOData>();
+        protected ObservableCollection<IOData> inputIOData = new ObservableCollection<IOData>();
         public ObservableCollection<IOData> InputIOData
         {
             get

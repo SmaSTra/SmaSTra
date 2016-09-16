@@ -90,7 +90,7 @@
         /// </summary>
         /// <param name="completeClassName"> This is the complete class name. For example 'java.util.List'</param>
         /// <returns>The last part of the Class name.</returns>
-        private string minimizeToClass(string completeClassName)
+        public static string minimizeToClass(string completeClassName)
         {
             return completeClassName.Split('.').Last();
         }

@@ -1,4 +1,6 @@
-﻿namespace SmaSTraDesigner.BusinessLogic
+﻿using SmaSTraDesigner.BusinessLogic.classhandler;
+
+namespace SmaSTraDesigner.BusinessLogic
 {
 	/// <summary>
 	/// Represents a TransformationTree's data output.

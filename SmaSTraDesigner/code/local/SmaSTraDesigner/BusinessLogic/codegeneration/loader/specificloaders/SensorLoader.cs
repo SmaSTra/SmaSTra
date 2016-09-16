@@ -3,6 +3,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using System;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -93,6 +94,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             return string.Format(ClassTemplates.SENSOR_TEMPLATE,
                 nodeClass.Name.RemoveAll(" ", "_"), nodeClass.OutputType.Name, methodCode);
+        }
+
+
+        public override void CreateCode(Node node, CodeExtension codeExtension)
+        {
+            DataSourceNodeClass nodeClass = node.Class as DataSourceNodeClass;
+            codeExtension.AddSensor(node as DataSource);
+
+            codeExtension.AddImport(nodeClass.OutputType.Name);
+            codeExtension.AddImport(nodeClass.MainClass);
         }
 
     }

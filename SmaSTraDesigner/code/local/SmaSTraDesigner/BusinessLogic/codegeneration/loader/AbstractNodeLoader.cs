@@ -3,6 +3,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using Common;
+using System;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -343,6 +344,14 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <param name="nodeClass">to use.</param>
         /// <returns>the generated Java class</returns>
         public abstract string GenerateClassFromSnippet(AbstractNodeClass nodeClass, string methodCode);
+
+
+        /// <summary>
+        /// Creates the Code for the Node and stores it in the code-Extension.
+        /// </summary>
+        /// <param name="node">To use</param>
+        /// <param name="codeExtension">To use.</param>
+        public abstract void CreateCode(Node node, CodeExtension codeExtension);
 
 
         #endregion Methods

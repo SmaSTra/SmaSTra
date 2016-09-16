@@ -234,6 +234,54 @@ namespace SmaSTraDesigner.BusinessLogic.utils
 
 
         /// <summary>
+        /// Extension Method for a simple ForEach.
+        /// </summary>
+        /// <typeparam name="T">To use in the Function / Collection</typeparam>
+        /// <param name="elements">To Iterate</param>
+        /// <param name="func">To execute</param>
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> elements, Action<T,int> func)
+        {
+            if (func == null) return elements;
+            
+            int i = 0;
+            return elements.ForEach(e => { func.Invoke(e, i); i++; });
+        }
+
+
+
+        /// <summary>
+        /// Extension Method for a simple ForEach.
+        /// </summary>
+        /// <typeparam name="T">To use in the Function / Collection</typeparam>
+        /// <param name="elements">To Iterate</param>
+        /// <param name="func">To execute</param>
+        public static IEnumerable<T> ForEachNonNull<T>(this IEnumerable<T> elements, Action<T, int> func)
+        {
+            if (func == null) return elements;
+            int i = 0;
+            foreach (T element in elements)
+            {
+                if(element != null) func.Invoke(element, i);
+                i++;
+            }
+
+            return elements;
+        }
+
+
+        public static void ExecuteOnFirst<T>(this IEnumerable<T> elements, Action<T> action)
+        {
+            if (elements.Empty()) return;
+            else action.Invoke(elements.First());
+        }
+
+        public static void ExecuteOnFirst<T>(this IEnumerable<T> elements, Func<T, bool> search, Action<T> action)
+        {
+            elements.Where(search).ExecuteOnFirst(action);
+        }
+
+
+        /// <summary>
         /// Simple check if collection is empty.
         /// </summary>
         /// <typeparam name="T">To use in the Function / Collection</typeparam>

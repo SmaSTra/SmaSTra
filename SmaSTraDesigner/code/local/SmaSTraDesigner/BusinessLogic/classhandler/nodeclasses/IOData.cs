@@ -46,6 +46,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             }
         }
 
+
+        /// <summary>
+        /// If the value is set to something.
+        /// </summary>
+        public bool IsSet()
+        {
+            return !string.IsNullOrWhiteSpace(Value);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propName)

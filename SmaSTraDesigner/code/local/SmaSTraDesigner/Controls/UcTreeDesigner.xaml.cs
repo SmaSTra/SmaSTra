@@ -837,10 +837,10 @@
             for(int i = 0; i < node.InputNodes.Count(); i++)
             {
                 Node output = node.InputNodes[i];
-                Node input = node.inputConnections.GetValue(i, null);
+                Tuple<Node,int> input = node.inputConnections.GetValue(i, new Tuple<Node,int>(null,0));
                 if (input != null && output != null)
                 {
-                    newConnections.Add(new Connection(output, input, i));
+                    newConnections.Add(new Connection(output, input.Item1, input.Item2));
                 }
             }
 
@@ -960,12 +960,12 @@
             AddNode(newNode, false);
 
             //Change the Connections:
+            int index = 0;
             foreach (Node node in nodes)
             {
                 AbstractNodeClass nodeClass = node.Class;
                 List<Node> nodeInputs = node.InputNodes.NonNull().ToList();
 
-                int index = 0;
                 for (int i = 0; i < nodeInputs.Count(); i++)
                 {
                     Node subNode = nodeInputs[i];
