@@ -86,7 +86,10 @@ namespace SmaSTraDesigner.BusinessLogic.utils
 
             UcIOHandle oHandle = outView.IoHandles.FirstOrDefault(h => !h.IsInput);
             UcIOHandle iHandle = inView.IoHandles.FirstOrDefault(h => h.IsInput && h.InputIndex == connection.InputIndex);
-            
+
+            //Still busy....
+            if (oHandle == null || iHandle == null) return this;
+
             adder.Invoke(iHandle, oHandle, connection);
             applied = true;
 
