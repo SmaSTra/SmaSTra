@@ -837,7 +837,7 @@
             for(int i = 0; i < node.InputNodes.Count(); i++)
             {
                 Node output = node.InputNodes[i];
-                Node input = node.inputConnections.GetKeyForValue(i, null);
+                Node input = node.inputConnections.GetValue(i, null);
                 if (input != null && output != null)
                 {
                     newConnections.Add(new Connection(output, input, i));
@@ -964,10 +964,10 @@
             {
                 AbstractNodeClass nodeClass = node.Class;
                 List<Node> nodeInputs = node.InputNodes.NonNull().ToList();
-                
+
+                int index = 0;
                 for (int i = 0; i < nodeInputs.Count(); i++)
                 {
-                    int index = 0;
                     Node subNode = nodeInputs[i];
                     if (subNode == null || !nodes.Contains(subNode))
                     {

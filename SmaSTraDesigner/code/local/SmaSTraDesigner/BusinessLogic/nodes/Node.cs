@@ -195,13 +195,8 @@
         public virtual object Clone()
 		{
 			Node clone = (Node)this.MemberwiseClone();
-            clone.NodeUUID = Guid.NewGuid().ToString();
+            OnClassChanged(null, this.Class);
 
-            clone.InputIOData = new ObservableCollection<IOData>();
-            foreach(IOData ioData in this.InputIOData)
-            {
-                clone.InputIOData.Add(new IOData(ioData.Type, " "));
-            }
             return clone;
 		}
 
@@ -259,6 +254,18 @@
             {
                 this.NodeUUID = NewUUID;
             }
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Node) return (obj as Node).NodeUUID.Equals(this.NodeUUID);
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return NodeUUID.GetHashCode();
         }
 
         #endregion methods

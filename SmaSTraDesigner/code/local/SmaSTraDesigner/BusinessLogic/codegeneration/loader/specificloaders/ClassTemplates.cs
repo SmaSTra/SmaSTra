@@ -58,5 +58,40 @@
        ;
 
 
+        /// <summary>
+        /// The Template for generation of final class.
+        /// <br> {0} : package name
+        /// <br> {1} : imports
+        /// <br> {2} : ClassName
+        /// <br> {3} : Class return value
+        /// <br> {4} : Amount of steps
+        /// <br> {5} : Sensor-Inits
+        /// <br> {6} : switchTransfor
+        /// <br> {7} : transformations
+        /// </summary>
+        public const string GENERATION_TEMPLATE =
+            "package {0}" + NL +
+            "{1}" + NL + 
+            "" + NL +
+            "public class {2} extends SmaSTraTreeExecutor<{3}> {{" + NL + 
+            "" + NL +
+            "   public {2}(Context context){{" + NL +
+            "       super({4}, context);" + NL +
+            "   }}" + NL +
+            "" + NL +
+            "{5}" + NL +
+            "" + NL +
+            "   @Override" + NL +
+            "   protected void transform(int level) {{" + NL +
+            "       switch(level) {{" + NL +
+            "           {6}" + NL +
+            "       }}" + NL +
+            "   }}" + NL +
+            "" + NL +
+            "{7}" + NL +
+            "" + NL +
+            "}}";
+            
+
     }
 }

@@ -172,7 +172,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             DataType output = root.Class.OutputType;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(NodeType.Combined, Name, Name, Description, subNodes, connections, output, root.NodeUUID, inputs.ToArray());
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, subNodes, connections, output, root.NodeUUID, inputs.ToArray());
 
             this.cachedNodeClass = finalNodeClass;
             return finalNodeClass;
@@ -191,8 +191,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             savePath = Path.Combine(savePath, toSave.DisplayName);
 
             if (Directory.Exists(savePath)) return false;
-            Directory.CreateDirectory(savePath);
-
             Singleton<NodeLoader>.Instance.saveToFolder(toSave, savePath);
             return true;
         }

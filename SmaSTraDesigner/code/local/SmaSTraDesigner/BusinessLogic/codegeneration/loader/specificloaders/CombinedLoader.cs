@@ -64,7 +64,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             List<SimpleConnection> connection = ReadConnections(root);
             string outputNodeID = ReadOutputNodeID(root);
 
-            return new CombinedNodeClass(nodeType, name, name, description, subNodes, connection, output, outputNodeID, inputs);
+            return new CombinedNodeClass(name, name, description, subNodes, connection, output, outputNodeID, inputs);
         }
 
         public override JObject classToJson(AbstractNodeClass nodeClass)

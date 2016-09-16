@@ -25,7 +25,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         /// <summary>
         /// The dictionary from node -> Input.
         /// </summary>
-        public Dictionary<Node,int> inputConnections { get; private set; }
+        public Dictionary<int,Node> inputConnections { get; private set; }
 
         #endregion properties
 
@@ -55,7 +55,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
 
                     ClassManager classManager = Singleton<ClassManager>.Instance;
                     this.includedNodes = new Node[ownClass.SubElements.Count];
-                    this.inputConnections = new Dictionary<Node, int>();
+                    this.inputConnections = new Dictionary<int,Node>();
 
                     int i = 0;
                     //Generate the Nodes:
@@ -92,7 +92,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         //We have an Input node:
                         if (second.StartsWith("input"))
                         {
-                            this.inputConnections.Add(firstNode,index);
+                            this.inputConnections.Add(index,firstNode);
                             continue;
                         }
 
