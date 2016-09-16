@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.ExtensionMethods;
 using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
@@ -22,6 +23,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// Filename for metadata.
         /// </summary>
         private const string METADATA_FILENAME = "metadata.json";
+
+        /// <summary>
+        /// The Folder for created stuff
+        /// </summary>
+        private const string CREATED_PATH = "created";
 
 
         /// <summary>
@@ -152,7 +158,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="nodeClass">To Save</param>
         /// <param name="path">To save to</param>
-        public void saveToFolder(NodeClass nodeClass, string path)
+        /// <param name="methodCode">To save, can be null.</param>
+        public void saveToFolder(NodeClass nodeClass, string path, string methodCode = null)
         {
             if(path == null)
             {
@@ -165,7 +172,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             }
 
             string metadataPath = Path.Combine(path, METADATA_FILENAME);
-            if (File.Exists(path))
+            string newClassPath = Path.Combine(path, CREATED_PATH, nodeClass.Name.RemoveAll(" ", "_") + ".java");
+            if (Directory.Exists(path))
             {
                 throw new FileAlreadyPresentException("Folder: " + path + " already exists.");
             }
@@ -176,14 +184,21 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 throw new MissingTypeException("Did not recognize Type for serialization: " + nodeClass.NodeType);
             }
 
-            JObject toWrite = loader.classToJson(nodeClass);
-            if(toWrite == null)
+            JObject metadata = loader.classToJson(nodeClass);
+            string generatedClass = methodCode == null ? null : loader.GenerateClassFromSnippet(nodeClass, methodCode);
+            if(metadata == null)
             {
                 throw new Exception("Ehhh, Something gone wrong, doc!");
             }
 
-            //Write the Metadata:
-            File.WriteAllText(metadataPath, toWrite.ToBeautifulJson());
+            //Write the Metadata + New class if exists:
+            Directory.CreateDirectory(path);
+            File.WriteAllText(metadataPath, metadata.ToBeautifulJson());
+            if (generatedClass != null)
+            {
+                Directory.CreateDirectory(Path.Combine(path, CREATED_PATH));
+                File.WriteAllText(newClassPath, generatedClass);
+            }
 
             //TODO add other stuff to add, like dependencies, etc.
         }

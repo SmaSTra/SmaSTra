@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
+using System;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -191,6 +192,14 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             toAddTo.Add(JSON_PROP_INPUT, inputObj);
         }
+
+        /// <summary>
+        /// Generates a new Class from a snippet.
+        /// </summary>
+        /// <param name="methodCode">to use.</param>
+        /// <param name="nodeClass">to use.</param>
+        /// <returns>the generated Java class</returns>
+        public abstract string GenerateClassFromSnippet(NodeClass nodeClass, string methodCode);
 
 
         #endregion Methods

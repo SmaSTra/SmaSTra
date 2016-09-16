@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.utils;
+using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
+using Common.ExtensionMethods;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
     class SensorLoader : AbstractNodeLoader
     {
+       
         public SensorLoader(ClassManager cManager) 
             : base(ClassManager.NodeType.Sensor, cManager)
         {}
@@ -35,6 +38,14 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddOutput(root, nodeClass.OutputType);
 
             return root;
+        }
+
+
+        
+        public override string GenerateClassFromSnippet(NodeClass nodeClass, string methodCode)
+        {
+            return string.Format(ClassTemplates.SENSOR_TEMPLATE,
+                nodeClass.Name.RemoveAll(" ", "_"), nodeClass.OutputType.Name, methodCode);
         }
 
     }

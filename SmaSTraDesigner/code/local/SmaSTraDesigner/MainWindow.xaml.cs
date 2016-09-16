@@ -11,6 +11,8 @@
     using SmaSTraDesigner.BusinessLogic;
     using Controls;
     using Controls.Support;
+    using BusinessLogic.codegeneration.loader;
+    using System.IO;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -81,6 +83,10 @@
                 }
                 Console.WriteLine("+++++ OutputType: " + outputType.Name);
                 Console.WriteLine("+++++ MethodCode: " + methodCode);
+
+                NodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
+                Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
+                Singleton<ClassManager>.Instance.AddClass(generatedClass);
             }
         }
 

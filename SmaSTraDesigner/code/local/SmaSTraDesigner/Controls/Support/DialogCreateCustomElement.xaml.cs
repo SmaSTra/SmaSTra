@@ -1,5 +1,6 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic;
+using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.Controls.Support
 {
@@ -218,6 +220,17 @@ namespace SmaSTraDesigner.Controls.Support
             InputTypeViewModel inputToDelete = (InputTypeViewModel)((Button)sender).DataContext;
             InputTypesViewModels.Remove(inputToDelete);
         }
+
+
+        public NodeClass GenerateClassFromInputs()
+        {
+            NodeType type = InputTypes.Empty() ?  NodeType.Sensor : NodeType.Transformation;
+
+            Node baseNode = type == NodeType.Sensor ? (Node) new DataSource() : (Node) new Transformation();
+            baseNode.Name = ElementName;
+
+            return new NodeClass(type, ElementName, baseNode, outputType, inputTypes.ToArray());
+        }
     }
 
     public class InputTypeViewModel
@@ -253,7 +266,7 @@ namespace SmaSTraDesigner.Controls.Support
             }
             set
             {
-                if(inputTypeString != value)
+                if (inputTypeString != value)
                 {
                     inputTypeString = value;
                 }
@@ -276,6 +289,7 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
     }
+
 
     public class ConverterCountToVisibility : IValueConverter
     {
