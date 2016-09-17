@@ -137,9 +137,9 @@
     <Compile Include="BusinessLogic\codegeneration\loader\NodeLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\SensorLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\TransformationLoader.cs" />
-    <Compile Include="BusinessLogic\codegeneration\NewJavaGenerator.cs" />
+    <Compile Include="BusinessLogic\codegeneration\javacodegenerator\NewJavaGenerator.cs" />
     <Compile Include="BusinessLogic\nodes\Connection.cs" />
-    <Compile Include="BusinessLogic\codegeneration\JavaGenerator.cs" />
+    <Compile Include="BusinessLogic\codegeneration\javacodegenerator\JavaGenerator.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />
     <Compile Include="BusinessLogic\nodes\DataSource.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\DataType.cs" />
