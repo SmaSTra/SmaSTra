@@ -892,6 +892,12 @@
             //Check if any nodes highlighted:
             if (nodes.Count <= 1) return false;
 
+            // Ensure OutputNode is not selected
+            foreach(Node node in nodes)
+            {
+                if (node is OutputNode) return false;
+            }
+
             //Check if connected:
             CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
             if (!generator.IsConnected()) return false;
