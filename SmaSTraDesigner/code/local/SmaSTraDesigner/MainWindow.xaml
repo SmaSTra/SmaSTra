@@ -56,7 +56,7 @@
 
         <StackPanel x:Name="spnSideMenu" Grid.ColumnSpan="99" Grid.Row="1" Orientation="Horizontal" Background="{StaticResource ColorPanelBackground}">
             <ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
-			<ToggleButton x:Name="tglCustomTF" Content="Custom Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
+			<ToggleButton x:Name="tglCustomTF" Content="Custom Transformations"  Checked="ToggleButton_Checked" />
 			<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
 		</StackPanel>
 
@@ -119,8 +119,8 @@
 
         <ScrollViewer Grid.Row="3" Grid.ColumnSpan="99" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Background="{StaticResource ColorPanelTitel}">
             <StackPanel x:Name="spnNodeClasses" Orientation="Horizontal">
-                <Grid>
-                    <ItemsControl x:Name="icDefaultDSNew" Visibility="{Binding ElementName=togDataSources, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                <DockPanel Visibility="{Binding ElementName=togDataSources, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
+                    <ItemsControl DockPanel.Dock="Right" x:Name="icDefaultDS" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -128,25 +128,46 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                     <!-- TODO: (PS) Add ItemControls here for custom and online Sensors -->
-                </Grid>
-                <Grid>
-                    <ItemsControl x:Name="icDefaultCVNew" Visibility="{Binding ElementName=togConversions, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                    <ItemsControl x:Name="icCustomDS" Visibility="{Binding ElementName=tglCustomTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CustomDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                </Grid>
-                <Grid>
-                    <ItemsControl x:Name="icDefaultTFNew" Visibility="{Binding ElementName=togTransformations, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                </DockPanel>
+                <DockPanel Visibility="{Binding ElementName=togConversions, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
+                    <ItemsControl DockPanel.Dock="Right" x:Name="icDefaultCV" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                </Grid>
+                    <ItemsControl x:Name="icCustomCV" Visibility="{Binding ElementName=tglCustomTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CustomConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </DockPanel>
+                <DockPanel Visibility="{Binding ElementName=togTransformations, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
+                    <ItemsControl DockPanel.Dock="Right" x:Name="icDefaultTF" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <ItemsControl x:Name="icCustomTF" Visibility="{Binding ElementName=tglCustomTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CustomTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </DockPanel>
             </StackPanel>
         </ScrollViewer>
 

@@ -36,14 +36,14 @@
 
 		private void ToggleButton_Checked(object sender, RoutedEventArgs e)
 		{
-			var toggleButtons = LayoutHelper.FindAllLogicalChildren<ToggleButton>(this.spnSideMenu);
-			foreach (var toggleButton in toggleButtons)
-			{
-				if (toggleButton != sender)
-				{
-					toggleButton.IsChecked = false;
-				}
-			}
+			//var toggleButtons = LayoutHelper.FindAllLogicalChildren<ToggleButton>(this.spnSideMenu);
+			//foreach (var toggleButton in toggleButtons)
+			//{
+			//	if (toggleButton != sender)
+			//	{
+			//		toggleButton.IsChecked = false;
+			//	}
+			//}
         }
 
         private void spnLibrary_Drop(object sender, DragEventArgs e)

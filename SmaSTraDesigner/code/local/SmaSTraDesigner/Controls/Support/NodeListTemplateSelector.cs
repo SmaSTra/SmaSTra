@@ -1,16 +1,17 @@
 ﻿namespace SmaSTraDesigner.Controls.Support
 {
-	using System.Windows;
-	using System.Windows.Controls;
+    using System.Windows;
+    using System.Windows.Controls;
 
-	using SmaSTraDesigner.BusinessLogic;
+    using SmaSTraDesigner.BusinessLogic;
+    using BusinessLogic.nodes;
 
-	/// <summary>
-	/// Template Selector that is used in conjunction with an ItemsControl to choose the correct
-	/// control to display a given node.
-	/// </summary>
-	/// <seealso cref="System.Windows.Controls.DataTemplateSelector" />
-	public class NodeListTemplateSelector : DataTemplateSelector
+    /// <summary>
+    /// Template Selector that is used in conjunction with an ItemsControl to choose the correct
+    /// control to display a given node.
+    /// </summary>
+    /// <seealso cref="System.Windows.Controls.DataTemplateSelector" />
+    public class NodeListTemplateSelector : DataTemplateSelector
 	{
 		#region overrideable methods
 
@@ -37,8 +38,14 @@
 			{
 				return element.FindResource("DataSourceNodeTemplate") as DataTemplate;
 			}
+            else if (item is CombinedNode)
+            {
+                CombinedNode combinedNode = (CombinedNode)item;
+                if(combinedNode.InputNodes.Length == 0) return element.FindResource("DataSourceNodeTemplate") as DataTemplate;
+                if (combinedNode.InputNodes.Length > 0) return element.FindResource("TransformationNodeTemplate") as DataTemplate;
+            }
 
-			return base.SelectTemplate(item, container);
+            return base.SelectTemplate(item, container);
 		}
 
 		#endregion overrideable methods

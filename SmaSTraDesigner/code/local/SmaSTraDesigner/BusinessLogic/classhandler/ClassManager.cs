@@ -23,15 +23,30 @@
 		/// </summary>
 		private Transformation[] baseConversions = null;
 
-		/// <summary>
-		/// List of all loaded data sources.
+        /// <summary>
+		/// List of all custom transformations that represent a simple conversion (one input one output).
 		/// </summary>
-		private DataSource[] baseDataSources = null;
+		private Transformation[] customConversions = null;
 
-		/// <summary>
-		/// List of all transformations (that do not fall in the conversion category).
+        /// <summary>
+        /// List of all loaded data sources.
+        /// </summary>
+        private DataSource[] baseDataSources = null;
+
+        /// <summary>
+		/// List of all custom data sources.
 		/// </summary>
-		private Transformation[] baseTransformations = null;
+		private DataSource[] customDataSources = null;
+
+        /// <summary>
+        /// List of all transformations (that do not fall in the conversion category).
+        /// </summary>
+        private Transformation[] baseTransformations = null;
+
+        /// <summary>
+        /// List of all custom transformations (that do not fall in the conversion category).
+        /// </summary>
+        private Transformation[] customTransformations = null;
 
 
         /// <summary>
@@ -72,7 +87,7 @@
 			{
 				if (this.baseConversions == null)
 				{
-					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1)
+					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && !cls.MainClass.Contains("created"))
 						.Select(cls => (Transformation)cls.BaseNode).ToArray();
 				}
 
@@ -80,17 +95,35 @@
 			}
 		}
 
-		/// <summary>
-		/// Gets the BaseDataSources instance (creates one if none exists).
-		/// List of all loaded data sources.
+        /// <summary>
+		/// Gets the BaseConversions instance (creates one if none exists).
+		/// List of all custom transformations that represent a simple conversion (one input one output).
 		/// </summary>
-		public DataSource[] BaseDataSources
+		public Transformation[] CustomConversions
+        {
+            get
+            {
+                if (this.customConversions == null)
+                {
+                    this.customConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && cls.MainClass.Contains("created"))
+                        .Select(cls => (Transformation)cls.BaseNode).ToArray();
+                }
+
+                return this.customConversions;
+            }
+        }
+
+        /// <summary>
+        /// Gets the BaseDataSources instance (creates one if none exists).
+        /// List of all loaded data sources.
+        /// </summary>
+        public DataSource[] BaseDataSources
 		{
 			get
 			{
 				if (this.baseDataSources == null)
 				{
-					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource)
+					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && !cls.MainClass.Contains("created"))
 						.Select(cls => (DataSource)cls.BaseNode).ToArray();
 				}
 
@@ -98,23 +131,59 @@
 			}
 		}
 
-		/// <summary>
-		/// Gets the BaseTransformations instance (creates one if none exists).
-		/// List of all transformations (that do not fall in the conversion category).
+        /// <summary>
+		/// Gets the CustomDataSources instance (creates one if none exists).
+		/// List of all custom data sources.
 		/// </summary>
-		public Transformation[] BaseTransformations
+		public DataSource[] CustomDataSources
+        {
+            get
+            {
+                if (this.customDataSources == null)
+                {
+                    this.customDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && cls.MainClass.Contains("created"))
+                        .Select(cls => (DataSource)cls.BaseNode).ToArray();
+                }
+
+                return this.customDataSources;
+            }
+        }
+
+        /// <summary>
+        /// Gets the BaseTransformations instance (creates one if none exists).
+        /// List of all transformations (that do not fall in the conversion category).
+        /// </summary>
+        public Transformation[] BaseTransformations
 		{
 			get
 			{
 				if (this.baseTransformations == null)
 				{
-					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1)
+					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && !cls.MainClass.Contains("created"))
 						.Select(cls => (Transformation)cls.BaseNode).ToArray();
 				}
 
 				return this.baseTransformations;
 			}
 		}
+
+        /// <summary>
+        /// Gets the BaseTransformations instance (creates one if none exists).
+        /// List of all custom transformations (that do not fall in the conversion category).
+        /// </summary>
+        public Transformation[] CustomTransformations
+        {
+            get
+            {
+                if (this.customTransformations == null)
+                {
+                    this.customTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && cls.MainClass.Contains("created"))
+                        .Select(cls => (Transformation)cls.BaseNode).ToArray();
+                }
+
+                return this.customTransformations;
+            }
+        }
 
 
         /// <summary>
