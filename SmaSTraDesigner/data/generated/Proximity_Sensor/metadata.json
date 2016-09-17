@@ -4,7 +4,9 @@
   "display": "Proximity Sensor",
   "description": "Captures the nearest distance for the Proximity Sensor",
   "neededPermissions": [],
-  "needs": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
+  ],
   "config": [
     {
       "key": "SamplingRate",

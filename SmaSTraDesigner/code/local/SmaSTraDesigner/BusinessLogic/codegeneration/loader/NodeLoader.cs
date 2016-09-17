@@ -1,11 +1,11 @@
 ﻿using Common;
 using Common.ExtensionMethods;
 using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
@@ -126,7 +126,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             path = Path.Combine(path, METADATA_FILENAME);
             if (!File.Exists(path))
             {
-                throw new FileNotFoundException("Could not find folder: " + path);
+                throw new FileNotFoundException("Could not find Metadata in folder: " + path);
             }
 
             JObject root = JObject.Parse(File.ReadAllText(path));

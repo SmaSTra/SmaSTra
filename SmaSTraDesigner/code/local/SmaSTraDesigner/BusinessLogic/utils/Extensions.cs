@@ -163,6 +163,16 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return String.IsNullOrEmpty(val) ? defaultValue : val;
         }
 
+        public static string ReplaceFirst(this string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+
     }
 
 
@@ -280,15 +290,16 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         }
 
 
-        public static void ExecuteOnFirst<T>(this IEnumerable<T> elements, Action<T> action)
+        public static bool ExecuteOnFirst<T>(this IEnumerable<T> elements, Action<T> action)
         {
-            if (elements.Empty()) return;
+            if (elements.Empty()) return false;
             else action.Invoke(elements.First());
+            return true;
         }
 
-        public static void ExecuteOnFirst<T>(this IEnumerable<T> elements, Func<T, bool> search, Action<T> action)
+        public static bool ExecuteOnFirst<T>(this IEnumerable<T> elements, Func<T, bool> search, Action<T> action)
         {
-            elements.Where(search).ExecuteOnFirst(action);
+            return elements.Where(search).ToList().ExecuteOnFirst(action);
         }
 
 

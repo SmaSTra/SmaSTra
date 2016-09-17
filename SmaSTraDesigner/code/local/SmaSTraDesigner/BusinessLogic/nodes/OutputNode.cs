@@ -1,11 +1,9 @@
-﻿using SmaSTraDesigner.BusinessLogic.classhandler;
-
-namespace SmaSTraDesigner.BusinessLogic
+﻿namespace SmaSTraDesigner.BusinessLogic
 {
-	/// <summary>
-	/// Represents a TransformationTree's data output.
-	/// </summary>
-	public class OutputNode : Node
+    /// <summary>
+    /// Represents a TransformationTree's data output.
+    /// </summary>
+    public class OutputNode : Node
 	{
 
 

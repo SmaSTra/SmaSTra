@@ -6,6 +6,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
@@ -386,13 +387,21 @@
 			foreach (string dir in dirs)
 			{
                 string dirName = Path.GetFileName(dir);
+                //Skip libs folder:
+                if (dirName == "libs") continue;
 
                 try
                 {
                     AbstractNodeClass loadedClass = loader.loadFromFolder(dir);
                     if (loadedClass == null) throw new Exception("Could not Load Class.... *Mumble... Mumble*");
                     AddClass(loadedClass);
-                }catch(Exception exp)
+                }
+                catch (FileNotFoundException e)
+                {
+                    //This is okay, it means there is no Metadata file in the folder.
+                    Debug.WriteLine(e.Message);
+                }
+                catch(Exception exp)
                 {
                     MessageBox.Show("Could not load " + dirName + " Error: \n" + exp.Message + "\nSkipping this element.", "Error in loading " + dirName);
                 }

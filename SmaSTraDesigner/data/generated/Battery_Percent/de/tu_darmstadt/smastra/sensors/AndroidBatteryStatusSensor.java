@@ -7,6 +7,7 @@ import android.os.BatteryManager;
 
 import java.util.Map;
 
+import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
@@ -17,6 +18,7 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  * This sensor sais if and with what the device is charged.
  * @author Tobias Welther
  */
+@NeedsOtherClass({ Abstract1dAndroidSensor.class })
 @SensorConfig(displayName = "Battery Percent", description = "Gives the percent of the battery (0-1, -1 if not readable))")
 public class AndroidBatteryStatusSensor implements Sensor {
 

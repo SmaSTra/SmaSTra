@@ -4,7 +4,9 @@
   "display": "Loading Status",
   "description": "Gives the Loading status (1 \u003d AC, 2 \u003d USB, 4 \u003d Wireless)",
   "neededPermissions": [],
-  "needs": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
+  ],
   "dataMethod": "getStatus",
   "output": "double",
   "start": "start",

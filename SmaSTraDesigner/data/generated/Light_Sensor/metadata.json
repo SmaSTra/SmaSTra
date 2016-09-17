@@ -4,7 +4,9 @@
   "display": "Light Sensor",
   "description": "Captures the Light value in lux",
   "neededPermissions": [],
-  "needs": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
+  ],
   "config": [
     {
       "key": "SamplingRate",

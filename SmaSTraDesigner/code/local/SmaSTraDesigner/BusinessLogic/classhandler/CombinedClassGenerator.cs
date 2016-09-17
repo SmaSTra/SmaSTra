@@ -1,11 +1,9 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
-using SmaSTraDesigner.BusinessLogic.nodes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {

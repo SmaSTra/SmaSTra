@@ -6,6 +6,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.Map;
 
@@ -39,7 +41,7 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
 
 
     public AndroidGPSSensor(Context context) {
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
 
@@ -49,7 +51,14 @@ public class AndroidGPSSensor implements Sensor, LocationListener {
     @SensorStart
     @Override
     public void start(){
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        Runnable run = new Runnable(){
+            @Override
+            public void run(){
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, AndroidGPSSensor.this);
+            }
+        };
+
+        new Handler(Looper.getMainLooper()).post(run);
     }
 
 
