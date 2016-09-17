@@ -3,7 +3,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
-using System;
+using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -101,9 +101,20 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             DataSourceNodeClass nodeClass = node.Class as DataSourceNodeClass;
             codeExtension.AddSensor(node as DataSource);
+            codeExtension.AddNeededPermissions(nodeClass.NeedsPermissions);
 
             codeExtension.AddImport(nodeClass.OutputType.Name);
             codeExtension.AddImport(nodeClass.MainClass);
+
+            //We have a special case: Only a DataSource:
+            if(codeExtension.RootNode == node)
+            {
+                string code = " private void transform0(){\n" 
+                            + "     data = sensor0." + nodeClass.DataMethod + "();\n"
+                            + " }\n";
+
+                codeExtension.AddCodeStep(code);
+            }
         }
 
     }

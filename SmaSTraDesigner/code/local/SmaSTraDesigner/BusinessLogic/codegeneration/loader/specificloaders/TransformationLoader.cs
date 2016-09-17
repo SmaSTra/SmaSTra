@@ -4,8 +4,8 @@ using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
-using System;
 using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -126,9 +126,10 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
         public override void CreateCode(Node node, CodeExtension codeExtension)
         {
-            codeExtension.AddTransformation(node as Transformation);
-
             TransformationNodeClass nodeClass = node.Class as TransformationNodeClass;
+            codeExtension.AddTransformation(node as Transformation);
+            codeExtension.AddNeededPermissions(nodeClass.NeedsPermissions);
+
             string content = "";
             string args = "(";
             int currentTransform = codeExtension.GetCurrentStep();

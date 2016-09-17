@@ -280,15 +280,16 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         }
 
 
-        public static void ExecuteOnFirst<T>(this IEnumerable<T> elements, Action<T> action)
+        public static bool ExecuteOnFirst<T>(this IEnumerable<T> elements, Action<T> action)
         {
-            if (elements.Empty()) return;
+            if (elements.Empty()) return false;
             else action.Invoke(elements.First());
+            return true;
         }
 
-        public static void ExecuteOnFirst<T>(this IEnumerable<T> elements, Func<T, bool> search, Action<T> action)
+        public static bool ExecuteOnFirst<T>(this IEnumerable<T> elements, Func<T, bool> search, Action<T> action)
         {
-            elements.Where(search).ExecuteOnFirst(action);
+            return elements.Where(search).ToList().ExecuteOnFirst(action);
         }
 
 

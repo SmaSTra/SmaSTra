@@ -5,13 +5,21 @@ namespace SmaSTraDesigner.BusinessLogic.utils
     class DirCopy
     {
 
+        public static void DirectoryCopy(
+            Node node, string destDirName)
+        {
+            string source = GetPathForNode(node.Class);
+            DirectoryCopy(source, destDirName, true);
+        }
+
+
         /// Copying all files from a given source directory to a destination directory, is capable of copying subdirs too. Deletes File "metadata.json" from dest in the end.
-		/// Copied from MSDN
-		/// </summary>
-		/// <param name="sourceDirName">The source directory</param>
-		/// <param name="destDirName">The target directory</param>
-		/// <param name="copySubDirs">whether substrings should be copied</param>
-		public  static void DirectoryCopy(
+        /// Copied from MSDN
+        /// </summary>
+        /// <param name="sourceDirName">The source directory</param>
+        /// <param name="destDirName">The target directory</param>
+        /// <param name="copySubDirs">whether substrings should be copied</param>
+        public  static void DirectoryCopy(
             string sourceDirName, string destDirName, bool copySubDirs)
         {
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
