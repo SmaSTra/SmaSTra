@@ -64,7 +64,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
                     return tmpManifest;
                 }
 
-                tmpManifest = Directory.GetParent(tmpManifest).FullName;
+                tmpPath = Directory.GetParent(tmpPath).FullName;
             }
 
             //Second, search in subfolders:
@@ -105,7 +105,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
             string workspacePath = androidStudioWorkspacePath.FullName;
 
             //Add the permissions:
-            AddPermissionsToManifest(manifestPath, codeExtension.GetNeededPermissions());
+            AddPermissionsToManifestWithoutBreakingLayout(manifestPath, codeExtension.GetNeededPermissions());
 
             //Copy classes:
             string javaDirPath = Directory.GetParent(manifestPath).FullName;
@@ -145,9 +145,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
                     }
 
                     //Add Lib dependencies:
-                    gradleFile = gradleFile.Replace("dependencies {",
+                    gradleFile = gradleFile.ReplaceFirst("dependencies {",
                         "dependencies {\n" +
-                        "  compile 'de.tu_darmstadt.smastra.base:SmaSTraBase:1.0@aar'"
+                        "    compile 'de.tu_darmstadt.smastra.base:SmaSTraBase:1.0@aar'"
                     );
 
                     //Finally rewrite:

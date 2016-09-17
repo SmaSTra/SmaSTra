@@ -1,4 +1,5 @@
 ﻿using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporters;
+using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.IO;
@@ -136,6 +137,32 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
             }
 
             doc.Save(manifestPath);
+        }
+
+        /// <summary>
+        /// Adds the permissions passed to the manifest passed.
+        /// </summary>
+        /// <param name="manifestPath">To add to</param>
+        /// <param name="permissions">To add</param>
+        protected void AddPermissionsToManifestWithoutBreakingLayout(string manifestPath, string[] permissions)
+        {
+            //No permissions -> Nothing to do!
+            if (permissions.Empty()) return;
+
+            string manifest = File.ReadAllText(manifestPath);
+            permissions = permissions.Where(p => !manifest.Contains(p)).ToArray();
+            if (permissions.Empty()) return;
+
+            string permString = string.Join("\n", permissions.Select(p => string.Format(ClassTemplates.GENERATION_TEMPLATE_PERMISSION, p)));
+            if (manifest.Contains("</manifest>"))
+            {
+                manifest = manifest.ReplaceFirst("</manifest>", permString + "\n</manifest>");
+                File.WriteAllText(manifestPath, manifest);
+            }
+            else
+            {
+                MessageBox.Show("Could not add Permissions to the Manifest. Please do this per hand.", "Manifest error");
+            }
         }
     }
 

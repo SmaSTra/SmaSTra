@@ -152,5 +152,12 @@
             "       {0} data{1} = {2};\n";
 
 
+        /// <summary>
+        /// A simple template for android permissions
+        /// <br>{0} : permission node.
+        /// </summary>
+        public const string GENERATION_TEMPLATE_PERMISSION =
+            "  <uses-permission android:name=\"{0}\" />\n";
+
     }
 }
