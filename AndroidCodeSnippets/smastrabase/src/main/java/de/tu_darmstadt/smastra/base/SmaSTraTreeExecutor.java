@@ -1,6 +1,7 @@
 package de.tu_darmstadt.smastra.base;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,6 +39,11 @@ public abstract class SmaSTraTreeExecutor<T> {
      */
     protected boolean inited = false;
 
+    /**
+     * If we have an error while initing:
+     */
+    protected boolean errorOnInit = false;
+
 
     /**
      * Creates the SmaSTra Execution Tree.
@@ -61,9 +67,22 @@ public abstract class SmaSTraTreeExecutor<T> {
         this.executor.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                if(!inited) { inited = true; init(); }
+                if(!inited) {
+                    inited = true;
+                    try{
+                        init();
+                    }catch(Throwable exp){
+                        Log.e("SmaSTra", "Error in Init Method. Shutting down! Please fix this!");
+                        exp.printStackTrace();
+                        errorOnInit = true;
+                    }
+                }
 
-                step();
+                try{
+                    if(!errorOnInit) step();
+                }catch(Throwable exp){
+                    exp.printStackTrace();
+                }
             }
         }, 50, 50, TimeUnit.MILLISECONDS);
     }

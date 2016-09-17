@@ -274,7 +274,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         public string BuildTransformDataVars()
         {
             string transOut = "";
-            for (int i = 0; i < nextTrans; i++)
+            for (int i = 0; i < nextTrans - 1; i++)
             {
                 Transformation transform = transformationOuts[i];
                 transOut += string.Format("   private {0} transformation{1};\n", transform.Class.OutputType.MinimizedName, i);
@@ -307,7 +307,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// </summary>
         public string BuildCodeSteps()
         {
-            return (codeSteps.Count() - 1).ToString();
+            return codeSteps.Count().ToString();
         }
 
         /// <summary>
