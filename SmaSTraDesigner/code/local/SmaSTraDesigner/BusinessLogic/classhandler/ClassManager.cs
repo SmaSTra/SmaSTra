@@ -55,6 +55,21 @@
         private CombinedNode[] baseCombinedNodes = null;
 
         /// <summary>
+        /// List of all Combined Conversions.
+        /// </summary>
+        private CombinedNode[] combinedConversions = null;
+
+        /// <summary>
+        /// List of all Combined  DataSources.
+        /// </summary>
+        private CombinedNode[] combinedDataSources = null;
+
+        /// <summary>
+        /// List of all Combined Transformations.
+        /// </summary>
+        private CombinedNode[] combinedTransformations = null;
+
+        /// <summary>
         /// Dictionary that keeps track of loaded node classes to ensure no ambiguity.
         /// </summary>
         private Dictionary<string, AbstractNodeClass> classes = new Dictionary<string, AbstractNodeClass>();
@@ -79,7 +94,7 @@
 
 		/// <summary>
 		/// Gets the BaseConversions instance (creates one if none exists).
-		/// List of all loaded transformations that represent a simple conversion (one input one output).
+		/// List of all base transformations that represent a simple conversion (one input one output).
 		/// </summary>
 		public Transformation[] BaseConversions
 		{
@@ -115,7 +130,7 @@
 
         /// <summary>
         /// Gets the BaseDataSources instance (creates one if none exists).
-        /// List of all loaded data sources.
+        /// List of all base data sources.
         /// </summary>
         public DataSource[] BaseDataSources
 		{
@@ -151,7 +166,7 @@
 
         /// <summary>
         /// Gets the BaseTransformations instance (creates one if none exists).
-        /// List of all transformations (that do not fall in the conversion category).
+        /// List of all base transformations (that do not fall in the conversion category).
         /// </summary>
         public Transformation[] BaseTransformations
 		{
@@ -204,6 +219,60 @@
             }
         }
 
+        /// <summary>
+        /// Gets the Combined Conversions instance (creates one if none exists).
+        /// List of all Combined Conversions.
+        /// </summary>
+        public CombinedNode[] CombinedConversions
+        {
+            get
+            {
+                if (this.combinedConversions == null)
+                {
+                    this.combinedConversions = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length == 1)
+                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                }
+
+                return this.combinedConversions;
+            }
+        }
+
+        // <summary>
+        /// Gets the Combined DataSources instance (creates one if none exists).
+        /// List of all Combined DataSources.
+        /// </summary>
+        public CombinedNode[] CombinedDataSources
+        {
+            get
+            {
+                if (this.combinedDataSources == null)
+                {
+                    this.combinedDataSources = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length == 0)
+                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                }
+
+                return this.combinedDataSources;
+            }
+        }
+
+        // <summary>
+        /// Gets the Combined Transformations instance (creates one if none exists).
+        /// List of all Combined Conversions.
+        /// </summary>
+        public CombinedNode[] CombinedTransformations
+        {
+            get
+            {
+                if (this.combinedTransformations == null)
+                {
+                    this.combinedTransformations = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length > 1)
+                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                }
+
+                return this.combinedTransformations;
+            }
+        }
+
         #endregion properties
 
         #region methods
@@ -231,23 +300,44 @@
                     if (nodeClass.InputTypes.Length == 1)
                     {
                         this.baseConversions = null;
+                        this.customConversions = null;
                         this.OnPropertyChanged("BaseConversions");
+                        this.OnPropertyChanged("CustomConversions");
                     }
                     else
                     {
                         this.baseTransformations = null;
-                        this.OnPropertyChanged("TransformationClasses");
+                        this.customTransformations = null;
+                        this.OnPropertyChanged("BaseTransformations");
+                        this.OnPropertyChanged("CustomTransformations");
                     }
                     break;
 
                 case NodeType.Sensor:
                     this.baseDataSources = null;
+                    this.customDataSources = null;
                     this.OnPropertyChanged("BaseDataSources");
+                    this.OnPropertyChanged("CustomDataSources");
                     break;
 
                 case NodeType.Combined:
                     this.baseCombinedNodes = null;
                     this.OnPropertyChanged("BaseCombined");
+                    if (nodeClass.InputTypes.Length == 1)
+                    {
+                        this.combinedConversions = null;
+                        this.OnPropertyChanged("CombinedConversions");
+                    }
+                    else if (nodeClass.InputTypes.Length == 0)
+                    {
+                        this.combinedDataSources = null;
+                        this.OnPropertyChanged("CombinedDataSources");
+                    }
+                    else if (nodeClass.InputTypes.Length > 1)
+                    {
+                        this.combinedTransformations = null;
+                        this.OnPropertyChanged("CombinedTransformations");
+                    }
                     break;
             }
 
