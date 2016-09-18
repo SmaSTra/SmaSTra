@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
@@ -24,6 +25,11 @@ public class SmaSTraBufferBuilder {
      * The List of the configuration.
      */
     private final List<ConfigurationElement> configuration = new ArrayList<>();
+
+    /**
+     * The Proxy properties to use.
+     */
+    private final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -103,6 +109,11 @@ public class SmaSTraBufferBuilder {
         return this;
     }
 
+    public SmaSTraBufferBuilder addProxyProperties(List<ProxyPropertyObj> proxyProperties){
+        if(proxyProperties != null) this.proxyProperties.addAll(proxyProperties);
+        return this;
+    }
+
     public List<Class<?>> getNeedsOtherClasses() {
         return needsOtherClasses;
     }
@@ -148,6 +159,8 @@ public class SmaSTraBufferBuilder {
         if(bufferAddMethodName == null) throw new ElementGenerationFailedException("No BufferAdd defined.");
         if(bufferGetMethodName == null) throw new ElementGenerationFailedException("No BufferGet defined.");
 
-        return new SmaSTraBuffer(displayName, description, androidPermissions, needsOtherClasses, bufferAddMethodName, bufferGetMethodName, clazz, configuration);
+        return new SmaSTraBuffer(displayName, description, androidPermissions, needsOtherClasses,
+                bufferAddMethodName, bufferGetMethodName, clazz,
+                configuration, proxyProperties);
     }
 }

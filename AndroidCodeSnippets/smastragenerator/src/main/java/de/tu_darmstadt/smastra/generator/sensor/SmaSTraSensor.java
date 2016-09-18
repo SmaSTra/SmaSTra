@@ -5,6 +5,7 @@ import java.util.List;
 import de.tu_darmstadt.smastra.generator.ElementGenerator;
 import de.tu_darmstadt.smastra.generator.SmaSTraElement;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
@@ -37,9 +38,10 @@ public class SmaSTraSensor extends SmaSTraElement {
 
 
     public SmaSTraSensor(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses, Output output,
-                         String dataMethodName, String startMethod, String stopMethod, Class<?> clazz, List<ConfigurationElement> configuration) {
+                         String dataMethodName, String startMethod, String stopMethod, Class<?> clazz,
+                         List<ConfigurationElement> configuration, List<ProxyPropertyObj> proxyProperties) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration);
+        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration, proxyProperties);
 
         this.output = output;
         this.dataMethodName = dataMethodName;

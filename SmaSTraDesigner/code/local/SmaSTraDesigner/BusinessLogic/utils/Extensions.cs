@@ -173,6 +173,16 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
+        public static string StringJoin(this IEnumerable<string> split, string mergeString)
+        {
+            return string.Join(mergeString, split);
+        }
+
+        public static string StringJoin(this IEnumerable<string> split)
+        {
+            return string.Join("", split);
+        }
+
     }
 
 

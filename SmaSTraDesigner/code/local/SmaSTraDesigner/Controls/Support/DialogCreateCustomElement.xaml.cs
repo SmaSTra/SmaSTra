@@ -246,11 +246,12 @@ namespace SmaSTraDesigner.Controls.Support
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];
             ConfigElement[] config = new ConfigElement[0];
+            ProxyProperty[] proxyProperties = new ProxyProperty[0];
             string methodName = javaFreandlyName;
             bool isStatic = true;
 
             return new TransformationNodeClass(javaFreandlyName, ElementName, description, OutputType, InputTypes.ToArray(), 
-                mainClass, neededOtherClasses, neededPermissions, config, 
+                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties,
                 methodName, isStatic);
         }
 
@@ -264,12 +265,13 @@ namespace SmaSTraDesigner.Controls.Support
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];
             ConfigElement[] config = new ConfigElement[0];
+            ProxyProperty[] proxyProperties = new ProxyProperty[0];
             string dataMethod = "getData";
             string startMethod = "start";
             string stopMethod = "stop";
 
             return new DataSourceNodeClass(javaFreandlyName, ElementName, description, OutputType, 
-                mainClass, neededOtherClasses, neededPermissions, config,
+                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties,
                 dataMethod, startMethod, stopMethod);
         }
 

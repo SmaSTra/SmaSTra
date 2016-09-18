@@ -19,11 +19,11 @@
         public string StopMethod { get; }
 
         public DataSourceNodeClass(string name, string displayName, string description, DataType outputType,
-            string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config,
+            string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config, ProxyProperty[] proxyProperties,
             string dataMethod, string startMethod, string stopMethod)
             : base(ClassManager.NodeType.Sensor, name, displayName, description, outputType, 
                   mainClass, needsOtherClasses, needsPermissions,
-                  config, new DataType[0])
+                  config, proxyProperties, new DataType[0])
         {
             this.DataMethod = dataMethod;
             this.StartMethod = startMethod;

@@ -120,9 +120,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddDisplayName(root, nodeClass.DisplayName);
             AddOutput(root, nodeClass.OutputType);
             AddInputs(root, nodeClass.InputTypes);
+            AddProxyProperties(root, combinedClass.ProxyProperties);
+
             AddConnections(root, combinedClass.Connections);
             AddSubNodes(root, combinedClass.SubElements);
-            AddOutputNodeID(root, combinedClass.OutputNodeUUID);  
+            AddOutputNodeID(root, combinedClass.OutputNodeUUID);
 
             return root;
         }

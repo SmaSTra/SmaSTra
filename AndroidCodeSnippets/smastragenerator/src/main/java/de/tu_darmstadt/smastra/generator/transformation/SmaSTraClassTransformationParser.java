@@ -11,6 +11,7 @@ import java.util.Set;
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.Transformation;
@@ -52,6 +53,7 @@ public class SmaSTraClassTransformationParser {
                 builder.addInputs(readInput(method));
                 builder.setAndroidPermissions(readNeededPermissions(clazz));
                 builder.addNeededClass(readNeededClasses(clazz));
+                builder.addProxyProperties(readProxyProperties(method));
 
                 SmaSTraTransformation transaction = builder.build();
                 if(transaction != null) transformations.add(transaction);
@@ -129,6 +131,15 @@ public class SmaSTraClassTransformationParser {
         }
 
         return inputList;
+    }
+
+    /**
+     * Reads the proxy properties from the Methos
+     * @return the
+     */
+    private static Collection<ProxyPropertyObj> readProxyProperties(Method method){
+        //at the moment not for Transforamtions.
+        return new ArrayList<>();
     }
 
 

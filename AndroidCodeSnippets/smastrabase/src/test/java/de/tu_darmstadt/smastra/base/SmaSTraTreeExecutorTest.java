@@ -4,8 +4,6 @@ import android.content.Context;
 
 import org.junit.Test;
 
-import de.tu_darmstadt.smastra.base.SmaSTraTreeExecutor;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -20,8 +18,8 @@ public class SmaSTraTreeExecutorTest {
 
     @Test
     public void testAllLevelsGetCalledInTheCorrectOrder() throws InterruptedException {
-        int max = 10;
-        TestTree1 sut = new TestTree1(max, null);
+        int max = 2;
+        TestTree1 sut = new TestTree1(null);
         long start = System.currentTimeMillis();
 
         sut.start();
@@ -46,13 +44,20 @@ public class SmaSTraTreeExecutorTest {
 
         int call = 0;
 
-        public TestTree1(int max, Context context) {
-            super(max, context);
+        TestTree1(Context context) {
+            super(context);
         }
 
-        @Override
-        protected void transform(int level) {
-            assertEquals(call, level);
+        @Override protected void startIntern() {}
+        @Override protected void stopIntern() {}
+
+        protected void transform0() {
+            assertEquals(0, call);
+            call++;
+        }
+
+        protected void transform1() {
+            assertEquals(1, call);
             call++;
         }
 
@@ -61,8 +66,7 @@ public class SmaSTraTreeExecutorTest {
 
     @Test
     public void testStopStopsTheTicking() throws InterruptedException {
-        int max = 10;
-        TestTree2 sut = new TestTree2(max, null);
+        TestTree2 sut = new TestTree2(null);
         sut.start();
 
         //Sleep a bit.
@@ -82,12 +86,14 @@ public class SmaSTraTreeExecutorTest {
 
         int call = 0;
 
-        public TestTree2(int max, Context context) {
-            super(max, context);
+        TestTree2(Context context) {
+            super(context);
         }
 
-        @Override
-        protected void transform(int level) {
+        @Override protected void startIntern() {}
+        @Override protected void stopIntern() {}
+
+        protected void transform0() {
             call++;
         }
     }
@@ -95,8 +101,7 @@ public class SmaSTraTreeExecutorTest {
 
     @Test
     public void testNotStartingDoesNotTick() throws InterruptedException {
-        int max = 10;
-        TestTree2 sut = new TestTree2(max, null);
+        TestTree2 sut = new TestTree2( null);
 
         //Sleep a bit.
         Thread.sleep(200);
@@ -106,8 +111,7 @@ public class SmaSTraTreeExecutorTest {
 
     @Test
     public void testCallingStartIfAlreadyStartedStillTicks() throws InterruptedException {
-        int max = 10;
-        TestTree2 sut = new TestTree2(max, null);
+        TestTree2 sut = new TestTree2(null);
         sut.start();
         Thread.sleep(100);
 
@@ -117,35 +121,6 @@ public class SmaSTraTreeExecutorTest {
 
         sut.stop();
         assertTrue(sut.call > current);
-    }
-
-    @Test
-    public void testInitIsOnlyCalledOnce() throws InterruptedException {
-        int max = 10;
-        TestTree3 sut = new TestTree3(max, null);
-        sut.start();
-        Thread.sleep(100);
-        sut.stop();
-
-        assertEquals(1, sut.call);
-    }
-
-    private class TestTree3 extends SmaSTraTreeExecutor<String> {
-
-        int call = 0;
-
-        public TestTree3(int max, Context context) {
-            super(max, context);
-        }
-
-        @Override
-        protected void init() {
-            super.init();
-            call++;
-        }
-
-        @Override
-        protected void transform(int level) {}
     }
 
 

@@ -1,4 +1,6 @@
-﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+﻿using Common.ExtensionMethods;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -277,7 +279,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
             for (int i = 0; i < nextTrans - 1; i++)
             {
                 Transformation transform = transformationOuts[i];
+                TransformationNodeClass transClass = transform.Class as TransformationNodeClass;
+                if (transClass.IsStatic) continue;
+
                 transOut += string.Format("   private {0} transformation{1};\n", transform.Class.OutputType.MinimizedName, i);
+            }
+
+            for (int i = 0; i < nextTrans - 1; i++)
+            {
+                Transformation transform = transformationOuts[i];
+                transOut += string.Format("   private {0} transform{1};\n", transform.Class.OutputType.MinimizedName, i);
             }
 
             return transOut;
@@ -287,42 +298,106 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// <summary>
         /// Builds the Data for the Sensor output.
         /// </summary>
-        public string BuildSensorInit()
+        public string BuildInitCode()
         {
-            string sensorOutput = "";
+            string initCode = "";
             for (int i = 0; i < nextSensor; i++)
             {
                 DataSource sensor = sensors[i];
                 DataSourceNodeClass clazz = sensor.Class as DataSourceNodeClass;
 
-                sensorOutput += string.Format("       sensor{0} = new {1}(context);\n", i, DataType.minimizeToClass(sensor.Class.MainClass));
-                if (!string.IsNullOrWhiteSpace(clazz.StartMethod)) sensorOutput += string.Format("       sensor{0}.{1}();\n", i, clazz.StartMethod);
+                initCode += string.Format("       sensor{0} = new {1}(context);\n", i, DataType.minimizeToClass(sensor.Class.MainClass));
             }
 
-            return sensorOutput;
-        }
-
-        /// <summary>
-        /// Builds the codesteps.
-        /// </summary>
-        public string BuildCodeSteps()
-        {
-            return codeSteps.Count().ToString();
-        }
-
-        /// <summary>
-        /// Builds the Switch statement needed for execution.
-        /// </summary>
-        public string BuildSwitchTransform()
-        {
-            string switchStatement = "";
-            for (int i = 0; i < codeSteps.Count(); i++)
+            for (int i = 0; i < nextTrans; i++)
             {
-                switchStatement += string.Format("			case {0} : transform{0}(); break;\n", i);
+                Transformation transformation = transformationOuts[i];
+                TransformationNodeClass clazz = transformation.Class as TransformationNodeClass;
+                if (clazz.IsStatic) continue;
+
+                initCode += string.Format("       trans{0} = new {1}();\n", i, DataType.minimizeToClass(transformation.Class.MainClass));
             }
 
-            return switchStatement;
+            return initCode;
         }
+
+
+        /// <summary>
+        /// Builds the Data for the Start method.
+        /// </summary>
+        public string BuildStartCode()
+        {
+            string startCode = "";
+            for (int i = 0; i < nextSensor; i++)
+            {
+                DataSource sensor = sensors[i];
+                DataSourceNodeClass clazz = sensor.Class as DataSourceNodeClass;
+
+                string startMethod = clazz.StartMethod;
+                if (!string.IsNullOrWhiteSpace(startMethod)) startCode += string.Format("       sensor{0}.{1}();\n", i, startMethod);
+            }
+
+            return startCode;
+        }
+
+
+        /// <summary>
+        /// Builds the Data for the Stop method.
+        /// </summary>
+        public string BuildStopCode()
+        {
+            string stopCode = "";
+            for (int i = 0; i < nextSensor; i++)
+            {
+                DataSource sensor = sensors[i];
+                DataSourceNodeClass clazz = sensor.Class as DataSourceNodeClass;
+
+                string stopMethod = clazz.StopMethod;
+                if (!string.IsNullOrWhiteSpace(stopMethod)) stopCode += string.Format("       sensor{0}.{1}();\n", i, stopMethod);
+            }
+
+            return stopCode;
+        }
+
+        /// <summary>
+        /// Builds the Proxy Property Code.
+        /// </summary>
+        /// <returns>The </returns>
+        public string BuildProxyPropertyCode()
+        {
+            Node[] allNodes = GetAllUsedNodes();
+            List<Node> added = new List<Node>();
+            string proxyPropertyCode = "";
+
+            allNodes.ForEach(
+                n =>
+                {
+                    foreach (ProxyProperty prop in n.Class.ProxyProperties)
+                    {
+                        string methodName = prop.MethodName;
+                        string className = n.Class.Name.RemoveAll(" ","_");
+                        int varID = added.Count(a => a.Class == n.Class);
+                        string inputTypeName = prop.PropertyType.MinimizedName;
+                        string varName = n.Class.NodeType.ToString().ToLower();
+                        int classID = GetOutputIndex(n);
+
+                        proxyPropertyCode += string.Format(ClassTemplates.GENERATION_TEMPLATE_PROXY_PROP,
+                            methodName,
+                            className,
+                            varID.ToString(),
+                            inputTypeName,
+                            varName,
+                            classID.ToString()
+                        );
+                    }
+
+                    added.Add(n);
+                }
+            );
+
+            return proxyPropertyCode;
+        }
+
 
         /// <summary>
         /// Builds the Transformation code.

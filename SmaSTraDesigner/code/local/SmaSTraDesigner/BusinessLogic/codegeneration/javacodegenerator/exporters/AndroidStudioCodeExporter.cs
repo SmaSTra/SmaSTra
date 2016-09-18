@@ -65,7 +65,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
                     return tmpManifest;
                 }
 
-                tmpPath = Directory.GetParent(tmpPath).FullName;
+                //Fix for not having anywhere to go upwards:
+                DirectoryInfo parentInfo = Directory.GetParent(tmpPath);
+                if (parentInfo == null) break;
+
+                tmpPath = parentInfo.FullName;
             }
 
             //Second, search in subfolders:
