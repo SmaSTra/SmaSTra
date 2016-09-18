@@ -4,6 +4,7 @@ using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
+using System.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -29,11 +30,14 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             string[] needsOtherClasses = ReadNeededClasses(root);
             string[] neededPermissions = ReadNeededPermissions(root);
             ConfigElement[] config = ReadConfig(root);
+            ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             string dataMethod = ReadDataMethod(root);
             string startMethod = ReadStartMethod(root);
             string stopMethod = ReadStopMethod(root);
 
-            return new DataSourceNodeClass(name, displayName, description, output, mainClass, needsOtherClasses, neededPermissions, config, dataMethod, startMethod, stopMethod);
+            return new DataSourceNodeClass(name, displayName, description, output, mainClass, 
+                needsOtherClasses, neededPermissions, config, proxyProperties,
+                dataMethod, startMethod, stopMethod);
         }
 
 
@@ -67,6 +71,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddNeededClasses(root, nodeClass.NeedsOtherClasses);
             AddPermissions(root, nodeClass.NeedsPermissions);
             AddConfig(root, nodeClass.Configuration);
+            AddProxyProperties(root, nodeClass.ProxyProperties);
 
             AddDataMethod(root, sourceClass.DataMethod);
             AddStartMethod(root, sourceClass.StartMethod);
@@ -106,8 +111,15 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             codeExtension.AddImport(nodeClass.OutputType.Name);
             codeExtension.AddImport(nodeClass.MainClass);
 
+
+            //Add the proxy methods to the Imports:
+            nodeClass.ProxyProperties
+                .Select(p => p.PropertyType.Name)
+                .ForEach(codeExtension.AddImport);
+
+
             //We have a special case: Only a DataSource:
-            if(codeExtension.RootNode == node)
+            if (codeExtension.RootNode == node)
             {
                 string code = " private void transform0(){\n" 
                             + "     data = sensor0." + nodeClass.DataMethod + "();\n"

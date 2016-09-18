@@ -5,15 +5,24 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.Map;
 
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
+import de.tu_darmstadt.smastra.generator.sensor.SensorParserTest;
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraClassSensorParser;
+import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
 import de.tu_darmstadt.smastra.markers.elements.BufferGet;
 import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
+import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
+import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
@@ -139,6 +148,40 @@ public class BufferParserTest {
         @BufferGet @Override public Collection<String> getData() { return null; }
         @Override public void configure(Map<String, Object> configuration) {}
         @Override public void configure(String key, Object value) {}
+    }
+
+
+    @Test
+    public void testReadProxyPropertiesWorks() throws Throwable {
+        SmaSTraBuffer buffer = SmaSTraClassBufferParser.readFromClass(BufferParserTest.TestClass6.class);
+        assertNotNull(buffer);
+
+        Collection<ProxyPropertyObj> proxies = buffer.getProxyProperties();
+        assertFalse(proxies.isEmpty());
+
+        ProxyPropertyObj first = proxies.iterator().next();
+        assertEquals(Object.class, first.getProxyClass());
+        assertEquals("Test", first.getProperty().name());
+        assertEquals("setBanane", first.getMethod().getName());
+    }
+
+
+
+    /* For testReadProxyPropertiesWorks */
+    @SkipParsing
+    @NeedsAndroidPermissions("TEST")
+    @BufferInfo(displayName = "fsaf")
+    private static class TestClass6 implements Buffer<Double> {
+
+        @ProxyProperty(name = "Test")
+        public void setBanane(Object obj){}
+
+        @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
+
+        @BufferAdd @Override public void addData(Double element) {}
+        @BufferGet @Override public Collection<Double> getData() { return null; }
+
     }
 
 }

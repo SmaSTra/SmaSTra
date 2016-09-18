@@ -17,33 +17,28 @@ public class DemoTree extends SmaSTraTreeExecutor<Vector3d> {
      * @param context  to use.
      */
     public DemoTree(Context context) {
-        super(6, context);
-    }
+        super(context);
 
-
-    protected void init(){
         sensor0 = new AndroidAccelerometerSensor(context);
-        sensor0.start();
-
         sensor1 = new AndroidAccelerometerSensor(context);
-        sensor1.start();
-
         sensor2 = new AndroidAccelerometerSensor(context);
-        sensor2.start();
     }
 
 
     @Override
-    protected void transform(int level) {
-        switch (level){
-            case 0 : transform0(); break;
-            case 1 : transform1(); break;
-            case 2 : transform2(); break;
-            case 3 : transform3(); break;
-            case 4 : transform4(); break;
-            case 5 : transform5(); break;
-        }
+    protected void startIntern(){
+        sensor0.start();
+        sensor1.start();
+        sensor2.start();
     }
+
+    @Override
+    protected void stopIntern(){
+        sensor0.stop();
+        sensor1.stop();
+        sensor2.stop();
+    }
+
 
 
     private Vector3d resultTransform0;

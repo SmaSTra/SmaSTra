@@ -1,11 +1,17 @@
 package de.tu_darmstadt.smastra.base;
 
 import android.content.Context;
-import android.util.Log;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import de.tu_darmstadt.smastra.utils.ConfigParserUtils;
 
 /**
  * This is an abstract class for Traversing the SmaSTra Tree.
@@ -15,9 +21,14 @@ import java.util.concurrent.TimeUnit;
 public abstract class SmaSTraTreeExecutor<T> {
 
     /**
+     * The Prefix for the transformation Method.
+     */
+    private static final String TRANSFORM_METHOD_PREFIX = "transform";
+
+    /**
      * The Executor service to use for ticking!
      */
-    protected ScheduledExecutorService executor;
+    private ScheduledExecutorService executor;
 
     /**
      * The Context to use.
@@ -25,34 +36,40 @@ public abstract class SmaSTraTreeExecutor<T> {
     protected final Context context;
 
     /**
-     * The maximal amount of steps in the Pipeline.
+     * The List of Methods to call.
      */
-    protected final int maxSteps;
+    private final List<Method> transformMethods = new ArrayList<>();
 
     /**
      * This is the current data present to give to the user.
      */
     protected T data;
 
-    /**
-     * If already inited.
-     */
-    protected boolean inited = false;
-
-    /**
-     * If we have an error while initing:
-     */
-    protected boolean errorOnInit = false;
-
 
     /**
      * Creates the SmaSTra Execution Tree.
      * @param context to use.
-     * @param maxSteps the maximal amount of steps present.
      */
-    public SmaSTraTreeExecutor(int maxSteps, Context context) {
-        this.maxSteps = maxSteps;
+    protected SmaSTraTreeExecutor(Context context) {
         this.context = context;
+
+        //Read the Methods to call:
+        Class<? extends  SmaSTraTreeExecutor> clazz = getClass();
+        for(Method method : clazz.getDeclaredMethods()){
+            if (method.getName().startsWith(TRANSFORM_METHOD_PREFIX)){
+                transformMethods.add(method);
+            }
+        }
+
+        //Sort the method to the index:
+        Collections.sort(transformMethods, new Comparator<Method>() {
+            @Override
+            public int compare(Method o1, Method o2) {
+                int nr1 = ConfigParserUtils.parseInt(o1.getName().substring(TRANSFORM_METHOD_PREFIX.length()), 0);
+                int nr2 = ConfigParserUtils.parseInt(o2.getName().substring(TRANSFORM_METHOD_PREFIX.length()), 0);
+                return Integer.compare(nr1,nr2);
+            }
+        });
     }
 
     /**
@@ -67,24 +84,15 @@ public abstract class SmaSTraTreeExecutor<T> {
         this.executor.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                if(!inited) {
-                    inited = true;
-                    try{
-                        init();
-                    }catch(Throwable exp){
-                        Log.e("SmaSTra", "Error in Init Method. Shutting down! Please fix this!");
-                        exp.printStackTrace();
-                        errorOnInit = true;
-                    }
-                }
-
                 try{
-                    if(!errorOnInit) step();
+                    step();
                 }catch(Throwable exp){
                     exp.printStackTrace();
                 }
             }
         }, 50, 50, TimeUnit.MILLISECONDS);
+
+        this.startIntern();
     }
 
 
@@ -95,32 +103,34 @@ public abstract class SmaSTraTreeExecutor<T> {
         if(this.executor != null){
             this.executor.shutdown();
             this.executor = null;
+            this.stopIntern();
         }
     }
 
 
     /**
-     * Inits all needed stuff (as sensors, Web-APIs, aso).
+     * Starts all intern stuff.
      */
-    protected void init() {}
+    protected abstract void startIntern();
+
+
+    /**
+     * Stops all intern stuff.
+     */
+    protected abstract void stopIntern();
 
 
     /**
      * Does a simple step.
      * <br>The step is calling each step of the Pipeline.
      */
-    protected void step(){
-        for(int i = 0; i < maxSteps; i++) {
-            try{ transform(i); }catch (Throwable exp){ exp.printStackTrace(); }
+    private void step(){
+        for(Method method : transformMethods) {
+            try{
+                method.invoke(this);
+            }catch (Throwable exp){ exp.printStackTrace(); }
         }
     }
-
-
-    /**
-     * Does a Transform for the level passed.
-     * @param level to use.
-     */
-    protected abstract void transform(int level);
 
 
     /**

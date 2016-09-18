@@ -7,6 +7,8 @@
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
+  "config": [],
+  "proxyProperties": [],
   "method": "length",
   "static": true,
   "output": "double",

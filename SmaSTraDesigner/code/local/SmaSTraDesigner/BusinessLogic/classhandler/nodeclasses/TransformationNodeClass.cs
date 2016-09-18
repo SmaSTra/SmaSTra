@@ -8,11 +8,11 @@
         public bool IsStatic { get; }
 
         public TransformationNodeClass(string name, string displayName, string description, DataType outputType, DataType[] inputTypes,
-            string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config,
+            string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config, ProxyProperty[] proxyProperties,
             string methodName, bool isStatic)
             : base(ClassManager.NodeType.Transformation, name, displayName, description, outputType, 
                   mainClass, needsOtherClasses, needsPermissions, 
-                  config, inputTypes)
+                  config, proxyProperties, inputTypes)
         {
             this.Method = methodName;
             this.IsStatic = isStatic;

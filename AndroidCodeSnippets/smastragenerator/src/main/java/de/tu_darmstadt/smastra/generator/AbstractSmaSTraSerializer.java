@@ -8,7 +8,9 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
 
 /**
  * This is the abstract base for a SmaSTra serialization to a metadata object.
@@ -28,6 +30,11 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
     protected static final String CONFIG_KEY_PATH = "key";
     protected static final String CONFIG_DESCRIPTION_PATH = "description";
     protected static final String CONFIG_CLASS_TYPE_PATH = "classType";
+
+    protected static final String PROXY_PROPERTIES_PATH = "proxyProperties";
+    protected static final String PROXY_PROPERTIES_TYPE_PATH = "type";
+    protected static final String PROXY_PROPERTIES_NAME_PATH = "name";
+    protected static final String PROXY_PROPERTIES_METHOD_PATH = "method";
 
 
     /**
@@ -64,8 +71,10 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
 
         //Write config if present:
         List<ConfigurationElement> config = src.getConfiguration();
+        JsonArray array = new JsonArray();
+        obj.add(CONFIG_PRE_PATH, array);
+
         if(config != null && !config.isEmpty()){
-            JsonArray array = new JsonArray();
             for(ConfigurationElement element : config){
                 JsonObject elementObj = new JsonObject();
                 elementObj.addProperty(CONFIG_KEY_PATH, element.key());
@@ -74,8 +83,22 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
 
                 array.add(elementObj);
             }
+        }
 
-            obj.add(CONFIG_PRE_PATH, array);
+
+        //Write the Proxy properties if present:
+        JsonArray proxyArray = new JsonArray();
+        obj.add(PROXY_PROPERTIES_PATH, proxyArray);
+        List<ProxyPropertyObj> proxyProperties = src.getProxyProperties();
+        if(!proxyProperties.isEmpty()){
+            for(ProxyPropertyObj proxyProperty : proxyProperties){
+                JsonObject proxyObj = new JsonObject();
+                proxyObj.addProperty(PROXY_PROPERTIES_TYPE_PATH, proxyProperty.getProxyClass().getCanonicalName());
+                proxyObj.addProperty(PROXY_PROPERTIES_METHOD_PATH, proxyProperty.getMethod().getName());
+                proxyObj.addProperty(PROXY_PROPERTIES_NAME_PATH, proxyProperty.getProperty().name());
+
+                proxyArray.add(proxyObj);
+            }
         }
 
         return obj;

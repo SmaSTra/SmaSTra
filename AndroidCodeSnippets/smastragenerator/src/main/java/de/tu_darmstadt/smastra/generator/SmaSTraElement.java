@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
@@ -43,18 +44,23 @@ public abstract class SmaSTraElement {
      */
     protected final List<ConfigurationElement> configuration;
 
+    /**
+     * The Proxy properties of the Element.
+     */
+    protected final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
+
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass) {
-        this(displayName, description, elementClass, new String[0], null, null);
+        this(displayName, description, elementClass, new String[0], null, null, null);
     }
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions) {
-        this(displayName, description, elementClass, androidPermissions, null, null);
+        this(displayName, description, elementClass, androidPermissions, null, null, null);
     }
 
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses,
-                          List<ConfigurationElement> config) {
+                          List<ConfigurationElement> config, List<ProxyPropertyObj> proxyProperties) {
 
         this.displayName = displayName;
         this.description = description;
@@ -62,6 +68,7 @@ public abstract class SmaSTraElement {
         this.androidPermissions = androidPermissions == null ? new String[0] : androidPermissions;
         this.configuration = config == null ? new ArrayList<ConfigurationElement>() : config;
 
+        if(proxyProperties != null) this.proxyProperties.addAll(proxyProperties);
         if(neededClasses != null) this.neededClasses.addAll(neededClasses);
     }
 
@@ -112,6 +119,14 @@ public abstract class SmaSTraElement {
      */
     public List<ConfigurationElement> getConfiguration() {
         return configuration;
+    }
+
+    /**
+     * Gets all Proxy properties.
+     * @return all proxy properties.
+     */
+    public List<ProxyPropertyObj> getProxyProperties() {
+        return proxyProperties;
     }
 
     /**

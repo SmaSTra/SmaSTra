@@ -7,7 +7,9 @@ import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
 
 /**
  * Builder pattern for a SmaSTra Sensor.
@@ -25,6 +27,11 @@ public class SmaSTraSensorBuilder {
      * The List of the configuration.
      */
     private final List<ConfigurationElement> configuration = new ArrayList<>();
+
+    /**
+     * The Proxy-Properties to use.
+     */
+    private final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -85,6 +92,11 @@ public class SmaSTraSensorBuilder {
 
     public SmaSTraSensorBuilder addNeededClass(Collection<Class<?>> otherClasses){
         this.needsOtherClasses.addAll(otherClasses);
+        return this;
+    }
+
+    public SmaSTraSensorBuilder addProxyProperties(Collection<ProxyPropertyObj> proxyProperties){
+        this.proxyProperties.addAll(proxyProperties);
         return this;
     }
 
@@ -168,6 +180,8 @@ public class SmaSTraSensorBuilder {
         if(output == null) throw new ElementGenerationFailedException("No Output defined.");
         if(dataMethodName == null) throw new ElementGenerationFailedException("No MethodName defined.");
 
-        return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses, output, dataMethodName, startMethod, stopMethod, clazz, configuration);
+        return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses,
+                output, dataMethodName, startMethod, stopMethod, clazz,
+                configuration, proxyProperties);
     }
 }

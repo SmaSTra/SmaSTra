@@ -14,6 +14,7 @@
       "classType": "java.lang.Integer"
     }
   ],
+  "proxyProperties": [],
   "dataMethod": "getLastData",
   "output": "double",
   "start": "start",

@@ -68,6 +68,26 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         private const string JSON_PROP_MAIN_CLASS = "mainClass";
 
+        /// <summary>
+        /// Name of the ProxyProperty root property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_PROXY_PROPERTIES = "proxyProperties";
+
+        /// <summary>
+        /// Name of the ProxyProperties type property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_PROXY_PROPERTIES_TYPE = "type";
+
+        /// <summary>
+        /// Name of the ProxyProperties name property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_PROXY_PROPERTIES_NAME = "name";
+
+        /// <summary>
+        /// Name of the ProxyProperties methodName property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_PROXY_PROPERTIES_METHOD = "method";
+
         #endregion constants
 
         #region Vars
@@ -221,7 +241,28 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                         DataType type = cManager.AddDataType(o.GetValueAsString(JSON_PROP_CONFIG_CLASS_TYPE));
                         return new ConfigElement(key, description, type);
                     }
-                ).NonNull().ToArray(); ;
+                ).NonNull().ToArray();
+        }
+
+        /// <summary>
+        /// Reads the Proxy-Properties from the root.
+        /// </summary>
+        /// <param name="root">To read from</param>
+        /// <returns>The ProxyProperties.</returns>
+        protected ProxyProperty[] ReadProxyProperties(JObject root)
+        {
+            ClassManager cManager = Singleton<ClassManager>.Instance;
+            return root
+                .GetValueAsJArray(JSON_PROP_PROXY_PROPERTIES, new JArray())
+                .ToJObj()
+                .Select(o =>
+                    {
+                        DataType type = cManager.AddDataType(o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_TYPE));
+                        string name = o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_NAME);
+                        string methodName = o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_METHOD);
+                        return new ProxyProperty(type, name, methodName);
+                    }
+                ).NonNull().ToArray();
         }
 
 
@@ -334,7 +375,28 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 }).NonNull().ToJArray()
             );
         }
-        
+
+
+        /// <summary>
+        /// Adds the ProxyProperties to the JObject passed.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="proxyProperties">to add</param>
+        protected void AddProxyProperties(JObject toAddTo, ProxyProperty[] proxyProperties)
+        {
+            toAddTo.Add(JSON_PROP_PROXY_PROPERTIES,
+                proxyProperties.Select(c =>
+                {
+                    JObject obj = new JObject();
+                    obj.Add(JSON_PROP_PROXY_PROPERTIES_METHOD, c.MethodName);
+                    obj.Add(JSON_PROP_PROXY_PROPERTIES_NAME, c.Name);
+                    obj.Add(JSON_PROP_PROXY_PROPERTIES_TYPE, c.PropertyType.Name);
+
+                    return obj;
+                }).NonNull().ToJArray()
+            );
+        }
+
 
 
         /// <summary>

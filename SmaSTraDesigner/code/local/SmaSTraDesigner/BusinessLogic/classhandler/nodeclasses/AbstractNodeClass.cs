@@ -26,7 +26,8 @@
         protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description,  
             DataType outputType, 
             string mainClass, string[] needsOtherClasses, string[] needsPermissions,
-            ConfigElement[] configuration, DataType[] inputTypes)
+            ConfigElement[] configuration, ProxyProperty[] proxyProperties,
+            DataType[] inputTypes)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 			{
@@ -47,6 +48,7 @@
             this.NeedsOtherClasses = needsOtherClasses == null ? new string[0] : needsOtherClasses;
             this.NeedsPermissions = needsPermissions == null ? new string[0] : needsPermissions;
             this.Configuration = configuration == null ? new ConfigElement[0] : configuration;
+            this.ProxyProperties = proxyProperties == null ? new ProxyProperty[0] : proxyProperties;
             this.NodeType = nodeType;
 		}
 
@@ -130,6 +132,11 @@
         /// The Configuration of this element.
         /// </summary>
         public ConfigElement[] Configuration { get; }
+
+        /// <summary>
+        /// The Proxy Properties to use.
+        /// </summary>
+        public ProxyProperty[] ProxyProperties { get; }
 
         #endregion properties
 

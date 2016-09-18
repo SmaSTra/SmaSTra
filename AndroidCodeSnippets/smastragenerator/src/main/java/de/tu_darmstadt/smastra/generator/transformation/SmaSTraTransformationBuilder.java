@@ -1,5 +1,6 @@
 package de.tu_darmstadt.smastra.generator.transformation;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,6 +9,7 @@ import java.util.List;
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
@@ -31,6 +33,11 @@ public class SmaSTraTransformationBuilder {
      * The config to use.
      */
     private final List<ConfigurationElement> config = new ArrayList<>();
+
+    /**
+     * The Proxy properties to use.
+     */
+    private final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -103,6 +110,12 @@ public class SmaSTraTransformationBuilder {
         this.needsOtherClasses.addAll(otherClasses);
         return this;
     }
+
+    public SmaSTraTransformationBuilder addProxyProperties(Collection<ProxyPropertyObj> proxyProperties){
+        this.proxyProperties.addAll(proxyProperties);
+        return this;
+    }
+
     public SmaSTraTransformationBuilder addConfig(Collection<ConfigurationElement> config){
         this.config.addAll(config);
         return this;
@@ -181,6 +194,6 @@ public class SmaSTraTransformationBuilder {
         if(displayName == null) throw new ElementGenerationFailedException("No displayName defined.");
 
         return new SmaSTraTransformation(displayName, inputs, androidPermissions, needsOtherClasses, description, output,
-                methodName, clazz, isStatic, config);
+                methodName, clazz, isStatic, config, proxyProperties);
     }
 }

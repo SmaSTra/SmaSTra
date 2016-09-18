@@ -37,11 +37,14 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             string[] needsOtherClasses = ReadNeededClasses(root);
             string[] neededPermissions = ReadNeededPermissions(root);
             ConfigElement[] config = ReadConfig(root);
+            ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             string methodName = ReadMethodName(root);
             bool isStatic = ReadIsStatic(root);
             DataType[] inputs = ReadInputs(root);
 
-            return new TransformationNodeClass(name, displayName, description, output, inputs, mainClass, needsOtherClasses, neededPermissions, config, methodName, isStatic);
+            return new TransformationNodeClass(name, displayName, description, output, inputs, mainClass, 
+                needsOtherClasses, neededPermissions, config, proxyProperties,
+                methodName, isStatic);
         }
 
         /// <summary>
@@ -80,6 +83,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddPermissions(root, nodeClass.NeedsPermissions);
             AddConfig(root, nodeClass.Configuration);
             AddInputs(root, nodeClass.InputTypes);
+            AddProxyProperties(root, nodeClass.ProxyProperties);
 
             AddMethodName(root, transClass.Method);
             AddStatic(root, transClass.IsStatic);
@@ -155,19 +159,42 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 else
                 {
                     DataSource inAsSource = inputNode as DataSource;
+                    DataSourceNodeClass inAsSourceClass = inAsSource == null ? null : inAsSource.Class as DataSourceNodeClass;
+                    Transformation inAsTransform = inputNode as Transformation;
+                    TransformationNodeClass inAsTransClass = inAsTransform == null ? null : inAsTransform.Class as TransformationNodeClass;
 
-                    string typeName = inputNode.Class.NodeType.ToString().ToLower();
+
+                    string typeName = "";
+                    string optionalMethodCall = "";
+
+                    switch (inputNode.Class.NodeType)
+                    {
+                        case ClassManager.NodeType.Transformation:
+                            typeName = "transform";
+                            break;
+
+                        case ClassManager.NodeType.Sensor:
+                            typeName = "sensor";
+                            optionalMethodCall = "." + inAsSourceClass.DataMethod + "()";
+                            break;
+
+                        case ClassManager.NodeType.Combined:
+                            break;
+
+                        default:
+                            break;
+                    }
+
+
+
                     int outputIndex = codeExtension.GetOutputIndex(inputNode);
-                    string optionalSensorCall = inputNode is DataSource 
-                        ? "."+ (inAsSource.Class as DataSourceNodeClass).DataMethod + "()"
-                        : "";
 
                     content += string.Format(ClassTemplates.GENERATION_TEMPLATE_TRANSFORM_VAR_LINE,
                         inputType.MinimizedName,
                         i.ToString(),
                         typeName,
                         outputIndex,
-                        optionalSensorCall);
+                        optionalMethodCall);
                 }
 
             }
@@ -177,7 +204,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             //Extract the method call:
             string methodCall = (nodeClass.IsStatic
                 ? (DataType.minimizeToClass(nodeClass.MainClass))
-                : (nodeClass.NodeType.ToString() + codeExtension.GetTransformId(node as Transformation) + "."))
+                : (nodeClass.NodeType.ToString() + codeExtension.GetTransformId(node as Transformation)))
                 + "." + nodeClass.Method + args;
 
             string template = codeExtension.RootNode == node 
@@ -195,6 +222,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             codeExtension.AddCodeStep(code);
             codeExtension.AddImport(nodeClass.MainClass);
             codeExtension.AddImport(nodeClass.OutputType.Name);
+
+            //Add the proxy methods to the Imports:
+            nodeClass.ProxyProperties
+                .Select(p => p.PropertyType.Name)
+                .ForEach(codeExtension.AddImport);
         }
 
     }

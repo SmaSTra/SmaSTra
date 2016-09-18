@@ -130,6 +130,7 @@
     <Compile Include="BusinessLogic\classhandler\nodeclasses\ConfigElement.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\DataSourceNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\IOData.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\ProxyProperty.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\TransformationNodeClass.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExtension.cs" />

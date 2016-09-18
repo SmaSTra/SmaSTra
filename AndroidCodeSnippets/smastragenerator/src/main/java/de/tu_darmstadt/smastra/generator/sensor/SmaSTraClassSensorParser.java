@@ -10,10 +10,12 @@ import java.util.Set;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Output;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.Configuration;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
@@ -49,6 +51,7 @@ public class SmaSTraClassSensorParser {
             builder.setOutput(readOutput(clazz));
             builder.setAndroidPermissions(readNeededPermissions(clazz));
             builder.addNeededClass(readNeededClasses(clazz));
+            builder.addProxyProperties(readProxyProperties(clazz));
 
             builder.addConfigurationElements(readConfigElements(clazz));
 
@@ -132,6 +135,31 @@ public class SmaSTraClassSensorParser {
         }
 
         return null;
+    }
+
+
+    /**
+     * Reads the proxy properties from the Class
+     * @return the ProxyProperties read.
+     */
+    private static List<ProxyPropertyObj> readProxyProperties(Class<?> clazz){
+        List<ProxyPropertyObj> properties = new ArrayList<>();
+        while(clazz != null && clazz != Object.class){
+            for(Method method : clazz.getMethods()){
+                ProxyProperty annotation = method.getAnnotation(ProxyProperty.class);
+                if(annotation == null) continue;
+
+                try{
+                    properties.add(new ProxyPropertyObj(method, annotation));
+                }catch(IllegalArgumentException exp){
+                    System.err.println(exp.getMessage());
+                }
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return properties;
     }
 
 

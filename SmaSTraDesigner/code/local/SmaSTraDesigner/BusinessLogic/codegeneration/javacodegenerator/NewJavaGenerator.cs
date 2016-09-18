@@ -161,23 +161,25 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
 
 
             //Build the rest:
-            string codeSteps = codeExtension.BuildCodeSteps();
             string sensorVars = codeExtension.BuildSensorDataVars();
             string transVars = codeExtension.BuildTransformDataVars();
-            string sensorInits = codeExtension.BuildSensorInit();
-            string switchTransform = codeExtension.BuildSwitchTransform();
+            string initCode = codeExtension.BuildInitCode();
+            string startCode = codeExtension.BuildStartCode();
+            string stopCode = codeExtension.BuildStopCode();
+            string proxyPropertyCode = codeExtension.BuildProxyPropertyCode();
             string transformations = codeExtension.BuildTransformations();
 
-            string TheCode = string.Format(ClassTemplates.GENERATION_TEMPLATE_TOTAL,
+            string TheCode = ClassTemplates.GenerateTotal(
                 codeExtension.BuildPackage(),
                 codeExtension.BuildImports(),
                 codeExtension.BuildClassName(),
                 codeExtension.BuildOutputType(),
-                codeSteps,
+                initCode,
                 sensorVars,
                 transVars,
-                sensorInits,
-                switchTransform,
+                startCode,
+                stopCode,
+                proxyPropertyCode,
                 transformations
                 );
 

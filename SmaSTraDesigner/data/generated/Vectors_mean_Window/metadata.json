@@ -8,6 +8,8 @@
     "de.tu_darmstadt.smastra.sensors.Vector3d",
     "de.tu_darmstadt.smastra.math.Math3d"
   ],
+  "config": [],
+  "proxyProperties": [],
   "method": "mean",
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",

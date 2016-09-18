@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerator;
 import de.tu_darmstadt.smastra.generator.SmaSTraElement;
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
 
 /**
@@ -26,9 +27,10 @@ public class SmaSTraBuffer extends SmaSTraElement {
 
 
     public SmaSTraBuffer(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses,
-                         String bufferAddMethodName, String bufferGetMethodName, Class<?> clazz, List<ConfigurationElement> configuration) {
+                         String bufferAddMethodName, String bufferGetMethodName, Class<?> clazz,
+                         List<ConfigurationElement> configuration, List<ProxyPropertyObj> proxyProperties) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration);
+        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration, proxyProperties);
 
         this.bufferAddMethodName = bufferAddMethodName;
         this.bufferGetMethodName = bufferGetMethodName;

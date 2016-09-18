@@ -5,6 +5,8 @@
   "description": "Gets the current Time in MS",
   "neededPermissions": [],
   "needs": [],
+  "config": [],
+  "proxyProperties": [],
   "dataMethod": "getLastData",
   "output": "long",
   "start": "start",

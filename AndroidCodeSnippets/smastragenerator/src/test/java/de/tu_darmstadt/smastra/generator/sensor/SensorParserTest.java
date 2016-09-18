@@ -2,11 +2,14 @@ package de.tu_darmstadt.smastra.generator.sensor;
 
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.Map;
 
+import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.SensorStart;
@@ -14,6 +17,7 @@ import de.tu_darmstadt.smastra.markers.elements.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
@@ -192,9 +196,9 @@ public class SensorParserTest {
 
     @Test
     public void testStartStopIsReadCorrectlyIfNotPresent() throws Throwable {
-        SmaSTraSensor list = SmaSTraClassSensorParser.readFromClass(TestClass7.class);
-        assertTrue(list.getStartMethod().isEmpty());
-        assertTrue(list.getStopMethod().isEmpty());
+        SmaSTraSensor sensor = SmaSTraClassSensorParser.readFromClass(TestClass7.class);
+        assertTrue(sensor.getStartMethod().isEmpty());
+        assertTrue(sensor.getStopMethod().isEmpty());
     }
 
 
@@ -209,6 +213,41 @@ public class SensorParserTest {
 
         @SensorOutput
         public int method2(){ return 1; }
+
+        @Override public void start(){}
+        @Override public void stop(){}
+        @Override public void configure(Map<String,Object> config){}
+        @Override public void configure(String key, Object value) {}
+    }
+
+
+    @Test
+    public void testReadProxyPropertiesWorks() throws Throwable {
+        SmaSTraSensor sensor = SmaSTraClassSensorParser.readFromClass(TestClass8.class);
+        Collection<ProxyPropertyObj> proxies = sensor.getProxyProperties();
+        assertFalse(proxies.isEmpty());
+
+        ProxyPropertyObj first = proxies.iterator().next();
+        assertEquals(Object.class, first.getProxyClass());
+        assertEquals("Test", first.getProperty().name());
+        assertEquals("setBanane", first.getMethod().getName());
+    }
+
+
+
+    /* For testSkipMethodWithoutAnnotationWorks */
+    @SkipParsing
+    @NeedsAndroidPermissions("TEST")
+    @SensorConfig(displayName = "fsaf")
+    private static class TestClass8 implements Sensor {
+
+        public String method1(String vec1){ return null; }
+
+        @SensorOutput
+        public int method2(){ return 1; }
+
+        @ProxyProperty(name = "Test")
+        public void setBanane(Object obj){}
 
         @Override public void start(){}
         @Override public void stop(){}
