@@ -97,8 +97,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
         public override string GenerateClassFromSnippet(AbstractNodeClass nodeClass, string methodCode)
         {
-            return string.Format(ClassTemplates.SENSOR_TEMPLATE,
-                nodeClass.Name.RemoveAll(" ", "_"), nodeClass.OutputType.Name, methodCode);
+            return string.Format(
+                ClassTemplates.SENSOR_TEMPLATE,
+                nodeClass.Name.RemoveAll(" ", "_"), 
+                nodeClass.OutputType.Name, 
+                methodCode);
         }
 
 

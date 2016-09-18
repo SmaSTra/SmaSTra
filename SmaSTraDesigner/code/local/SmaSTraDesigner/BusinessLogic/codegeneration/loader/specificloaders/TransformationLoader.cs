@@ -6,6 +6,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -159,9 +160,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 else
                 {
                     DataSource inAsSource = inputNode as DataSource;
-                    DataSourceNodeClass inAsSourceClass = inAsSource == null ? null : inAsSource.Class as DataSourceNodeClass;
                     Transformation inAsTransform = inputNode as Transformation;
+                    BufferNode inAsBuffer = inputNode as BufferNode;
+                    DataSourceNodeClass inAsSourceClass = inAsSource == null ? null : inAsSource.Class as DataSourceNodeClass;
                     TransformationNodeClass inAsTransClass = inAsTransform == null ? null : inAsTransform.Class as TransformationNodeClass;
+                    BufferNodeClass inAsBufferClass = inAsBuffer == null ? null : inAsBuffer.Class as BufferNodeClass;
 
 
                     string typeName = "";
@@ -176,6 +179,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                         case ClassManager.NodeType.Sensor:
                             typeName = "sensor";
                             optionalMethodCall = "." + inAsSourceClass.DataMethod + "()";
+                            break;
+
+                        case ClassManager.NodeType.Buffer:
+                            typeName = "buffer";
+                            optionalMethodCall = "." + inAsBufferClass.BufferGetMethod + "()";
                             break;
 
                         case ClassManager.NodeType.Combined:

@@ -2,6 +2,7 @@
 using Common.ExtensionMethods;
 using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
+using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         private const string NODE_TYPE_COMBINED = "combined";
 
+        /// <summary>
+        /// Possible value for node type.
+        /// </summary>
+        private const string NODE_TYPE_BUFFER = "buffer";
+
         #endregion Const
 
         #region static methods
@@ -67,6 +73,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
                 case NODE_TYPE_COMBINED:
                     return NodeType.Combined;
+
+                case NODE_TYPE_BUFFER:
+                    return NodeType.Buffer;
 
                 default:
                     throw new Exception(String.Format("Unrecognized node type \"{0}\".", type));
@@ -90,6 +99,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             addLoader(new TransformationLoader(cManager));
             addLoader(new SensorLoader(cManager));
             addLoader(new CombinedLoader(cManager));
+            addLoader(new BufferLoader(cManager));
         }
 
         private void addLoader(AbstractNodeLoader loader)

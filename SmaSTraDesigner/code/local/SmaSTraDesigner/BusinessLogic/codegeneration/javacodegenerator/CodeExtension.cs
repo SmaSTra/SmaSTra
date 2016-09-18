@@ -1,6 +1,7 @@
 ﻿using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
+using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         private readonly Dictionary<int, Transformation> transformationOuts = new Dictionary<int, Transformation>();
 
         /// <summary>
+        /// The internal dictionary of Buffers.
+        /// </summary>
+        private readonly Dictionary<int, BufferNode> buffers = new Dictionary<int, BufferNode>();
+
+        /// <summary>
         /// A counter for the next Sensor to set.
         /// </summary>
         private int nextSensor = 0;
@@ -50,6 +56,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// A counter for the next Transformation to set.
         /// </summary>
         private int nextTrans = 0;
+
+        /// <summary>
+        /// A counter for the next Buffer to set.
+        /// </summary>
+        private int nextBuffer = 0;
 
         /// <summary>
         /// The code steps totally present.
@@ -102,6 +113,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
             {
                 this.imports.Add(import);
             }
+        }
+
+        /// <summary>
+        /// Adds a new Buffer to the system.
+        /// </summary>
+        /// <param name="node"></param>
+        public void AddBuffer(BufferNode node)
+        {
+            this.buffers.Add(nextBuffer, node);
+            nextBuffer++;
         }
 
         /// <summary>

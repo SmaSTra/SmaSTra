@@ -126,6 +126,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\classhandler\CombinedClassGenerator.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\BufferNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\CombinedNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\ConfigElement.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\DataSourceNodeClass.cs" />
@@ -137,12 +138,14 @@
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\AndroidStudioCodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\DefaultCodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\AbstractNodeLoader.cs" />
+    <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\BufferLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\ClassTemplates.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\CombinedLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\NodeLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\SensorLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\TransformationLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\NewJavaGenerator.cs" />
+    <Compile Include="BusinessLogic\nodes\BufferNode.cs" />
     <Compile Include="BusinessLogic\nodes\Connection.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\JavaGenerator.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />

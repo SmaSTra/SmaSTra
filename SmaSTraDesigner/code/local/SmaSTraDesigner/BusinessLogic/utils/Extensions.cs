@@ -324,6 +324,12 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         }
         
 
+        public static T[] AddBefore<T>(this T[] elements, T addBefore)
+        {
+            T[] tmp = new T[] { addBefore };
+            return tmp.Concat(elements).ToArray();
+        }
+
     }
 
 }
