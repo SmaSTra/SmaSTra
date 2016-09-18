@@ -47,7 +47,7 @@
                             <Setter Property="Fill" Value="{StaticResource ColorVector3d}" />
                             <Setter Property="Stroke" Value="{StaticResource ColorVector3d}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Int">
+                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="int">
                             <Setter Property="Fill" Value="{StaticResource ColorInt}" />
                             <Setter Property="Stroke" Value="{StaticResource ColorInt}" />
                         </DataTrigger>
@@ -110,6 +110,18 @@
                         <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Vector3d">
                             <Setter Property="Fill" Value="{StaticResource ColorVector3d}" />
                             <Setter Property="Stroke" Value="{StaticResource ColorVector3d}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="int">
+                            <Setter Property="Fill" Value="{StaticResource ColorInt}" />
+                            <Setter Property="Stroke" Value="{StaticResource ColorInt}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Picture">
+                            <Setter Property="Fill" Value="{StaticResource ColorPicture}" />
+                            <Setter Property="Stroke" Value="{StaticResource ColorPicture}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Buffer">
+                            <Setter Property="Fill" Value="{StaticResource ColorBuffer}" />
+                            <Setter Property="Stroke" Value="{StaticResource ColorBuffer}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Collection">
                             <Setter Property="Fill" Value="{StaticResource ColorCollection}" />
