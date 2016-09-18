@@ -1,17 +1,18 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	using BusinessLogic;
+    using BusinessLogic;
 
-	using Common.Resources.Converters;
+    using Common.Resources.Converters;
+    using BusinessLogic.classhandler;
 
-	/// <summary>
-	/// Represents a Transformation from the TransformationTree on the GUI
-	/// </summary>
-	public partial class UcTransformationViewer : UcNodeViewer
+    /// <summary>
+    /// Represents a Transformation from the TransformationTree on the GUI
+    /// </summary>
+    public partial class UcTransformationViewer : UcNodeViewer
 	{
 		#region constructors
 
@@ -22,10 +23,10 @@
 			// initialize converter for the ItemsControl that shows the input handles.
 			((LambdaConverter)this.FindResource("InputItemsSourceConverter")).ConvertMethod = (value, targetType, parameter, culture) =>
 			{
-				IEnumerable<DataType> inputTypes = (IEnumerable<DataType>)value;
+				IEnumerable<IOData> inputTypes = (IEnumerable<IOData>)value;
 
 				// Inclde index of the input, so the UcIOHandle's InputIndex property can use it.
-				return inputTypes.Select((t, i) => new Tuple<DataType, int>(t, i)).ToArray();
+				return inputTypes.Select((t, i) => new Tuple<IOData, int>(t, i)).ToArray();
 			};
 		}
 

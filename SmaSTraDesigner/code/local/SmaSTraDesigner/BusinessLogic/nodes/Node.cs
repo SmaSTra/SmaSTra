@@ -195,6 +195,11 @@
         public virtual object Clone()
 		{
 			Node clone = (Node)this.MemberwiseClone();
+            clone.InputIOData = new ObservableCollection<IOData>();
+            foreach(IOData ioData in InputIOData)
+            {
+                clone.InputIOData.Add(new IOData(ioData.Type, ""));
+            }
             OnClassChanged(null, this.Class);
 
             return clone;

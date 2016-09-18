@@ -1,23 +1,25 @@
 ﻿namespace SmaSTraDesigner.Controls
 {
-	using System;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Input;
-	using System.Linq;
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Linq;
 
-	using BusinessLogic;
+    using BusinessLogic;
 
-	using Common;
+    using Common;
 
-	using Support;
-	using Common.Resources.Converters;
-	/// <summary>
-	/// Represents an input or output of a node on the GUI as a small handle for the user to interact with.
-	/// </summary>
-	/// <seealso cref="System.Windows.Controls.UserControl" />
-	/// <seealso cref="System.Windows.Markup.IComponentConnector" />
-	public partial class UcIOHandle : UserControl
+    using Support;
+    using Common.Resources.Converters;
+    using BusinessLogic.classhandler;
+
+    /// <summary>
+    /// Represents an input or output of a node on the GUI as a small handle for the user to interact with.
+    /// </summary>
+    /// <seealso cref="System.Windows.Controls.UserControl" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
+    public partial class UcIOHandle : UserControl
 	{
 		#region static constructor
 
@@ -412,9 +414,9 @@
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is DataType)
+            if (e.NewValue is IOData)
             {
-                string typeName = ((DataType)e.NewValue).Name;
+                string typeName = ((IOData)e.NewValue).Type.Name;
                 DataTypeName = typeName != null ? typeName.Split('.').Last() : null;
             }
         }

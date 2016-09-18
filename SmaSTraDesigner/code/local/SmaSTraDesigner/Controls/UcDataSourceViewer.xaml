@@ -69,6 +69,6 @@
             <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbSourceName}">
             </Image>
         </StackPanel>
-        <local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.Class.OutputType}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-14,0" />
+        <local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-14,0" />
     </Grid>
 </local:UcNodeViewer>
