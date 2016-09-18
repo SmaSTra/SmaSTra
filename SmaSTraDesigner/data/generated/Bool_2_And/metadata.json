@@ -5,6 +5,8 @@
   "description": "None",
   "neededPermissions": [],
   "needs": [],
+  "config": [],
+  "proxyProperties": [],
   "method": "and2",
   "static": true,
   "output": "boolean",

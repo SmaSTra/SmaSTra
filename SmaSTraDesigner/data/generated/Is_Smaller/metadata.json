@@ -5,6 +5,8 @@
   "description": "None",
   "neededPermissions": [],
   "needs": [],
+  "config": [],
+  "proxyProperties": [],
   "method": "isSmaller",
   "static": true,
   "output": "boolean",
