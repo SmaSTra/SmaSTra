@@ -1,5 +1,6 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
+using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             if (!nodes.Any()) return true;
 
             //Check recursivcely:
-            foreach (Node input in root.InputNodes)
+            foreach (Node input in root.InputNodes.NonNull())
             {
                 if (SubTreeContains(input, nodes)) return true;
             }
