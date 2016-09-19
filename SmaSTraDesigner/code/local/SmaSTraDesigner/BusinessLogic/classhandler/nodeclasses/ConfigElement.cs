@@ -45,9 +45,22 @@
         public string Value { get; set; }
 
         public DataConfigElement(string key, string description, DataType type) 
+            : this(key, description, type, "")
+        {}
+
+        public DataConfigElement(string key, string description, DataType type, string Value)
             : base(key, description, type)
         {
-            this.Value = "";
+            this.Value = Value;
+        }
+
+        /// <summary>
+        /// Clones this object.
+        /// </summary>
+        /// <returns>A cloned Data arg.</returns>
+        public DataConfigElement Clone()
+        {
+            return new DataConfigElement(Key, Description, DataType, Value);
         }
     }
 }

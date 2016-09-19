@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -85,6 +86,22 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         private const string JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE = "value";
 
+        /// <summary>
+        /// The path to the Config-Key Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_CONFIG = "Configuration";
+
+        /// <summary>
+        /// The path to the Config-Key Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_CONFIG_KEY = "key";
+
+        /// <summary>
+        /// The path to the Config-Data Property of the Sub-Elements.
+        /// </summary>
+        private const string JSON_PROP_SUB_ELEMENTS_CONFIG_VALUE = "value";
+
+
         #endregion consts
 
 
@@ -151,7 +168,17 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                             return new IOData(cManager.AddDataType(key), value);
                         }).ToArray();
 
-                    return new SimpleSubNode(name, uuid, type, posx, posy, data);
+                    DataConfigElement[] config = o.GetValueAsJArray(JSON_PROP_SUB_ELEMENTS_CONFIG, new JArray())
+                        .ToJObj()
+                        .Select(o2 =>
+                        {
+                            string key = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_CONFIG_KEY, "");
+                            string value = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_CONFIG_VALUE, "");
+                            return new DataConfigElement(key, "", new DataType("NULL"), value);
+                        }).ToArray();
+
+
+                    return new SimpleSubNode(name, uuid, type, posx, posy, data, config);
                 })
                 .ToList();
         }
@@ -192,25 +219,33 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             root.Add(JSON_PROP_SUB_ELEMENTS,
                 subElements.Select(s =>
                 {
-                JObject obj = new JObject();
-                obj.Add(JSON_PROP_SUB_ELEMENTS_NAME, s.Name);
-                obj.Add(JSON_PROP_SUB_ELEMENTS_UUID, s.Uuid);
-                obj.Add(JSON_PROP_SUB_ELEMENTS_TYPE, s.Type);
-                obj.Add(JSON_PROP_SUB_ELEMENTS_POSX, s.PosX);
-                obj.Add(JSON_PROP_SUB_ELEMENTS_POSY, s.PosY);
+                    JObject obj = new JObject();
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_NAME, s.Name);
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_UUID, s.Uuid);
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_TYPE, s.Type);
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_POSX, s.PosX);
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_POSY, s.PosY);
                     obj.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA,
-                        s.Data.Select(d =>
-                        {
-                            JObject obj2 = new JObject();
-                            obj2.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_TYPE, d.Type.Name);
-                            obj2.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE, d.Value);
+                            s.Data.Select(d =>
+                            {
+                                JObject obj2 = new JObject();
+                                obj2.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_TYPE, d.Type.Name);
+                                obj2.Add(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE, d.Value);
 
-                            return obj2;
-                        }).ToJArray());
+                                return obj2;
+                            }).ToJArray());
+                    obj.Add(JSON_PROP_SUB_ELEMENTS_CONFIG,
+                            s.Configuration.Select(d =>
+                            {
+                                JObject obj2 = new JObject();
+                                obj2.Add(JSON_PROP_SUB_ELEMENTS_CONFIG_KEY, d.Key);
+                                obj2.Add(JSON_PROP_SUB_ELEMENTS_CONFIG_VALUE, d.Value);
 
+                                return obj2;
+                            }).ToJArray());
                     return obj;
-                }).ToJArray()
-            );
+                }
+            ).ToJArray());
         }
 
         private void AddConnections(JObject root, List<SimpleConnection> connections)

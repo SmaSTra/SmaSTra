@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
@@ -64,7 +65,9 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         public IOData[] Data { get; set; }
 
-        
+        public DataConfigElement[] Configuration { get; set; }
+
+
 
         public SimpleSubNode(Node node, double centerX, double centerY)
         {
@@ -75,9 +78,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             this.PosY = node.PosY - centerY;
 
             this.Data = node.InputIOData.Select(d => (IOData) d.Clone()).ToArray();
+            this.Configuration = node.Configuration.Select(c => (DataConfigElement)c.Clone()).ToArray();
         }
 
-        public SimpleSubNode(string name, string uuid, string type, double posX, double posY, IOData[] data)
+        public SimpleSubNode(string name, string uuid, string type, double posX, double posY, 
+            IOData[] data, DataConfigElement[] configuration)
         {
             this.Name = name;
             this.Uuid = uuid;
@@ -85,6 +90,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             this.PosX = posX;
             this.PosY = posY;
             this.Data = data;
+            this.Configuration = configuration;
         }
 
         /// <summary>
@@ -115,9 +121,16 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 node.PosX = PosX;
                 node.PosY = PosY;
 
+                //Apply the IOData:
                 for(int i = 0; i < node.InputIOData.Count(); i++)
                 {
                     node.InputIOData[i].Value = Data[i].Value;
+                }
+
+                //Apply the Configuration:
+                for (int i = 0; i < node.Configuration.Count(); i++)
+                {
+                    node.Configuration[i].Value = Configuration[i].Value;
                 }
             }
 
