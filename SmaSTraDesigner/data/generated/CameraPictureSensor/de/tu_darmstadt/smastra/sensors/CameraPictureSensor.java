@@ -8,6 +8,7 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.List;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
@@ -66,13 +67,19 @@ public class CameraPictureSensor implements Sensor {
                 @Override
                 public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                     Camera.Parameters params = camera.getParameters();
+
+                    //Temporarly set the smallest size possible, because Filters are slow as f**k at the moment.
+                    List<Camera.Size> sizes = params.getSupportedPictureSizes();
+                    Camera.Size preferred = sizes.get( sizes.size()-1 );
+                    params.setPictureSize(preferred.width, preferred.height);
+
                     camera.setParameters(params);
                     camera.startPreview();
 
                     Camera.PictureCallback call = new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] data, Camera camera) {
-                            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length).copy(Bitmap.Config.ARGB_8888, true);
                             lastPicture = new Picture(bmp);
 
                             camera.takePicture(null, null, this);

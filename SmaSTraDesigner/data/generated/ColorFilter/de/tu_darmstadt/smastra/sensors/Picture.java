@@ -16,12 +16,12 @@ public class Picture {
     /**
      * The Width of the image
      */
-    private final int width;
+    private int width;
 
     /**
      * The height of the image
      */
-    private final int height;
+    private int height;
 
     /**
      * The Texture id of the image.
@@ -74,13 +74,18 @@ public class Picture {
         if(filterID == null || appliedFilters.contains(filterID)) return;
 
         //Call the filters by step:
-        filter.applyOnBitmap(width, height, bitmap);
+        if(bitmap.isMutable()){
+            //We need to be sure that we get a mutable bitmap. Otherwise the pixel-based approach will fail.
+            filter.applyOnBitmap(width, height, bitmap);
+        }
 
         //Last stept, if we need to replace the image:
         Bitmap newMap = filter.applyOnBitmapAndReplace(width, height, bitmap);
         if(newMap != null) {
             this.bitmap.recycle();
             this.bitmap = newMap;
+            this.width = bitmap.getWidth();
+            this.height = bitmap.getHeight();
         }
 
         appliedFilters.add(filterID);

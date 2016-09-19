@@ -28,7 +28,7 @@ public class ImageFilters implements de.tu_darmstadt.smastra.markers.interfaces.
                         int blue = 0x0000ff & rgb;
                         int green = 0x0000ff & (rgb >> 8);
                         int red = 0x0000ff & (rgb >> 16);
-                        int lum = (int) (red * 0.299 + green * 0.587 + blue * 0.114);
+                        int lum = (int) (red * 0.299 + green * 0.587 + blue * 0.114) + 0xff_00_00_00;
                         bitmap.setPixel(x, y, lum | (lum << 8) | (lum << 16));
                     }
                 }
