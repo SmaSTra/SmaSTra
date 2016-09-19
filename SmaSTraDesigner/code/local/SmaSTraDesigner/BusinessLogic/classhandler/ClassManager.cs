@@ -114,7 +114,7 @@
 			{
 				if (this.baseConversions == null)
 				{
-					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && !cls.MainClass.Contains("created"))
+					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && !cls.UserCreated)
 						.Select(cls => (Transformation)cls.BaseNode).ToArray();
 				}
 
@@ -132,7 +132,7 @@
             {
                 if (this.customConversions == null)
                 {
-                    this.customConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && cls.MainClass.Contains("created"))
+                    this.customConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && cls.UserCreated)
                         .Select(cls => (Transformation)cls.BaseNode).ToArray();
                 }
 
@@ -150,7 +150,7 @@
             {
                 if (this.baseBuffers == null)
                 {
-                    this.baseBuffers = this.classes.Values.Where(cls => cls.BaseNode is BufferNode && !cls.MainClass.Contains("created"))
+                    this.baseBuffers = this.classes.Values.Where(cls => cls.BaseNode is BufferNode && !cls.UserCreated)
                         .Select(cls => cls.BaseNode as BufferNode).NonNull().ToArray();
                 }
 
@@ -168,7 +168,7 @@
             {
                 if (this.baseBuffers == null)
                 {
-                    this.baseBuffers = this.classes.Values.Where(cls => cls.BaseNode is BufferNode && cls.MainClass.Contains("created"))
+                    this.baseBuffers = this.classes.Values.Where(cls => cls.BaseNode is BufferNode && cls.UserCreated)
                         .Select(cls => cls.BaseNode as BufferNode).NonNull().ToArray();
                 }
 
@@ -186,7 +186,7 @@
 			{
 				if (this.baseDataSources == null)
 				{
-					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && !cls.MainClass.Contains("created"))
+					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && !cls.UserCreated)
 						.Select(cls => (DataSource)cls.BaseNode).ToArray();
 				}
 
@@ -204,7 +204,7 @@
             {
                 if (this.customDataSources == null)
                 {
-                    this.customDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && cls.MainClass.Contains("created"))
+                    this.customDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && cls.UserCreated)
                         .Select(cls => (DataSource)cls.BaseNode).ToArray();
                 }
 
@@ -222,7 +222,7 @@
 			{
 				if (this.baseTransformations == null)
 				{
-					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && !cls.MainClass.Contains("created"))
+					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && !cls.UserCreated)
 						.Select(cls => (Transformation)cls.BaseNode).ToArray();
 				}
 
@@ -240,7 +240,7 @@
             {
                 if (this.customTransformations == null)
                 {
-                    this.customTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && cls.MainClass.Contains("created"))
+                    this.customTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && cls.UserCreated)
                         .Select(cls => (Transformation)cls.BaseNode).ToArray();
                 }
 

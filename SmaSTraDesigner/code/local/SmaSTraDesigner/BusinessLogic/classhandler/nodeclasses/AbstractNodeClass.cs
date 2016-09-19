@@ -23,11 +23,10 @@
         /// <param name="mainClass">This is the MainClass in the java world</param>
         /// <param name="needsOtherClasses">The other classes needed for the Java class to work</param>
         /// <param name="needsPermissions">The Permissions needed for this element</param>
-        protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description,  
-            DataType outputType, 
+        protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description,  DataType outputType, 
             string mainClass, string[] needsOtherClasses, string[] needsPermissions,
             ConfigElement[] configuration, ProxyProperty[] proxyProperties,
-            DataType[] inputTypes)
+            DataType[] inputTypes, bool userCreated)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 			{
@@ -50,6 +49,7 @@
             this.Configuration = configuration == null ? new ConfigElement[0] : configuration;
             this.ProxyProperties = proxyProperties == null ? new ProxyProperty[0] : proxyProperties;
             this.NodeType = nodeType;
+            this.UserCreated = userCreated;
 		}
 
 
@@ -137,6 +137,11 @@
         /// The Proxy Properties to use.
         /// </summary>
         public ProxyProperty[] ProxyProperties { get; }
+
+        /// <summary>
+        /// This indicates if the class was created by a user of a default class.
+        /// </summary>
+        public bool UserCreated { get; }
 
         #endregion properties
 

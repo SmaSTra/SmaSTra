@@ -251,7 +251,7 @@ namespace SmaSTraDesigner.Controls.Support
             bool isStatic = true;
 
             return new TransformationNodeClass(javaFreandlyName, ElementName, description, OutputType, InputTypes.ToArray(), 
-                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties,
+                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true,
                 methodName, isStatic);
         }
 
@@ -271,7 +271,7 @@ namespace SmaSTraDesigner.Controls.Support
             string stopMethod = "stop";
 
             return new DataSourceNodeClass(javaFreandlyName, ElementName, description, OutputType, 
-                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties,
+                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true,
                 dataMethod, startMethod, stopMethod);
         }
 

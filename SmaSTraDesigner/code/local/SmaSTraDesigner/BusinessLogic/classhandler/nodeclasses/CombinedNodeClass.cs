@@ -32,8 +32,9 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         public CombinedNodeClass(string name,
                 string displayName, string description,
                 List<SimpleSubNode> subElements, List<SimpleConnection> connections,
-                DataType outputType, string outputNodeUUID, DataType[] inputTypes = null)
-                    : base(ClassManager.NodeType.Combined, name, displayName, description, outputType, "", null, null, null, null, inputTypes)
+                DataType outputType, string outputNodeUUID, bool userCreated,
+                DataType[] inputTypes = null)
+                    : base(ClassManager.NodeType.Combined, name, displayName, description, outputType, "", null, null, null, null, inputTypes, userCreated)
         {
             this.SubElements = subElements == null ? new List<SimpleSubNode>() : subElements;
             this.Connections = connections == null ? new List<SimpleConnection>() : connections;

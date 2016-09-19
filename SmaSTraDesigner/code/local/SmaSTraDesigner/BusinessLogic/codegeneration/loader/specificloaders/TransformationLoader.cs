@@ -42,9 +42,10 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             string methodName = ReadMethodName(root);
             bool isStatic = ReadIsStatic(root);
             DataType[] inputs = ReadInputs(root);
+            bool userCreated = ReadUserCreated(root);
 
             return new TransformationNodeClass(name, displayName, description, output, inputs, mainClass, 
-                needsOtherClasses, neededPermissions, config, proxyProperties,
+                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated,
                 methodName, isStatic);
         }
 
@@ -85,6 +86,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddConfig(root, nodeClass.Configuration);
             AddInputs(root, nodeClass.InputTypes);
             AddProxyProperties(root, nodeClass.ProxyProperties);
+            AddUserCreated(root, nodeClass.UserCreated);
 
             AddMethodName(root, transClass.Method);
             AddStatic(root, transClass.IsStatic);

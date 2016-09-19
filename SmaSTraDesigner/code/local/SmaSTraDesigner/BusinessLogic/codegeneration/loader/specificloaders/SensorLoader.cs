@@ -34,9 +34,10 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             string dataMethod = ReadDataMethod(root);
             string startMethod = ReadStartMethod(root);
             string stopMethod = ReadStopMethod(root);
+            bool userCreated = ReadUserCreated(root);
 
             return new DataSourceNodeClass(name, displayName, description, output, mainClass, 
-                needsOtherClasses, neededPermissions, config, proxyProperties,
+                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated,
                 dataMethod, startMethod, stopMethod);
         }
 
@@ -72,6 +73,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddPermissions(root, nodeClass.NeedsPermissions);
             AddConfig(root, nodeClass.Configuration);
             AddProxyProperties(root, nodeClass.ProxyProperties);
+            AddUserCreated(root, nodeClass.UserCreated);
 
             AddDataMethod(root, sourceClass.DataMethod);
             AddStartMethod(root, sourceClass.StartMethod);

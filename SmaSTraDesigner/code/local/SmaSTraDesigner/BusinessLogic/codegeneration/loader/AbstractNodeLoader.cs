@@ -88,6 +88,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         private const string JSON_PROP_PROXY_PROPERTIES_METHOD = "method";
 
+        /// <summary>
+        /// The Name of the Path if the user created a node.
+        /// </summary>
+        private const string JSON_PROP_USER_CREATED = "userCreated";
+
         #endregion constants
 
         #region Vars
@@ -181,6 +186,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         protected string ReadDescription(JObject root)
         {
             return root.GetValueAsString(JSON_PROP_DESCRIPTION, "No description");
+        }
+
+        /// <summary>
+        /// Reads if this node is Created by a user.
+        /// </summary>
+        /// <param name="root">to read from</param>
+        /// <returns>true if created by a user.</returns>
+        protected bool ReadUserCreated(JObject root)
+        {
+            return root.GetValueAsBool(JSON_PROP_USER_CREATED, false);
         }
 
         /// <summary>
@@ -334,6 +349,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         protected void AddMainClass(JObject toAddTo, string mainClass)
         {
             toAddTo.Add(JSON_PROP_MAIN_CLASS, mainClass);
+        }
+
+        /// <summary>
+        /// Adds if the node is user created.
+        /// </summary>
+        /// <param name="toAddTo">JObject to add to</param>
+        /// <param name="userCreated">if the node is user created</param>
+        protected void AddUserCreated(JObject toAddTo, bool userCreated)
+        {
+            toAddTo.Add(JSON_PROP_USER_CREATED, userCreated);
         }
 
         /// <summary>

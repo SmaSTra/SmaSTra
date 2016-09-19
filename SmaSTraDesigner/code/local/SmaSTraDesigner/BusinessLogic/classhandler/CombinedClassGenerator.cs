@@ -171,7 +171,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             DataType output = root.Class.OutputType;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, subNodes, connections, output, root.NodeUUID, inputs.ToArray());
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, subNodes, connections, output, root.NodeUUID, true, inputs.ToArray());
 
             this.cachedNodeClass = finalNodeClass;
             return finalNodeClass;
