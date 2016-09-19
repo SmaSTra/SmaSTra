@@ -17,16 +17,36 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         private static bool SubTreeContains(Node root, List<Node> nodes)
         {
-            //Remove the first element:
-            if (root != null) nodes.Remove(root);
-
             //If empty -> Everything is okay!
             if (!nodes.Any()) return true;
+
+            //Remove the first element:
+            if (root != null) nodes.Remove(root);
 
             //Check recursivcely:
             foreach (Node input in root.InputNodes.NonNull())
             {
                 if (SubTreeContains(input, nodes)) return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsCyclic(Node root, List<Node> nodes, List<Node> visited)
+        {
+            //If empty -> Everything is okay!
+            if (!nodes.Any()) return false;
+
+            //Remove the first element:
+            if (root != null) nodes.Remove(root);
+
+            visited.Add(root);
+
+            //Check recursivcely:
+            foreach (Node input in root.InputNodes.NonNull())
+            {
+                if (visited.Contains(input)) return true;
+                if (IsCyclic(input, nodes, visited)) return true;
             }
 
             return false;
@@ -123,6 +143,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         public bool IsConnected()
         {
             return GetRootNode() != null;
+        }
+
+        /// <summary>
+        /// Checks if the Nodes are connected.
+        /// </summary>
+        /// <returns>true if connected</returns>
+        public bool IsCyclic()
+        {
+            return IsCyclic(GetRootNode(), nodes, new List<Node>());
         }
 
 
