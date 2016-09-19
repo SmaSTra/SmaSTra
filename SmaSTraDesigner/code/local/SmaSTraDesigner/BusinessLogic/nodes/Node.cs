@@ -5,6 +5,8 @@
     using classhandler;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using classhandler.nodeclasses;
+    using utils;
 
 
     /// <summary>
@@ -195,13 +197,7 @@
         public virtual object Clone()
 		{
 			Node clone = (Node)this.MemberwiseClone();
-            clone.InputIOData = new ObservableCollection<IOData>();
-            foreach(IOData ioData in InputIOData)
-            {
-                clone.InputIOData.Add(new IOData(ioData.Type, ""));
-            }
-            OnClassChanged(null, this.Class);
-
+            clone.OnClassChanged(null, this.Class);
             return clone;
 		}
 
@@ -212,13 +208,18 @@
         /// <param name="newValue">The new value.</param>
         protected virtual void OnClassChanged(AbstractNodeClass oldValue, AbstractNodeClass newValue)
         {
-            InputIOData.Clear();
-            foreach (DataType inputType in newValue.InputTypes)
-            {
-                InputIOData.Add(new IOData(inputType, ""));
-            }
-
+            //Create new Input-IOData, to force new Bindings.
+            InputIOData = newValue.InputTypes
+                .Select(t => new IOData(t,""))
+                .ToObservableCollection();
+            
+            //Create new Output-IOData, to force new Bindings.
             OutputIOData = new IOData(newValue.OutputType, null);
+
+            //Create new Configuration to force new Bindings.
+            this.Configuration = clazz
+                .Configuration.Select(c => c.GenerateDataElement())
+                .ToObservableCollection();
 
             //Set a new UUID for the node:
             this.NodeUUID = Guid.NewGuid().ToString();
@@ -305,6 +306,23 @@
                 if (inputIOData != value)
                 {
                     inputIOData = value;
+                }
+            }
+        }
+
+
+        protected ObservableCollection<DataConfigElement> configuration = new ObservableCollection<DataConfigElement>();
+        public ObservableCollection<DataConfigElement> Configuration
+        {
+            get
+            {
+                return configuration;
+            }
+            set
+            {
+                if (configuration != value)
+                {
+                    configuration = value;
                 }
             }
         }

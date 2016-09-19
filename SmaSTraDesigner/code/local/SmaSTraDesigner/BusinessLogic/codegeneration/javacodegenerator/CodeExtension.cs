@@ -92,7 +92,6 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 
         #endregion varibles
 
-
         #region methods
 
         /// <summary>

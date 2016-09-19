@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.utils
@@ -297,6 +298,11 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             }
 
             return elements;
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection)
+        {
+            return new ObservableCollection<T>(collection);
         }
 
 

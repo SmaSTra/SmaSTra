@@ -25,5 +25,29 @@
             this.DataType = type;
         }
 
+        /// <summary>
+        /// Generates a Data Element from the own Config.
+        /// </summary>
+        /// <returns>The generated element</returns>
+        public DataConfigElement GenerateDataElement()
+        {
+            return new DataConfigElement(Key, Description, DataType);
+        }
+
+    }
+
+    public class DataConfigElement : ConfigElement
+    {
+
+        /// <summary>
+        /// The Data for the configuration to set.
+        /// </summary>
+        public string Value { get; set; }
+
+        public DataConfigElement(string key, string description, DataType type) 
+            : base(key, description, type)
+        {
+            this.Value = "";
+        }
     }
 }
