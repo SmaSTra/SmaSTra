@@ -9,15 +9,20 @@ namespace SmaSTraDesigner.Controls.Support
             InitializeComponent();
         }
 
-        public string ResponseText
+        public string CombinedElementName
         {
-            get { return ResponseTextBox.Text; }
-            set { ResponseTextBox.Text = value; }
+            get { return tboxCombinedElementName.Text; }
+            set { tboxCombinedElementName.Text = value; }
         }
 
         private void OK_Clicked(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = true;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            tboxCombinedElementName.Focus();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace SmaSTraDesigner.Controls.Support
         private DataType outputType;
         private List<DataType> inputTypes = new List<DataType>();
         private string methodCode = "";
+        private string packageName = "";
 
         private DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
         private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
@@ -90,6 +91,19 @@ namespace SmaSTraDesigner.Controls.Support
             {
                 if (methodCode != value)
                     methodCode = value;
+            }
+        }
+
+        public string PackageName
+        {
+            get
+            {
+                return packageName;
+            }
+            set
+            {
+                if (packageName != value)
+                    packageName = value;
             }
         }
 
@@ -161,7 +175,7 @@ namespace SmaSTraDesigner.Controls.Support
         {
             if(ElementName.Length < 1)
             {
-                tbStatus.Text = "Bitte einen Namen für das neue Element angeben.";
+                tbStatus.Text = "Please enter a name for the new element.";
                 return;
             }
             ClassManager classManager = Singleton<ClassManager>.Instance;
@@ -170,7 +184,7 @@ namespace SmaSTraDesigner.Controls.Support
             {   //Check new DataType name
                 if (OutputTypeString.Length < 1)
                 {
-                    tbStatus.Text = "Bitte einen Namen für den neuen Output Typ angeben.";
+                    tbStatus.Text = "Please enter a name for the new output type.";
                     return;
                 } else
                 {   //create new DataType and update AllDataTypes[]
@@ -191,7 +205,7 @@ namespace SmaSTraDesigner.Controls.Support
                 {   //Check new DataType name
                     if (inputTypeViewModel.InputTypeString.Length < 1)
                     {
-                        tbStatus.Text = "Bitte einen Namen für den neuen Input Typ angeben.";
+                        tbStatus.Text = "Please enter a name for the new input type.";
                         return;
                     } else
                     {   //create new DataType and update AllDataTypes[]
@@ -209,7 +223,13 @@ namespace SmaSTraDesigner.Controls.Support
 
             if(MethodCode.Length < 1)
             {
-                tbStatus.Text = "Die Methode ist leer. Bitte geben sie den Methodentext ein";
+                tbStatus.Text = "Missing method body. Please enter method code";
+                return;
+            }
+
+            if (PackageName.Length < 1)
+            {
+                tbStatus.Text = "Missing package declaration. Please enter a package name";
                 return;
             }
 

@@ -934,12 +934,12 @@
             while (newName == "")
             {
                 DialogCombinedName dialog = new DialogCombinedName();
-                dialog.ResponseText = "New Name";
+                dialog.CombinedElementName = "New Name";
                 if (dialog.ShowDialog() == true)
                 {
-                    if (!string.IsNullOrWhiteSpace(dialog.ResponseText))
+                    if (!string.IsNullOrWhiteSpace(dialog.CombinedElementName))
                     {
-                        newName = dialog.ResponseText;
+                        newName = dialog.CombinedElementName;
                         if (generator.ExistsName(newName))
                         {
                             MessageBox.Show("The name " + newName + " already exists. Please choose another one!", "Name taken");
@@ -1278,7 +1278,10 @@
 
 		private void UcNodeViewer_StartedMoving(object sender, EventArgs e)
 		{
-			this.movingNodeViewer = (UcNodeViewer)sender;
+            if (ConnectingIOHandle == null)
+            {
+                this.movingNodeViewer = (UcNodeViewer)sender;
+            }
 		}
 
 

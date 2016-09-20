@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="DialogCombinedName" Height="150" Width="300">
+        Title="DialogCombinedName" Height="150" Width="300" Loaded="Window_Loaded">
     <StackPanel>
         <Grid Height="50"></Grid>
         <TextBlock Text="Enter a Name for the new Combined Node" TextAlignment="Center" />
-        <TextBox x:Name="ResponseTextBox" />
+        <TextBox x:Name="tboxCombinedElementName" />
         <Button Content="OK" Click="OK_Clicked" Width="100" />
     </StackPanel>
 </Window>
