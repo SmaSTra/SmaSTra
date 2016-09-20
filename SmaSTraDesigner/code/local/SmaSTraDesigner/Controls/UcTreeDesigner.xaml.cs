@@ -505,6 +505,15 @@
                 case "Collection":
                     color = (SolidColorBrush)Application.Current.FindResource("ColorCollection");
                     break;
+                case "Buffer":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorBuffer");
+                    break;
+                case "int":
+                    color = (SolidColorBrush)Application.Current.FindResource("Colorint");
+                    break;
+                case "Picture":
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorPicture");
+                    break;
                 default:
                     color = (SolidColorBrush)Application.Current.FindResource("ColorDefault");
                     break;

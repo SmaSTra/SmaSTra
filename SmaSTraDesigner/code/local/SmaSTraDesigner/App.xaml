@@ -64,7 +64,7 @@
 
 
         <SolidColorBrush x:Key="ColorPanelBackground" Color="#696969"/>
-        <SolidColorBrush x:Key="ColorPanelTitel" Color="LightGray"/>
+        <SolidColorBrush x:Key="ColorPanelTitel" Color="Gray"/>
         <SolidColorBrush x:Key="ColorDefault" Color="White"/>
         <SolidColorBrush x:Key="ColorBoolean" Color="GreenYellow"/>
         <SolidColorBrush x:Key="ColorDouble" Color="Blue"/>

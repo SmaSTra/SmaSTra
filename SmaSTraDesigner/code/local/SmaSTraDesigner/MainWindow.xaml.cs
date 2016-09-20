@@ -114,7 +114,8 @@
         }
         private void Exit_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            App.Current.Shutdown();
+            This.Close();
+           // App.Current.Shutdown();
         }
 
         private void Generate_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -271,5 +272,20 @@
 
         #endregion command handlers
 
+        private void This_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DialogClosingApplication closingDialog = new DialogClosingApplication();
+            if(closingDialog.ShowDialog() == true)
+            {
+                if (closingDialog.YesClicked)
+                {
+                    e.Cancel = false;
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
     }
 }
