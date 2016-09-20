@@ -75,15 +75,6 @@
                 DataType outputType = dialogNewElement.OutputType;
                 string methodCode = dialogNewElement.MethodCode;
 
-                //Debug check if everything is correct
-                Console.WriteLine("+++++ New Element Name: " + newElementName);
-                foreach (DataType inType in inputTypes)
-                {
-                    Console.WriteLine("+++++ inType: " + inType.Name);
-                }
-                Console.WriteLine("+++++ OutputType: " + outputType.Name);
-                Console.WriteLine("+++++ MethodCode: " + methodCode);
-
                 AbstractNodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
                 Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
                 Singleton<ClassManager>.Instance.AddClass(generatedClass);

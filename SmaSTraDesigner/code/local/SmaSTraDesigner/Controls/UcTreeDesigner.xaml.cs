@@ -910,6 +910,7 @@
             //Check if connected:
             CombinedClassGenerator generator = new CombinedClassGenerator(nodes);
             if (!generator.IsConnected()) return false;
+            if (generator.IsCyclic()) return false;
 
             return true;
         }

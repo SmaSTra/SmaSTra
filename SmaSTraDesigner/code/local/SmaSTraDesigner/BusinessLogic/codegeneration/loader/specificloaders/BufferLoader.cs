@@ -34,6 +34,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             AddPermissions(root, nodeClass.NeedsPermissions);
             AddConfig(root, nodeClass.Configuration);
             AddProxyProperties(root, nodeClass.ProxyProperties);
+            AddUserCreated(root, nodeClass.UserCreated);
 
             AddBufferAdd(root, bufferClass.BufferAddMethod);
             AddBufferGet(root, bufferClass.BufferGetMethod);
@@ -88,12 +89,13 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             DataType[] inputTypes = ReadInputs(root).AddBefore(genericData);
-            
+            bool userCreated = ReadUserCreated(root);
+
             string bufferAddMethod = ReadBufferAdd(root);
             string bufferGetMethod = ReadBufferGet(root);
 
             return new BufferNodeClass(name, displayName, description, output, mainClass,
-                needsOtherClasses, neededPermissions, config, proxyProperties, inputTypes,
+                needsOtherClasses, neededPermissions, config, proxyProperties, inputTypes, userCreated,
                 bufferAddMethod, bufferGetMethod);
         }
 

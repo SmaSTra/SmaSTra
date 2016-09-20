@@ -25,5 +25,42 @@
             this.DataType = type;
         }
 
+        /// <summary>
+        /// Generates a Data Element from the own Config.
+        /// </summary>
+        /// <returns>The generated element</returns>
+        public DataConfigElement GenerateDataElement()
+        {
+            return new DataConfigElement(Key, Description, DataType);
+        }
+
+    }
+
+    public class DataConfigElement : ConfigElement
+    {
+
+        /// <summary>
+        /// The Data for the configuration to set.
+        /// </summary>
+        public string Value { get; set; }
+
+        public DataConfigElement(string key, string description, DataType type) 
+            : this(key, description, type, "")
+        {}
+
+        public DataConfigElement(string key, string description, DataType type, string Value)
+            : base(key, description, type)
+        {
+            this.Value = Value;
+        }
+
+        /// <summary>
+        /// Clones this object.
+        /// </summary>
+        /// <returns>A cloned Data arg.</returns>
+        public DataConfigElement Clone()
+        {
+            return new DataConfigElement(Key, Description, DataType, Value);
+        }
     }
 }

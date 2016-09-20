@@ -92,7 +92,6 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 
         #endregion varibles
 
-
         #region methods
 
         /// <summary>
@@ -321,13 +320,22 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// </summary>
         public string BuildInitCode()
         {
-            string initCode = "";
+            string initVarCode = "";
+            string initVarConfigCode = "";
             for (int i = 0; i < nextSensor; i++)
             {
                 DataSource sensor = sensors[i];
                 DataSourceNodeClass clazz = sensor.Class as DataSourceNodeClass;
 
-                initCode += string.Format("       sensor{0} = new {1}(context);\n", i, DataType.minimizeToClass(sensor.Class.MainClass));
+                initVarCode += string.Format("       sensor{0} = new {1}(context);\n", i, DataType.minimizeToClass(sensor.Class.MainClass));
+
+                //Build the Config part:
+                foreach(DataConfigElement element in sensor.Configuration)
+                {
+                    if (string.IsNullOrWhiteSpace(element.Value)) continue;
+                    initVarConfigCode += string.Format("    sensor{0}.configure(\"{2}\", \"{3}\");\n",
+                        i, element.Key, element.Value);
+                }
             }
 
             for (int i = 0; i < nextTrans; i++)
@@ -336,10 +344,18 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
                 TransformationNodeClass clazz = transformation.Class as TransformationNodeClass;
                 if (clazz.IsStatic) continue;
 
-                initCode += string.Format("       trans{0} = new {1}();\n", i, DataType.minimizeToClass(transformation.Class.MainClass));
+                initVarCode += string.Format("       trans{0} = new {1}();\n", i, DataType.minimizeToClass(transformation.Class.MainClass));
+
+                //Build the Config part:
+                foreach (DataConfigElement element in transformation.Configuration)
+                {
+                    if (string.IsNullOrWhiteSpace(element.Value)) continue;
+                    initVarConfigCode += string.Format("    sensor{0}.configure(\"{2}\", \"{3}\");\n",
+                        i, element.Key, element.Value);
+                }
             }
 
-            return initCode;
+            return initVarCode + "\n" + initVarConfigCode;
         }
 
 

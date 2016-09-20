@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SmaSTraDesigner.BusinessLogic.utils;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporters
 {
@@ -22,6 +18,22 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
             this.CopyNodes(directory, codeExtension.GetAllUsedNodes());
             this.CopyLibs(directory);
             this.CopyJavaFile(directory, javaClass, codeExtension);
+
+            //TODO create text:
+            string readMeText = 
+                "Please do the following steps to use " + codeExtension.ClassName + ":\n" +
+                "  1: Add the Classes in the folders to your IDE. \n" +
+                "  2: Add the Libs in the 'libs' folder to your IDE and include it to the Project.\n" +
+                "  3: Include the permissions below to your Manifest.\n" + 
+                "  4: Create a new " + codeExtension.ClassName + " in your code.\n" +
+                "  5: Populate all Setters in the class according to what they need to be set.\n" +
+                "  6: Call .start(); on " + codeExtension.ClassName + " to start it.\n" +
+                "\n\n Permission Needed:\n" +
+                codeExtension.GetNeededPermissions().StringJoin("\n")
+                ;
+
+
+            File.WriteAllText(Path.Combine(directory, "README.txt"), readMeText);
         }
 
     }

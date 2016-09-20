@@ -9,10 +9,11 @@
 
         public TransformationNodeClass(string name, string displayName, string description, DataType outputType, DataType[] inputTypes,
             string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config, ProxyProperty[] proxyProperties,
+            bool userCreated,
             string methodName, bool isStatic)
             : base(ClassManager.NodeType.Transformation, name, displayName, description, outputType, 
                   mainClass, needsOtherClasses, needsPermissions, 
-                  config, proxyProperties, inputTypes)
+                  config, proxyProperties, inputTypes, userCreated)
         {
             this.Method = methodName;
             this.IsStatic = isStatic;
