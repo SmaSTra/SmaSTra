@@ -16,7 +16,7 @@ import de.tu_darmstadt.smastra.SmaSTraFileRepository;
  * Servlet implementation class SmaSTra
  */
 @WebServlet("/add")
-public class PostElement extends HttpServlet {
+public class AddElement extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -28,7 +28,7 @@ public class PostElement extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public PostElement() {
+    public AddElement() {
     	repo = SmaSTraFileRepository.get();
     }
     
@@ -36,6 +36,19 @@ public class PostElement extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	String name = req.getParameter("name");
+    	
+    	//No name found:
+    	if(name == null){
+    		resp.setStatus(422);
+    		return;
+    	}
+    	
+    	//Already present:
+    	if(repo.getElement(name) != null){
+    		resp.setStatus(409);
+    		return;
+    	}
+    	
     	byte[] data = read(req.getInputStream());
     	boolean worked = repo.addNewElement(name, data);
     	resp.setStatus(worked ? 200 : 400);
