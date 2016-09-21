@@ -25,6 +25,7 @@
         <CommandBinding Command="ctrlSupport:Commands.AddSelected" CanExecute="AddSelected_CanExecute" Executed="AddSelected_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.ToOutputViewer" CanExecute="ToOutputViewer_CanExecute" Executed="ToOutputViewer_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.AddToLibrary" CanExecute="AddToLibrary_CanExecute" Executed="AddToLibrary_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.CreateCustomElement" CanExecute="CreateCustomElement_CanExecute" Executed="CreateCustomElement_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
@@ -50,6 +51,7 @@
             <MenuItem x:Name="mniEdit" Header="Edit">
                 <MenuItem x:Name="mniMerge" Header="Merge" Command="ctrlSupport:Commands.Merge" />
                 <MenuItem x:Name="mniUnmerge" Header="Unmerge" Command="ctrlSupport:Commands.Unmerge" />
+                <MenuItem x:Name="mniCreateCustomElement" Header="Create Custom Element" Command="ctrlSupport:Commands.CreateCustomElement" />
             </MenuItem>
             <MenuItem Header="Tree">
                 <MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Command="ctrlSupport:Commands.Generate" />
@@ -281,7 +283,27 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </WrapPanel>
-                <WrapPanel>
+                        <TextBlock Text="Configuration: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <WrapPanel>
+                            <ItemsControl x:Name="icNodeConfiguration" ItemsSource="{Binding Path=NodeConfiguration, UpdateSourceTrigger=PropertyChanged}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.Resources>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                                        </DataTemplate.Resources>
+                                        <StackPanel Orientation="Vertical" >
+                                            <WrapPanel>
+                                                <TextBlock Text="{Binding Path=DataType.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
+                                                <TextBlock Text=": " TextWrapping="Wrap"/>
+                                                <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50"/>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </WrapPanel>
+                        <WrapPanel>
                     <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
                 </WrapPanel>

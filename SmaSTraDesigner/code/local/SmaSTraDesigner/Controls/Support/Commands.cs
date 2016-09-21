@@ -137,6 +137,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand CreateCustomElement = new RoutedUICommand
+                        (
+                                "Create custom element",
+                                "CreateCustomElement",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                        new KeyGesture(Key.N, ModifierKeys.Control)
+                                }
+                        );
+
 
     }
 }

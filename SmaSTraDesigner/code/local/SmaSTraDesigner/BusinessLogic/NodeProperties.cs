@@ -1,4 +1,5 @@
 ﻿using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -99,6 +100,21 @@ namespace SmaSTraDesigner.BusinessLogic
                 {
                     return ActiveNode.InputIOData;
                 } else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public ObservableCollection<DataConfigElement> NodeConfiguration
+        {
+            get
+            {
+                if (ActiveNode != null)
+                {
+                    return ActiveNode.Configuration;
+                }
+                else
                 {
                     return null;
                 }

@@ -71,18 +71,10 @@
         }
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            // Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
-            DialogCreateCustomElement dialogNewElement = new DialogCreateCustomElement();
-            if (dialogNewElement.ShowDialog() == true)
+            // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
+            foreach(Node node in this.tdTreeDesigner.Tree.Nodes)
             {
-                string newElementName = dialogNewElement.ElementName;
-                List<DataType> inputTypes = dialogNewElement.InputTypes;
-                DataType outputType = dialogNewElement.OutputType;
-                string methodCode = dialogNewElement.MethodCode;
-
-                AbstractNodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
-                Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
-                Singleton<ClassManager>.Instance.AddClass(generatedClass);
+                Console.WriteLine("++++++ node.Configuration.Count: " + node.Configuration.Count);
             }
         }
 
@@ -264,6 +256,27 @@
         private void Unmerge_Execute(object sender, ExecutedRoutedEventArgs e)
         {
             this.tdTreeDesigner.TryUnmergeSelectedNode();
+        }
+
+        private void CreateCustomElement_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        // moved to Ctrl+N
+        private void CreateCustomElement_Executed(object sender, ExecutedRoutedEventArgs e)
+        { 
+            DialogCreateCustomElement dialogNewElement = new DialogCreateCustomElement();
+            if (dialogNewElement.ShowDialog() == true)
+            {
+                string newElementName = dialogNewElement.ElementName;
+                List<DataType> inputTypes = dialogNewElement.InputTypes;
+                DataType outputType = dialogNewElement.OutputType;
+                string methodCode = dialogNewElement.MethodCode;
+
+                AbstractNodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
+                Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
+                Singleton<ClassManager>.Instance.AddClass(generatedClass);
+            }
         }
 
         #endregion command handlers
