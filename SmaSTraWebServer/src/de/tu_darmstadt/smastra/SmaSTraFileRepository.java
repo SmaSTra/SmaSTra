@@ -119,7 +119,10 @@ public class SmaSTraFileRepository {
 	 * Adds a new Element.
 	 */
 	public void addNewElement(SmaSTraElement element){
-		if(element != null) this.elements.put(element.getName(), element);
+		if(element != null) {
+			this.elements.put(element.getName(), element);
+			this.cachedAllJson = null;
+		}
 	}
 	
 	/**

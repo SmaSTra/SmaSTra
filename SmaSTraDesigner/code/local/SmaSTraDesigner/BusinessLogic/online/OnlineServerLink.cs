@@ -1,8 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Common;
+using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,10 +32,21 @@ namespace SmaSTraDesigner.BusinessLogic.online
         private const string HOST_BASE = "SmaSTraWebServer";
 
         /// <summary>
+        /// The path for the TMP directory.
+        /// </summary>
+        private const string TMP_PATH = "tmp";
+
+        /// <summary>
         /// The Complete base-Address, ending with a slash.
         /// </summary>
         private readonly string BASE_ADDRESS = HOST_ADDRESS + ":" + HOST_PORT + "/" + HOST_BASE + "/";
 
+
+
+        public OnlineServerLink()
+        {
+            Directory.CreateDirectory(TMP_PATH);
+        }
 
 
 
@@ -97,7 +112,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void GetElementAsZipFile(string name, Action<byte[]> callback)
+        public void GetOnlineElement(string name, Action<AbstractNodeClass,bool> callback)
         {
             if (name == null || callback == null) return;
 
@@ -110,10 +125,11 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void startDownloadOfElement(string name, Action<byte[]> callback)
+        private async void startDownloadOfElement(string name, Action<AbstractNodeClass,bool> callback)
         {
             byte[] data = null;
 
+            bool worked = true;
             string address = BASE_ADDRESS + "get?name=" + name;
             using (HttpClient client = new HttpClient())
             using (HttpResponseMessage response = await client.GetAsync(address))
@@ -124,10 +140,56 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 {
                     data = await content.ReadAsByteArrayAsync();
                 }
+                else
+                {
+                    worked = false;
+                }
 
             }
 
-            callback.Invoke(data);
+            //If download failed -> break!
+            if (!worked)
+            {
+                if (callback != null) callback.Invoke(null, false);
+                return;
+            }
+
+            string tmpPath = Path.Combine(TMP_PATH, name + "_download");
+            string tmpZipPath = Path.Combine(tmpPath, "data.zip");
+            string destDir = Path.Combine("created", name);
+            Directory.CreateDirectory(tmpPath);
+            Directory.CreateDirectory(destDir);
+
+            //Write and do your stuff:
+            File.WriteAllBytes(tmpZipPath, data);
+            try
+            {
+                ZipFile.ExtractToDirectory(tmpZipPath, destDir);
+            }catch(Exception exp)
+            {
+                Debug.Print(exp.ToString());
+                worked = false;
+            }
+
+            //Cleanup:
+            Directory.Delete(tmpPath, true);
+            if (!worked) Directory.Delete(destDir, true);
+
+            //Now try to load the new element:
+            AbstractNodeClass newElement = null;
+            if (worked)
+            {
+                try
+                {
+                    newElement = Singleton<NodeLoader>.Instance.loadFromFolder(destDir);
+                }catch(Exception exp)
+                {
+                    Debug.Print(exp.ToString());
+                    worked = false;
+                }
+            }
+
+            if (callback != null) callback.Invoke(newElement, worked);
         }
 
 
@@ -136,13 +198,20 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void UploadElement(string name, string zipFile, Action<string, bool> callback)
+        public void UploadElement(AbstractNodeClass clazz, Action<string, bool> callback)
         {
-            if (zipFile == null || callback == null) return;
+            string folder = Path.Combine((clazz.UserCreated ? "created" : "generated"), clazz.Name);
+            string tmpName = Path.Combine(TMP_PATH, "upload_" + clazz.Name + ".zip");
+            ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);
 
-            Task t = new Task(() => uploadFile(name, zipFile, callback));
+            Task t = new Task(() => uploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n,b) =>
+            {
+                File.Delete(tmpName);
+                if(callback != null) callback.Invoke(n,b);
+            }));
             t.Start();
         }
+
 
 
         /// <summary>
@@ -150,10 +219,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void uploadFile(string name, string zipFile, Action<string, bool> callback)
+        private async void uploadFile(string name, byte[] data, Action<string, bool> callback)
         {
             bool worked = false;
-            byte[] data = File.ReadAllBytes(zipFile);
 
             var contentToSend = new ByteArrayContent(data);
             contentToSend.Headers.Add("name", name);
@@ -170,8 +238,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             }
 
             //Tell if worked:
-            callback.Invoke(name, worked);
-            
+            if (callback != null) callback.Invoke(name, worked);
         }
     }
 
