@@ -55,6 +55,11 @@
         {
             Singleton<Library>.Instance.Library_DragEnter(sender, e);
         }
+        
+        private void InputType_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Singleton<NodeProperties>.Instance.onTextBoxInput(sender, e);
+        }
 
         #endregion event handlers
 

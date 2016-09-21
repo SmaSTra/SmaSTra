@@ -3,7 +3,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace SmaSTraDesigner.BusinessLogic
 {
@@ -210,6 +213,34 @@ namespace SmaSTraDesigner.BusinessLogic
                 this.NotifyPropertyChanged("NodePositionX");
                 this.NotifyPropertyChanged("NodePositionY");
             }
+        }
+
+        public void onTextBoxInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox inputBox = sender as TextBox;
+            IOData inputData = inputBox.DataContext as IOData;
+            e.Handled = !textAccepted(e.Text, inputData.Type);
+        }
+
+        private bool textAccepted(string input, DataType dataType)
+        {
+            Regex allowedExpression;
+            switch (dataType.Name){
+                case "double":
+                    allowedExpression = new Regex("[^0-9.-]+");
+                    break;
+                case "int":
+                    allowedExpression = new Regex("[^0-9-]+");
+                    break;
+                case "de.tu_darmstadt.smastra.sensors.Vector3d":
+                    allowedExpression = new Regex("[^0-9.,-]+");
+                    break;
+                case "de.tu_darmstadt.smastra.sensors.Picture":
+                    return false;
+                default:
+                    return true; // allow everything
+            }
+            return !allowedExpression.IsMatch(input);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

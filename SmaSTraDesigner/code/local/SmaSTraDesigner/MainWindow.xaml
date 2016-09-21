@@ -274,7 +274,7 @@
                                     <WrapPanel>
                                         <TextBlock Text="{Binding Path=Type.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
                                         <TextBlock Text=": " TextWrapping="Wrap"/>
-                                        <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50"/>
+                                        <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" PreviewTextInput="InputType_PreviewTextInput"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </DataTemplate>
