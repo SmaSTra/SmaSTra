@@ -276,7 +276,7 @@ namespace SmaSTraDesigner.Controls.Support
             methodNameText = InputTypes.Empty() ? " getData" : " " + ElementName.RemoveAll(" ", "_");
             for(int i = 0; i < InputTypes.Count; i++)
             {
-                argumentsText = argumentsText + "DataType " + InputTypes[i].MinimizedName + " arg" + i;
+                argumentsText = argumentsText + InputTypes[i].MinimizedName + " arg" + i;
             }
             argumentsText = argumentsText + ")";
 
@@ -365,6 +365,16 @@ namespace SmaSTraDesigner.Controls.Support
         {
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            tboxNewElementName.Focus();
         }
     }
 
