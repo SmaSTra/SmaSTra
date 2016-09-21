@@ -119,7 +119,10 @@ public class SmaSTraFileRepository {
 	 * Adds a new Element.
 	 */
 	public void addNewElement(SmaSTraElement element){
-		if(element != null) this.elements.put(element.getName(), element);
+		if(element != null) {
+			this.elements.put(element.getName(), element);
+			this.cachedAllJson = null;
+		}
 	}
 	
 	/**
@@ -187,13 +190,11 @@ public class SmaSTraFileRepository {
 		//Already extracted or not present:
 		if(!zipFile.exists() || metadataFile.exists()) return;
 		
-		try{
-			Path zipPath = zipFile.toPath();
-			FileSystem fileSystem = FileSystems.newFileSystem(zipPath, null);
-			
+		Path zipPath = zipFile.toPath();
+		try(FileSystem fileSystem = FileSystems.newFileSystem(zipPath, null)){
 			Path source = fileSystem.getPath("metadata.json");
 			Files.copy(source, metadataFile.toPath());
-		}catch (IOException e) {
+		}catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
