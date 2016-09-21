@@ -13,14 +13,24 @@ namespace SmaSTraDesigner.BusinessLogic.online
     {
 
         /// <summary>
-        /// The Host address to connect to.
+        /// The address of the host hosting the web-server.
         /// </summary>
-        private const string HOST_ADDRESS = "localhost:8811";
+        private const string HOST_ADDRESS = "http://localhost";
+
+        /// <summary>
+        /// The port of the host hosting the web-server.
+        /// </summary>
+        private const int HOST_PORT = 8811;
 
         /// <summary>
         /// The Prefix for the SmaStra system.
         /// </summary>
-        private const string HOST_BASE = "SamSTraWebServer";
+        private const string HOST_BASE = "SmaSTraWebServer";
+
+        /// <summary>
+        /// The Complete base-Address, ending with a slash.
+        /// </summary>
+        private readonly string BASE_ADDRESS = HOST_ADDRESS + ":" + HOST_PORT + "/" + HOST_BASE + "/";
 
 
 
@@ -47,8 +57,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
         {
             List<SimpleClass> classList = new List<SimpleClass>();
 
+            string address = BASE_ADDRESS + "all";
             using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.GetAsync(HOST_ADDRESS + "/" + HOST_BASE + "/" + "all"))
+            using (HttpResponseMessage response = await client.GetAsync(address))
             using (HttpContent content = response.Content)
             {
                 HttpStatusCode status = response.StatusCode;
@@ -103,8 +114,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
         {
             byte[] data = null;
 
+            string address = BASE_ADDRESS + "get?name=" + name;
             using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.GetAsync(HOST_ADDRESS + "/" + HOST_BASE + "/" + "get?name=" + name))
+            using (HttpResponseMessage response = await client.GetAsync(address))
             using (HttpContent content = response.Content)
             {
                 //Did work!
@@ -143,11 +155,12 @@ namespace SmaSTraDesigner.BusinessLogic.online
             bool worked = false;
             byte[] data = File.ReadAllBytes(zipFile);
 
-            ByteArrayContent contentToSend = new ByteArrayContent(data);
+            var contentToSend = new ByteArrayContent(data);
             contentToSend.Headers.Add("name", name);
 
+            string address = BASE_ADDRESS + "add";
             using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.PostAsync(HOST_ADDRESS + "/" + HOST_BASE + "/" + "add", contentToSend))
+            using (HttpResponseMessage response = await client.PostAsync(address, contentToSend))
             {
                 //Did work!
                 if (response.StatusCode == HttpStatusCode.OK)

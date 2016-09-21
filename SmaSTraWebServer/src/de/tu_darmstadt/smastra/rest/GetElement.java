@@ -41,8 +41,9 @@ public class GetElement extends HttpServlet {
 	 */
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	
 		String element = request.getParameter("name");
+		if(element == null) element = request.getHeader("name");
+		
     	if(element == null){
     		response.setStatus(400); //Not Param!
     		return;

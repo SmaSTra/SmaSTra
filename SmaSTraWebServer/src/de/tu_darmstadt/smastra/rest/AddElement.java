@@ -1,5 +1,6 @@
 package de.tu_darmstadt.smastra.rest;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,6 +37,7 @@ public class AddElement extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	String name = req.getParameter("name");
+    	if(name == null) name = req.getHeader("name");
     	
     	//No name found:
     	if(name == null){
@@ -50,6 +52,8 @@ public class AddElement extends HttpServlet {
     	}
     	
     	byte[] data = read(req.getInputStream());
+    	req.getInputStream().close();
+    	
     	boolean worked = repo.addNewElement(name, data);
     	resp.setStatus(worked ? 200 : 400);
     }
@@ -57,9 +61,18 @@ public class AddElement extends HttpServlet {
     
     
     private byte[] read(InputStream in) throws IOException{
-    	byte[] data = new byte[in.available()];
-    	in.read(data);
-    	return data;
+    	ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+    	int nRead;
+    	byte[] data = new byte[16384];
+
+    	while ((nRead = in.read(data, 0, data.length)) != -1) {
+    	  buffer.write(data, 0, nRead);
+    	}
+
+    	buffer.flush();
+
+    	return buffer.toByteArray();
     }
 
 }
