@@ -4,77 +4,93 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
+        xmlns:wpfConverters="clr-namespace:Common.Resources.Converters;assembly=WpfCommonLib"
         mc:Ignorable="d"
         Title="Window1" Height="auto" Width="auto">
     <Window.Resources>
         <local:ConverterCountToVisibility x:Key="converterCountToVisibility" />
     </Window.Resources>
 
-    <StackPanel>
+    <Grid>
+        <StackPanel>
+            <Grid>
+    <StackPanel Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}}">
         <Grid Height="50"></Grid>
         <TextBlock Text="Enter a name for the new element" TextAlignment="Center" />
         <WrapPanel HorizontalAlignment="Center">
         <TextBox x:Name="tboxNewElementName" Text="{Binding Path=ElementName}" MinWidth="200" TextAlignment="Center" />
         </WrapPanel>
             <Grid Margin="10,20,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Padding="5">
-            <StackPanel>
-                <TextBlock Text="Input types:"/>
-                <ItemsControl x:Name="icInputTypes" ItemsSource="{Binding Path=InputTypesViewModels}" >
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical" >
-                            <WrapPanel>
-                                    <Button x:Name="btnDeleteInputType" Content="Delete" Click="btnDeleteInputType_Click" Margin="0,0,10,0"/>
-                                    <ComboBox x:Name="cboxInputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1"  SelectionChanged="cboxTypesString_SelectionChanged" Margin="0,0,10,0">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding}" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                    <TextBox Text="{Binding Path=InputTypeString, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Visibility="{Binding ElementName=cboxInputTypeString, Path=SelectedIndex , Converter={StaticResource converterCountToVisibility}}" />
-                                </WrapPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-                <Button x:Name="btnAddInput" Content="Add" Width="100" Click="btnAddInput_Click"/>
-            </StackPanel>
-            </Border>
-            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Padding="5">
-                <StackPanel>
-                    <TextBlock Text="Output type:"/>
-                    <WrapPanel>
-                        <ComboBox x:Name="cboxOutputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1" SelectionChanged="cboxTypesString_SelectionChanged" >
-                            <ComboBox.ItemTemplate>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Padding="5">
+                    <StackPanel>
+                        <TextBlock Text="Input types:"/>
+                        <ItemsControl x:Name="icInputTypes" ItemsSource="{Binding Path=InputTypesViewModels}" >
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding}" />
+                                    <StackPanel Orientation="Vertical" >
+                                        <WrapPanel>
+                                            <Button x:Name="btnDeleteInputType" Content="Delete" Click="btnDeleteInputType_Click" Margin="0,0,10,0"/>
+                                            <ComboBox x:Name="cboxInputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1"  SelectionChanged="cboxTypesString_SelectionChanged" Margin="0,0,10,0">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding}" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <TextBox Text="{Binding Path=InputTypeString, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Visibility="{Binding ElementName=cboxInputTypeString, Path=SelectedIndex , Converter={StaticResource converterCountToVisibility}}" />
+                                        </WrapPanel>
                                     </StackPanel>
                                 </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBox Text="{Binding Path=OutputTypeString, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Visibility="{Binding ElementName=cboxOutputTypeString, Path=SelectedIndex , Converter={StaticResource converterCountToVisibility}}" />
-                    </WrapPanel>
-                </StackPanel>
-            </Border>
-        </Grid>
-        <TextBlock x:Name="tempTbHeader" TextAlignment="Left" Text="public ..." Margin="0,10,0,0" FontSize="20"/>
-        <ScrollViewer>
-        <TextBox x:Name="tboxMethodCode" Text="{Binding Path=MethodCode}" MinWidth="300" MinHeight="100" Margin="10,20,10,20" />
-        </ScrollViewer>
-        <TextBlock x:Name="tbPackageName" TextAlignment="Left" Text="Packange name" Margin="0,10,0,0" FontSize="15"/>
-        <WrapPanel>
-        <TextBox x:Name="tboxPackageName" Text="{Binding Path=PackageName}" MinWidth="300" Margin="10,20,10,20" />
-        </WrapPanel>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button x:Name="btnAddInput" Content="Add" Width="100" Click="btnAddInput_Click"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Padding="5">
+                    <StackPanel>
+                        <TextBlock Text="Output type:"/>
+                        <WrapPanel>
+                            <ComboBox x:Name="cboxOutputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1" SelectionChanged="cboxTypesString_SelectionChanged" >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBox Text="{Binding Path=OutputTypeString, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Visibility="{Binding ElementName=cboxOutputTypeString, Path=SelectedIndex , Converter={StaticResource converterCountToVisibility}}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <Button x:Name="btnIONext" Content="Next" Width="100" Click="btnIONext_Click" Margin="0,10,0,0" />
+        </StackPanel>
+
+        <StackPanel Margin="10,50,10,10" Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}">
+                    <TextBlock x:Name="tempTbHeader" TextWrapping="Wrap" TextAlignment="Left" Text="public ..." Margin="0,10,0,0" FontSize="20"/>
+            <ScrollViewer>
+                <TextBox x:Name="tboxMethodCode" Text="{Binding Path=MethodCode}" MinWidth="300" MinHeight="100" Margin="10,20,10,20" />
+            </ScrollViewer>
+            <TextBlock x:Name="tbPackageName" TextAlignment="Left" Text="Packange name" Margin="0,10,0,0" FontSize="15"/>
+            <WrapPanel>
+                <TextBox x:Name="tboxPackageName" Text="{Binding Path=PackageName}" MinWidth="300" Margin="10,10,10,20" />
+            </WrapPanel>
+                <TextBlock x:Name="tbDescription" TextAlignment="Left" Text="Description" Margin="0,10,0,0" FontSize="15"/>
+                <WrapPanel>
+                    <TextBox x:Name="tboxDescription" Text="{Binding Path=Description}" MinWidth="300" Margin="10,10,10,10" />
+                </WrapPanel>
+                <Button x:Name="btnIOBack" Content="Back" Width="100" Click="btnIOBack_Click" Margin="0,10,0,0" />
+            <Button x:Name="btnIOFinished" Content="Generate" Width="100" Click="btnIOFinished_Click" Margin="0,10,0,0" />
+        </StackPanel>
+            </Grid>
             <TextBlock x:Name="tbStatus" TextAlignment="Center" Margin="0,10,0,0"/>
-        <Button x:Name="btnIOFinished" Content="OK" Width="100" Click="btnIOFinished_Click" Margin="0,10,0,0" />
-    </StackPanel>
+        </StackPanel>
+    </Grid>
 </Window>

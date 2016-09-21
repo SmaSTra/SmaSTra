@@ -6,6 +6,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +18,7 @@ namespace SmaSTraDesigner.Controls.Support
     /// <summary>
     /// Interaktionslogik für DialogCreateCustomElement.xaml
     /// </summary>
-    public partial class DialogCreateCustomElement : Window
+    public partial class DialogCreateCustomElement : Window, INotifyPropertyChanged
 
     {
         private string elementName = "";
@@ -25,10 +26,25 @@ namespace SmaSTraDesigner.Controls.Support
         private List<DataType> inputTypes = new List<DataType>();
         private string methodCode = "";
         private string packageName = "";
+        private string description = "No description";
 
         private DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
         private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
-        private string outputTypeString = "output type String";
+        private string outputTypeString = "OutputType";
+
+        private bool firstPage;
+        public bool FirstPage
+        {
+            get
+            {
+                return firstPage;
+            }
+            set
+            {
+                firstPage = value;
+                this.NotifyPropertyChanged("FirstPage");
+            }
+        }
         
 
         public DialogCreateCustomElement()
@@ -36,9 +52,9 @@ namespace SmaSTraDesigner.Controls.Support
             InitializeComponent();
             this.DataContext = this;
             allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
-            cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "outputType", SelectedDataType = allDataTypes[0] };
-            InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "inputType", SelectedDataType = allDataTypes [0]});
-            
+            cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "OutputType", SelectedDataType = allDataTypes[0] };
+            InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "InputType", SelectedDataType = allDataTypes [0]});
+            FirstPage = true;
             
         }
 
@@ -107,6 +123,19 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                if (description != value)
+                    description = value;
+            }
+        }
+
         public DataType[] AllDataTypes
         {
             get
@@ -143,6 +172,7 @@ namespace SmaSTraDesigner.Controls.Support
             }
             set
             {
+                value = value.RemoveAll(" ", "_");
                 if (outputTypeString != value)
                     outputTypeString = value;
             }
@@ -171,22 +201,29 @@ namespace SmaSTraDesigner.Controls.Support
             InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "inputType", SelectedDataType = allDataTypes[0] });
         }
 
-        private void btnIOFinished_Click(object sender, RoutedEventArgs e)
+        private void btnDeleteInputType_Click(object sender, RoutedEventArgs e)
         {
-            if(ElementName.Length < 1)
+            InputTypeViewModel inputToDelete = (InputTypeViewModel)((Button)sender).DataContext;
+            InputTypesViewModels.Remove(inputToDelete);
+        }
+
+        private void btnIONext_Click(object sender, RoutedEventArgs e)
+        {
+            if (ElementName.Length < 1)
             {
                 tbStatus.Text = "Please enter a name for the new element.";
                 return;
             }
             ClassManager classManager = Singleton<ClassManager>.Instance;
             OutputType = ((InputTypeViewModel)cboxOutputTypeString.DataContext).SelectedDataType;
-            if(OutputType == null)
+            if (OutputType == null)
             {   //Check new DataType name
                 if (OutputTypeString.Length < 1)
                 {
                     tbStatus.Text = "Please enter a name for the new output type.";
                     return;
-                } else
+                }
+                else
                 {   //create new DataType and update AllDataTypes[]
                     DataType newDataType = new DataType(OutputTypeString);
                     OutputType = newDataType;
@@ -199,7 +236,7 @@ namespace SmaSTraDesigner.Controls.Support
             }
 
             InputTypes.Clear();
-            foreach(InputTypeViewModel inputTypeViewModel in InputTypesViewModels)
+            foreach (InputTypeViewModel inputTypeViewModel in InputTypesViewModels)
             {
                 if (inputTypeViewModel.SelectedDataType == null)
                 {   //Check new DataType name
@@ -207,7 +244,8 @@ namespace SmaSTraDesigner.Controls.Support
                     {
                         tbStatus.Text = "Please enter a name for the new input type.";
                         return;
-                    } else
+                    }
+                    else
                     {   //create new DataType and update AllDataTypes[]
                         DataType newDataType = new DataType(inputTypeViewModel.InputTypeString);
                         inputTypeViewModel.SelectedDataType = newDataType;
@@ -220,8 +258,41 @@ namespace SmaSTraDesigner.Controls.Support
                 }
                 InputTypes.Add(inputTypeViewModel.SelectedDataType);
             }
+            updateMethodHeader();
+            FirstPage = false;
+        }
 
-            if(MethodCode.Length < 1)
+        private void updateMethodHeader()
+        {
+            //public double getData(){
+            //public static boolean CustomConversionUpdate2(DataType long arg0) {
+            string methodHeader = "public";
+            string staticText = "";
+            string outputTypeText = "";
+            string methodNameText = "";
+            string argumentsText = "(";
+            staticText = InputTypes.Empty() ? " static" : "";
+            outputTypeText = " " + OutputType.MinimizedName;
+            methodNameText = InputTypes.Empty() ? " getData" : " " + ElementName.RemoveAll(" ", "_");
+            for(int i = 0; i < InputTypes.Count; i++)
+            {
+                argumentsText = argumentsText + "DataType " + InputTypes[i].MinimizedName + " arg" + i;
+            }
+            argumentsText = argumentsText + ")";
+
+            methodHeader = methodHeader + staticText + outputTypeText + methodNameText + argumentsText + " {";
+            tempTbHeader.Text = methodHeader;
+
+        }
+
+        private void btnIOBack_Click(object sender, RoutedEventArgs e)
+        {
+            FirstPage = true;
+        }
+
+        private void btnIOFinished_Click(object sender, RoutedEventArgs e)
+        {
+            if (MethodCode.Length < 1)
             {
                 tbStatus.Text = "Missing method body. Please enter method code";
                 return;
@@ -233,16 +304,9 @@ namespace SmaSTraDesigner.Controls.Support
                 return;
             }
 
-            //TODO next Dialog
             DialogResult = true;
         }
-
-        private void btnDeleteInputType_Click(object sender, RoutedEventArgs e)
-        {
-            InputTypeViewModel inputToDelete = (InputTypeViewModel)((Button)sender).DataContext;
-            InputTypesViewModels.Remove(inputToDelete);
-        }
-
+        
 
         public AbstractNodeClass GenerateClassFromInputs()
         {
@@ -280,7 +344,7 @@ namespace SmaSTraDesigner.Controls.Support
         {
             string javaFreandlyName = ElementName.RemoveAll(" ", "_");
 
-            string description = "No description";
+            string description = Description;
             string mainClass = "created." + javaFreandlyName;
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];
@@ -295,6 +359,13 @@ namespace SmaSTraDesigner.Controls.Support
                 dataMethod, startMethod, stopMethod);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propName)
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
     }
 
     public class InputTypeViewModel
@@ -306,7 +377,7 @@ namespace SmaSTraDesigner.Controls.Support
             allTypesString = new string[allDataTypes.Length + 1];
             for (int i = 1; i <= allDataTypes.Length; i++)
             {
-                allTypesString[i] = allDataTypes[i - 1].Name;
+                allTypesString[i] = allDataTypes[i - 1].MinimizedName;
             }
             allTypesString[0] = "[Add new DataType]";
         }
@@ -330,9 +401,11 @@ namespace SmaSTraDesigner.Controls.Support
             }
             set
             {
+                value = value.RemoveAll(" ", "_");
                 if (inputTypeString != value)
                 {
                     inputTypeString = value;
+                    SelectedDataType = null;
                 }
             }
         }

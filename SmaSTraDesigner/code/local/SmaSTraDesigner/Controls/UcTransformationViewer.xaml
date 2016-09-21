@@ -98,7 +98,7 @@
 
         <StackPanel>
             <Grid>
-                <TextBlock Name="tbTransformationName" FontFamily="Tahoma Regular" Foreground="White" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10,3,10,3.5" >
+                <TextBlock Name="tbTransformationName" FontFamily="Tahoma Regular" Foreground="White" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="80" Padding="10,3,10,3.5" >
                     <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Background" Value="{StaticResource ColorDouble}" />

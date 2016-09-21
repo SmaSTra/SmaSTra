@@ -52,5 +52,10 @@ namespace SmaSTraDesigner.Controls.Support
         {
             btnNo.Focus();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DialogResult = true;
+        }
     }
 }
