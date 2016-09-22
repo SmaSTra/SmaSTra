@@ -22,8 +22,11 @@
 			
 		</StackPanel>
 
-		<Border x:Name="bdrViewPort" />
+		<Border x:Name="bdrViewPort"/>
 		<ScrollViewer x:Name="scvCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
+            <ScrollViewer.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#696969"/>
+            </ScrollViewer.Resources>
 			<Viewbox x:Name="vbBackground">
 				<Canvas x:Name="cnvBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="cnvBackground_MouseLeftButtonDown" MouseRightButtonDown="cnvBackground_MouseRightButtonDown" MouseWheel="Canvas_MouseWheel" IsHitTestVisible="True">
                     <Canvas.Background>
