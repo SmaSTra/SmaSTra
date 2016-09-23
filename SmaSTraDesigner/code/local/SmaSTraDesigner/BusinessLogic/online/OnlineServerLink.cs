@@ -19,12 +19,13 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <summary>
         /// The address of the host hosting the web-server.
         /// </summary>
-        private const string HOST_ADDRESS = "http://localhost";
+        private const string HOST_ADDRESS = "http://tobiyas.de";
 
         /// <summary>
         /// The port of the host hosting the web-server.
         /// </summary>
-        private const int HOST_PORT = 8811;
+        private const int HOST_PORT = 8181;
+
 
         /// <summary>
         /// The Prefix for the SmaStra system.

@@ -13,6 +13,8 @@
     using Controls.Support;
     using BusinessLogic.codegeneration.loader;
     using System.IO;
+    using BusinessLogic.online;
+    using System.Diagnostics;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -71,6 +73,11 @@
         }
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            Singleton<OnlineServerLink>.Instance.UploadElement(tdTreeDesigner.SelectedNodeViewers[0].Node.Class, (n, d) =>
+            {
+                Debug.Print("Uploaded: " + n + " - " + d);
+            });
+
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
             foreach(Node node in this.tdTreeDesigner.Tree.Nodes)
             {
