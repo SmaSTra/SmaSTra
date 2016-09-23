@@ -48,8 +48,8 @@
                 <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Padding="5">
                             
                     <StackPanel>
-                        <TextBlock Text="Input types:"/>
-                                <ScrollViewer MaxHeight="150">
+                        <TextBlock Text="Input types:" Margin="0,0,0,10"/>
+                                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
                                     <ItemsControl x:Name="icInputTypes" ItemsSource="{Binding Path=InputTypesViewModels}" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -78,7 +78,7 @@
                         </Border>
                 <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Padding="5">
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Output type:"/>
+                                    <TextBlock Text="Output type:" Margin="0,0,0,10"/>
                         <WrapPanel>
                             <ComboBox x:Name="cboxOutputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1" SelectionChanged="cboxTypesString_SelectionChanged" >
                                 <ComboBox.ItemTemplate>
@@ -100,8 +100,8 @@
                 <!-- Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}" -->
                 <StackPanel Margin="10,50,10,10" Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}">
                     <TextBlock x:Name="tempTbHeader" TextWrapping="Wrap" TextAlignment="Left" Text="public ..." Margin="0,10,0,0" />
-                    <ScrollViewer MaxHeight="300">
-                        <TextBox x:Name="tboxMethodCode" Text="{Binding Path=MethodCode}" TextWrapping="Wrap" AcceptsReturn="True" MinWidth="300" MinHeight="100" Margin="10,0,10,0" />
+                    <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
+                        <TextBox x:Name="tboxMethodCode" Text="{Binding Path=MethodCode}" TextWrapping="Wrap" AcceptsReturn="True" MinWidth="300" MinHeight="150" Margin="10,0,10,0" />
             </ScrollViewer>
                     <TextBlock Text="}"/>
                     <TextBlock x:Name="tbPackageName" TextAlignment="Left" Text="Packange name" Margin="0,10,0,0"/>
