@@ -1,6 +1,6 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
-    class DataSourceNodeClass : AbstractNodeClass
+    public class DataSourceNodeClass : AbstractNodeClass
     {
 
         /// <summary>
@@ -32,12 +32,9 @@
         }
 
 
-        protected override Node generateBaseNode()
+        public override Node generateNode()
         {
-            return new DataSource()
-            {
-                Name = this.DisplayName
-            };
+            return new DataSource(this);
         }
 
     }

@@ -5,7 +5,7 @@ using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
-    class CombinedNodeClass : AbstractNodeClass
+    public class CombinedNodeClass : AbstractNodeClass
     {
 
         #region Properties
@@ -39,18 +39,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             this.SubElements = subElements == null ? new List<SimpleSubNode>() : subElements;
             this.Connections = connections == null ? new List<SimpleConnection>() : connections;
             this.OutputNodeUUID = outputNodeUUID;
-
-            this.BaseNode.Class = this;
         }
 
         #endregion Constructor
 
-        protected override Node generateBaseNode()
+        public override Node generateNode()
         {
-            return new CombinedNode()
-            {
-                Name = this.DisplayName
-            };
+            return new CombinedNode(this);
         }
     }
 

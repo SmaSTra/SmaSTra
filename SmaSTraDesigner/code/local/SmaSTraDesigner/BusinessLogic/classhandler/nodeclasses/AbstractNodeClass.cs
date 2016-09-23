@@ -55,33 +55,9 @@
 
         #endregion constructors
 
-        #region vars
-
-        /// <summary>
-        /// This is the basenode. It is a cached node.
-        /// </summary>
-        protected Node baseNode;
-
-        #endregion vars
 
         #region properties
 
-        /// <summary>
-        /// Gets this node class's base node that is cloned for creation of new nodes.
-        /// </summary>
-        public Node BaseNode {
-            get
-            {
-                if(this.baseNode == null)
-                {
-                    baseNode = generateBaseNode();
-                    baseNode.Class = this;
-                    baseNode.Name = this.DisplayName;
-                }
-
-                return baseNode;
-            }
-        }
 
         /// <summary>
         /// Gets or sets a description for this node class.
@@ -148,10 +124,10 @@
         #region overrideable methods
 
         /// <summary>
-        /// This is called when the node is generated FROM THE CACHE!
+        /// This is called when a new node is generated.
         /// </summary>
-        /// <returns>The base node.</returns>
-        protected abstract Node generateBaseNode();
+        /// <returns>The node to work with.</returns>
+        public abstract Node generateNode();
 
 
         public override string ToString()
