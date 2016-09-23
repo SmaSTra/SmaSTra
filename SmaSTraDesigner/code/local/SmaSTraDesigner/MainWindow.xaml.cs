@@ -231,7 +231,7 @@
         }
         private void AddToLibrary_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Clone());
+            Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Class.generateNode());
         }
 
 

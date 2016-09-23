@@ -30,6 +30,16 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
         #endregion properties
 
 
+        #region constructor
+
+        public CombinedNode(CombinedNodeClass nodeClass)
+        {
+            this.Name = nodeClass.DisplayName;
+            this.Class = nodeClass;
+        }
+
+        #endregion constructor
+
         #region methods
 
         /// <summary>
@@ -131,14 +141,6 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
             }
         }
 
-
-        public override object Clone()
-        {
-            CombinedNode clonedNode = (CombinedNode)base.Clone();
-            //We call this for initing!
-            clonedNode.OnClassChanged(null, this.clazz);
-            return clonedNode;
-        }
 
 
         public override void SetInput(int index, Node output)

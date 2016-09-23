@@ -14,7 +14,7 @@
     /// Provides information about a specific node in a TransformationTree.
     /// Implemented variations are DataSource, Transformation and OutputNode.
     /// </summary>
-    public class Node : INotifyPropertyChanged, ICloneable
+    public class Node : INotifyPropertyChanged
     {
         #region fields
 
@@ -190,16 +190,6 @@
             inputNodes[inputIndex] = inputNode;
         }
 
-        /// <summary>
-        /// Clones this node.
-        /// </summary>
-        /// <returns>A clone of this node.</returns>
-        public virtual object Clone()
-		{
-			Node clone = (Node)this.MemberwiseClone();
-            clone.OnClassChanged(null, this.Class);
-            return clone;
-		}
 
         /// <summary>
         /// Called when the Class property changed its value.

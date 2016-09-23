@@ -968,7 +968,7 @@
             classManager.AddClass(generatedClass);
 
             //Generate the own Node:
-            Node newNode = (Node) generatedClass.BaseNode.Clone();
+            Node newNode = generatedClass.generateNode();
             newNode.PosX = nodes.Average(n => n.PosX);
             newNode.PosY = nodes.Average(n => n.PosY);
 
@@ -1088,7 +1088,7 @@
         {
             Node node = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1;
 			Point mousePos = e.GetPosition(this.cnvBackground);
-			Node newNode = (Node)node.Clone();
+			Node newNode = node.Class.generateNode();
             foreach (Node oldNode in nodeViewers.Keys) // Loading a Node from Library causes odd behavior of the currently selected Node
             {
                 System.Diagnostics.Debug.Print("+++++ first oldNode: " + oldNode.Name);

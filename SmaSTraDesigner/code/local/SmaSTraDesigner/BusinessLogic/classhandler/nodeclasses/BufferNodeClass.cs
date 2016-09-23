@@ -4,7 +4,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
 
 
-    class BufferNodeClass : AbstractNodeClass
+    public class BufferNodeClass : AbstractNodeClass
     {
 
 
@@ -33,12 +33,9 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
         }
 
 
-        protected override Node generateBaseNode()
+        public override Node generateNode()
         {
-            return new BufferNode()
-            {
-                Name = this.DisplayName
-            };
+            return new BufferNode(this);
         }
 
     }

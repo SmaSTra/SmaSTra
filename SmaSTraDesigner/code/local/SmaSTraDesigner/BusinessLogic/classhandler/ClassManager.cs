@@ -1,5 +1,7 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
+    using classhandler;
+    using classhandler.nodeclasses;
     using codegeneration.loader;
     using Common;
     using nodes;
@@ -114,8 +116,11 @@
 			{
 				if (this.baseConversions == null)
 				{
-					this.baseConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && !cls.UserCreated)
-						.Select(cls => (Transformation)cls.BaseNode).ToArray();
+					this.baseConversions = this.classes.Values
+                        .Where(cls => cls is TransformationNodeClass && cls.InputTypes.Length == 1 && !cls.UserCreated)
+						.Select(cls => cls.generateNode() as Transformation)
+                        .NonNull()
+                        .ToArray();
 				}
 
 				return this.baseConversions;
@@ -132,8 +137,11 @@
             {
                 if (this.customConversions == null)
                 {
-                    this.customConversions = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length == 1 && cls.UserCreated)
-                        .Select(cls => (Transformation)cls.BaseNode).ToArray();
+                    this.customConversions = this.classes.Values
+                        .Where(cls => cls is TransformationNodeClass && cls.InputTypes.Length == 1 && cls.UserCreated)
+                        .NonNull()
+                        .Select(cls => cls.generateNode() as Transformation)
+                        .ToArray();
                 }
 
                 return this.customConversions;
@@ -150,8 +158,11 @@
             {
                 if (this.baseBuffers == null)
                 {
-                    this.baseBuffers = this.classes.Values.Where(cls => cls.BaseNode is BufferNode && !cls.UserCreated)
-                        .Select(cls => cls.BaseNode as BufferNode).NonNull().ToArray();
+                    this.baseBuffers = this.classes.Values
+                        .Where(cls => cls is BufferNodeClass && !cls.UserCreated)
+                        .Select(cls => cls.generateNode() as BufferNode)
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.baseBuffers;
@@ -168,8 +179,11 @@
             {
                 if (this.baseBuffers == null)
                 {
-                    this.baseBuffers = this.classes.Values.Where(cls => cls.BaseNode is BufferNode && cls.UserCreated)
-                        .Select(cls => cls.BaseNode as BufferNode).NonNull().ToArray();
+                    this.baseBuffers = this.classes.Values
+                        .Where(cls => cls is BufferNodeClass && cls.UserCreated)
+                        .Select(cls => cls.generateNode() as BufferNode)
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.baseBuffers;
@@ -186,8 +200,11 @@
 			{
 				if (this.baseDataSources == null)
 				{
-					this.baseDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && !cls.UserCreated)
-						.Select(cls => (DataSource)cls.BaseNode).ToArray();
+					this.baseDataSources = this.classes.Values
+                        .Where(cls => cls is DataSourceNodeClass && !cls.UserCreated)
+						.Select(cls => (DataSource)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
 				}
 
 				return this.baseDataSources;
@@ -204,8 +221,11 @@
             {
                 if (this.customDataSources == null)
                 {
-                    this.customDataSources = this.classes.Values.Where(cls => cls.BaseNode is DataSource && cls.UserCreated)
-                        .Select(cls => (DataSource)cls.BaseNode).ToArray();
+                    this.customDataSources = this.classes.Values
+                        .Where(cls => cls is DataSourceNodeClass && cls.UserCreated)
+                        .Select(cls => (DataSource)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.customDataSources;
@@ -222,8 +242,11 @@
 			{
 				if (this.baseTransformations == null)
 				{
-					this.baseTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && !cls.UserCreated)
-						.Select(cls => (Transformation)cls.BaseNode).ToArray();
+					this.baseTransformations = this.classes.Values
+                        .Where(cls => cls is TransformationNodeClass && cls.InputTypes.Length > 1 && !cls.UserCreated)
+						.Select(cls => (Transformation)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
 				}
 
 				return this.baseTransformations;
@@ -240,8 +263,11 @@
             {
                 if (this.customTransformations == null)
                 {
-                    this.customTransformations = this.classes.Values.Where(cls => cls.BaseNode is Transformation && cls.InputTypes.Length > 1 && cls.UserCreated)
-                        .Select(cls => (Transformation)cls.BaseNode).ToArray();
+                    this.customTransformations = this.classes.Values
+                        .Where(cls => cls is TransformationNodeClass && cls.InputTypes.Length > 1 && cls.UserCreated)
+                        .Select(cls => (Transformation)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.customTransformations;
@@ -259,8 +285,11 @@
             {
                 if (this.baseCombinedNodes == null)
                 {
-                    this.baseCombinedNodes = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode)
-                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                    this.baseCombinedNodes = this.classes.Values
+                        .Where(cls => cls is CombinedNodeClass)
+                        .Select(cls => (CombinedNode)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.baseCombinedNodes;
@@ -277,8 +306,11 @@
             {
                 if (this.combinedConversions == null)
                 {
-                    this.combinedConversions = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length == 1)
-                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                    this.combinedConversions = this.classes.Values
+                        .Where(cls => cls is CombinedNodeClass && cls.InputTypes.Length == 1)
+                        .Select(cls => (CombinedNode)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.combinedConversions;
@@ -295,8 +327,11 @@
             {
                 if (this.combinedDataSources == null)
                 {
-                    this.combinedDataSources = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length == 0)
-                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                    this.combinedDataSources = this.classes.Values
+                        .Where(cls => cls is CombinedNodeClass && cls.InputTypes.Length == 0)
+                        .Select(cls => (CombinedNode)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.combinedDataSources;
@@ -313,8 +348,11 @@
             {
                 if (this.combinedTransformations == null)
                 {
-                    this.combinedTransformations = this.classes.Values.Where(cls => cls.BaseNode is CombinedNode && cls.InputTypes.Length > 1)
-                        .Select(cls => (CombinedNode)cls.BaseNode).ToArray();
+                    this.combinedTransformations = this.classes.Values
+                        .Where(cls => cls is CombinedNodeClass && cls.InputTypes.Length > 1)
+                        .Select(cls => (CombinedNode)cls.generateNode())
+                        .NonNull()
+                        .ToArray();
                 }
 
                 return this.combinedTransformations;
@@ -471,12 +509,9 @@
         /// <returns>The first found node with that name, null if none found.</returns>
         public Node GetNewNodeForType(String typeName)
         {
-            Node node = this.BaseConversions
-                .Concat<Node>(BaseDataSources)
-                .Concat<Node>(BaseTransformations)
-                .Concat<Node>(BaseCombinedNodes)
-                .FirstOrDefault(x => x.Class.Name == typeName);
-            return node == null ? node : (Node)node.Clone();
+            AbstractNodeClass node = this.classes.Values
+                .FirstOrDefault(x => x.Name == typeName);
+            return node == null ? null : node.generateNode();
         }
 
 

@@ -47,6 +47,9 @@ namespace SmaSTraDesigner.BusinessLogic.utils
                 //Do not copy the Metadata files:
                 if (file.Name.EndsWith("metadata.json")) continue;
 
+                //Do not copy the depends of CombinedNodes:
+                if (file.Name.EndsWith("dependencies.zip")) continue;
+
                 // Create the path to the new copy of the file.
                 string temppath = Path.Combine(destDirName, file.Name);
 
@@ -109,6 +112,19 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             string temppath = Path.Combine(destDirName, "metadata.json");
 
             File.Delete(temppath);
+        }
+
+        public static void PlainCopy(string sourceDir, string destDir)
+        {
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(sourceDir, "*",
+                SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(sourceDir, destDir));
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(sourceDir, "*.*",
+                SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(sourceDir, destDir), true);
         }
 
 

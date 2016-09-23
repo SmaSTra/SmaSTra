@@ -1,6 +1,6 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
-    class TransformationNodeClass : AbstractNodeClass
+    public class TransformationNodeClass : AbstractNodeClass
     {
 
         public string Method { get;  }
@@ -20,12 +20,9 @@
         }
 
 
-        protected override Node generateBaseNode()
+        public override Node generateNode()
         {
-            return new Transformation()
-            {
-                Name = this.DisplayName
-            };
+            return new Transformation(this);
         }
     }
 }

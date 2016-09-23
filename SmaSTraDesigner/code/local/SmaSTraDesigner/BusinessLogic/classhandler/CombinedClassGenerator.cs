@@ -4,6 +4,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
@@ -17,11 +18,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         private static bool SubTreeContains(Node root, List<Node> nodes)
         {
-            //If empty -> Everything is okay!
-            if (!nodes.Any()) return true;
-
             //Remove the first element:
             if (root != null) nodes.Remove(root);
+
+            //If empty -> Everything is okay!
+            if (!nodes.Any()) return true;
 
             //Check recursivcely:
             foreach (Node input in root.InputNodes.NonNull())
@@ -220,6 +221,29 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
             if (Directory.Exists(savePath)) return false;
             Singleton<NodeLoader>.Instance.saveToFolder(toSave, savePath);
+
+            //Now save the depencies to the depencies.zip.
+            string tmpSaveFolder = Path.Combine(savePath, "dependencies");
+            Directory.CreateDirectory(tmpSaveFolder);
+            this.nodes
+                .Select(n => n.Class)
+                .Where(n => n.UserCreated && n != toSave)
+                .Distinct()
+                .ForEach(c =>
+                {
+                    string nodeDir = Path.Combine(tmpSaveFolder, c.Name);
+                    Directory.CreateDirectory(nodeDir);
+                    DirCopy.PlainCopy(DirCopy.GetPathForNode(c), nodeDir);
+                });
+
+            //Generate the Zip file from that directory:
+            if (!Directory.EnumerateFileSystemEntries(tmpSaveFolder).Empty())
+            {
+                string zipPath = Path.Combine(savePath, "dependencies.zip");
+                ZipFile.CreateFromDirectory(tmpSaveFolder, zipPath, CompressionLevel.NoCompression, false);
+            }
+
+            Directory.Delete(tmpSaveFolder, true);
             return true;
         }
 

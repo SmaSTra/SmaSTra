@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,17 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
 {
     public class BufferNode : Node
     {
+
+
+        #region constructor
+
+        public BufferNode(BufferNodeClass nodeClass)
+        {
+            this.Name = nodeClass.DisplayName;
+            this.Class = nodeClass;
+        }
+
+        #endregion constructor
+
     }
 }
