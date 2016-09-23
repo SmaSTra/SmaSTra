@@ -56,7 +56,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void GetAllOnlineElements(Action<List<SimpleClass>> callback)
+        public void GetAllOnlineElements(Action<List<SimpleClass>, DownloadAllResponse> callback)
         {
             if (callback == null) return;
 
@@ -69,7 +69,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Starts the Download of all Elements.
         /// </summary>
         /// <param name="callback">To call</param>
-        private async void startDownloadAll(Action<List<SimpleClass>> callback)
+        private async void startDownloadAll(Action<List<SimpleClass>, DownloadAllResponse> callback)
         {
             List<SimpleClass> classList = new List<SimpleClass>();
 
@@ -78,10 +78,12 @@ namespace SmaSTraDesigner.BusinessLogic.online
             using (HttpResponseMessage response = await client.GetAsync(address))
             using (HttpContent content = response.Content)
             {
+                DownloadAllResponse resp = DownloadAllResponse.SUCCESS;
                 HttpStatusCode status = response.StatusCode;
                 if(status != HttpStatusCode.OK)
                 {
-                    callback.Invoke(classList);
+                    resp = DownloadAllResponse.FAILED;
+                    callback.Invoke(classList, resp);
                     return;
                 }
 
@@ -102,9 +104,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
                         SimpleClass newElement = new SimpleClass(type, name, display, description, inputs, output);
                         classList.Add(newElement);
                     });
-            }
 
-            callback.Invoke(classList);
+                callback.Invoke(classList, resp);
+            }
         }
 
 
@@ -113,7 +115,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void GetOnlineElement(string name, Action<AbstractNodeClass,bool> callback)
+        public void GetOnlineElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
             if (name == null || callback == null) return;
 
@@ -126,11 +128,11 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void startDownloadOfElement(string name, Action<AbstractNodeClass,bool> callback)
+        private async void startDownloadOfElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
             byte[] data = null;
 
-            bool worked = true;
+            DownloadSingleResponse resp = DownloadSingleResponse.SUCCESS;
             string address = BASE_ADDRESS + "get?name=" + name;
             using (HttpClient client = new HttpClient())
             using (HttpResponseMessage response = await client.GetAsync(address))
@@ -141,17 +143,23 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 {
                     data = await content.ReadAsByteArrayAsync();
                 }
-                else
+
+                if(response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    worked = false;
+                    resp = DownloadSingleResponse.FAILED_NO_NAME;
+                }
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    resp = DownloadSingleResponse.FAILED_NAME_NOT_FOUND;
                 }
 
             }
 
             //If download failed -> break!
-            if (!worked)
+            if (resp != DownloadSingleResponse.SUCCESS)
             {
-                if (callback != null) callback.Invoke(null, false);
+                if (callback != null) callback.Invoke(null, resp);
                 return;
             }
 
@@ -169,16 +177,16 @@ namespace SmaSTraDesigner.BusinessLogic.online
             }catch(Exception exp)
             {
                 Debug.Print(exp.ToString());
-                worked = false;
+                resp = DownloadSingleResponse.FAILED_WHILE_EXTRACTING;
             }
 
             //Cleanup:
             Directory.Delete(tmpPath, true);
-            if (!worked) Directory.Delete(destDir, true);
+            if (resp != DownloadSingleResponse.SUCCESS) Directory.Delete(destDir, true);
 
             //Now try to load the new element:
             AbstractNodeClass newElement = null;
-            if (worked)
+            if (resp == DownloadSingleResponse.SUCCESS)
             {
                 try
                 {
@@ -186,11 +194,11 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 }catch(Exception exp)
                 {
                     Debug.Print(exp.ToString());
-                    worked = false;
+                    resp = DownloadSingleResponse.FAILED_WHILE_LOADING;
                 }
             }
 
-            if (callback != null) callback.Invoke(newElement, worked);
+            if (callback != null) callback.Invoke(newElement, resp);
         }
 
 
@@ -199,7 +207,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void UploadElement(AbstractNodeClass clazz, Action<string, bool> callback)
+        public void UploadElement(AbstractNodeClass clazz, Action<string,UploadResponse> callback)
         {
             string folder = Path.Combine((clazz.UserCreated ? "created" : "generated"), clazz.Name);
             string tmpName = Path.Combine(TMP_PATH, "upload_" + clazz.Name + ".zip");
@@ -220,9 +228,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void uploadFile(string name, byte[] data, Action<string, bool> callback)
+        private async void uploadFile(string name, byte[] data, Action<string,UploadResponse> callback)
         {
-            bool worked = false;
+            UploadResponse resp = UploadResponse.FAILED_DUPLICATE_NAME;
 
             var contentToSend = new ByteArrayContent(data);
             contentToSend.Headers.Add("name", name);
@@ -234,12 +242,22 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 //Did work!
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    worked = true;
+                    resp = UploadResponse.SUCCESS;
+                }
+
+                if(response.StatusCode == (HttpStatusCode)409)
+                {
+                    resp = UploadResponse.FAILED_DUPLICATE_NAME;
+                }
+
+                if (response.StatusCode == (HttpStatusCode)422)
+                {
+                    resp = UploadResponse.FAILED_NO_NAME;
                 }
             }
 
             //Tell if worked:
-            if (callback != null) callback.Invoke(name, worked);
+            if (callback != null) callback.Invoke(name, resp);
         }
     }
 

@@ -165,6 +165,7 @@
     <Compile Include="BusinessLogic\nodes\Transformation.cs" />
     <Compile Include="BusinessLogic\classhandler\TransformationTree.cs" />
     <Compile Include="BusinessLogic\online\OnlineServerLink.cs" />
+    <Compile Include="BusinessLogic\online\OnlineServiceResponse.cs" />
     <Compile Include="BusinessLogic\utils\DirCopy.cs" />
     <Compile Include="BusinessLogic\utils\Extensions.cs" />
     <Compile Include="BusinessLogic\utils\UIConnectionRefresher.cs" />
