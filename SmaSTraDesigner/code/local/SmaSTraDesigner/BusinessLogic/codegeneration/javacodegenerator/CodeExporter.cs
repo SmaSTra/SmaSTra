@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator

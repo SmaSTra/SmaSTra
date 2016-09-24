@@ -327,6 +327,7 @@ namespace SmaSTraDesigner.Controls.Support
 
             string description = "No description";
             string mainClass = "created." + javaFreandlyName;
+            string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];
             ConfigElement[] config = new ConfigElement[0];
@@ -334,7 +335,7 @@ namespace SmaSTraDesigner.Controls.Support
             string methodName = javaFreandlyName;
             bool isStatic = true;
 
-            return new TransformationNodeClass(javaFreandlyName, ElementName, description, OutputType, InputTypes.ToArray(), 
+            return new TransformationNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, InputTypes.ToArray(), 
                 mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true,
                 methodName, isStatic);
         }
@@ -346,6 +347,7 @@ namespace SmaSTraDesigner.Controls.Support
 
             string description = Description;
             string mainClass = "created." + javaFreandlyName;
+            string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];
             ConfigElement[] config = new ConfigElement[0];
@@ -354,7 +356,7 @@ namespace SmaSTraDesigner.Controls.Support
             string startMethod = "start";
             string stopMethod = "stop";
 
-            return new DataSourceNodeClass(javaFreandlyName, ElementName, description, OutputType, 
+            return new DataSourceNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, 
                 mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true,
                 dataMethod, startMethod, stopMethod);
         }

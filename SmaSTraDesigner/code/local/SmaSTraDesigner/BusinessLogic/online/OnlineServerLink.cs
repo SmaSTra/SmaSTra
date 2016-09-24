@@ -1,6 +1,7 @@
 ﻿using Common;
 using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
+using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,6 @@ namespace SmaSTraDesigner.BusinessLogic.online
     public class OnlineServerLink
     {
 
-        /// <summary>
-        /// The address of the host hosting the web-server.
-        /// </summary>
-        private const string HOST_ADDRESS = "http://localhost";
-
-        /// <summary>
-        /// The port of the host hosting the web-server.
-        /// </summary>
-        private const int HOST_PORT = 8811;
-
-        /// <summary>
-        /// The Prefix for the SmaStra system.
-        /// </summary>
-        private const string HOST_BASE = "SmaSTraWebServer";
 
         /// <summary>
         /// The path for the TMP directory.
@@ -37,9 +24,14 @@ namespace SmaSTraDesigner.BusinessLogic.online
         private const string TMP_PATH = "tmp";
 
         /// <summary>
-        /// The Complete base-Address, ending with a slash.
+        /// The last check if the web-server is there.
         /// </summary>
-        private readonly string BASE_ADDRESS = HOST_ADDRESS + ":" + HOST_PORT + "/" + HOST_BASE + "/";
+        private long lastCheckedOnlineTime = 0;
+
+        /// <summary>
+        /// The last check if the web-server is there.
+        /// </summary>
+        private bool lastCheckedOnline = false;
 
 
 
@@ -55,55 +47,122 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void GetAllOnlineElements(Action<List<SimpleClass>> callback)
+        public void GetAllOnlineElements(Action<List<SimpleClass>, DownloadAllResponse> callback)
         {
             if (callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(null, DownloadAllResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
 
             Task t = new Task(() => startDownloadAll(callback));
             t.Start();
         }
+
+
+        /// <summary>
+        /// Checks the online-Service. If not available, returns false.
+        /// This works SYNC!
+        /// </summary>
+        /// <returns>if the service is online. Be aware, that this is sync!</returns>
+        private bool CheckOnlineSync()
+        {
+            long now = System.DateTime.Now.Ticks;
+            if((lastCheckedOnlineTime + 10000) > now)
+            {
+                return lastCheckedOnline;
+            }
+
+            this.lastCheckedOnlineTime = now;
+            try
+            {
+                string address = GetBaseAddress() + "ping";
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = client.GetAsync(address).Result)
+                using (HttpContent content = response.Content)
+                {
+                    HttpStatusCode status = response.StatusCode;
+                    this.lastCheckedOnline = status == HttpStatusCode.OK;
+                }
+            }
+            catch (Exception exp)
+            {
+                Debug.Print("Server not reachable?! Check your config!");
+                Debug.Print(exp.ToString());
+
+                this.lastCheckedOnline = false;
+            }
+
+            return lastCheckedOnline;
+        }
+        
 
         
         /// <summary>
         /// Starts the Download of all Elements.
         /// </summary>
         /// <param name="callback">To call</param>
-        private async void startDownloadAll(Action<List<SimpleClass>> callback)
+        private async void startDownloadAll(Action<List<SimpleClass>, DownloadAllResponse> callback)
         {
             List<SimpleClass> classList = new List<SimpleClass>();
 
-            string address = BASE_ADDRESS + "all";
-            using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.GetAsync(address))
-            using (HttpContent content = response.Content)
+            string address = GetBaseAddress() + "all";
+            DownloadAllResponse resp = DownloadAllResponse.FAILED_EXCEPTION;
+
+            try
             {
-                HttpStatusCode status = response.StatusCode;
-                if(status != HttpStatusCode.OK)
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(address))
+                using (HttpContent content = response.Content)
                 {
-                    callback.Invoke(classList);
-                    return;
+                    HttpStatusCode status = response.StatusCode;
+                    if(status != HttpStatusCode.OK)
+                    {
+                        resp = DownloadAllResponse.FAILED_EXCEPTION;
+                        callback.Invoke(classList, resp);
+                        return;
+                    }
+
+
+                    //Success!
+                    resp = DownloadAllResponse.SUCCESS;
+
+
+                    // ... Read the string.
+                    string result = await content.ReadAsStringAsync();
+                    JArray.Parse(result)
+                        .ToJObj()
+                        .ForEach(o =>
+                        {
+                            string type = o.GetValueAsString("type", "");
+                            string name = o.GetValueAsString("name", "");
+                            string display = o.GetValueAsString("display", "");
+                            string description = o.GetValueAsString("description", "");
+                            string[] inputs = o.GetValueAsStringArray("inputs");
+                            string output = o.GetValueAsString("output", "");
+
+                            SimpleClass newElement = new SimpleClass(type, name, display, description, inputs, output);
+                            classList.Add(newElement);
+                        });
+
                 }
 
-
-                // ... Read the string.
-                string result = await content.ReadAsStringAsync();
-                JArray.Parse(result)
-                    .ToJObj()
-                    .ForEach(o =>
-                    {
-                        string type = o.GetValueAsString("type", "");
-                        string name = o.GetValueAsString("name", "");
-                        string display = o.GetValueAsString("display", "");
-                        string description = o.GetValueAsString("description", "");
-                        string[] inputs = o.GetValueAsStringArray("inputs");
-                        string output = o.GetValueAsString("output", "");
-
-                        SimpleClass newElement = new SimpleClass(type, name, display, description, inputs, output);
-                        classList.Add(newElement);
-                    });
+            }
+            catch (HttpRequestException exp)
+            {
+                Debug.Print("Server not reachable?! Check your config!");
+                Debug.Print(exp.ToString());
+                resp = DownloadAllResponse.FAILED_SERVER_NOT_REACHABLE;
+            }
+            catch (Exception exp)
+            {
+                Debug.Print("Exception while Downloading all elements");
+                Debug.Print(exp.ToString());
+                resp = DownloadAllResponse.FAILED_EXCEPTION;
             }
 
-            callback.Invoke(classList);
+            callback.Invoke(classList, resp);
         }
 
 
@@ -112,9 +171,14 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void GetOnlineElement(string name, Action<AbstractNodeClass,bool> callback)
+        public void GetOnlineElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
             if (name == null || callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(null, DownloadSingleResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
 
             Task t = new Task(() => startDownloadOfElement(name, callback));
             t.Start();
@@ -125,38 +189,65 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void startDownloadOfElement(string name, Action<AbstractNodeClass,bool> callback)
+        private async void startDownloadOfElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
             byte[] data = null;
 
-            bool worked = true;
-            string address = BASE_ADDRESS + "get?name=" + name;
-            using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.GetAsync(address))
-            using (HttpContent content = response.Content)
+            DownloadSingleResponse resp = DownloadSingleResponse.FAILED_EXCEPTION;
+            string address = GetBaseAddress() + "get?name=" + name;
+            try
             {
-                //Did work!
-                if (response.StatusCode == HttpStatusCode.OK)
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(address))
+                using (HttpContent content = response.Content)
                 {
-                    data = await content.ReadAsByteArrayAsync();
-                }
-                else
-                {
-                    worked = false;
-                }
+                    //Did work!
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        data = await content.ReadAsByteArrayAsync();
+                        resp = DownloadSingleResponse.SUCCESS;
+                    }
 
+                    if(response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        resp = DownloadSingleResponse.FAILED_NO_NAME;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        resp = DownloadSingleResponse.FAILED_NAME_NOT_FOUND;
+                    }
+                }
+            }
+            catch (HttpRequestException exp)
+            {
+                Debug.Print("Server not reachable?! Check your config!");
+                Debug.Print(exp.ToString());
+                resp = DownloadSingleResponse.FAILED_SERVER_NOT_REACHABLE;
+            }
+            catch (Exception exp)
+            {
+                Debug.Print("Exception while Downloading Element :" + name);
+                Debug.Print(exp.ToString());
+                resp = DownloadSingleResponse.FAILED_EXCEPTION;
             }
 
             //If download failed -> break!
-            if (!worked)
+            if (resp != DownloadSingleResponse.SUCCESS)
             {
-                if (callback != null) callback.Invoke(null, false);
+                if (callback != null) callback.Invoke(null, resp);
                 return;
             }
 
-            string tmpPath = Path.Combine(TMP_PATH, name + "_download");
+            string workSpace = SmaSTraConfiguration.WORK_SPACE;
+            string tmpPath = Path.Combine(workSpace, TMP_PATH, name + "_download");
             string tmpZipPath = Path.Combine(tmpPath, "data.zip");
-            string destDir = Path.Combine("created", name);
+            string destDir = Path.Combine(workSpace, "created", name);
+
+            //Just to be sure we do not have some old remainings.
+            if(Directory.Exists(tmpPath)) Directory.Delete(tmpPath, true);
+
+            //Now create new stuff:
             Directory.CreateDirectory(tmpPath);
             Directory.CreateDirectory(destDir);
 
@@ -168,16 +259,16 @@ namespace SmaSTraDesigner.BusinessLogic.online
             }catch(Exception exp)
             {
                 Debug.Print(exp.ToString());
-                worked = false;
+                resp = DownloadSingleResponse.FAILED_WHILE_EXTRACTING;
             }
 
             //Cleanup:
             Directory.Delete(tmpPath, true);
-            if (!worked) Directory.Delete(destDir, true);
+            if (resp != DownloadSingleResponse.SUCCESS) Directory.Delete(destDir, true);
 
             //Now try to load the new element:
             AbstractNodeClass newElement = null;
-            if (worked)
+            if (resp == DownloadSingleResponse.SUCCESS)
             {
                 try
                 {
@@ -185,11 +276,11 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 }catch(Exception exp)
                 {
                     Debug.Print(exp.ToString());
-                    worked = false;
+                    resp = DownloadSingleResponse.FAILED_WHILE_LOADING;
                 }
             }
 
-            if (callback != null) callback.Invoke(newElement, worked);
+            if (callback != null) callback.Invoke(newElement, resp);
         }
 
 
@@ -198,10 +289,17 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Calls the callback when done.
         /// </summary>
         /// <param name="callback">to call when done.</param>
-        public void UploadElement(AbstractNodeClass clazz, Action<string, bool> callback)
+        public void UploadElement(AbstractNodeClass clazz, Action<string,UploadResponse> callback)
         {
-            string folder = Path.Combine((clazz.UserCreated ? "created" : "generated"), clazz.Name);
-            string tmpName = Path.Combine(TMP_PATH, "upload_" + clazz.Name + ".zip");
+            if (clazz == null || callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(null, UploadResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
+
+            string folder = Path.Combine(SmaSTraConfiguration.WORK_SPACE, (clazz.UserCreated ? "created" : "generated"), clazz.Name);
+            string tmpName = Path.Combine(SmaSTraConfiguration.WORK_SPACE, TMP_PATH, "upload_" + clazz.Name + ".zip");
             ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);
 
             Task t = new Task(() => uploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n,b) =>
@@ -219,27 +317,67 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void uploadFile(string name, byte[] data, Action<string, bool> callback)
+        private async void uploadFile(string name, byte[] data, Action<string,UploadResponse> callback)
         {
-            bool worked = false;
+            UploadResponse resp = UploadResponse.FAILED_DUPLICATE_NAME;
 
             var contentToSend = new ByteArrayContent(data);
             contentToSend.Headers.Add("name", name);
 
-            string address = BASE_ADDRESS + "add";
-            using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = await client.PostAsync(address, contentToSend))
+            try
             {
-                //Did work!
-                if (response.StatusCode == HttpStatusCode.OK)
+                string address = GetBaseAddress() + "add";
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.PostAsync(address, contentToSend))
                 {
-                    worked = true;
+                    //Did work!
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        resp = UploadResponse.SUCCESS;
+                    }
+
+                    if (response.StatusCode == (HttpStatusCode)409)
+                    {
+                        resp = UploadResponse.FAILED_DUPLICATE_NAME;
+                    }
+
+                    if (response.StatusCode == (HttpStatusCode)422)
+                    {
+                        resp = UploadResponse.FAILED_NO_NAME;
+                    }
                 }
             }
+            catch (HttpRequestException exp)
+            {
+                Debug.Print("Server not reachable?! Check your config!");
+                Debug.Print(exp.ToString());
+                resp = UploadResponse.FAILED_SERVER_NOT_REACHABLE;
+            }
+            catch (Exception exp)
+            {
+                Debug.Print("Exception while Uploading Element: " + name);
+                Debug.Print(exp.ToString());
+            }
+
 
             //Tell if worked:
-            if (callback != null) callback.Invoke(name, worked);
+            if (callback != null) callback.Invoke(name, resp);
         }
+
+        /// <summary>
+        /// Gets the base address for the Online-service.
+        /// </summary>
+        /// <returns>the base address</returns>
+        private string GetBaseAddress()
+        {
+            SmaSTraConfiguration config = Singleton<SmaSTraConfiguration>.Instance;
+            string host = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_HOST_PATH, "http://localhost");
+            string port = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PORT_PATH, "8080");
+            string prefix = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PREFIX_PATH, "SmaSTraWebServer");
+
+            return host + ":" + port + "/" + prefix + "/";
+        }
+
     }
 
 

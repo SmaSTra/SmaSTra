@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using BusinessLogic;
-
     using Common.Resources.Converters;
     using BusinessLogic.classhandler;
 

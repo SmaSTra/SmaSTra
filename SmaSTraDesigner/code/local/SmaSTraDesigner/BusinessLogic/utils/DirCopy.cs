@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using SmaSTraDesigner.BusinessLogic.config;
+using System.IO;
 
 namespace SmaSTraDesigner.BusinessLogic.utils
 {
@@ -130,13 +131,14 @@ namespace SmaSTraDesigner.BusinessLogic.utils
 
         public static string GetPathForNode(AbstractNodeClass nodeClass)
         {
-            string path = Path.Combine("generated", nodeClass.Name);
+            string workspace = SmaSTraConfiguration.WORK_SPACE;
+            string path = Path.Combine(workspace, "generated", nodeClass.Name);
             if (Directory.Exists(path))
             {
                 return path;
             }
 
-            return Path.Combine("created", nodeClass.Name);
+            return Path.Combine(workspace, "created", nodeClass.Name);
         }
 
     }

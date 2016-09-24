@@ -184,6 +184,13 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return string.Join("", split);
         }
 
+
+        public static string[] Sort(this string[] toSort)
+        {
+            Array.Sort(toSort, StringComparer.InvariantCultureIgnoreCase);
+            return toSort;
+        }
+
     }
 
 

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.serializers;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -126,7 +127,7 @@ namespace SmaSTraDesigner.BusinessLogic
                 .Select(serializer.serializeNode)
                 .ForEach(array.Add);
 
-            File.WriteAllText(LIB_FILE_NAME, lib.ToString());
+            File.WriteAllText(Path.Combine(SmaSTraConfiguration.WORK_SPACE, LIB_FILE_NAME), lib.ToString());
         }
 
 
@@ -137,7 +138,7 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             this.libraryNodeViewerList.Clear();
 
-            if (!File.Exists(LIB_FILE_NAME))
+            if (!File.Exists(Path.Combine(SmaSTraConfiguration.WORK_SPACE, LIB_FILE_NAME)))
             {
                 return;
             }

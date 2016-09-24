@@ -30,11 +30,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         #region Constructor
 
         public CombinedNodeClass(string name,
-                string displayName, string description,
+                string displayName, string description, string creator,
                 List<SimpleSubNode> subElements, List<SimpleConnection> connections,
                 DataType outputType, string outputNodeUUID, bool userCreated,
                 DataType[] inputTypes = null)
-                    : base(ClassManager.NodeType.Combined, name, displayName, description, outputType, "", null, null, null, null, inputTypes, userCreated)
+                    : base(ClassManager.NodeType.Combined, name, displayName, description, creator, outputType, "", null, null, null, null, inputTypes, userCreated)
         {
             this.SubElements = subElements == null ? new List<SimpleSubNode>() : subElements;
             this.Connections = connections == null ? new List<SimpleConnection>() : connections;

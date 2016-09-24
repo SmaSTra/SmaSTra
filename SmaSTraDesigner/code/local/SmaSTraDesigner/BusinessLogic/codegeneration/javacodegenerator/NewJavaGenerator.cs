@@ -8,7 +8,6 @@ using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration

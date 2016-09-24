@@ -23,7 +23,7 @@
         /// <param name="mainClass">This is the MainClass in the java world</param>
         /// <param name="needsOtherClasses">The other classes needed for the Java class to work</param>
         /// <param name="needsPermissions">The Permissions needed for this element</param>
-        protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description,  DataType outputType, 
+        protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description, string creator,  DataType outputType, 
             string mainClass, string[] needsOtherClasses, string[] needsPermissions,
             ConfigElement[] configuration, ProxyProperty[] proxyProperties,
             DataType[] inputTypes, bool userCreated)
@@ -41,6 +41,7 @@
 			this.Name = name;
             this.DisplayName = displayName;
             this.Description = description;
+            this.Creator = creator;
 			this.OutputType = outputType;
 			this.InputTypes = inputTypes == null ? new DataType[0] : inputTypes;
             this.MainClass = mainClass;
@@ -63,6 +64,11 @@
         /// Gets or sets a description for this node class.
         /// </summary>
         public string Description { get; }
+
+        /// <summary>
+        /// Gets the creator of this element.
+        /// </summary>
+        public string Creator { get; }
 
         /// <summary>
         /// Gets or sets a display name for this node class.

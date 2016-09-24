@@ -25,6 +25,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
+            string creator = ReadCreator(root).EmptyDefault("Unknown");
             DataType output = ReadOutput(root);
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
@@ -36,7 +37,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             string stopMethod = ReadStopMethod(root);
             bool userCreated = ReadUserCreated(root);
 
-            return new DataSourceNodeClass(name, displayName, description, output, mainClass, 
+            return new DataSourceNodeClass(name, displayName, description, creator, output, mainClass, 
                 needsOtherClasses, neededPermissions, config, proxyProperties, userCreated,
                 dataMethod, startMethod, stopMethod);
         }
@@ -74,6 +75,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddConfig(root, nodeClass.Configuration);
             AddProxyProperties(root, nodeClass.ProxyProperties);
             AddUserCreated(root, nodeClass.UserCreated);
+            AddCreator(root, nodeClass.Creator);
 
             AddDataMethod(root, sourceClass.DataMethod);
             AddStartMethod(root, sourceClass.StartMethod);

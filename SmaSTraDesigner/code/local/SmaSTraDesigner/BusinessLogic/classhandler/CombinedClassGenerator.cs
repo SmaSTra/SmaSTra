@@ -1,5 +1,6 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
+using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
@@ -199,9 +200,12 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
             //Generate the BaseNode:
             DataType output = root.Class.OutputType;
+            string creator = Environment.UserName;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, subNodes, connections, output, root.NodeUUID, true, inputs.ToArray());
+            CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, creator, 
+                subNodes, connections, output, root.NodeUUID, true, 
+                inputs.ToArray());
 
             this.cachedNodeClass = finalNodeClass;
             return finalNodeClass;
@@ -216,7 +220,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             CombinedNodeClass toSave = GenerateClass();
             if (toSave == null) return false;
 
-            string savePath = Path.Combine(Environment.CurrentDirectory, "created");
+            string savePath = Path.Combine(SmaSTraConfiguration.WORK_SPACE, "created");
             savePath = Path.Combine(savePath, toSave.DisplayName);
 
             if (Directory.Exists(savePath)) return false;

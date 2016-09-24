@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.IO;
     using System.Linq;
 
     using Microsoft.Win32;
@@ -16,8 +15,6 @@
     /// </summary>
     public class TransformationTree
 	{
-
-        private bool USE_NEW_GEN = true;
 
         #region constructors
 
@@ -90,8 +87,6 @@
         /// </summary>
         public void createJava()
         {
-            JavaGenerator javaGenerator = new JavaGenerator();
-
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Java Source File Java Code (*.java)|*.java";
             saveFileDialog.InitialDirectory = Environment.CurrentDirectory;
@@ -110,23 +105,9 @@
                 Console.WriteLine(directory);
                 try
                 {
-                    if (USE_NEW_GEN)
-                    {
-                        new NewJavaGenerator(this).CreateJavaSource(directory, className);
-                    }
-                    else
-                    {
-                        code = javaGenerator.traverse(OutputNode.InputNodes[0], visited, numbers, true, directory);
-                        string completeJavaText = javaGenerator.assembleText(className, code);
-                        File.WriteAllText(saveFileDialog.FileName, completeJavaText);
-                    }
-                    
+                    new NewJavaGenerator(this).CreateJavaSource(directory, className);
                 }
-                catch (NullNodeException e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-                catch (InvalidArgumentException e)
+                catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
@@ -155,7 +136,7 @@
         }
 
         /// <summary>
-        /// 
+        /// Loads a saved state and restores it.
         /// </summary>
         public void loadFromFile()
         {

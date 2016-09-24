@@ -4,6 +4,7 @@
     using classhandler.nodeclasses;
     using codegeneration.loader;
     using Common;
+    using config;
     using nodes;
     using System;
     using System.Collections.Generic;
@@ -462,6 +463,30 @@
         {
             return dataTypes.Values.ToArray();
         }
+
+        /// <summary>
+        /// This reloads everything in the ClassManager.
+        /// </summary>
+        public void Reload()
+        {
+            //Clear all the classes already present:
+            this.classes.Clear();
+
+            //Clear all the GUI element-references:
+            this.baseConversions = null;
+            this.customConversions = null;
+            this.baseBuffers = null;
+            this.customBuffers = null;
+            this.baseDataSources = null;
+            this.customDataSources = null;
+            this.baseTransformations = null;
+            this.customTransformations = null;
+
+            //Now reload ower folders:
+            LoadClasses(Path.Combine(SmaSTraConfiguration.WORK_SPACE, "generated"));
+            LoadClasses(Path.Combine(SmaSTraConfiguration.WORK_SPACE, "created"));
+        }
+
 
 		/// <summary>
 		/// Load all node classes from a directory path.

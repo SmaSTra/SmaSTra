@@ -45,12 +45,12 @@ public class SmaSTraFileRepository {
 	/**
 	 * The path to the path-base.
 	 */
-	private final File basePath = new File("Elements");
+	private final File basePath = new File("/home/SmaSTra/Elements");
 	
 	/**
 	 * The tmp folder for saving / loading.
 	 */
-	private final File tmpPath = new File("TMP_DATA");
+	private final File tmpPath = new File("/home/SmaSTra/TMP_DATA");
 	
 	/**
 	 * All the json as String cache.

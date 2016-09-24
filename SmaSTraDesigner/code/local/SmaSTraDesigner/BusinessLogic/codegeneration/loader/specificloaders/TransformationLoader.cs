@@ -33,6 +33,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
+            string creator = ReadCreator(root).EmptyDefault("Unknown");
             DataType output = ReadOutput(root);
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
@@ -44,7 +45,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             DataType[] inputs = ReadInputs(root);
             bool userCreated = ReadUserCreated(root);
 
-            return new TransformationNodeClass(name, displayName, description, output, inputs, mainClass, 
+            return new TransformationNodeClass(name, displayName, description, creator, output, inputs, mainClass, 
                 needsOtherClasses, neededPermissions, config, proxyProperties, userCreated,
                 methodName, isStatic);
         }
@@ -79,6 +80,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddOwnType(root);
             AddDescription(root, nodeClass.Description);
             AddDisplayName(root, nodeClass.DisplayName);
+            AddCreator(root, nodeClass.Creator);
             AddOutput(root, nodeClass.OutputType);
             AddMainClass(root, nodeClass.MainClass);
             AddNeededClasses(root, nodeClass.NeedsOtherClasses);

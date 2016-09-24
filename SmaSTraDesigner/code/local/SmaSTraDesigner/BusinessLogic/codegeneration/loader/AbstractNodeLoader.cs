@@ -23,6 +23,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         private const string JSON_PROP_DISPLAY = "display";
 
         /// <summary>
+        /// Name of the person created this element.
+        /// </summary>
+        private const string JSON_PROP_CREATOR = "creator";
+
+        /// <summary>
         /// Name of the input type(s) property field in JSON metadata.
         /// </summary>
         private const string JSON_PROP_INPUT = "input";
@@ -189,6 +194,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         }
 
         /// <summary>
+        /// Reads the Creator from the Json.
+        /// </summary>
+        /// <param name="root">to read from.</param>
+        /// <returns>the Creator.</returns>
+        protected string ReadCreator(JObject root)
+        {
+            return root.GetValueAsString(JSON_PROP_CREATOR, "Unknown");
+        }
+
+        /// <summary>
         /// Reads if this node is Created by a user.
         /// </summary>
         /// <param name="root">to read from</param>
@@ -321,6 +336,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         protected void AddDisplayName(JObject toAddTo, string display)
         {
             toAddTo.Add(JSON_PROP_DISPLAY, display);
+        }
+
+        /// <summary>
+        /// Adds the Creator name passed to the Object.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="creator">to add.</param>
+        protected void AddCreator(JObject toAddTo, string creator)
+        {
+            toAddTo.Add(JSON_PROP_CREATOR, creator);
         }
 
         /// <summary>
