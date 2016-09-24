@@ -7,11 +7,11 @@
 
         public bool IsStatic { get; }
 
-        public TransformationNodeClass(string name, string displayName, string description, DataType outputType, DataType[] inputTypes,
+        public TransformationNodeClass(string name, string displayName, string description, string creator, DataType outputType, DataType[] inputTypes,
             string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config, ProxyProperty[] proxyProperties,
             bool userCreated,
             string methodName, bool isStatic)
-            : base(ClassManager.NodeType.Transformation, name, displayName, description, outputType, 
+            : base(ClassManager.NodeType.Transformation, name, displayName, description, creator, outputType, 
                   mainClass, needsOtherClasses, needsPermissions, 
                   config, proxyProperties, inputTypes, userCreated)
         {

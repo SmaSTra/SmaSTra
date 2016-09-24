@@ -34,6 +34,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             AddConfig(root, nodeClass.Configuration);
             AddProxyProperties(root, nodeClass.ProxyProperties);
             AddUserCreated(root, nodeClass.UserCreated);
+            AddCreator(root, nodeClass.Creator);
 
             AddBufferAdd(root, bufferClass.BufferAddMethod);
             AddBufferGet(root, bufferClass.BufferGetMethod);
@@ -81,6 +82,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
+            string creator = ReadCreator(root).EmptyDefault("Unknown");
             DataType output = genericData;
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
@@ -93,7 +95,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             string bufferAddMethod = ReadBufferAdd(root);
             string bufferGetMethod = ReadBufferGet(root);
 
-            return new BufferNodeClass(name, displayName, description, output, mainClass,
+            return new BufferNodeClass(name, displayName, description, creator, output, mainClass,
                 needsOtherClasses, neededPermissions, config, proxyProperties, inputTypes, userCreated,
                 bufferAddMethod, bufferGetMethod);
         }

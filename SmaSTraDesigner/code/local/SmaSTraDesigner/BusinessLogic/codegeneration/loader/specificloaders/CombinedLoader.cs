@@ -114,6 +114,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
+            string creator = ReadCreator(root).EmptyDefault("Unknown");
             DataType output = ReadOutput(root);
             DataType[] inputs = ReadInputs(root);
             List<SimpleSubNode> subNodes = ReadSubNodes(root);
@@ -121,7 +122,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             string outputNodeID = ReadOutputNodeID(root);
             bool userCreated = ReadUserCreated(root);
 
-            return new CombinedNodeClass(name, name, description, subNodes, connection, output, outputNodeID, userCreated, inputs);
+            return new CombinedNodeClass(name, name, description, creator, subNodes, connection, output, outputNodeID, userCreated, inputs);
         }
 
         public override JObject classToJson(AbstractNodeClass nodeClass)
@@ -140,6 +141,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddInputs(root, nodeClass.InputTypes);
             AddProxyProperties(root, combinedClass.ProxyProperties);
             AddUserCreated(root, nodeClass.UserCreated);
+            AddCreator(root, nodeClass.Creator);
 
             AddConnections(root, combinedClass.Connections);
             AddSubNodes(root, combinedClass.SubElements);
