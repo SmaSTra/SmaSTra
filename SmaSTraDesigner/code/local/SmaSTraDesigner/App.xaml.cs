@@ -34,8 +34,11 @@
         {
             SmaSTraConfiguration.WORK_SPACE = newWorkspace;
 
+            Singleton<SmaSTraConfiguration>.Instance.Reload();
             Singleton<ClassManager>.Instance.Reload();
             Singleton<Library>.Instance.loadLibrary();
+
+            //TODO add reload of Transformation Tree here!
         }
 
 		#endregion event handlers

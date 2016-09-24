@@ -23,6 +23,16 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         private const string TMP_PATH = "tmp";
 
+        /// <summary>
+        /// The last check if the web-server is there.
+        /// </summary>
+        private long lastCheckedOnlineTime = 0;
+
+        /// <summary>
+        /// The last check if the web-server is there.
+        /// </summary>
+        private bool lastCheckedOnline = false;
+
 
 
         public OnlineServerLink()
@@ -40,10 +50,53 @@ namespace SmaSTraDesigner.BusinessLogic.online
         public void GetAllOnlineElements(Action<List<SimpleClass>, DownloadAllResponse> callback)
         {
             if (callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(null, DownloadAllResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
 
             Task t = new Task(() => startDownloadAll(callback));
             t.Start();
         }
+
+
+        /// <summary>
+        /// Checks the online-Service. If not available, returns false.
+        /// This works SYNC!
+        /// </summary>
+        /// <returns>if the service is online. Be aware, that this is sync!</returns>
+        private bool CheckOnlineSync()
+        {
+            long now = System.DateTime.Now.Ticks;
+            if((lastCheckedOnlineTime + 10000) > now)
+            {
+                return lastCheckedOnline;
+            }
+
+            this.lastCheckedOnlineTime = now;
+            try
+            {
+                string address = GetBaseAddress() + "ping";
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = client.GetAsync(address).Result)
+                using (HttpContent content = response.Content)
+                {
+                    HttpStatusCode status = response.StatusCode;
+                    this.lastCheckedOnline = status == HttpStatusCode.OK;
+                }
+            }
+            catch (Exception exp)
+            {
+                Debug.Print("Server not reachable?! Check your config!");
+                Debug.Print(exp.ToString());
+
+                this.lastCheckedOnline = false;
+            }
+
+            return lastCheckedOnline;
+        }
+        
 
         
         /// <summary>
@@ -121,6 +174,11 @@ namespace SmaSTraDesigner.BusinessLogic.online
         public void GetOnlineElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
             if (name == null || callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(null, DownloadSingleResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
 
             Task t = new Task(() => startDownloadOfElement(name, callback));
             t.Start();
@@ -233,6 +291,13 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <param name="callback">to call when done.</param>
         public void UploadElement(AbstractNodeClass clazz, Action<string,UploadResponse> callback)
         {
+            if (clazz == null || callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(null, UploadResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
+
             string folder = Path.Combine(SmaSTraConfiguration.WORK_SPACE, (clazz.UserCreated ? "created" : "generated"), clazz.Name);
             string tmpName = Path.Combine(SmaSTraConfiguration.WORK_SPACE, TMP_PATH, "upload_" + clazz.Name + ".zip");
             ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);

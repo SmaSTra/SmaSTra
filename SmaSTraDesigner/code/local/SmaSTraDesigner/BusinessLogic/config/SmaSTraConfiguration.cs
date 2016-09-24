@@ -33,14 +33,14 @@ namespace SmaSTraDesigner.BusinessLogic.config
 
         public SmaSTraConfiguration()
         {
-            reload();
+            Reload();
         }
 
 
         /// <summary>
         /// Reloads the config.
         /// </summary>
-        public void reload()
+        public void Reload()
         {
             config.Clear();
 
