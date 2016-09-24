@@ -1,17 +1,18 @@
 ﻿namespace SmaSTraDesigner
 {
-	using System;
-	using System.IO;
-	using System.Windows;
+    using System;
+    using System.IO;
+    using System.Windows;
 
-	using Common;
+    using Common;
 
-	using SmaSTraDesigner.BusinessLogic;
+    using SmaSTraDesigner.BusinessLogic;
+    using BusinessLogic.config;
 
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
-	public partial class App : Application
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
 	{
 		#region event handlers
 
@@ -21,9 +22,19 @@
 
 		private void Application_Startup(object sender, StartupEventArgs e)
         {
-            Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "generated"));
-            Singleton<ClassManager>.Instance.LoadClasses(Path.Combine(Environment.CurrentDirectory, "created"));
+            SwitchWorkspace("");
+        }
 
+
+        /// <summary>
+        /// Switches the Workspace.
+        /// </summary>
+        /// <param name="newWorkspace"></param>
+        public void SwitchWorkspace(string newWorkspace)
+        {
+            SmaSTraConfiguration.WORK_SPACE = newWorkspace;
+
+            Singleton<ClassManager>.Instance.Reload();
             Singleton<Library>.Instance.loadLibrary();
         }
 

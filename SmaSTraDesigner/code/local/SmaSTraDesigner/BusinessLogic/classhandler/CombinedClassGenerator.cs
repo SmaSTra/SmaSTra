@@ -1,5 +1,6 @@
 ﻿using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
+using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
@@ -216,7 +217,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             CombinedNodeClass toSave = GenerateClass();
             if (toSave == null) return false;
 
-            string savePath = Path.Combine(Environment.CurrentDirectory, "created");
+            string savePath = Path.Combine(SmaSTraConfiguration.WORK_SPACE, "created");
             savePath = Path.Combine(savePath, toSave.DisplayName);
 
             if (Directory.Exists(savePath)) return false;

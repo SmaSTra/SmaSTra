@@ -75,6 +75,7 @@
         {
             Singleton<OnlineServerLink>.Instance.UploadElement(tdTreeDesigner.SelectedNodeViewers[0].Node.Class, (n, d) =>
             {
+                MessageBox.Show("Result of upload of " + n + " is: " + d.ToString(), "Upload of " + n);
                 Debug.Print("Uploaded: " + n + " - " + d);
             });
 

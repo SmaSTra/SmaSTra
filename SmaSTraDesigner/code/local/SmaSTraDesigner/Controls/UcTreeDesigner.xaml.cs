@@ -16,7 +16,7 @@
     using Common.ExtensionMethods;
     using Common.Resources.Converters;
 
-    using SmaSTraDesigner.BusinessLogic;
+    using BusinessLogic;
     using BusinessLogic.classhandler;
     using BusinessLogic.nodes;
     using Support;

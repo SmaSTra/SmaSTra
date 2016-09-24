@@ -75,7 +75,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         if (subNode == null)
                         {
                             //We have some types that are not registered?!?
-                            throw new NullNodeException("Could not load Node: " + simpleNode.Type);
+                            throw new Exception("Could not load Node: " + simpleNode.Type);
                         }
 
                         //We have our output node:
