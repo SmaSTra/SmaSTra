@@ -1,12 +1,10 @@
 ﻿namespace SmaSTraDesigner
 {
-    using System;
-    using System.IO;
     using System.Windows;
 
     using Common;
 
-    using SmaSTraDesigner.BusinessLogic;
+    using BusinessLogic;
     using BusinessLogic.config;
 
     /// <summary>
