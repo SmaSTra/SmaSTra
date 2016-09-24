@@ -5,14 +5,17 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
     public class IOData : INotifyPropertyChanged, ICloneable
     {
-
+        private Node parentNode;
         private DataType type;
         private string value; //TODO: needs better, typesafe solution
+        private Node connectedNode;
+        private string inputGUIString;
 
         public IOData(DataType type, string value)
         {
             this.Type = type;
             this.Value = value;
+            this.InputGUIString = "{" + Type.MinimizedName + "}";
         }
 
         public DataType Type
@@ -41,8 +44,66 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             {
                 if (this.value != value)
                 {
+                    if (string.IsNullOrWhiteSpace(this.value) && ParentNode != null)
+                    {
+                        ParentNode.removeConnection(this);
+                    }
+                    InputGUIString = string.IsNullOrWhiteSpace(value) ? "{" + Type.MinimizedName + "}" : value;
                     this.value = value;
                     this.NotifyPropertyChanged("Value");
+                }
+            }
+        }
+
+        public Node ConnectedNode
+        {
+            get
+            {
+                return connectedNode;
+            }
+            set
+            {
+                if (connectedNode != value)
+                {
+                    connectedNode = value;
+                    this.NotifyPropertyChanged("ConnectedNode");
+                    if(connectedNode != null)
+                    {
+                        this.Value = "";
+                        InputGUIString = connectedNode.Name;
+                    }
+                }
+            }
+        }
+
+        public Node ParentNode
+        {
+            get
+            {
+                return parentNode;
+            }
+            set
+            {
+                if (parentNode != value)
+                {
+                    parentNode = value;
+                    this.NotifyPropertyChanged("ParentNode");
+                }
+            }
+        }
+
+        public string InputGUIString
+        {
+            get
+            {
+                return inputGUIString;
+            }
+            set
+            {
+                if (inputGUIString != value)
+                {
+                    inputGUIString = value;
+                    this.NotifyPropertyChanged("InputGUIString");
                 }
             }
         }

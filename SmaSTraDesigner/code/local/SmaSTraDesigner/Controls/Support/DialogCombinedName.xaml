@@ -5,18 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="DialogCombinedName" Height="150" Width="300" Loaded="Window_Loaded"
+        Title="DialogCombinedName" Height="170" Width="370" Loaded="Window_Loaded"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
+    <Window.Resources>
+    <Style TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontFamily" Value="Tahoma Regular"/>
+    </Style>
+    <Style TargetType="TextBox">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontFamily" Value="Tahoma Regular"/>
+    </Style>
+    </Window.Resources>
     <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="20">
         <StackPanel>
             <Grid Height="50" Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
                 <Button IsCancel="True" Content="X" Width="25" HorizontalAlignment="Right" Margin="0,7,20,0" Height="25"/>
             </Grid>
             <TextBlock Text="Enter a Name for the new Combined Node" TextAlignment="Center" />
-            <TextBox x:Name="tboxCombinedElementName" Margin="5" />
-            <Button Content="OK" Click="OK_Clicked" Width="100" Margin="10" />
+            <TextBox x:Name="tboxCombinedElementName" Margin="10" />
+            <Button Content="OK" Click="OK_Clicked" Width="100" Margin="10" Style="{StaticResource imageButtonTemplate}" />
         </StackPanel>
     </Border>
 </Window>

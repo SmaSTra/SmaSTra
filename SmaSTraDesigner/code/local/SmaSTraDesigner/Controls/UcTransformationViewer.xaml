@@ -33,7 +33,7 @@
     </local:UcNodeViewer.ContextMenu>
 
     <Grid HorizontalAlignment="Center"  Margin="5,0,5,0">
-	 	<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Border x:Name="borderHighlightBorder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="{Binding ActualWidth, ElementName=tbTransformationName}">
 			<Border.Style>
 				<Style TargetType="{x:Type Border}">
 					<Setter Property="BorderBrush">
@@ -98,7 +98,7 @@
 
         <StackPanel>
             <Grid>
-                <TextBlock Name="tbTransformationName" FontFamily="Tahoma Regular" Foreground="White" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="80" Padding="10,3,10,3.5" >
+                <TextBlock Name="tbTransformationName" FontFamily="Tahoma Regular" Foreground="White" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="80" Padding="10,3,10,3.5"  >
                     <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Background" Value="{StaticResource ColorDouble}" />
@@ -143,18 +143,7 @@
                                     <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" Margin="-7,5,0,5" >
                                     </local:UcIOHandle>
                                 </Grid>
-                                <TextBlock DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" Margin="5,0,0,0" >
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1.Value}"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=Value.Length}" Value="0">
-                                                    <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1.Type.Name, Converter={StaticResource InputTypeNameConverter}}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                <TextBlock DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" Text="{Binding Path=InputGUIString}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="{Binding ActualWidth, ElementName=tbTransformationName}" Padding="10,0,10,0" Margin="-5,3,0,-5" />
                             </WrapPanel>
                         </Grid>
                     </DataTemplate>

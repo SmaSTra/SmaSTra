@@ -656,7 +656,7 @@
 			}
 		}
 
-		private void RemoveConnection(UcIOHandle handle, Connection? connection)
+		public void RemoveConnection(UcIOHandle handle, Connection? connection)
 		{
 			if (this.Tree == null || handle == null)
 			{
@@ -1089,16 +1089,8 @@
             Node node = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1;
 			Point mousePos = e.GetPosition(this.cnvBackground);
 			Node newNode = node.Class.generateNode();
-            foreach (Node oldNode in nodeViewers.Keys) // Loading a Node from Library causes odd behavior of the currently selected Node
-            {
-                System.Diagnostics.Debug.Print("+++++ first oldNode: " + oldNode.Name);
-            }
             newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
-            foreach (Node oldNode in nodeViewers.Keys)
-            {
-                System.Diagnostics.Debug.Print("+++++ second oldNode: " + oldNode.Name);
-            }
             this.AddNode(newNode, true);
             scvCanvas.Focus();
         }

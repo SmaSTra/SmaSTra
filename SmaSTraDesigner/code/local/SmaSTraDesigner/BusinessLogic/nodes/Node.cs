@@ -188,6 +188,10 @@
             }
 
             inputNodes[inputIndex] = inputNode;
+            if (InputIOData.Count > inputIndex)
+            {
+                InputIOData[inputIndex].ConnectedNode = inputNode;
+            }
         }
 
 
@@ -296,6 +300,10 @@
                 if (inputIOData != value)
                 {
                     inputIOData = value;
+                    foreach(IOData ioData in inputIOData)
+                    {
+                        ioData.ParentNode = this;
+                    }
                 }
             }
         }
@@ -314,6 +322,16 @@
                 {
                     configuration = value;
                 }
+            }
+        }
+
+        public void removeConnection(IOData removedIOData)
+        {
+            if (Tree != null)
+            {
+                int inputIndex = InputIOData.IndexOf(removedIOData);
+                Connection removedConnection = Tree.Connections.FirstOrDefault(c => c.InputNode == this && c.InputIndex == inputIndex);
+                Tree.DesignTree.RemoveConnection(Tree.DesignTree.SelectedNodeViewer.IoHandles.FirstOrDefault(h => h.InputIndex == inputIndex), null);
             }
         }
 
