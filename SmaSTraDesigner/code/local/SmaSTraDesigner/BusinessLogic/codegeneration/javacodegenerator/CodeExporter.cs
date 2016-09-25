@@ -1,5 +1,6 @@
 ﻿using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporters;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
+using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 
             //Default exporter is always last!
             this.codeExporters.Add(new DefaultCodeExporter());
+            this.codeExporters.Add(new EclipseExporter());
         }
 
 
@@ -87,7 +89,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// <param name="destination"></param>
         protected void CopyLibs(string destination)
         {
-            string path = Path.Combine("generated", "libs");
+            string path = Path.Combine(WorkSpace.DIR, "generated", "libs");
             DirCopy.DirectoryCopy(path, destination, true);
         }
 

@@ -8,7 +8,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
     class AndroidStudioCodeExporter : AbstractCodeExporter
     {
 
-        private const int MANIFEST_SEARCH_DEPTH = 5;
+        private const int MANIFEST_SEARCH_DEPTH = 8;
         private const string MANIFEST_FILE_NAME = "AndroidManifest.xml";
         private readonly string[] DOWN_SEARCH_PATH = new string[] { "app", "src", "main"};
 
