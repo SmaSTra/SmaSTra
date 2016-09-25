@@ -271,6 +271,25 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             return elements;
         }
 
+        /// <summary>
+        /// Extension Method for a simple ForEach.
+        /// </summary>
+        /// <typeparam name="T">To use in the Function / Collection</typeparam>
+        /// <param name="elements">To Iterate</param>
+        /// <param name="func">To execute</param>
+        public static IEnumerable<T> ForEachTryIgnore<T>(this IEnumerable<T> elements, Action<T> func)
+        {
+            if (func == null) return elements;
+            foreach (T element in elements)
+            {
+#pragma warning disable CS0168 // Variable is declared but never used
+                try { func.Invoke(element); } catch (Exception exp) { }
+#pragma warning restore CS0168 // Variable is declared but never used
+            }
+
+            return elements;
+        }
+
 
         /// <summary>
         /// Extension Method for a simple ForEach.

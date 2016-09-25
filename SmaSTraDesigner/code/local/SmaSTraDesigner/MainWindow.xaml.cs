@@ -71,15 +71,7 @@
             e.CanExecute = true;
         }
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if(dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                //Switch workspace:
-                App.SwitchWorkspace(dialog.SelectedPath);
-            }
-            
+        {            
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
             foreach (Node node in this.tdTreeDesigner.Tree.Nodes)
             {
@@ -288,14 +280,19 @@
             }
         }
 
-        private void OnlineTransformations_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void SwitchWorkspace_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
         }
-        private void OnlineTransformations_Executed(object sender, ExecutedRoutedEventArgs e)
+
+        private void SwitchWorkspace_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            DialogOnlineTransformatins onlineDialog = new DialogOnlineTransformatins(Singleton<OnlineServerLink>.Instance);
-            onlineDialog.Show();
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                //Switch workspace:
+                App.SwitchWorkspace(dialog.SelectedPath, this.tdTreeDesigner);
+            }
         }
 
         #endregion command handlers
@@ -314,11 +311,6 @@
                     e.Cancel = true;
                 }
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

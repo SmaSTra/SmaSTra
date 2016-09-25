@@ -220,7 +220,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             CombinedNodeClass toSave = GenerateClass();
             if (toSave == null) return false;
 
-            string savePath = Path.Combine(SmaSTraConfiguration.WORK_SPACE, "created");
+            string savePath = Path.Combine(WorkSpace.DIR, "created");
             savePath = Path.Combine(savePath, toSave.DisplayName);
 
             if (Directory.Exists(savePath)) return false;

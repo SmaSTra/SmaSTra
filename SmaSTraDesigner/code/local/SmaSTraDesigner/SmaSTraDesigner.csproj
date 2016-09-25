@@ -145,6 +145,7 @@
     <Compile Include="BusinessLogic\classhandler\nodeclasses\TransformationNodeClass.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExtension.cs" />
+    <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\EclipseExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\AndroidStudioCodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\DefaultCodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\AbstractNodeLoader.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\TransformationLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\NewJavaGenerator.cs" />
     <Compile Include="BusinessLogic\config\SmaSTraConfiguration.cs" />
+    <Compile Include="BusinessLogic\config\WorkSpace.cs" />
     <Compile Include="BusinessLogic\nodes\BufferNode.cs" />
     <Compile Include="BusinessLogic\nodes\Connection.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />

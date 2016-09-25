@@ -6,18 +6,13 @@ using System.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.config
 {
+
     public class SmaSTraConfiguration
     {
 
         public const string ONLINE_SERVICE_HOST_PATH = "onlineServiceHost";
         public const string ONLINE_SERVICE_PORT_PATH = "onlineServicePort";
         public const string ONLINE_SERVICE_PREFIX_PATH = "onlineServicePrefix";
-
-
-        /// <summary>
-        /// The Workspace to use
-        /// </summary>
-        public static string WORK_SPACE = "";
 
 
         /// <summary>
@@ -45,10 +40,10 @@ namespace SmaSTraDesigner.BusinessLogic.config
             config.Clear();
 
             //Checks if the default file is present.
-            if (!File.Exists(Path.Combine(WORK_SPACE, CONFIG_PATH))) createDefaultConfig();
+            if (!File.Exists(Path.Combine(WorkSpace.DIR, CONFIG_PATH))) createDefaultConfig();
 
             //Loads and reads the config finally:
-            string[] lines = File.ReadAllLines(Path.Combine(WORK_SPACE, CONFIG_PATH));
+            string[] lines = File.ReadAllLines(Path.Combine(WorkSpace.DIR, CONFIG_PATH));
             lines.ForEach(l =>
             {
                 string[] split = l.Split(new char[]{ '=' }, 2);
@@ -78,7 +73,7 @@ namespace SmaSTraDesigner.BusinessLogic.config
         public void SetConfigOption(string key, string value)
         {
             this.config[key] = value;
-            saveConfig(config, Path.Combine(WORK_SPACE, CONFIG_PATH));
+            saveConfig(config, Path.Combine(WorkSpace.DIR, CONFIG_PATH));
         }
 
 
@@ -94,7 +89,7 @@ namespace SmaSTraDesigner.BusinessLogic.config
             config[ONLINE_SERVICE_PREFIX_PATH] = "SmaSTraWebServer";
             //TODO Add new Default config stuff here:
 
-            saveConfig(config, Path.Combine(WORK_SPACE, CONFIG_PATH));
+            saveConfig(config, Path.Combine(WorkSpace.DIR, CONFIG_PATH));
         }
 
         /// <summary>

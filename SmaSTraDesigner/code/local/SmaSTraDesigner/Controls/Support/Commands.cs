@@ -148,14 +148,14 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
-        public static readonly RoutedUICommand OnlineTransformations = new RoutedUICommand
+        public static readonly RoutedUICommand SwitchWorkspace = new RoutedUICommand
                         (
-                                "Online transformations",
-                                "OnlineTransformations",
+                                "Switch Workspace",
+                                "SwitchWorkspace",
                                 typeof(Commands),
                                 new InputGestureCollection()
                                 {
-                                        new KeyGesture(Key.D, ModifierKeys.Control)
+                                    new KeyGesture(Key.W, ModifierKeys.Alt)
                                 }
                         );
 
