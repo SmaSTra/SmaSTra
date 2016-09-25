@@ -94,13 +94,6 @@
             Singleton<SmaSTraConfiguration>.Instance.Reload();
             Singleton<ClassManager>.Instance.Reload();
             Singleton<Library>.Instance.loadLibrary();
-
-
-            //At last change the title of the Main-Window:
-            if(App.Current != null && App.Current.MainWindow != null)
-            {
-                App.Current.MainWindow.Title = "SmaSTra Designer (WS: " + newWorkspace + ")";
-            }
         }
 
 		#endregion event handlers
