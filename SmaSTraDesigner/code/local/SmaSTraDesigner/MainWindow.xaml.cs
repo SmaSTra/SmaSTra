@@ -72,14 +72,16 @@
         }
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Singleton<OnlineServerLink>.Instance.UploadElement(tdTreeDesigner.SelectedNodeViewers[0].Node.Class, (n, d) =>
-            {
-                MessageBox.Show("Result of upload of " + n + " is: " + d.ToString(), "Upload of " + n);
-                Debug.Print("Uploaded: " + n + " - " + d);
-            });
 
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if(dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                //Switch workspace:
+                App.SwitchWorkspace(dialog.SelectedPath);
+            }
+            
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
-            foreach(Node node in this.tdTreeDesigner.Tree.Nodes)
+            foreach (Node node in this.tdTreeDesigner.Tree.Nodes)
             {
                 Console.WriteLine("++++++ node.Configuration.Count: " + node.Configuration.Count);
             }

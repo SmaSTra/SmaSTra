@@ -473,18 +473,41 @@
             this.classes.Clear();
 
             //Clear all the GUI element-references:
-            this.baseConversions = null;
-            this.customConversions = null;
-            this.baseBuffers = null;
-            this.customBuffers = null;
             this.baseDataSources = null;
-            this.customDataSources = null;
+            this.baseConversions = null;
             this.baseTransformations = null;
+            this.baseCombinedNodes = null;
+            this.baseBuffers = null;
+
+            this.customDataSources = null;
+            this.customConversions = null;
             this.customTransformations = null;
+            this.customBuffers = null;
+
+            this.combinedDataSources = null;
+            this.combinedConversions = null;
+            this.combinedTransformations = null;
+
 
             //Now reload ower folders:
             LoadClasses(Path.Combine(SmaSTraConfiguration.WORK_SPACE, "generated"));
             LoadClasses(Path.Combine(SmaSTraConfiguration.WORK_SPACE, "created"));
+
+            //Call prop-Changed for everything:
+            this.OnPropertyChanged("BaseDataSources");
+            this.OnPropertyChanged("BaseConversions");
+            this.OnPropertyChanged("BaseTransformations");
+            this.OnPropertyChanged("BaseCombined");
+            this.OnPropertyChanged("BaseBuffers");
+
+            this.OnPropertyChanged("CustomDataSources");
+            this.OnPropertyChanged("CustomConversions");
+            this.OnPropertyChanged("CustomTransformations");
+            this.OnPropertyChanged("CustomBuffers");
+
+            this.OnPropertyChanged("CombinedDataSources");
+            this.OnPropertyChanged("CombinedConversions");
+            this.OnPropertyChanged("CombinedTransformations");
         }
 
 
