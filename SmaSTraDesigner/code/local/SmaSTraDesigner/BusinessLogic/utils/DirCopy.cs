@@ -131,7 +131,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
 
         public static string GetPathForNode(AbstractNodeClass nodeClass)
         {
-            string workspace = SmaSTraConfiguration.WORK_SPACE;
+            string workspace = WorkSpace.DIR;
             string path = Path.Combine(workspace, "generated", nodeClass.Name);
             if (Directory.Exists(path))
             {

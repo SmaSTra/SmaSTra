@@ -152,6 +152,7 @@
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\TransformationLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\NewJavaGenerator.cs" />
     <Compile Include="BusinessLogic\config\SmaSTraConfiguration.cs" />
+    <Compile Include="BusinessLogic\config\WorkSpace.cs" />
     <Compile Include="BusinessLogic\nodes\BufferNode.cs" />
     <Compile Include="BusinessLogic\nodes\Connection.cs" />
     <Compile Include="BusinessLogic\nodes\CombinedNode.cs" />

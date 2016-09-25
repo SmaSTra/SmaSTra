@@ -37,7 +37,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
 
         public OnlineServerLink()
         {
-            Directory.CreateDirectory(Path.Combine(SmaSTraConfiguration.WORK_SPACE, TMP_PATH));
+            Directory.CreateDirectory(Path.Combine(WorkSpace.DIR, TMP_PATH));
         }
 
 
@@ -239,7 +239,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            string workSpace = SmaSTraConfiguration.WORK_SPACE;
+            string workSpace = WorkSpace.DIR;
             string tmpPath = Path.Combine(workSpace, TMP_PATH, name + "_download");
             string tmpZipPath = Path.Combine(tmpPath, "data.zip");
             string destDir = Path.Combine(workSpace, "created", name);
@@ -298,8 +298,8 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            string folder = Path.Combine(SmaSTraConfiguration.WORK_SPACE, (clazz.UserCreated ? "created" : "generated"), clazz.Name);
-            string tmpName = Path.Combine(SmaSTraConfiguration.WORK_SPACE, TMP_PATH, "upload_" + clazz.Name + ".zip");
+            string folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? "created" : "generated"), clazz.Name);
+            string tmpName = Path.Combine(WorkSpace.DIR, TMP_PATH, "upload_" + clazz.Name + ".zip");
             ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);
 
             Task t = new Task(() => uploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n,b) =>

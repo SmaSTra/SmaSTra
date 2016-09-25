@@ -490,8 +490,8 @@
 
 
             //Now reload ower folders:
-            LoadClasses(Path.Combine(SmaSTraConfiguration.WORK_SPACE, "generated"));
-            LoadClasses(Path.Combine(SmaSTraConfiguration.WORK_SPACE, "created"));
+            LoadClasses(Path.Combine(WorkSpace.DIR, "generated"));
+            LoadClasses(Path.Combine(WorkSpace.DIR, "created"));
 
             //Call prop-Changed for everything:
             this.OnPropertyChanged("BaseDataSources");

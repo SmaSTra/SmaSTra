@@ -127,7 +127,7 @@ namespace SmaSTraDesigner.BusinessLogic
                 .Select(serializer.serializeNode)
                 .ForEach(array.Add);
 
-            File.WriteAllText(Path.Combine(SmaSTraConfiguration.WORK_SPACE, LIB_FILE_NAME), lib.ToString());
+            File.WriteAllText(Path.Combine(WorkSpace.DIR, LIB_FILE_NAME), lib.ToString());
         }
 
 
@@ -138,7 +138,7 @@ namespace SmaSTraDesigner.BusinessLogic
         {
             this.libraryNodeViewerList.Clear();
 
-            if (!File.Exists(Path.Combine(SmaSTraConfiguration.WORK_SPACE, LIB_FILE_NAME)))
+            if (!File.Exists(Path.Combine(WorkSpace.DIR, LIB_FILE_NAME)))
             {
                 return;
             }
