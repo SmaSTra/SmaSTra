@@ -26,6 +26,7 @@
         <CommandBinding Command="ctrlSupport:Commands.ToOutputViewer" CanExecute="ToOutputViewer_CanExecute" Executed="ToOutputViewer_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.AddToLibrary" CanExecute="AddToLibrary_CanExecute" Executed="AddToLibrary_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.CreateCustomElement" CanExecute="CreateCustomElement_CanExecute" Executed="CreateCustomElement_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.SwitchWorkspace" CanExecute="SwitchWorkspace_CanExecute" Executed="SwitchWorkspace_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
@@ -44,6 +45,7 @@
 
 		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
             <MenuItem x:Name="mniFile" Header="File">
+                <MenuItem x:Name="mniSwitchWorkspace" Header="Switch Workspace" Command="ctrlSupport:Commands.SwitchWorkspace" />
                 <MenuItem x:Name="mniSave" Header="Save" Command="ctrlSupport:Commands.Save" />
                 <MenuItem x:Name="mniLoad" Header="Load" Command="ctrlSupport:Commands.Load" />
                 <MenuItem x:Name="mniExit" Header="Exit" Command="ctrlSupport:Commands.Exit" />

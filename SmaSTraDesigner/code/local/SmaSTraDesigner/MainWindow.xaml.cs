@@ -71,15 +71,7 @@
             e.CanExecute = true;
         }
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if(dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                //Switch workspace:
-                App.SwitchWorkspace(dialog.SelectedPath);
-            }
-            
+        {            
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
             foreach (Node node in this.tdTreeDesigner.Tree.Nodes)
             {
@@ -285,6 +277,21 @@
                 AbstractNodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
                 Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
                 Singleton<ClassManager>.Instance.AddClass(generatedClass);
+            }
+        }
+
+        private void SwitchWorkspace_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SwitchWorkspace_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                //Switch workspace:
+                App.SwitchWorkspace(dialog.SelectedPath, this.tdTreeDesigner);
             }
         }
 

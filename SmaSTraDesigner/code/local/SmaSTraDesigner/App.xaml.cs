@@ -8,6 +8,8 @@
     using BusinessLogic.config;
     using System.IO;
     using BusinessLogic.utils;
+    using Controls;
+    using System.Linq;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -22,18 +24,25 @@
 
 		private void Application_Startup(object sender, StartupEventArgs e)
         {
-            SwitchWorkspace("");
+            SwitchWorkspace("", null);
         }
 
 
         /// <summary>
         /// Switches the Workspace.
         /// </summary>
-        /// <param name="newWorkspace"></param>
-        public static void SwitchWorkspace(string newWorkspace)
+        /// <param name="newWorkspace">to switch to.</param>
+        /// <param name="treeDesigner">The tree designer to remove remaining stuff.</param>
+        public static void SwitchWorkspace(string newWorkspace, UcTreeDesigner treeDesigner)
         {
             //Be sure the new Workspace exists:
             if(!string.IsNullOrWhiteSpace(newWorkspace)) Directory.CreateDirectory(newWorkspace);
+
+            //Clear the current Tree and the GUI:
+            if(treeDesigner != null)
+            {
+                treeDesigner.Clear();
+            }
 
             //Set the new Workspace:
             SmaSTraConfiguration.WORK_SPACE = newWorkspace;
@@ -46,10 +55,6 @@
                 string orgGeneratedPath = "generated";
                 DirCopy.PlainCopy(orgGeneratedPath, newGeneratedPath);
             }
-
-
-            //Clear the current Tree and the GUI:
-            //TODO add reload of Transformation Tree here!
 
             //Reload the managers:
             Singleton<SmaSTraConfiguration>.Instance.Reload();

@@ -148,6 +148,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand SwitchWorkspace = new RoutedUICommand
+                        (
+                                "Switch Workspace",
+                                "SwitchWorkspace",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.W, ModifierKeys.Alt)
+                                }
+                        );
+
 
     }
 }

@@ -1014,6 +1014,17 @@
             foreach (Node old in nodes) RemoveNode(old);
         }
 
+        /// <summary>
+        /// This clears the complete GUI.
+        /// </summary>
+        public void Clear()
+        {
+            this.nodeViewers.Keys
+                .ToArray()
+                .Where(n => !(n is OutputNode))
+                .ForEach(RemoveNode);
+        }
+
 
         #endregion methods
 
