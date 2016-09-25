@@ -159,6 +159,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand OnlineTransformations = new RoutedUICommand
+                        (
+                                "Online Transformations",
+                                "OnlineTransformations",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.D, ModifierKeys.Control)
+                                }
+                        );
+
 
     }
 }

@@ -295,6 +295,17 @@
             }
         }
 
+        private void OnlineTransformations_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void OnlineTransformations_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            DialogOnlineTransformatins onlineDialog = new DialogOnlineTransformatins(Singleton<OnlineServerLink>.Instance);
+            onlineDialog.Show();
+        }
+
         #endregion command handlers
 
         private void This_Closing(object sender, System.ComponentModel.CancelEventArgs e)
