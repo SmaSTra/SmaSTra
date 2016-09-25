@@ -26,6 +26,7 @@
         <CommandBinding Command="ctrlSupport:Commands.ToOutputViewer" CanExecute="ToOutputViewer_CanExecute" Executed="ToOutputViewer_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.AddToLibrary" CanExecute="AddToLibrary_CanExecute" Executed="AddToLibrary_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.CreateCustomElement" CanExecute="CreateCustomElement_CanExecute" Executed="CreateCustomElement_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.OnlineTransformations" CanExecute="OnlineTransformations_CanExecute" Executed="OnlineTransformations_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
@@ -129,6 +130,10 @@
                             </WrapPanel>
                         </RadioButton>
                     </Border>
+
+                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" Grid.Column="1" Width="50" Margin="50,0,0,0" Background="Transparent" ToolTip="Open">
+                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
+                    </Button>
                 </StackPanel>
             </ScrollViewer>
 
@@ -137,9 +142,9 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.Visibility>
@@ -156,24 +161,17 @@
                         </WrapPanel>
                     </ToggleButton>
                     </Border>
-                    <Border Grid.Column="1" Grid.Row="0"  BorderBrush="Black" BorderThickness="0,0,0,1">
+                    <Border Grid.Column="1"  BorderBrush="Black" BorderThickness="0,0,0,1">
                         <ToggleButton x:Name="tglCustomTF" Checked="ToggleButton_Checked" Background="Transparent" >
                             <WrapPanel ToolTip="Custom Transformations">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0,0">
+                    <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,0,0">
                         <ToggleButton x:Name="tglCombinedTF" Checked="ToggleButton_Checked" Background="Transparent">
                             <WrapPanel ToolTip="Combined Transformations">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
-                            </WrapPanel>
-                        </ToggleButton>
-                    </Border>
-                    <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,1,0">
-                        <ToggleButton x:Name="tglOnlineTF" Opacity="0.5" Checked="ToggleButton_Checked" Background="Transparent" >
-                            <WrapPanel ToolTip="Online Transformations">
-                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>

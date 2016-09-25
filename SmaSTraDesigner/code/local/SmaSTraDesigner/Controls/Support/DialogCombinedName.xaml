@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
         Title="DialogCombinedName" Height="170" Width="370" Loaded="Window_Loaded"
+        ShowInTaskbar="False"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">

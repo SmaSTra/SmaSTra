@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="Window1" Height="auto" Width="auto" SizeToContent="Height"
         Loaded="Window_Loaded"
+        ShowInTaskbar="False"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
