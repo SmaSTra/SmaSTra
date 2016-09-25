@@ -141,6 +141,7 @@
     <Compile Include="BusinessLogic\classhandler\nodeclasses\TransformationNodeClass.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExtension.cs" />
+    <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\EclipseExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\AndroidStudioCodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\DefaultCodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\AbstractNodeLoader.cs" />
