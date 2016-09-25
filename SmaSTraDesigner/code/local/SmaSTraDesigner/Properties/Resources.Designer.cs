@@ -173,6 +173,16 @@ namespace SmaSTraDesigner.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap default_transf {
+            get {
+                object obj = ResourceManager.GetObject("default_transf", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap green_window {
             get {
                 object obj = ResourceManager.GetObject("green_window", resourceCulture);

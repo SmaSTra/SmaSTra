@@ -42,12 +42,12 @@
             <RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
+        <Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
             <MenuItem x:Name="mniFile" Header="File">
                 <MenuItem x:Name="mniSave" Header="Save" Command="ctrlSupport:Commands.Save" />
                 <MenuItem x:Name="mniLoad" Header="Load" Command="ctrlSupport:Commands.Load" />
                 <MenuItem x:Name="mniExit" Header="Exit" Command="ctrlSupport:Commands.Exit" />
-			</MenuItem>
+            </MenuItem>
             <MenuItem x:Name="mniEdit" Header="Edit">
                 <MenuItem x:Name="mniMerge" Header="Merge" Command="ctrlSupport:Commands.Merge" />
                 <MenuItem x:Name="mniUnmerge" Header="Unmerge" Command="ctrlSupport:Commands.Unmerge" />
@@ -55,15 +55,8 @@
             </MenuItem>
             <MenuItem Header="Tree">
                 <MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Command="ctrlSupport:Commands.Generate" />
-			</MenuItem>
-		</Menu>
-
-        <StackPanel x:Name="spnSideMenu" Grid.ColumnSpan="99" Grid.Row="1" Orientation="Horizontal" Background="{StaticResource ColorPanelBackground}">
-            <ToggleButton x:Name="tglDefaultTF" Content="Default Transformations" IsChecked="True" Checked="ToggleButton_Checked" />
-			<ToggleButton x:Name="tglCustomTF" Content="Custom Transformations"  Checked="ToggleButton_Checked" />
-            <ToggleButton x:Name="tglCombinedTF" Content="Combined Transformations"  Checked="ToggleButton_Checked" />
-			<ToggleButton x:Name="tglOnlineTF" Content="Online Transformations" IsEnabled="False" Checked="ToggleButton_Checked" />
-		</StackPanel>
+            </MenuItem>
+        </Menu>
 
         <Grid Grid.ColumnSpan="99" Grid.Row="2" Background="{StaticResource ColorPanelBackground}">
             <Grid.ColumnDefinitions>
@@ -140,7 +133,52 @@
             </ScrollViewer>
 
             <Grid Grid.Column="0" Grid.Row="1" Width="{Binding ElementName=gridUpperMenuButtons, Path=ActualWidth}">
-                <Border BorderBrush="Black" BorderThickness="0,1,0,2"></Border>
+                <Grid x:Name="spnSideMenu" Background="{StaticResource ColorPanelBackground}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.Visibility>
+                        <MultiBinding Converter="{StaticResource VisibilityAsBooleanConverter}" ConverterParameter="{x:Static wpfConverters:VisibilityAsBooleanConverterOptions.CombineWithOr}" >
+                            <Binding ElementName="togDataSources" Path="IsChecked" Mode="OneWay" />
+                            <Binding ElementName="togConversions" Path="IsChecked" Mode="OneWay" />
+                            <Binding ElementName="togTransformations" Path="IsChecked" Mode="OneWay" />
+                        </MultiBinding>
+                    </Grid.Visibility>
+                    <Border BorderBrush="Black" BorderThickness="0,0,1,1">
+                    <ToggleButton x:Name="tglDefaultTF" IsChecked="True" Checked="ToggleButton_Checked" Background="Transparent" >
+                        <WrapPanel ToolTip="Default Transformations">
+                            <Image Width="50" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
+                        </WrapPanel>
+                    </ToggleButton>
+                    </Border>
+                    <Border Grid.Column="1" Grid.Row="0"  BorderBrush="Black" BorderThickness="0,0,0,1">
+                        <ToggleButton x:Name="tglCustomTF" Checked="ToggleButton_Checked" Background="Transparent" >
+                            <WrapPanel ToolTip="Custom Transformations">
+                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
+                            </WrapPanel>
+                        </ToggleButton>
+                    </Border>
+                    <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,0,0">
+                        <ToggleButton x:Name="tglCombinedTF" Checked="ToggleButton_Checked" Background="Transparent">
+                            <WrapPanel ToolTip="Combined Transformations">
+                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
+                            </WrapPanel>
+                        </ToggleButton>
+                    </Border>
+                    <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,1,0">
+                        <ToggleButton x:Name="tglOnlineTF" Opacity="0.5" Checked="ToggleButton_Checked" Background="Transparent" >
+                            <WrapPanel ToolTip="Online Transformations">
+                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
+                            </WrapPanel>
+                        </ToggleButton>
+                    </Border>
+                </Grid>
+                <Border BorderBrush="Black" BorderThickness="1,1,0,2"></Border>
             </Grid>
 
             <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,2">
