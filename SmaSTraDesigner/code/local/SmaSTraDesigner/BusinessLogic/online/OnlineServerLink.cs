@@ -37,7 +37,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
 
         public OnlineServerLink()
         {
-            Directory.CreateDirectory(TMP_PATH);
+            Directory.CreateDirectory(Path.Combine(SmaSTraConfiguration.WORK_SPACE, TMP_PATH));
         }
 
 
