@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="DialogOnlineTransformatins" Height="450" Width="550" Background="{StaticResource ColorPanelBackground}">
+        Title="DialogOnlineTransformatins" SizeToContent="Height" Width="550" Background="{StaticResource ColorPanelBackground}">
     <Grid>
         <StackPanel>
             <Grid Height="30"/>
@@ -17,20 +17,20 @@
             </Grid.ColumnDefinitions>
 
                 <DockPanel>
-            <ListView x:Name="listOnlineElements" DockPanel.Dock="Top" ItemsSource="{Binding Path=OnlineElementsList}" SelectionChanged="listOnlineElements_SelectionChanged">
-                        <ListView.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
-                        </ListView.Resources>
+                    <ListView x:Name="listOnlineElements" DockPanel.Dock="Top" Background="{StaticResource ColorPanelTitel}" ItemsSource="{Binding Path=OnlineElementsList}" SelectionChanged="listOnlineElements_SelectionChanged">
                         <ListView.ItemTemplate>
                     <DataTemplate>
-                        <WrapPanel>
+                                <DataTemplate.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                                </DataTemplate.Resources>
+                                <WrapPanel>
                             <TextBlock Text="{Binding Name}" />
                         </WrapPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-                <Button x:Name="UpdateButton" DockPanel.Dock="Bottom" Height="30" Content="Update list" Click="UpdateButton_Click" />
+                <Button x:Name="UpdateButton" DockPanel.Dock="Bottom" Height="40" Content="Update list" Style="{StaticResource imageButtonTemplate}" Click="UpdateButton_Click" />
 
                 </DockPanel>
 
@@ -56,9 +56,11 @@
                     <StackPanel>
                         <TextBlock x:Name="tbDetailInputs" Text="Inputs:"/>
                             <ItemsControl x:Name="icDetailInputs" ItemsSource="{Binding Path=SelectedClass.Inputs}" Margin="10,0,0,0">
-                                <ItemsControl.Resources>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
-                                </ItemsControl.Resources>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Style="{StaticResource TextBlockStyle}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
                     <WrapPanel>
@@ -76,9 +78,9 @@
 
             
 
-            <Button x:Name="btnDownloadElement" Content="Download" Click="btnDownloadElement_Click" >
+            <Button x:Name="btnDownloadElement" Width="100" Content="Download" Click="btnDownloadElement_Click" >
                 <Button.Style>
-                        <Style>
+                    <Style BasedOn="{StaticResource imageButtonTemplate}" TargetType="Button">
                             <Style.Triggers>
                                 <DataTrigger 
                      Binding ="{Binding ElementName=listOnlineElements, Path=SelectedIndex}" 
@@ -90,11 +92,11 @@
                     </Button.Style>
             </Button>
 
-            <Grid x:Name="uploadDropZone" Background="LightGray" Height="50" Margin="0,10,0,0" AllowDrop="True" Drop="uploadDropZone_Drop">
+            <Grid x:Name="uploadDropZone" Background="LightGray" Height="50" Margin="0,20,0,0" AllowDrop="True" Drop="uploadDropZone_Drop">
                 <TextBlock Text="Upload Drop Zone" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
 
-            <TextBlock x:Name="tbStatusBar"/>
+            <TextBlock x:Name="tbStatusBar" HorizontalAlignment="Center" Margin="10" Style="{StaticResource TextBlockStyle}"/>
         </StackPanel>
     </Grid>
 </Window>
