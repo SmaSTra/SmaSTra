@@ -7,21 +7,25 @@
 
         /// <summary>
         /// The template for the Transformation.
-        /// <br>{0} : Name of the Class / Method
-        /// <br>{1} : Return Type
-        /// <br>{2} : Code-Content
+        /// <br>{0} : Package name
+        /// <br>{1} : import section
+        /// <br>{2} : Name of the Class / Method
+        /// <br>{3} : Return Type
+        /// <br>{4} : Code-Content
         /// </summary>
         public const string SENSOR_TEMPLATE = 
-                "package created;" + NL +
+                "package {0};" + NL +
+                "" + NL +
+                "{1}" + NL +
                 "" + NL +
                 "import android.content.Context;" + NL +
                 "import de.tu_darmstadt.smastra.markers.interfaces.Sensor;" + NL +
                 "" + NL +
-                "public class {0} implements Sensor {{" + NL +
+                "public class {2} implements Sensor {{" + NL +
                 "" + NL +
                 "   private final Context context;" + NL +
                 "" + NL +
-                "   public {0}(Context context) {{" + NL +
+                "   public {2}(Context context) {{" + NL +
                 "       this.context = context;" + NL +
                 "   }}" + NL +
                 "" + NL +
@@ -32,8 +36,8 @@
                 "" + NL +
                 "   @Override public void configure(Map<String, Object> configuration) {{}}" + NL +
                 "" + NL +
-                "   public {1} getData(){{" + NL +
-                "   {2}" + NL +
+                "   public {3} getData(){{" + NL +
+                "   {4}" + NL +
                 "   }}" + NL +
                 "}}"
         ;
@@ -41,18 +45,22 @@
 
         /// <summary>
         /// The template for the Transformation.
-        /// <br>{0} : Name of the Class / Method
-        /// <br>{1} : Return Type
-        /// <br>{2} : Input-Types as Method-Args
-        /// <br>{3} : Code-Content
+        /// <br>{0} : pacakge
+        /// <br>{1} : Imports
+        /// <br>{2} : Name of the Class / Method
+        /// <br>{3} : Return Type
+        /// <br>{4} : Input-Types as Method-Args
+        /// <br>{5} : Code-Content
         /// </summary>
         public const string TRANSFORMATION_TEMPLATE =
-               "package created;" + NL +
+               "package {0};" + NL +
                "" + NL +
-               "public class {0} implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {{" + NL +
+               "{1}" + NL +
                "" + NL +
-               "   public static {1} {0}({2}) {{" + NL +
-               "   {3}" + NL +
+               "public class {2} implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {{" + NL +
+               "" + NL +
+               "   public static {3} {2}({4}) {{" + NL +
+               "   {5}" + NL +
                "   }}" + NL +
                "}}"
        ;

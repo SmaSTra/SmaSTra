@@ -120,15 +120,29 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
         public override string GenerateClassFromSnippet(AbstractNodeClass nodeClass, string methodCode)
         {
+            string package = GetPackageFromMainclass(nodeClass.MainClass);
+            string imports = nodeClass.InputTypes
+                .ToArray()
+                .Concat(new[] { nodeClass.OutputType })
+                .Distinct()
+                .Select(i => "import " + i.MinimizedName + ";")
+                .StringJoin("\n");
+                
+
             string methodArgs = "";
             for (int i = 0 ; i < nodeClass.InputTypes.Count(); i++) 
             {
                 if (i > 0) methodArgs += ", ";
-                methodArgs += nodeClass.InputTypes[i] + " arg"+i;
+                methodArgs += nodeClass.InputTypes[i].MinimizedName + " arg"+i;
             }
 
             return string.Format(ClassTemplates.TRANSFORMATION_TEMPLATE,
-                nodeClass.Name, nodeClass.OutputType.Name.RemoveAll(" ", "_"), methodArgs, methodCode);
+                package,
+                imports,
+                nodeClass.Name, 
+                nodeClass.OutputType.MinimizedName, 
+                methodArgs, 
+                methodCode);
         }
 
 
