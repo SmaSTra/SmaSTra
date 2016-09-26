@@ -214,7 +214,14 @@ namespace SmaSTraDesigner.Controls.Support
                 tbStatus.Text = "Please enter a name for the new element.";
                 return;
             }
+
             ClassManager classManager = Singleton<ClassManager>.Instance;
+            if(classManager.GetNodeClassForType(ElementName) != null)
+            {
+                tbStatus.Text = "A Element with that name already exists.";
+                return;
+            }
+
             OutputType = ((InputTypeViewModel)cboxOutputTypeString.DataContext).SelectedDataType;
             if (OutputType == null)
             {   //Check new DataType name
@@ -326,7 +333,7 @@ namespace SmaSTraDesigner.Controls.Support
             string javaFreandlyName = ElementName.RemoveAll(" ","_");
 
             string description = Description;
-            string mainClass = "created." + javaFreandlyName;
+            string mainClass = PackageName + "." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];
@@ -346,7 +353,7 @@ namespace SmaSTraDesigner.Controls.Support
             string javaFreandlyName = ElementName.RemoveAll(" ", "_");
 
             string description = Description;
-            string mainClass = "created." + javaFreandlyName;
+            string mainClass = PackageName + "." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
             string[] neededPermissions = new string[0];

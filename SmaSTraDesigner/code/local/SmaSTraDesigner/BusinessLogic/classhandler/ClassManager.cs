@@ -557,17 +557,29 @@
         /// <returns>The first found node with that name, null if none found.</returns>
         public Node GetNewNodeForType(String typeName)
         {
-            AbstractNodeClass node = this.classes.Values
-                .FirstOrDefault(x => x.Name == typeName);
+            AbstractNodeClass node = GetNodeClassForType(typeName);
             return node == null ? null : node.generateNode();
         }
 
+        /// <summary>
+        /// Gets the First NodeClass found with that type name.
+        /// Returns null if none found.
+        /// </summary>
+        /// <param name="typeName">To search.</param>
+        /// <returns>The first found NodeClass with that name, null if none found.</returns>
+        public AbstractNodeClass GetNodeClassForType(String typeName)
+        {
+            return this.classes.Values
+                .FirstOrDefault(x => x.Name == typeName);
+        }
 
-		/// <summary>
-		/// Raises the PropertyChanged event.
-		/// </summary>
-		/// <param name="propertyName">Name of the property that changed values.</param>
-		private void OnPropertyChanged(string propertyName)
+
+
+        /// <summary>
+        /// Raises the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed values.</param>
+        private void OnPropertyChanged(string propertyName)
 		{
 			if (this.PropertyChanged != null)
 			{

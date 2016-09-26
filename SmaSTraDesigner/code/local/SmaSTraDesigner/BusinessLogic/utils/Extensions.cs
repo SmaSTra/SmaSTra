@@ -7,6 +7,15 @@ using System.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.utils
 {
+
+    static class GenericUtils
+    {
+        public static T[] ToSingleArray<T>(T element)
+        {
+            return new T[] { element };
+        }
+    }
+
     static class JsonExtensions
     {
 
@@ -173,6 +182,12 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             }
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
+
+        public static string StringJoin<T>(this IEnumerable<T> split, string mergeString)
+        {
+            return string.Join(mergeString, split.Select(t => t.ToString()));
+        }
+
 
         public static string StringJoin(this IEnumerable<string> split, string mergeString)
         {

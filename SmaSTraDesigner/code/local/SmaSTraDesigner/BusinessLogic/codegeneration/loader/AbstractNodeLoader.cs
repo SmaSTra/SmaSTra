@@ -149,6 +149,23 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
         #region Methods
 
+
+        /// <summary>
+        /// Makes the pacakge name from the MainClass.
+        /// </summary>
+        /// <param name="mainclass">To get from.</param>
+        /// <returns></returns>
+        protected string GetPackageFromMainclass(string mainclass)
+        {
+            string[] split = mainclass.Split('.');
+            if (split.Length == 1) return split[0];
+            else return split
+                    .Take(split.Count() - 1)
+                    .ToArray()
+                    .StringJoin(".");
+        }
+
+
         /// <summary>
         /// This gets the Node type this loader can load.
         /// </summary>

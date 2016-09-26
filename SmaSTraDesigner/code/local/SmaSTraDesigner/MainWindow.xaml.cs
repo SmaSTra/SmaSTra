@@ -14,6 +14,7 @@
     using System.IO;
     using BusinessLogic.online;
     using System.Diagnostics;
+    using BusinessLogic.config;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -275,7 +276,7 @@
                 string methodCode = dialogNewElement.MethodCode;
 
                 AbstractNodeClass generatedClass = dialogNewElement.GenerateClassFromInputs();
-                Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine("created", generatedClass.Name), dialogNewElement.MethodCode);
+                Singleton<NodeLoader>.Instance.saveToFolder(generatedClass, Path.Combine(WorkSpace.DIR, "created", generatedClass.Name), dialogNewElement.MethodCode);
                 Singleton<ClassManager>.Instance.AddClass(generatedClass);
             }
         }

@@ -7,6 +7,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
@@ -178,6 +179,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             );
         }
 
+
         /// <summary>
         /// Saves the Node passed to the path passed.
         /// The passed path is taken AS IS. No fiddeling with names afterwards.
@@ -198,7 +200,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             }
 
             string metadataPath = Path.Combine(path, METADATA_FILENAME);
-            string newClassPath = Path.Combine(path, CREATED_PATH, nodeClass.Name.RemoveAll(" ", "_") + ".java");
+            string newClassPath = Path.Combine(path, Path.Combine(nodeClass.MainClass.Split('.').ToArray()).RemoveAll(" ", "_") + ".java");
             if (Directory.Exists(path))
             {
                 throw new FileAlreadyPresentException("Folder: " + path + " already exists.");
@@ -222,7 +224,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             File.WriteAllText(metadataPath, metadata.ToBeautifulJson());
             if (generatedClass != null)
             {
-                Directory.CreateDirectory(Path.Combine(path, CREATED_PATH));
+                Directory.CreateDirectory(Path.Combine(path, newClassPath));
+                Directory.Delete(newClassPath);
                 File.WriteAllText(newClassPath, generatedClass);
             }
 
