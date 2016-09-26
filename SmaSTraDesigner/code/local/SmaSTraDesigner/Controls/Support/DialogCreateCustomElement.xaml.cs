@@ -325,7 +325,7 @@ namespace SmaSTraDesigner.Controls.Support
         {
             string javaFreandlyName = ElementName.RemoveAll(" ","_");
 
-            string description = "No description";
+            string description = Description;
             string mainClass = "created." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];

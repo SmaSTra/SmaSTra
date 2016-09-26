@@ -23,7 +23,6 @@ namespace SmaSTraDesigner.Controls.Support
     /// </summary>
     public partial class DialogOnlineTransformatins : Window, INotifyPropertyChanged
     {
-        private string testString = "defaultText";
 
         private OnlineServerLink onlineServer;
 
@@ -38,17 +37,6 @@ namespace SmaSTraDesigner.Controls.Support
 
         private ObservableCollection<SimpleClass> onlineElementsList = new ObservableCollection<SimpleClass>();
         private SimpleClass selectedClass;
-
-
-        public string TestString
-        {
-            get { return testString; }
-            set
-            {
-                testString = value;
-                this.NotifyPropertyChanged("TestString");
-            }
-        }
 
         public ObservableCollection<SimpleClass> OnlineElementsList
         {
@@ -151,13 +139,6 @@ namespace SmaSTraDesigner.Controls.Support
                     tbStatusBar.Text = "Error: " + downloadSingleResponse.ToString();
                     return;
             }
-        }
-
-
-
-        private void TestButton_Click(object sender, RoutedEventArgs e)
-        {
-            onlineServer.GetAllOnlineElements(new Action<List<SimpleClass>, DownloadAllResponse>(callbackGetAllOnlineElements));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
