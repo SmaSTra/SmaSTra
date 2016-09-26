@@ -574,6 +574,20 @@
                 .FirstOrDefault(x => x.Name.Replace(" ", "").Replace("_", "") == typeName);
         }
 
+        
+        /// <summary>
+        /// Gets the First NodeClass found with that type name.
+        /// Returns null if none found.
+        /// </summary>
+        /// <param name="typeName">To search.</param>
+        /// <returns>The first found NodeClass with that name, null if none found.</returns>
+        public AbstractNodeClass[] GetFilteredNodeClasses(String filter)
+        {
+            filter = filter.ToLower();
+            return this.classes.Values
+                .Where(x => x.Name.Replace(" ","").Replace("_","").ToLower().Contains(filter) )
+                .ToArray();
+        }
 
 
         /// <summary>
