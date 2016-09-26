@@ -569,8 +569,9 @@
         /// <returns>The first found NodeClass with that name, null if none found.</returns>
         public AbstractNodeClass GetNodeClassForType(String typeName)
         {
+            typeName = typeName.Replace(" ", "").Replace("_", "");
             return this.classes.Values
-                .FirstOrDefault(x => x.Name == typeName);
+                .FirstOrDefault(x => x.Name.Replace(" ", "").Replace("_", "") == typeName);
         }
 
 
