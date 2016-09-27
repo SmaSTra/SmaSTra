@@ -15,6 +15,7 @@
     using BusinessLogic.online;
     using System.Diagnostics;
     using BusinessLogic.config;
+    using System.Windows.Controls.Primitives;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -29,6 +30,9 @@
             this.spnNodeClasses.DataContext = Singleton<ClassManager>.Instance;
             this.spnProperties.DataContext = Singleton<NodeProperties>.Instance;
             this.spnLibrary.DataContext = Singleton<Library>.Instance;
+            Online online = Singleton<Online>.Instance;
+            online.MainWindow = this;
+            this.spnOnlinePanel.DataContext = online;
         }
 
 		#endregion constructors
@@ -38,14 +42,41 @@
 
 		private void ToggleButton_Checked(object sender, RoutedEventArgs e)
 		{
-			//var toggleButtons = LayoutHelper.FindAllLogicalChildren<ToggleButton>(this.spnSideMenu);
-			//foreach (var toggleButton in toggleButtons)
-			//{
-			//	if (toggleButton != sender)
-			//	{
-			//		toggleButton.IsChecked = false;
-			//	}
-			//}
+            var toggleButtons = LayoutHelper.FindAllLogicalChildren<ToggleButton>(this.spnNodeTypeMenu);
+            foreach (var toggleButton in toggleButtons)
+            {
+                if (toggleButton != sender)
+                {
+                    toggleButton.IsChecked = false;
+                }
+            }
+        }
+
+        private void togDataSources_Checked(object sender, RoutedEventArgs e)
+        {
+            int oldPosition = spnNodeTypeMenu.Children.IndexOf(gridSideMenu);
+            spnNodeTypeMenu.Children.RemoveAt(oldPosition);
+            int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderDataSources);
+            spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
+            ToggleButton_Checked(sender, e);
+        }
+
+        private void togConversions_Checked(object sender, RoutedEventArgs e)
+        {
+            int oldPosition = spnNodeTypeMenu.Children.IndexOf(gridSideMenu);
+            spnNodeTypeMenu.Children.RemoveAt(oldPosition);
+            int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderConversions);
+            spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
+            ToggleButton_Checked(sender, e);
+        }
+
+        private void togTransformations_Checked(object sender, RoutedEventArgs e)
+        {
+            int oldPosition = spnNodeTypeMenu.Children.IndexOf(gridSideMenu);
+            spnNodeTypeMenu.Children.RemoveAt(oldPosition);
+            int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderTransformations);
+            spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
+            ToggleButton_Checked(sender, e);
         }
 
         private void spnLibrary_Drop(object sender, DragEventArgs e)
@@ -62,6 +93,30 @@
         {
             Singleton<NodeProperties>.Instance.onTextBoxInput(sender, e);
         }
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Singleton<Online>.Instance.UpdateButton_Click(sender, e);
+        }
+
+        private void listOnlineElements_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            Singleton<Online>.Instance.listOnlineElements_SelectionChanged(sender, e);
+        }
+
+        private void btnDownloadElement_Click(object sender, RoutedEventArgs e)
+        {
+            Singleton<Online>.Instance.btnDownloadElement_Click(sender, e);
+        }
+
+        private void uploadDropZone_Drop(object sender, DragEventArgs e)
+        {
+            Singleton<Online>.Instance.uploadDropZone_Drop(sender, e);
+        }
+        private void spnOnlinePanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            Singleton<Online>.Instance.spnOnlinePanel_IsVisibleChanged(sender, e);
+        }
+
 
         #endregion event handlers
 
@@ -303,8 +358,11 @@
 
         private void OnlineTransformations_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            DialogOnlineTransformatins onlineDialog = new DialogOnlineTransformatins(Singleton<OnlineServerLink>.Instance);
-            onlineDialog.Show();
+            if (!DialogOnlineTransformatins.IsOpen)
+            {
+                DialogOnlineTransformatins onlineDialog = new DialogOnlineTransformatins(Singleton<OnlineServerLink>.Instance);
+                onlineDialog.Show();
+            }
         }
 
         #endregion command handlers

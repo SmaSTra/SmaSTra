@@ -1,4 +1,4 @@
-﻿using SmaSTraDesigner.BusinessLogic;
+﻿using Common;
 using SmaSTraDesigner.BusinessLogic.online;
 using System;
 using System.Collections.Generic;
@@ -9,23 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
-namespace SmaSTraDesigner.Controls.Support
+namespace SmaSTraDesigner.BusinessLogic
 {
-    /// <summary>
-    /// Interaktionslogik für DialogOnlineTransformatins.xaml
-    /// </summary>
-    public partial class DialogOnlineTransformatins : Window, INotifyPropertyChanged
+    class Online : INotifyPropertyChanged
     {
 
-        public static bool IsOpen { get; private set; }
-
+        private Window mainWindow;
         private OnlineServerLink onlineServer;
 
         private List<SimpleClass> simpleOnlineElementsList;
@@ -40,11 +31,14 @@ namespace SmaSTraDesigner.Controls.Support
         private ObservableCollection<SimpleClass> onlineElementsList = new ObservableCollection<SimpleClass>();
         private SimpleClass selectedClass;
 
+        private string statusBarText ="";
+
         public ObservableCollection<SimpleClass> OnlineElementsList
         {
             get { return onlineElementsList; }
             set
-            {   if (value != null)
+            {
+                if (value != null)
                 {
                     onlineElementsList = value;
                     this.NotifyPropertyChanged("OnlineElementsList");
@@ -65,34 +59,56 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
-        public DialogOnlineTransformatins(OnlineServerLink onlineServer)
+        public string StatusBarText
         {
-            this.onlineServer = onlineServer;
-            DataContext = this;
-            InitializeComponent();
+            get { return statusBarText; }
+            set
+            {
+                if (value != null)
+                {
+                    statusBarText = value;
+                    this.NotifyPropertyChanged("StatusBarText");
+                }
+            }
+        }
 
-            onlineServer.GetAllOnlineElements(new Action<List<SimpleClass>, DownloadAllResponse>(callbackGetAllOnlineElements));
+        public Window MainWindow
+        {
+            get { return mainWindow; }
+            set
+            {
+                if (value != null)
+                {
+                    mainWindow = value;
+                    this.NotifyPropertyChanged("MainWindow");
+                }
+            }
+        }
+
+        public Online()
+        {
+            onlineServer = Singleton<OnlineServerLink>.Instance;
         }
 
         private void callbackGetAllOnlineElements(List<SimpleClass> allOnlineElementsList, DownloadAllResponse downloadAllResponse)
         {
             this.simpleOnlineElementsList = allOnlineElementsList;
             this.downloadAllResponse = downloadAllResponse;
-            Dispatcher.Invoke(new Action(responseGetAllOnlineElements));
+            MainWindow.Dispatcher.Invoke(new Action(responseGetAllOnlineElements));
         }
 
         private void callbackGetOnlineElement(AbstractNodeClass downloadedClass, DownloadSingleResponse downloadSingleResponse)
         {
             this.downloadedClass = downloadedClass;
             this.downloadSingleResponse = downloadSingleResponse;
-            Dispatcher.Invoke(new Action(responseGetOnlineElement));
+            MainWindow.Dispatcher.Invoke(new Action(responseGetOnlineElement));
         }
 
         private void callbackUploadElement(string n, UploadResponse uploadResponse)
         {
             this.uploadResponse = uploadResponse;
             this.n = n;
-            Dispatcher.Invoke(new Action(responseUploadElement));
+            MainWindow.Dispatcher.Invoke(new Action(responseUploadElement));
         }
 
         private void responseGetAllOnlineElements()
@@ -100,12 +116,12 @@ namespace SmaSTraDesigner.Controls.Support
             switch (downloadAllResponse)
             {
                 case DownloadAllResponse.SUCCESS:
-                    tbStatusBar.Text = "Success: Online elements updated";
+                    StatusBarText = "Success: Online elements updated";
                     //TODO: update list
                     OnlineElementsList = new ObservableCollection<SimpleClass>(simpleOnlineElementsList);
                     return;
                 default:
-                    tbStatusBar.Text = "Error: " + downloadAllResponse.ToString();
+                    StatusBarText = "Error: " + downloadAllResponse.ToString();
                     return;
             }
         }
@@ -115,11 +131,11 @@ namespace SmaSTraDesigner.Controls.Support
             switch (downloadSingleResponse)
             {
                 case DownloadSingleResponse.SUCCESS:
-                    tbStatusBar.Text = "Success: Element downloaded";
+                    StatusBarText = "Success: Element downloaded";
                     //TODO handle download
                     return;
                 default:
-                    tbStatusBar.Text = "Error: " + downloadSingleResponse.ToString();
+                    StatusBarText = "Error: " + downloadSingleResponse.ToString();
                     return;
             }
         }
@@ -134,11 +150,11 @@ namespace SmaSTraDesigner.Controls.Support
             switch (uploadResponse)
             {
                 case UploadResponse.SUCCESS:
-                    tbStatusBar.Text = "Success: Element uploaded";
+                    StatusBarText = "Success: Element uploaded";
                     //TODO handle download
                     return;
                 default:
-                    tbStatusBar.Text = "Error: " + downloadSingleResponse.ToString();
+                    StatusBarText = "Error: " + downloadSingleResponse.ToString();
                     return;
             }
         }
@@ -148,27 +164,28 @@ namespace SmaSTraDesigner.Controls.Support
         public void NotifyPropertyChanged(string propName)
         {
             if (this.PropertyChanged != null)
-            this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        public void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
             onlineServer.GetAllOnlineElements(new Action<List<SimpleClass>, DownloadAllResponse>(callbackGetAllOnlineElements));
         }
 
-        private void listOnlineElements_SelectionChanged(object sender, RoutedEventArgs e)
+        public void listOnlineElements_SelectionChanged(object sender, RoutedEventArgs e)
         {
             SelectedClass = ((SimpleClass)((ListView)sender).SelectedItem);
         }
 
-        private void btnDownloadElement_Click(object sender, RoutedEventArgs e)
+        public void btnDownloadElement_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedClass != null) {
+            if (SelectedClass != null)
+            {
                 onlineServer.GetOnlineElement(SelectedClass.Name, callbackGetOnlineElement);
-                    }
+            }
         }
 
-        private void uploadDropZone_Drop(object sender, DragEventArgs e)
+        public void uploadDropZone_Drop(object sender, DragEventArgs e)
         {
             AbstractNodeClass uploadClass = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1.Class as AbstractNodeClass;
             if (uploadClass != null)
@@ -177,14 +194,12 @@ namespace SmaSTraDesigner.Controls.Support
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        public void spnOnlinePanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            IsOpen = true;
-        }
-
-        private void Window_Unloaded(object sender, RoutedEventArgs e)
-        {
-            IsOpen = false;
+            if ((bool)e.NewValue)
+            {
+                onlineServer.GetAllOnlineElements(new Action<List<SimpleClass>, DownloadAllResponse>(callbackGetAllOnlineElements));
+            }
         }
     }
 }

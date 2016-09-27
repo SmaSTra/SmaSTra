@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="DialogOnlineTransformatins" SizeToContent="Height" Width="550" Background="{StaticResource ColorPanelBackground}">
+        Title="DialogOnlineTransformatins" SizeToContent="Height" Width="550" Background="{StaticResource ColorPanelBackground}" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
     <Grid>
         <StackPanel>
             <Grid Height="30"/>

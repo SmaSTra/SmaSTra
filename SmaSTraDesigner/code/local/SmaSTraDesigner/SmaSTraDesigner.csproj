@@ -171,6 +171,7 @@
     <Compile Include="BusinessLogic\nodes\OutputNode.cs" />
     <Compile Include="BusinessLogic\nodes\Transformation.cs" />
     <Compile Include="BusinessLogic\classhandler\TransformationTree.cs" />
+    <Compile Include="BusinessLogic\Online.cs" />
     <Compile Include="BusinessLogic\online\OnlineServerLink.cs" />
     <Compile Include="BusinessLogic\online\OnlineServiceResponse.cs" />
     <Compile Include="BusinessLogic\utils\DirCopy.cs" />

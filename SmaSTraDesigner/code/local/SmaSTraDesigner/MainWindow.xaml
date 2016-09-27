@@ -95,91 +95,79 @@
 
 
             <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Background="{StaticResource ColorPanelBackground}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" x:Name="spnNodeTypeMenu">
                     <Border BorderBrush="Black" BorderThickness="1,1,1,0">
-                        <RadioButton GroupName="nodeType" x:Name="togDataSources" VerticalContentAlignment="Center">
-                            <RadioButton.Template>
-                                <ControlTemplate>
-                                    <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                          Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Background="Transparent"/>
-                                </ControlTemplate>
-                            </RadioButton.Template>
+                        <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" Checked="togDataSources_Checked" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="DataSources">
-                                <Image Width="40" Source="pack://siteoforigin:,,,/Resources/0v1_blue.png"/>
+                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/0v1_blue.png"/>
                             </WrapPanel>
-                        </RadioButton>
+                        </ToggleButton>
                     </Border>
+                    <Border x:Name="placeholderDataSources"></Border>
                     <Border BorderBrush="Black" BorderThickness="0,1,1,0">
-                        <RadioButton GroupName="nodeType" x:Name="togConversions" VerticalContentAlignment="Center">
-                            <RadioButton.Template>
-                                <ControlTemplate>
-                                    <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                          Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Background="Transparent"/>
-                                </ControlTemplate>
-                            </RadioButton.Template>
+                        <ToggleButton x:Name="togConversions" Style="{StaticResource ToggleButtonStyle}" Checked="togConversions_Checked" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Conversions">
-                                <Image Width="40" Source="pack://siteoforigin:,,,/Resources/1v1_blue.png"/>
+                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/1v1_blue.png"/>
                             </WrapPanel>
-                        </RadioButton>
+                        </ToggleButton>
                     </Border>
+                    <Border x:Name="placeholderConversions"></Border>
                     <Border BorderBrush="Black" BorderThickness="0,1,1,0">
-                        <RadioButton GroupName="nodeType" x:Name="togTransformations" VerticalContentAlignment="Center">
-                            <RadioButton.Template>
-                                <ControlTemplate>
-                                    <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                          Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Background="Transparent"/>
-                                </ControlTemplate>
-                            </RadioButton.Template>
+                        <ToggleButton x:Name="togTransformations" Style="{StaticResource ToggleButtonStyle}" Checked="togTransformations_Checked" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Transformations">
-                                <Image Width="40" Source="pack://siteoforigin:,,,/Resources/2v1_blue.png"/>
+                                <Image Width="50" Source="pack://siteoforigin:,,,/Resources/2v1_blue.png"/>
                             </WrapPanel>
-                        </RadioButton>
+                        </ToggleButton>
                     </Border>
-                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" Grid.Column="1" Width="30" Margin="50,0,0,0" Background="Transparent" ToolTip="Open">
+                    <Border x:Name="placeholderTransformations"></Border>
+                    
+                    <Grid x:Name="gridSideMenu" Margin="0,0,10,0" Background="{StaticResource ColorPanelBackground}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.Visibility>
+                            <MultiBinding Converter="{StaticResource VisibilityAsBooleanConverter}" ConverterParameter="{x:Static wpfConverters:VisibilityAsBooleanConverterOptions.CombineWithOr}" >
+                                <Binding ElementName="togDataSources" Path="IsChecked" Mode="OneWay" />
+                                <Binding ElementName="togConversions" Path="IsChecked" Mode="OneWay" />
+                                <Binding ElementName="togTransformations" Path="IsChecked" Mode="OneWay" />
+                            </MultiBinding>
+                        </Grid.Visibility>
+                        <Border BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
+                            <ToggleButton x:Name="tglDefaultTF" VerticalAlignment="Center" Style="{StaticResource ToggleButtonStyle}" IsChecked="True" >
+                                <WrapPanel ToolTip="Default Transformations">
+                                    <Image Width="30" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
+                                </WrapPanel>
+                            </ToggleButton>
+                        </Border>
+                        <Border Grid.Column="1"  BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
+                            <ToggleButton x:Name="tglCustomTF" Style="{StaticResource ToggleButtonStyle}" >
+                                <WrapPanel ToolTip="Custom Transformations">
+                                    <Image Width="30" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
+                                </WrapPanel>
+                            </ToggleButton>
+                        </Border>
+                        <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,0" >
+                            <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Center">
+                                <WrapPanel ToolTip="Combined Transformations">
+                                    <Image Width="30" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
+                                </WrapPanel>
+                            </ToggleButton>
+                        </Border>
+                    </Grid>
+                    
+                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" Grid.Column="1" Width="40" Margin="50,0,0,0" Background="Transparent" ToolTip="Open">
                         <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
                     </Button>
                 </StackPanel>
             </ScrollViewer>
 
             <Grid Grid.Column="0" Grid.Row="1" Width="{Binding ElementName=gridUpperMenuButtons, Path=ActualWidth}">
-                <Grid x:Name="spnSideMenu" Background="{StaticResource ColorPanelBackground}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.Visibility>
-                        <MultiBinding Converter="{StaticResource VisibilityAsBooleanConverter}" ConverterParameter="{x:Static wpfConverters:VisibilityAsBooleanConverterOptions.CombineWithOr}" >
-                            <Binding ElementName="togDataSources" Path="IsChecked" Mode="OneWay" />
-                            <Binding ElementName="togConversions" Path="IsChecked" Mode="OneWay" />
-                            <Binding ElementName="togTransformations" Path="IsChecked" Mode="OneWay" />
-                        </MultiBinding>
-                    </Grid.Visibility>
-                    <Border BorderBrush="Black" BorderThickness="0,0,1,1">
-                        <ToggleButton x:Name="tglDefaultTF" Margin="0,8,0,0" IsChecked="True" VerticalAlignment="Top" Checked="ToggleButton_Checked" Background="Transparent" >
-                            <WrapPanel ToolTip="Default Transformations">
-                                <Image Width="30" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
-                            </WrapPanel>
-                        </ToggleButton>
-                    </Border>
-                    <Border Grid.Column="1"  BorderBrush="Black" Margin="0,8.5,0,0" BorderThickness="0,0,0,1">
-                        <ToggleButton x:Name="tglCustomTF" Checked="ToggleButton_Checked" VerticalAlignment="Top" Background="Transparent" >
-                            <WrapPanel ToolTip="Custom Transformations">
-                                <Image Width="30" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
-                            </WrapPanel>
-                        </ToggleButton>
-                    </Border>
-                    <Border Grid.Column="2" BorderBrush="Black" Margin="0,9,0,0" BorderThickness="0,0,0,0">
-                        <ToggleButton x:Name="tglCombinedTF" Checked="ToggleButton_Checked" VerticalAlignment="Top" Background="Transparent">
-                            <WrapPanel ToolTip="Combined Transformations">
-                                <Image Width="30" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
-                            </WrapPanel>
-                        </ToggleButton>
-                    </Border>
-                </Grid>
+                
                 <Border BorderBrush="Black" BorderThickness="1,1,0,2"></Border>
             </Grid>
 
@@ -275,56 +263,147 @@
         
         <GridSplitter Grid.Column="1" Grid.Row="5" Width="5" Background="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
 
-        
-        <Grid Grid.Column="2" Grid.Row="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="5" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <ScrollViewer Grid.Column="2" Grid.Row="4" Background="{StaticResource ColorPanelBackground}">
+            <StackPanel>
 
-            <DockPanel>
-                <Border BorderThickness="1" BorderBrush="Black" DockPanel.Dock="Top">
-                    <TextBlock Text="Properties" Style="{StaticResource TextBlockStyle}" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                </Border>
-                <ScrollViewer>
-            <StackPanel x:Name="spnProperties" Background="{StaticResource ColorPanelBackground}">
-                <StackPanel.Resources>
-                    <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
-                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
-                </StackPanel.Resources>
-                <WrapPanel>
-                    <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeName ,UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Class: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClass ,UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <TextBlock Text="Input: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <WrapPanel>
-                            <ItemsControl x:Name="icNodeClassInputTypes" ItemsSource="{Binding Path=NodeInputIOData, UpdateSourceTrigger=PropertyChanged}" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <DataTemplate.Resources>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
-                                </DataTemplate.Resources>
-                                <StackPanel Orientation="Vertical" >
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="Black">
+                        <ToggleButton x:Name="togOnlinePanel" Content="Online Transformations" Foreground="White" FontSize="{StaticResource FontSizeMedium}" Style="{StaticResource ToggleButtonStyle}"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel x:Name="spnOnlinePanel" IsVisibleChanged="spnOnlinePanel_IsVisibleChanged" Visibility="{Binding ElementName=togOnlinePanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
+                        <Grid Height="30"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <DockPanel>
+                                <ListView x:Name="listOnlineElements" DockPanel.Dock="Top" Background="{StaticResource ColorPanelTitel}" ItemsSource="{Binding Path=OnlineElementsList}" SelectionChanged="listOnlineElements_SelectionChanged">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                                            </DataTemplate.Resources>
+                                            <WrapPanel>
+                                                <TextBlock Text="{Binding Name}" />
+                                            </WrapPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                                <Button x:Name="UpdateButton" DockPanel.Dock="Bottom" Height="40" Content="Update list" Style="{StaticResource imageButtonTemplate}" Click="UpdateButton_Click" />
+
+                            </DockPanel>
+
+                            <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+
+                            <ScrollViewer Grid.Column="2" Height="150">
+                                <StackPanel x:Name="spnElementDetails" >
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                                    </StackPanel.Resources>
                                     <WrapPanel>
-                                        <TextBlock Text="{Binding Path=Type.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
+                                        <TextBlock Text="Name: "/>
+                                        <TextBlock x:Name="tbDetailName" Text="{Binding Path=SelectedClass.Name}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Text="Description: "/>
+                                        <TextBlock x:Name="tbDetailDescription" Text="{Binding Path=SelectedClass.Description}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Text="Display: "/>
+                                        <TextBlock x:Name="tbDetailDisplay" Text="{Binding Path=SelectedClass.Display}"/>
+                                    </WrapPanel>
+                                    <StackPanel>
+                                        <TextBlock x:Name="tbDetailInputs" Text="Inputs:"/>
+                                        <ItemsControl x:Name="icDetailInputs" ItemsSource="{Binding Path=SelectedClass.Inputs}" Margin="10,0,0,0">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" Style="{StaticResource TextBlockStyle}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                    <WrapPanel>
+                                        <TextBlock Text="Output: "/>
+                                        <TextBlock x:Name="tbDetailOutput" Text="{Binding Path=SelectedClass.Output}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Text="Type: "/>
+                                        <TextBlock x:Name="tbDetailType" Text="{Binding Path=SelectedClass.Type}"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                        </Grid>
+
+
+
+                        <Button x:Name="btnDownloadElement" Width="100" Content="Download" Click="btnDownloadElement_Click" >
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource imageButtonTemplate}" TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger 
+                     Binding ="{Binding ElementName=listOnlineElements, Path=SelectedIndex}" 
+                     Value="-1">
+                                            <Setter Property="Button.IsEnabled" Value="false"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Grid x:Name="uploadDropZone" Background="LightGray" Height="50" Margin="0,20,0,0" AllowDrop="True" Drop="uploadDropZone_Drop">
+                            <TextBlock Text="Upload Drop Zone" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <TextBlock x:Name="tbOnlineStatusBar" HorizontalAlignment="Center" Margin="10" Text="{Binding Path=StatusBarText}" Style="{StaticResource TextBlockStyle}"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <DockPanel>
+                    <Border BorderThickness="1" BorderBrush="Black" DockPanel.Dock="Top">
+                        <ToggleButton x:Name="togPropertiesPanel" Content="Properties" IsChecked="True" Foreground="White" FontSize="{StaticResource FontSizeMedium}" Style="{StaticResource ToggleButtonStyle}"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel x:Name="spnProperties" Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togPropertiesPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
+                        <StackPanel.Resources>
+                            <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                        </StackPanel.Resources>
+                        <WrapPanel>
+                            <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeName ,UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Class: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClass ,UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                        <TextBlock Text="Input: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <WrapPanel>
+                            <ItemsControl x:Name="icNodeClassInputTypes" ItemsSource="{Binding Path=NodeInputIOData, UpdateSourceTrigger=PropertyChanged}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.Resources>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                                        </DataTemplate.Resources>
+                                        <StackPanel Orientation="Vertical" >
+                                            <WrapPanel>
+                                                <TextBlock Text="{Binding Path=Type.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
                                                 <TextBlock Text=": " TextWrapping="Wrap"/>
                                                 <Grid>
                                                     <TextBlock Text="{Binding Path=ConnectedNode.Name, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="#898989"/>
                                                     <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="Transparent" PreviewTextInput="InputType_PreviewTextInput"/>
                                                 </Grid>
                                             </WrapPanel>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </WrapPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </WrapPanel>
                         <TextBlock Text="Configuration: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <WrapPanel>
                             <ItemsControl x:Name="icNodeConfiguration" ItemsSource="{Binding Path=NodeConfiguration, UpdateSourceTrigger=PropertyChanged}" >
@@ -346,47 +425,44 @@
                             </ItemsControl>
                         </WrapPanel>
                         <WrapPanel>
-                    <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionX ,UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionY ,UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-                <WrapPanel>
-                    <TextBlock Text="Description: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
-                </WrapPanel>
-            </StackPanel>
-            </ScrollViewer>
-            </DockPanel>
-            <GridSplitter Grid.Row="1" Height="5" Background="Black" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionX ,UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionY ,UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Description: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </DockPanel>
 
-            <DockPanel Grid.Row="2">
-                <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Text="Library" Style="{StaticResource TextBlockStyle}" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                </Border>
-                <ScrollViewer >
-            <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
-                        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
-                    </StackPanel.Resources>
-                    <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeViewerList}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel>
-                                </StackPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </StackPanel>
-            </ScrollViewer>
-            </DockPanel>
-        </Grid>
-	</Grid>
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="Black">
+                        <ToggleButton x:Name="togLibraryPanel" Content="Library" IsChecked="True" Foreground="White" FontSize="{StaticResource FontSizeMedium}" Style="{StaticResource ToggleButtonStyle}"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togLibraryPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter"  >
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
+                        </StackPanel.Resources>
+                        <ItemsControl Name="icLibraryNodeList" ItemsSource="{Binding Path=LibraryNodeViewerList}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel>
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                </DockPanel>
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>
