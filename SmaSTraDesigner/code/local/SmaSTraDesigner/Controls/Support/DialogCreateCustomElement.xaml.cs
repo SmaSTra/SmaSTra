@@ -11,6 +11,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.Controls.Support
@@ -31,6 +32,7 @@ namespace SmaSTraDesigner.Controls.Support
         private DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
         private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
         private string outputTypeString = "OutputType";
+        ClassManager classManager = Singleton<ClassManager>.Instance;
 
         private bool firstPage;
         public bool FirstPage
@@ -51,7 +53,8 @@ namespace SmaSTraDesigner.Controls.Support
         {
             InitializeComponent();
             this.DataContext = this;
-            allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
+            classManager = Singleton<ClassManager>.Instance;
+            allDataTypes = classManager.getDataTypes();
             cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "OutputType", SelectedDataType = allDataTypes[0] };
             InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "InputType", SelectedDataType = allDataTypes [0]});
             FirstPage = true;
@@ -214,8 +217,7 @@ namespace SmaSTraDesigner.Controls.Support
                 tbStatus.Text = "Please enter a name for the new element.";
                 return;
             }
-
-            ClassManager classManager = Singleton<ClassManager>.Instance;
+            
             if(classManager.GetNodeClassForType(ElementName) != null)
             {
                 tbStatus.Text = "A Element with that name already exists.";
@@ -225,7 +227,7 @@ namespace SmaSTraDesigner.Controls.Support
             OutputType = ((InputTypeViewModel)cboxOutputTypeString.DataContext).SelectedDataType;
             if (OutputType == null)
             {   //Check new DataType name
-                if (OutputTypeString.Length < 1)
+                if (OutputTypeString.Length < 1 || string.IsNullOrWhiteSpace(OutputTypeString))
                 {
                     tbStatus.Text = "Please enter a name for the new output type.";
                     return;
@@ -247,7 +249,7 @@ namespace SmaSTraDesigner.Controls.Support
             {
                 if (inputTypeViewModel.SelectedDataType == null)
                 {   //Check new DataType name
-                    if (inputTypeViewModel.InputTypeString.Length < 1)
+                    if (inputTypeViewModel.InputTypeString.Length < 1 || string.IsNullOrWhiteSpace(inputTypeViewModel.InputTypeString))
                     {
                         tbStatus.Text = "Please enter a name for the new input type.";
                         return;
@@ -384,6 +386,23 @@ namespace SmaSTraDesigner.Controls.Support
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tboxNewElementName.Focus();
+        }
+
+        private void tboxNewElementName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string enteredName = ((TextBox)sender).Text;
+            if (classManager.GetNodeClassForType(enteredName) != null)
+            {
+                tboxNewElementName.Foreground = Brushes.Red;
+                tbStatus.Foreground = Brushes.Red;
+                tbStatus.Text = "A Element with that name already exists.";
+            }
+            else
+            {
+                tboxNewElementName.Foreground = Brushes.Black;
+                tbStatus.Foreground = Brushes.Black;
+                tbStatus.Text = "";
+            }
         }
     }
 

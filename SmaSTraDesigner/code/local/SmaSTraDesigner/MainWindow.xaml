@@ -368,7 +368,7 @@
 
             <DockPanel Grid.Row="2">
                 <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="Black">
-                    <TextBlock Text="Library" Style="{StaticResource TextBlockStyle}" FontSize="15" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <TextBlock Text="Library" Style="{StaticResource TextBlockStyle}" Background="{StaticResource ColorPanelTitel}" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 </Border>
                 <ScrollViewer >
             <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter" >

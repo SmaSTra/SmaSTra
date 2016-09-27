@@ -12,11 +12,11 @@
         Background="Transparent">
     <Window.Resources>
     <Style TargetType="TextBlock">
-        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
         <Setter Property="FontFamily" Value="Tahoma Regular"/>
     </Style>
     <Style TargetType="TextBox">
-        <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
         <Setter Property="FontFamily" Value="Tahoma Regular"/>
     </Style>
     </Window.Resources>
