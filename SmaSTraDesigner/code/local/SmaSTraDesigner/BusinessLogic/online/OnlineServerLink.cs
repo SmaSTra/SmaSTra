@@ -1,5 +1,7 @@
 ﻿using Common;
 using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -401,6 +404,50 @@ namespace SmaSTraDesigner.BusinessLogic.online
             Inputs = inputs;
             Output = output;
         }
+
+
+        /// <summary>
+        /// Generates a temporary Class object for the Node.
+        /// </summary>
+        /// <returns>The temp. Class.</returns>
+        public AbstractNodeClass GenerateTempClass()
+        {
+            if(Type == "transformation")
+            {
+                return new TransformationNodeClass(Name, Display, Description, "CREATOR", 
+                    new DataType(Output), Inputs.Select(i => new DataType(i)).ToArray(),
+                    "", null, null, null, null, true, "", true
+                );
+            }
+
+            if(Type == "sensor")
+            {
+                return new DataSourceNodeClass(Name, Display, Description, "CREATOR",
+                    new DataType(Output), "",
+                    null, null, null, null, true, "", "", ""
+                );
+            }
+
+            if(Type == "buffer")
+            {
+                return new BufferNodeClass(Name, Display, Description, "CREATOR",
+                    new DataType(Output), "",
+                    null, null, null, null, null, true, "", ""
+                );
+            }
+
+            //This will fail:
+            if(Type == "combined")
+            {
+                return new CombinedNodeClass(Name, Display, Description, "CREATOR",
+                    null, null, new DataType(Output), "",
+                    true, null
+                );
+            }
+
+            return null;
+        }
+
     }
 
 

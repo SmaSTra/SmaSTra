@@ -21,12 +21,45 @@
     public class ClassManager : INotifyPropertyChanged
 	{
 
-		#region fields
+        #region fields
 
-		/// <summary>
-		/// List of all loaded transformations that represent a simple conversion (one input one output).
-		/// </summary>
-		private Transformation[] baseConversions = null;
+        /// <summary>
+        /// The Toggle for the Basic Elements
+        /// </summary>
+        private bool toggleBasic = false;
+
+        /// <summary>
+        /// The Toggle for the Custom Elements
+        /// </summary>
+        private bool toggleCustom = false;
+
+        /// <summary>
+        /// The Toggle for the Combined Elements
+        /// </summary>
+        private bool toggleCombined = false;
+
+        /// <summary>
+        /// The Type to filter for.
+        /// </summary>
+        private string selectedCategory = "none";
+        /// <summary>
+        /// The Name to filter for.
+        /// </summary>
+        private string filterString = "";
+
+
+        /// <summary>
+        /// The cached filtered Nodes.
+        /// </summary>
+        private Node[] filteredNodes = null;
+
+
+        //////DELETE BELOW IF WORKING!////
+
+        /// <summary>
+        /// List of all loaded transformations that represent a simple conversion (one input one output).
+        /// </summary>
+        private Transformation[] baseConversions = null;
 
         /// <summary>
 		/// List of all custom transformations that represent a simple conversion (one input one output).
@@ -103,15 +136,140 @@
 		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		#endregion events
+        #endregion events
 
-		#region properties
+        #region properties
 
-		/// <summary>
-		/// Gets the BaseConversions instance (creates one if none exists).
-		/// List of all base transformations that represent a simple conversion (one input one output).
-		/// </summary>
-		public Transformation[] BaseConversions
+
+        /// <summary>
+        /// The Toggle for the Basic Elements to Bind to the GUI.
+        /// </summary>
+        public bool ToggleBasic {
+            get
+            { return toggleBasic; }
+            set
+            {
+                this.toggleBasic = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+
+        /// <summary>
+        /// The Toggle for the Custom Elements to Bind to the GUI.
+        /// </summary>
+        public bool ToggleCustom
+        {
+            get
+            { return toggleCustom; }
+            set
+            {
+                this.toggleCustom = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+
+        /// <summary>
+        /// The Toggle for the Combined Elements to Bind to the GUI.
+        /// </summary>
+        public bool ToggleCombined
+        {
+            get
+            { return toggleCombined; }
+            set
+            {
+                this.toggleCombined = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+
+        /// <summary>
+        /// The Selected category to filter to Bind to the GUI.
+        /// </summary>
+        public string SelectedCategory
+        {
+            get
+            { return selectedCategory; }
+            set
+            {
+                this.selectedCategory = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+        /// <summary>
+        /// The String to filter the names for to Bind to the GUI.
+        /// </summary>
+        public string FilterString
+        {
+            get
+            { return filterString; }
+            set
+            {
+                this.filterString = value.ToLower();
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+        /// <summary>
+        /// Gets the Filtered Nodes. To bind to the GUI.
+        /// </summary>
+        public Node[] FilteredNodes
+        {
+            get
+            {
+                if (this.filteredNodes == null)
+                {
+                    Func<AbstractNodeClass, bool> typeFilter = (n =>
+                    {
+                        if (this.selectedCategory == "datasource") return n.InputTypes.Count() == 0;
+                        if (this.selectedCategory == "conversion") return n.InputTypes.Count() == 1;
+                        if (this.selectedCategory == "transformation") return n.InputTypes.Count() > 1;
+                        if (this.selectedCategory == "buffer") return n is BufferNodeClass;
+                        return false;
+                    });
+
+                    Func<AbstractNodeClass, bool> baseFilter = (n => { return toggleBasic && !n.UserCreated; });
+                    Func<AbstractNodeClass, bool> customFilter = (n => { return toggleCustom && n.UserCreated; });
+                    Func<AbstractNodeClass, bool> combinedFilter = (n => { return toggleCombined && n is CombinedNodeClass; });
+                    Func<AbstractNodeClass, bool> nameFilter = (n => { return string.IsNullOrWhiteSpace(this.filterString) || n.Name.ToLower().Contains(filterString); });
+
+                    //Filter + Generate:
+                    return classes.Values
+                        .Where(typeFilter)
+
+                        .Where(baseFilter)
+                        .Where(customFilter)
+                        .Where(combinedFilter)
+
+                        .Where(nameFilter)
+
+                        .Distinct()
+                        .Select(n => n.generateNode())
+                        .NonNull()
+                        .OrderBy(s => s.Class.Name)
+                        .ToArray();
+                }
+
+                return this.filteredNodes;
+            }
+        }
+
+
+        /////DELETE BELOW WHEN WORKING////
+
+        /// <summary>
+        /// Gets the BaseConversions instance (creates one if none exists).
+        /// List of all base transformations that represent a simple conversion (one input one output).
+        /// </summary>
+        public Transformation[] BaseConversions
 		{
 			get
 			{
@@ -435,6 +593,13 @@
                     break;
             }
 
+            //Always update the filtered nodes.
+            if(nodeClass != null)
+            {
+                filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+
             return nodeClass;
         }
 
@@ -569,10 +734,25 @@
         /// <returns>The first found NodeClass with that name, null if none found.</returns>
         public AbstractNodeClass GetNodeClassForType(String typeName)
         {
+            typeName = typeName.Replace(" ", "").Replace("_", "").ToLower();
             return this.classes.Values
-                .FirstOrDefault(x => x.Name == typeName);
+                .FirstOrDefault(x => x.Name.Replace(" ", "").Replace("_", "").ToLower() == typeName);
         }
 
+        
+        /// <summary>
+        /// Gets the First NodeClass found with that type name.
+        /// Returns null if none found.
+        /// </summary>
+        /// <param name="typeName">To search.</param>
+        /// <returns>The first found NodeClass with that name, null if none found.</returns>
+        public AbstractNodeClass[] GetFilteredNodeClasses(String filter)
+        {
+            filter = filter.ToLower();
+            return this.classes.Values
+                .Where(x => x.Name.Replace(" ","").Replace("_","").ToLower().Contains(filter) )
+                .ToArray();
+        }
 
 
         /// <summary>

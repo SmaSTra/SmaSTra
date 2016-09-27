@@ -209,7 +209,7 @@ namespace SmaSTraDesigner.Controls.Support
 
         private void btnIONext_Click(object sender, RoutedEventArgs e)
         {
-            if (ElementName.Length < 1)
+            if (string.IsNullOrWhiteSpace(ElementName))
             {
                 tbStatus.Text = "Please enter a name for the new element.";
                 return;

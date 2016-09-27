@@ -46,6 +46,12 @@
                 }
             }catch (Exception exp) { Debug.Print(exp.ToString()); }
 
+            //We have the default Workspace -> Set it correct:
+            if (string.IsNullOrWhiteSpace(lastWorkspace))
+            {
+                lastWorkspace = Directory.GetCurrentDirectory();
+            }
+
             SwitchWorkspace(lastWorkspace, null);
         }
 
