@@ -1,44 +1,92 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
+    using config;
+    using Newtonsoft.Json.Linq;
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
+    using utils;
 
     /// <summary>
     /// Stores information about a data type used by nodes for their inpot or output data.
     /// </summary>
     public class DataType
-	{
-		#region constructors
+    {
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="name">Data type name (is used as a unique identifier)</param>
-		public DataType(string name)
-		{
+        /// <summary>
+        /// The List of DataTypes present in the system.
+        /// </summary>
+        private static List<DataType> knownTypes = new List<DataType>();
+
+
+        #region constructors
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Data type name (is used as a unique identifier)</param>
+        private DataType(string name) : this(name, "{0}", new string[] { "Object" } )
+		{}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Data type name (is used as a unique identifier)</param>
+        private DataType(string name, string template, string type) : this(name, template, new string[] { type } )
+        {}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Data type name (is used as a unique identifier)</param>
+        private DataType(string name, string template, string[] types = null, bool creatable = true)
+        {
             System.Diagnostics.Debug.Print("DataType created: " + name);
-			if (String.IsNullOrWhiteSpace(name))
-			{
-				throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", "name");
-			}
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", "name");
+            }
 
-			this.Name = name;
+            this.Name = name;
             this.MinimizedName = minimizeToClass(name);
-		}
 
-		#endregion constructors
+            this.TypeTemplate = template;
+            this.TypeTemplateVars = types == null ? new string[] { "object" } : types;
+            this.Creatable = true;
+        }
 
-		#region properties
+        #endregion constructors
 
-		/// <summary>
-		/// Data type name (is used as a unique identifier)
-		/// </summary>
-		public string Name { get; }
+        #region properties
+
+        /// <summary>
+        /// Data type name (is used as a unique identifier)
+        /// </summary>
+        public string Name { get; }
 
         /// <summary>
         /// The Name of the Class minimized to Java criteria.
         /// </summary>
         public string MinimizedName { get; }
+
+
+        /// <summary>
+        /// The Template to use to create a new Object as Source.
+        /// </summary>
+        public string TypeTemplate { get; }
+
+
+        /// <summary>
+        /// The Template to use to create a new Object as Source.
+        /// </summary>
+        public string[] TypeTemplateVars { get; }
+
+        /// <summary>
+        /// If the element may be created by hand.
+        /// </summary>
+        public bool Creatable { get; }
 
 
         #endregion properties
@@ -85,6 +133,15 @@
 		}
 
         /// <summary>
+        /// Copies the Element.
+        /// </summary>
+        /// <returns></returns>
+        public DataType Copy()
+        {
+            return new DataType(Name);
+        }
+
+        /// <summary>
         /// This gets the last part of a class from an complete Class name.
         /// Eg.: java.util.List -> List.
         /// </summary>
@@ -96,5 +153,92 @@
         }
 
         #endregion methods
+
+        #region StaticMethods
+
+        /// <summary>
+        /// Gets the cached Type.
+        /// </summary>
+        /// <param name="name">To get</param>
+        public static DataType GetCachedType(string name)
+        {
+            DataType first = knownTypes
+                .FirstOrDefault(t => t.Name == name);
+
+            if(first == null)
+            {
+                first = new DataType(name);
+                knownTypes.Add(first);
+            }
+
+            return first;
+        }
+
+        /// <summary>
+        /// Gets Temp non registered types.
+        /// </summary>
+        /// <param name="name">To get</param>
+        public static DataType GetCachedOrNonRegisteredType(string name)
+        {
+            DataType first = knownTypes
+                .FirstOrDefault(t => t.Name == name);
+
+            return first == null ? new DataType(name) : first;
+        }
+
+        /// <summary>
+        /// Gets all Datatypes known.
+        /// </summary>
+        /// <returns>all known DataTypes.</returns>
+        public static DataType[] getDataTypes()
+        {
+            return knownTypes.ToArray();
+        }
+
+        /// <summary>
+        /// Reloads the data from the base-Folder.
+        /// </summary>
+        public static void ReloadFromBaseFolder()
+        {
+            //Clear the olds and readd the basics.
+            knownTypes.Clear();
+            ReaddBasics();
+
+            //Read the Base-Folder:
+            string BaseFolder = Path.Combine(WorkSpace.DIR, WorkSpace.DATA_TYPES_DIR);
+            if (!Directory.Exists(BaseFolder)) return;
+
+            foreach (string file in Directory.GetFiles(BaseFolder))
+            {
+                try
+                {
+                    JObject root = JObject.Parse(File.ReadAllText(file));
+                    string name = root.GetValueAsString("name");
+                    string template = root.GetValueAsString("template");
+                    string[] types = root.GetValueAsStringArray("types");
+                    bool creatable = root.GetValueAsBool("creatable", true);
+                    knownTypes.Add(new DataType(name, template, types, creatable));
+                }catch(Exception exp)
+                {
+                    Debug.Print("Could not read DataType in: " + file);
+                    Debug.Print(exp.ToString());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Readds the basic components to the System.
+        /// </summary>
+        private static void ReaddBasics()
+        {
+            //Define the basic types:
+            knownTypes.Add(new DataType("double", "{0}d", "double"));
+            knownTypes.Add(new DataType("int", "{0}", "integer"));
+            knownTypes.Add(new DataType("boolean", "{0}", "boolean"));
+            knownTypes.Add(new DataType("string", "\"{0}\"", "string"));
+        }
+
+
+        #endregion StaticMethods
     }
 }

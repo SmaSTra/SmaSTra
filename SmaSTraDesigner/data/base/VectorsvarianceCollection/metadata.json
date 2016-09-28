@@ -15,6 +15,6 @@
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "input": {
-    "arg0": "de.tu_darmstadt.smastra.markers.interfaces.Buffer"
+    "arg0": "java.util.Collection"
   }
 }

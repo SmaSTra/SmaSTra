@@ -119,11 +119,10 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
         {
             if (obj == null) return null;
 
-            ClassManager cManager = Singleton<ClassManager>.Instance;
             string typeName = obj.GetValueAsString("type", "");
             string value = obj.GetValueAsString("value", "");
 
-            return new IOData(cManager.AddDataType(typeName), value);
+            return new IOData(DataType.GetCachedType(typeName), value);
         }
 
 

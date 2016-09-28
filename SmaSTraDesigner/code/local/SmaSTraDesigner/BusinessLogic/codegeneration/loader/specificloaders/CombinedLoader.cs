@@ -171,7 +171,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                         {
                             string key = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_TYPE, "");
                             string value = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_INPUT_DATA_VALUE, "");
-                            return new IOData(cManager.AddDataType(key), value);
+                            return new IOData(DataType.GetCachedType(key), value);
                         }).ToArray();
 
                     DataConfigElement[] config = o.GetValueAsJArray(JSON_PROP_SUB_ELEMENTS_CONFIG, new JArray())
@@ -180,7 +180,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                         {
                             string key = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_CONFIG_KEY, "");
                             string value = o2.GetValueAsString(JSON_PROP_SUB_ELEMENTS_CONFIG_VALUE, "");
-                            return new DataConfigElement(key, "", new DataType("NULL"), value);
+                            return new DataConfigElement(key, "", DataType.GetCachedOrNonRegisteredType("EMPTY"), value);
                         }).ToArray();
 
 

@@ -1,5 +1,7 @@
 package de.tu_darmstadt.smastra.sensors;
 
+import de.tu_darmstadt.smastra.markers.elements.DataType;
+
 /**
  * This is a sub-part of the Data-3d.
  * It can handle Mathematical things.
@@ -53,6 +55,7 @@ public class Vector3d {
      * @param y Y component
      * @param z Z component
      */
+    @DataType()
     public Vector3d(double x, double y, double z) {
         this.x = x;
         this.y = y;

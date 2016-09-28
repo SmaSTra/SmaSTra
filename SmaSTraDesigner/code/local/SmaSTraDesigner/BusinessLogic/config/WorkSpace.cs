@@ -20,6 +20,11 @@ namespace SmaSTraDesigner.BusinessLogic.config
         public const string LIBS_DIR = "libs";
 
         /// <summary>
+        /// The Directory for the Data Types.
+        /// </summary>
+        public const string DATA_TYPES_DIR = "datatypes";
+
+        /// <summary>
         /// The Workspace to use
         /// </summary>
         public static string DIR { get; set; }

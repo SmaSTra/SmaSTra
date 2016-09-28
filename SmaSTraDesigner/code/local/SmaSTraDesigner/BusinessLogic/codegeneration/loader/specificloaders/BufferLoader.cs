@@ -79,7 +79,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 
         public override AbstractNodeClass loadFromJson(string path, JObject root)
         {
-            DataType genericData = new DataType("Generic");
+            DataType genericData = DataType.GetCachedOrNonRegisteredType("Generic");
 
             string name = ReadName(root);
             string displayName = ReadDisplayName(root).EmptyDefault(name);

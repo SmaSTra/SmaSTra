@@ -4,11 +4,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import de.tu_darmstadt.smastra.generator.datatype.DataType;
+import de.tu_darmstadt.smastra.generator.datatype.DataTypeParser;
+import de.tu_darmstadt.smastra.generator.datatype.DataTypeSerializer;
 
 /**
  * This starts generating the Resources.
@@ -22,9 +27,34 @@ public class SmaSTraGeneratorBootstrap {
      * @param args to use.
      */
     public static void main(String args[]) throws Throwable {
-        File output = new File("generated");
+        File output = new File("base");
+        File output2 = new File("datatypes");
         if(args.length > 0) output = new File(args[0]);
-        Generate(output);
+        if(args.length > 1) output = new File(args[1]);
+
+        GenerateElementsTo(output);
+        GenerateDataTypesTo(output2);
+    }
+
+    /**
+     * Copies all found DataTypes to the Folder passed.
+     * @param destinationFolder to copy to.
+     * @throws IOException if something goes wrong.
+     */
+    public static void GenerateDataTypesTo(File destinationFolder) throws IOException{
+        if(destinationFolder.exists()) FileUtils.deleteDirectory(destinationFolder);
+        if(!destinationFolder.exists()) destinationFolder.mkdir();
+
+        DataTypeSerializer serializer = new DataTypeSerializer();
+        for(DataType type : DataTypeParser.getAllFromClassLoader()){
+            File saveTo = new File(destinationFolder, type.getClazz().getCanonicalName() + ".json");
+            if(saveTo.exists()) saveTo.delete();
+
+            String content = serializer.serialize(type, null, null).toString();
+            try(FileWriter writer = new FileWriter(saveTo)){
+                IOUtils.write(content, writer);
+            }
+        }
     }
 
 
@@ -34,7 +64,7 @@ public class SmaSTraGeneratorBootstrap {
      *
      * @throws IOException when something goes wrong!
      */
-    public static void Generate(File destinationFolder) throws IOException {
+    public static void GenerateElementsTo(File destinationFolder) throws IOException {
         ElementGenerator generator = new ElementGenerator();
         Collection<SmaSTraElement> elements = generator.getAllElementsFromClassloader();
 
@@ -86,7 +116,7 @@ public class SmaSTraGeneratorBootstrap {
      *
      * @throws IOException when something goes wrong!
      */
-    public static void Generate(File destinationFolder, Class<?>... classes) throws IOException {
+    public static void GenerateElementsTo(File destinationFolder, Class<?>... classes) throws IOException {
         ElementGenerator generator = new ElementGenerator();
         Collection<SmaSTraElement> elements = generator.getAllElementsFromClasses(classes);
 
