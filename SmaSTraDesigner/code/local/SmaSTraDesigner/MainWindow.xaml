@@ -138,21 +138,21 @@
                             </MultiBinding>
                         </Grid.Visibility>
                         <Border BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
-                            <ToggleButton x:Name="tglDefaultTF" VerticalAlignment="Center" Style="{StaticResource ToggleButtonStyle}" IsChecked="True" >
+                            <ToggleButton x:Name="tglDefaultTF" VerticalAlignment="Center" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleBasic, Mode=TwoWay}" >
                                 <WrapPanel ToolTip="Default Transformations">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
                         <Border Grid.Column="1"  BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
-                            <ToggleButton x:Name="tglCustomTF" Style="{StaticResource ToggleButtonStyle}" >
+                            <ToggleButton x:Name="tglCustomTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleCustom, Mode=TwoWay}" >
                                 <WrapPanel ToolTip="Custom Transformations">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
                         <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,0" >
-                            <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Center">
+                            <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Center" IsChecked="{Binding Path=ToggleCombined, Mode=TwoWay}">
                                 <WrapPanel ToolTip="Combined Transformations">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
                                 </WrapPanel>
@@ -160,9 +160,14 @@
                         </Border>
                     </Grid>
                     
-                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" Grid.Column="1" Width="40" Margin="50,0,0,0" Background="Transparent" ToolTip="Open">
+                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" Grid.Column="1" Width="40" Margin="50,0,0,0" Background="Transparent" ToolTip="Online Menu">
                         <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
                     </Button>
+
+                    <StackPanel Orientation="Horizontal" Margin="50,0,0,0">
+                        <TextBlock Text="Filter: " VerticalAlignment="Bottom" Style="{StaticResource TextBlockStyle}"/>
+                        <TextBox x:Name="tboxNodeFilter" Width="170"  VerticalAlignment="Bottom" Text="{Binding Path=FilterString, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxtyle}"/>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
 
@@ -174,75 +179,15 @@
             <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,2">
                 <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="{StaticResource ColorPanelTitel}">
                     <StackPanel x:Name="spnNodeClasses" Orientation="Horizontal">
-                        <DockPanel Visibility="{Binding ElementName=togDataSources, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
-                            <ItemsControl x:Name="icDefaultDS" DockPanel.Dock="Right" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                            <ItemsControl x:Name="icCustomDS" DockPanel.Dock="Left" Visibility="{Binding ElementName=tglCustomTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CustomDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                            <ItemsControl x:Name="icCombinedDS" Visibility="{Binding ElementName=tglCombinedTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CombinedDataSources}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </DockPanel>
-                        <DockPanel Visibility="{Binding ElementName=togConversions, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
-                            <ItemsControl x:Name="icDefaultCV" DockPanel.Dock="Right" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                            <ItemsControl x:Name="icCustomCV" DockPanel.Dock="Left" Visibility="{Binding ElementName=tglCustomTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CustomConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                            <ItemsControl x:Name="icCombinedCV" Visibility="{Binding ElementName=tglCombinedTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CombinedConversions}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </DockPanel>
-                        <DockPanel Visibility="{Binding ElementName=togTransformations, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
-                            <ItemsControl x:Name="icDefaultTF" DockPanel.Dock="Right" Visibility="{Binding ElementName=tglDefaultTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=BaseTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                            <ItemsControl x:Name="icCustomTF" DockPanel.Dock="Left" Visibility="{Binding ElementName=tglCustomTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CustomTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                            <ItemsControl x:Name="icCombinedTF" Visibility="{Binding ElementName=tglCombinedTF, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" ItemsSource="{Binding Path=CombinedTransformations}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </DockPanel>
+
+                        <ItemsControl x:Name="icFilteredElements" ItemsSource="{Binding Path=FilteredNodes}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        
                     </StackPanel>
             </ScrollViewer>
             </Border>

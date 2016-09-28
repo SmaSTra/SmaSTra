@@ -28,6 +28,7 @@
 		{
 			this.InitializeComponent();
             this.spnNodeClasses.DataContext = Singleton<ClassManager>.Instance;
+            this.spnNodeTypeMenu.DataContext = Singleton<ClassManager>.Instance;
             this.spnProperties.DataContext = Singleton<NodeProperties>.Instance;
             this.spnLibrary.DataContext = Singleton<Library>.Instance;
             Online online = Singleton<Online>.Instance;
@@ -59,6 +60,8 @@
             int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderDataSources);
             spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
             ToggleButton_Checked(sender, e);
+
+            Singleton<ClassManager>.Instance.SelectedCategory = "datasource";
         }
 
         private void togConversions_Checked(object sender, RoutedEventArgs e)
@@ -68,6 +71,8 @@
             int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderConversions);
             spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
             ToggleButton_Checked(sender, e);
+
+            Singleton<ClassManager>.Instance.SelectedCategory = "conversion";
         }
 
         private void togTransformations_Checked(object sender, RoutedEventArgs e)
@@ -77,6 +82,8 @@
             int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderTransformations);
             spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
             ToggleButton_Checked(sender, e);
+
+            Singleton<ClassManager>.Instance.SelectedCategory = "transformation";
         }
 
         private void spnLibrary_Drop(object sender, DragEventArgs e)

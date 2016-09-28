@@ -132,7 +132,7 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 case DownloadSingleResponse.SUCCESS:
                     StatusBarText = "Success: Element downloaded";
-                    //TODO handle download
+                    Singleton<ClassManager>.Instance.AddClass(downloadedClass);
                     return;
                 default:
                     StatusBarText = "Error: " + downloadSingleResponse.ToString();
