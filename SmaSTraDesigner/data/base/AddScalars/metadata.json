@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Add Scalars",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
+  "display": "Add Scalars",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "add",
+  "static": true,
+  "output": "double",
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

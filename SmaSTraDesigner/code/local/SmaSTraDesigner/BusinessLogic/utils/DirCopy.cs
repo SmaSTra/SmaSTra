@@ -9,7 +9,7 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         public static void DirectoryCopy(
             Node node, string destDirName)
         {
-            string source = GetPathForNode(node.Class);
+            string source = node.Class.NodePath;
             DirectoryCopy(source, destDirName, true);
         }
 
@@ -126,19 +126,6 @@ namespace SmaSTraDesigner.BusinessLogic.utils
             foreach (string newPath in Directory.GetFiles(sourceDir, "*.*",
                 SearchOption.AllDirectories))
                 File.Copy(newPath, newPath.Replace(sourceDir, destDir), true);
-        }
-
-
-        public static string GetPathForNode(AbstractNodeClass nodeClass)
-        {
-            string workspace = WorkSpace.DIR;
-            string path = Path.Combine(workspace, "generated", nodeClass.Name);
-            if (Directory.Exists(path))
-            {
-                return path;
-            }
-
-            return Path.Combine(workspace, "created", nodeClass.Name);
         }
 
     }

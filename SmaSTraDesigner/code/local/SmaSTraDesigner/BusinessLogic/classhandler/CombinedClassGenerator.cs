@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -204,7 +205,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
             //Finally generate the NodeClass
             CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, creator, 
-                subNodes, connections, output, root.NodeUUID, true, 
+                subNodes, connections, output, root.NodeUUID, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, Name.RemoveAll(" ","_")),
                 inputs.ToArray());
 
             this.cachedNodeClass = finalNodeClass;
@@ -220,7 +221,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             CombinedNodeClass toSave = GenerateClass();
             if (toSave == null) return false;
 
-            string savePath = Path.Combine(WorkSpace.DIR, "created");
+            string savePath = Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR);
             savePath = Path.Combine(savePath, toSave.DisplayName);
 
             if (Directory.Exists(savePath)) return false;
@@ -237,7 +238,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 {
                     string nodeDir = Path.Combine(tmpSaveFolder, c.Name);
                     Directory.CreateDirectory(nodeDir);
-                    DirCopy.PlainCopy(DirCopy.GetPathForNode(c), nodeDir);
+                    DirCopy.PlainCopy(c.NodePath, nodeDir);
                 });
 
             //Generate the Zip file from that directory:
@@ -269,8 +270,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <returns></returns>
         internal bool ExistsName(string newName)
         {
-            return File.Exists(Path.Combine("created", newName, "metadata.json"))
-                || File.Exists(Path.Combine("generated", newName, "metadata.json"));
+            return Singleton<ClassManager>.Instance.GetNodeClassForType(newName) != null;
         }
 
         #endregion Methods

@@ -15,7 +15,7 @@ public class GenerateFilesAsTest {
 
     @Test
     public void generateSources() throws Throwable{
-        SmaSTraGeneratorBootstrap.Generate(new File("generated"));
-        //SmaSTraGeneratorBootstrap.Generate(new File("generated"), AndroidActivityReognitionSensor.class);
+        SmaSTraGeneratorBootstrap.Generate(new File("base"));
+        //SmaSTraGeneratorBootstrap.Generate(new File("base"), AndroidActivityReognitionSensor.class);
     }
 }

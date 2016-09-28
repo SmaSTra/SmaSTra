@@ -43,7 +43,7 @@ public class SmaSTraGeneratorBootstrap {
 
         int created = 0;
         for(SmaSTraElement element : elements){
-            File tileDir = new File(destinationFolder, element.getDisplayName().replace(" ", "_"));
+            File tileDir = new File(destinationFolder, element.getDisplayName().replace(" ", "").replace("_", ""));
 
             //Create Directory:
             if(tileDir.exists()) FileUtils.forceDelete(tileDir);

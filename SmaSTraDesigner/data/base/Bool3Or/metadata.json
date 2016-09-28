@@ -1,0 +1,19 @@
+{
+  "type": "transformation",
+  "name": "Bool 3 Or",
+  "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
+  "display": "Bool 3 Or",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "or",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "boolean",
+    "arg1": "boolean",
+    "arg2": "boolean"
+  }
+}

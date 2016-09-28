@@ -1,0 +1,20 @@
+{
+  "type": "transformation",
+  "name": "Vectors squared distance",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
+  "display": "Vectors squared distance",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "method": "distanceSquare",
+  "static": true,
+  "output": "double",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "arg1": "de.tu_darmstadt.smastra.sensors.Vector3d"
+  }
+}

@@ -87,11 +87,11 @@
 
 
             //Copy all the Basic stuff in:
-            string newGeneratedPath = Path.Combine(WorkSpace.DIR, "generated");
+            string newGeneratedPath = Path.Combine(WorkSpace.DIR, WorkSpace.BASE_DIR);
             if (  !Directory.Exists(newGeneratedPath) 
                 || Directory.EnumerateFileSystemEntries(newGeneratedPath).Empty())
             {
-                string orgGeneratedPath = "generated";
+                string orgGeneratedPath = WorkSpace.BASE_DIR;
                 DirCopy.PlainCopy(orgGeneratedPath, newGeneratedPath);
             }
 

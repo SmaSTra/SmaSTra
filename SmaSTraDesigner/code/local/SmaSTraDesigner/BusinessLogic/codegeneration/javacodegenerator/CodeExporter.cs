@@ -89,7 +89,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// <param name="destination"></param>
         protected void CopyLibs(string destination)
         {
-            string path = Path.Combine(WorkSpace.DIR, "generated", "libs");
+            string path = Path.Combine(WorkSpace.DIR, WorkSpace.LIBS_DIR);
             DirCopy.DirectoryCopy(path, destination, true);
         }
 

@@ -26,12 +26,13 @@
         protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description, string creator,  DataType outputType, 
             string mainClass, string[] needsOtherClasses, string[] needsPermissions,
             ConfigElement[] configuration, ProxyProperty[] proxyProperties,
-            DataType[] inputTypes, bool userCreated)
+            DataType[] inputTypes, bool userCreated, string nodePath)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 			{
 				throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", "name");
 			}
+
 			if (nodeType == NodeType.Transformation  && (inputTypes == null || inputTypes.Length == 0))
 			{
 				throw new ArgumentException("There must be input types given for a transformation node class", "inputTypes");
@@ -51,6 +52,7 @@
             this.ProxyProperties = proxyProperties == null ? new ProxyProperty[0] : proxyProperties;
             this.NodeType = nodeType;
             this.UserCreated = userCreated;
+            this.NodePath = nodePath;
 		}
 
 
@@ -59,6 +61,10 @@
 
         #region properties
 
+        /// <summary>
+        /// The File path for this node.
+        /// </summary>
+        public string NodePath { get; }
 
         /// <summary>
         /// Gets or sets a description for this node class.

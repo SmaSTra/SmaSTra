@@ -25,6 +25,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 
             JObject root = new JObject();
             AddOwnType(root);
+            AddName(root, nodeClass.Name);
             AddDescription(root, nodeClass.Description);
             AddDisplayName(root, nodeClass.DisplayName);
             AddOutput(root, nodeClass.OutputType);
@@ -76,10 +77,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         }
 
 
-        public override AbstractNodeClass loadFromJson(string name, JObject root)
+        public override AbstractNodeClass loadFromJson(string path, JObject root)
         {
             DataType genericData = new DataType("Generic");
 
+            string name = ReadName(root);
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
             string creator = ReadCreator(root).EmptyDefault("Unknown");
@@ -96,7 +98,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             string bufferGetMethod = ReadBufferGet(root);
 
             return new BufferNodeClass(name, displayName, description, creator, output, mainClass,
-                needsOtherClasses, neededPermissions, config, proxyProperties, inputTypes, userCreated,
+                needsOtherClasses, neededPermissions, config, proxyProperties, inputTypes, userCreated, path,
                 bufferAddMethod, bufferGetMethod);
         }
 

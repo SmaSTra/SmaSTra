@@ -1,0 +1,25 @@
+{
+  "type": "sensor",
+  "name": "Accelerometer Sensor",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidAccelerometerSensor",
+  "display": "Accelerometer Sensor",
+  "description": "The Accelerometer sensor measuring 3d-Acceleration to the Device",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "de.tu_darmstadt.smastra.sensors.Data3d",
+    "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor"
+  ],
+  "config": [
+    {
+      "key": "SamplingRate",
+      "description": "Sets the sampling rate. This is the delay in Miliseconds between 2 Events.",
+      "classType": "java.lang.Integer"
+    }
+  ],
+  "proxyProperties": [],
+  "dataMethod": "getLastData",
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
+  "start": "start",
+  "stop": "stop"
+}

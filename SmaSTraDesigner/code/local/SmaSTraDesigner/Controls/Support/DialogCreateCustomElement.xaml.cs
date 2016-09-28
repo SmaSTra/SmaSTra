@@ -2,11 +2,13 @@
 using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -344,8 +346,8 @@ namespace SmaSTraDesigner.Controls.Support
             string methodName = javaFreandlyName;
             bool isStatic = true;
 
-            return new TransformationNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, InputTypes.ToArray(), 
-                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true,
+            return new TransformationNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, InputTypes.ToArray(),
+                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, javaFreandlyName),
                 methodName, isStatic);
         }
 
@@ -366,7 +368,7 @@ namespace SmaSTraDesigner.Controls.Support
             string stopMethod = "stop";
 
             return new DataSourceNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, 
-                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true,
+                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, javaFreandlyName),
                 dataMethod, startMethod, stopMethod);
         }
 

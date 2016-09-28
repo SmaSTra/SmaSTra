@@ -1,0 +1,20 @@
+{
+  "type": "transformation",
+  "name": "Subtract Vectors",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
+  "display": "Subtract Vectors",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "method": "subtract",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "arg1": "de.tu_darmstadt.smastra.sensors.Vector3d"
+  }
+}

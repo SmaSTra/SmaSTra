@@ -23,10 +23,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
         public BufferNodeClass(string name, string displayName, string description, string creator,
             DataType outputType, string mainClass, string[] needsOtherClasses, string[] needsPermissions, 
             ConfigElement[] configuration, ProxyProperty[] proxyProperties, DataType[] inputTypes,
-            bool userCreated,
+            bool userCreated, string nodePath,
             string bufferAdd, string bufferGet) 
             : base(ClassManager.NodeType.Buffer, name, displayName, description, creator, outputType, mainClass, needsOtherClasses, needsPermissions, 
-                  configuration, proxyProperties, inputTypes, userCreated)
+                  configuration, proxyProperties, inputTypes, userCreated, nodePath)
         {
             this.BufferAddMethod = bufferAdd;
             this.BufferGetMethod = bufferGet;

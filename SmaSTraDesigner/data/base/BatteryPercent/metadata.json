@@ -1,0 +1,17 @@
+{
+  "type": "sensor",
+  "name": "Battery Percent",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidBatteryStatusSensor",
+  "display": "Battery Percent",
+  "description": "Gives the percent of the battery (0-1, -1 if not readable))",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "dataMethod": "getStatus",
+  "output": "double",
+  "start": "start",
+  "stop": "stop"
+}

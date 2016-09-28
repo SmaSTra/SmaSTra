@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Is Equal",
+  "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
+  "display": "Is Equal",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "isEqual",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

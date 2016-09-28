@@ -1,0 +1,21 @@
+{
+  "type": "transformation",
+  "name": "Rotate Picture",
+  "mainClass": "de.tu_darmstadt.smastra.imagefilters.ImageFilters",
+  "display": "Rotate Picture",
+  "description": "Rotates a picture by X degree.",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.imagefilters.PictureFilter",
+    "de.tu_darmstadt.smastra.sensors.Picture"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "method": "Rotate90",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Picture",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.Picture",
+    "arg1": "double"
+  }
+}

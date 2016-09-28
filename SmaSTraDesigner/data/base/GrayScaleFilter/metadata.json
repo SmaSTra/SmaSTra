@@ -1,0 +1,20 @@
+{
+  "type": "transformation",
+  "name": "Gray Scale Filter",
+  "mainClass": "de.tu_darmstadt.smastra.imagefilters.ImageFilters",
+  "display": "Gray Scale Filter",
+  "description": "A Gray Scale filter for pictures.",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.imagefilters.PictureFilter",
+    "de.tu_darmstadt.smastra.sensors.Picture"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "method": "GrayScale",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Picture",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.Picture"
+  }
+}

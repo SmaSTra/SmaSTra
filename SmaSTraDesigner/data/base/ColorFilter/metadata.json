@@ -1,0 +1,21 @@
+{
+  "type": "transformation",
+  "name": "ColorFilter",
+  "mainClass": "de.tu_darmstadt.smastra.imagefilters.ImageFilters",
+  "display": "ColorFilter",
+  "description": "Filters the Color passed (RGP).",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.imagefilters.PictureFilter",
+    "de.tu_darmstadt.smastra.sensors.Picture"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "method": "ColorFilter",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Picture",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.Picture",
+    "arg1": "int"
+  }
+}

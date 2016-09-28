@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Device scalars",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
+  "display": "Device scalars",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "divide",
+  "static": true,
+  "output": "double",
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

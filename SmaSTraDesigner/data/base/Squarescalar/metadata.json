@@ -1,0 +1,17 @@
+{
+  "type": "transformation",
+  "name": "Square scalar",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
+  "display": "Square scalar",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "square",
+  "static": true,
+  "output": "double",
+  "input": {
+    "arg0": "double"
+  }
+}

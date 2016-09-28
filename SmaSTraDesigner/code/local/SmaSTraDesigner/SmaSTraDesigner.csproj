@@ -435,8 +435,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cmd /c if exist "$(TargetDir)generated\" rd /s /q  "$(TargetDir)generated\"
-xcopy /E /Y "$(SolutionDir)..\data\generated\*" "$(TargetDir)generated\"</PostBuildEvent>
+    <PostBuildEvent>cmd /c if exist "$(TargetDir)base\" rd /s /q  "$(TargetDir)base\"
+cmd /c if exist "$(TargetDir)libs\" rd /s /q  "$(TargetDir)libs\"
+xcopy /E /Y "$(SolutionDir)..\data\*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

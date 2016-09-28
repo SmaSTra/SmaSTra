@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Is Greater",
+  "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
+  "display": "Is Greater",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "isGreater",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

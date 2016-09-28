@@ -655,8 +655,8 @@
 
 
             //Now reload ower folders:
-            LoadClasses(Path.Combine(WorkSpace.DIR, "generated"));
-            LoadClasses(Path.Combine(WorkSpace.DIR, "created"));
+            LoadClasses(Path.Combine(WorkSpace.DIR, WorkSpace.BASE_DIR));
+            LoadClasses(Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR));
 
             //Call prop-Changed for everything:
             this.OnPropertyChanged("BaseDataSources");
@@ -692,9 +692,6 @@
 			foreach (string dir in dirs)
 			{
                 string dirName = Path.GetFileName(dir);
-                //Skip libs folder:
-                if (dirName == "libs") continue;
-
                 try
                 {
                     AbstractNodeClass loadedClass = loader.loadFromFolder(dir);

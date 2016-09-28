@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Bool 2 And",
+  "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
+  "display": "Bool 2 And",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "and2",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "boolean",
+    "arg1": "boolean"
+  }
+}

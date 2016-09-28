@@ -1,0 +1,23 @@
+{
+  "type": "sensor",
+  "name": "Light Sensor",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidLightSensor",
+  "display": "Light Sensor",
+  "description": "Captures the Light value in lux",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
+  ],
+  "config": [
+    {
+      "key": "SamplingRate",
+      "description": "Sets the sampling rate. This is the delay in Miliseconds between 2 Events.",
+      "classType": "java.lang.Integer"
+    }
+  ],
+  "proxyProperties": [],
+  "dataMethod": "getLastData",
+  "output": "double",
+  "start": "start",
+  "stop": "stop"
+}

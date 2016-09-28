@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Is Smaller",
+  "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
+  "display": "Is Smaller",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "isSmaller",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

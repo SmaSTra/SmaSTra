@@ -20,11 +20,11 @@
 
         public DataSourceNodeClass(string name, string displayName, string description, string creator, DataType outputType,
             string mainClass, string[] needsOtherClasses, string[] needsPermissions, ConfigElement[] config, ProxyProperty[] proxyProperties,
-            bool userCreated,
+            bool userCreated, string nodePath,
             string dataMethod, string startMethod, string stopMethod)
             : base(ClassManager.NodeType.Sensor, name, displayName, description, creator, outputType, 
                   mainClass, needsOtherClasses, needsPermissions,
-                  config, proxyProperties, new DataType[0], userCreated)
+                  config, proxyProperties, new DataType[0], userCreated, nodePath)
         {
             this.DataMethod = dataMethod;
             this.StartMethod = startMethod;

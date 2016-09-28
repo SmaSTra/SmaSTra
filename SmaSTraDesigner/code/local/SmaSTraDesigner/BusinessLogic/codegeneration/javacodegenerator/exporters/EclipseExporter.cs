@@ -109,7 +109,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
 
             //Add Lib to Eclipse File:
             //Since Eclipse does not support AAR files, we need to copy them manually:
-            DirectoryInfo libDir = new DirectoryInfo(Path.Combine(WorkSpace.DIR,"generated","libs"));
+            DirectoryInfo libDir = new DirectoryInfo(Path.Combine(WorkSpace.DIR, WorkSpace.LIBS_DIR));
             foreach(var file in libDir.GetFiles())
             {
                 //Extract the classes file from the AAR files:

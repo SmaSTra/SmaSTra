@@ -1,0 +1,25 @@
+{
+  "type": "sensor",
+  "name": "CameraPictureSensor",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.CameraPictureSensor",
+  "display": "CameraPictureSensor",
+  "description": "Takes a picture by the camera",
+  "neededPermissions": [
+    "android.permission.CAMERA"
+  ],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Picture"
+  ],
+  "config": [],
+  "proxyProperties": [
+    {
+      "type": "android.view.SurfaceView",
+      "method": "setTextureView",
+      "name": "setSurfaceView"
+    }
+  ],
+  "dataMethod": "getLastData",
+  "output": "de.tu_darmstadt.smastra.sensors.Picture",
+  "start": "start",
+  "stop": "stop"
+}

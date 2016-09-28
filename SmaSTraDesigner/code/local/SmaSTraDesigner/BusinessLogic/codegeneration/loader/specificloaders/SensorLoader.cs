@@ -21,8 +21,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             : base(ClassManager.NodeType.Sensor, cManager)
         {}
 
-        public override AbstractNodeClass loadFromJson(string name, JObject root)
+        public override AbstractNodeClass loadFromJson(string path, JObject root)
         {
+            string name = ReadName(root);
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
             string creator = ReadCreator(root).EmptyDefault("Unknown");
@@ -38,7 +39,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             bool userCreated = ReadUserCreated(root);
 
             return new DataSourceNodeClass(name, displayName, description, creator, output, mainClass, 
-                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated,
+                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated, path,
                 dataMethod, startMethod, stopMethod);
         }
 
@@ -66,6 +67,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             JObject root = new JObject();
             AddOwnType(root);
+            AddName(root, nodeClass.Name);
             AddDescription(root, nodeClass.Description);
             AddDisplayName(root, nodeClass.DisplayName);
             AddOutput(root, nodeClass.OutputType);

@@ -129,29 +129,25 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 throw new ArgumentException("Path may not be null!");
             }
 
-
-            //Read the Name:
-            string name = Path.GetFileName(path);
-
             //Read the Metadata:
-            path = Path.Combine(path, METADATA_FILENAME);
-            if (!File.Exists(path))
+            string metaDataPath = Path.Combine(path, METADATA_FILENAME);
+            if (!File.Exists(metaDataPath))
             {
                 throw new FileNotFoundException("Could not find Metadata in folder: " + path);
             }
 
-            JObject root = JObject.Parse(File.ReadAllText(path));
+            JObject root = JObject.Parse(File.ReadAllText(metaDataPath));
 
             //No root => Nothing to do!
             if(root == null)
             {
-                throw new FileNotParseableException("Could not parse file: " + path);
+                throw new FileNotParseableException("Could not parse file: " + metaDataPath);
             }
 
             string typeName = root.GetValueAsString(JSON_PROP_TYPE);
             if (String.IsNullOrEmpty(typeName))
             {
-                throw new MissingTypeException("Could not find the type element in: " + path);
+                throw new MissingTypeException("Could not find the type element in: " + metaDataPath);
             }
 
             NodeType type = GetNodeType(typeName);
@@ -161,7 +157,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 throw new MissingTypeException("Did not recognize Type: " + type);
             }
 
-            return loader.loadFromJson(name, root);
+            return loader.loadFromJson(path, root);
         }
 
 

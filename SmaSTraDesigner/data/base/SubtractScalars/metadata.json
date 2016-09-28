@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "Subtract Scalars",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
+  "display": "Subtract Scalars",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "subtract",
+  "static": true,
+  "output": "double",
+  "input": {
+    "arg0": "double",
+    "arg1": "double"
+  }
+}

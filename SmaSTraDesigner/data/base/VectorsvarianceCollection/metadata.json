@@ -1,0 +1,20 @@
+{
+  "type": "transformation",
+  "name": "Vectors variance Collection",
+  "mainClass": "de.tu_darmstadt.smastra.math.Math3dCollections",
+  "display": "Vectors variance Collection",
+  "description": "None",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "de.tu_darmstadt.smastra.math.Math3d"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "method": "variance",
+  "static": true,
+  "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.markers.interfaces.Buffer"
+  }
+}

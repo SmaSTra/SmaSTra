@@ -13,6 +13,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         #region constants
 
         /// <summary>
+        /// Name of the Name property field in JSON metadata.
+        /// </summary>
+        private const string JSON_PROP_NAME = "name";
+
+        /// <summary>
         /// Name of the description property field in JSON metadata.
         /// </summary>
         private const string JSON_PROP_DESCRIPTION = "description";
@@ -132,9 +137,10 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <summary>
         /// The Implementation to load a Class from the JObject passed.
         /// </summary>
+        /// <param name="path">The path this comes from</param>
         /// <param name="root">To read from.</param>
         /// <returns></returns>
-        public abstract AbstractNodeClass loadFromJson(string name, JObject root);
+        public abstract AbstractNodeClass loadFromJson(string path, JObject root);
 
 
         /// <summary>
@@ -173,6 +179,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         public ClassManager.NodeType getNodeType()
         {
             return nodeType;
+        }
+
+        /// <summary>
+        /// Reads the Name of the Element from the root.
+        /// </summary>
+        /// <param name="root">To read from</param>
+        /// <returns>The name or an empty string if not found!</returns>
+        protected string ReadName(JObject root)
+        {
+            return root.GetValueAsString(JSON_PROP_NAME, "");
         }
 
         /// <summary>
@@ -342,6 +358,17 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         protected void AddDescription(JObject toAddTo, string description)
         {
             toAddTo.Add(JSON_PROP_DESCRIPTION, description);
+        }
+
+
+        /// <summary>
+        /// Adds the Name passed to the Object.
+        /// </summary>
+        /// <param name="toAddTo">The JObject to add to</param>
+        /// <param name="name">to add.</param>
+        protected void AddName(JObject toAddTo, string name)
+        {
+            toAddTo.Add(JSON_PROP_NAME, name);
         }
 
 

@@ -29,8 +29,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             : base(ClassManager.NodeType.Transformation, cManager)
         {}
 
-        public override AbstractNodeClass loadFromJson(string name, JObject root)
+        public override AbstractNodeClass loadFromJson(string path, JObject root)
         {
+            string name = ReadName(root);
             string displayName = ReadDisplayName(root).EmptyDefault(name);
             string description = ReadDescription(root).EmptyDefault("No Description");
             string creator = ReadCreator(root).EmptyDefault("Unknown");
@@ -46,7 +47,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             bool userCreated = ReadUserCreated(root);
 
             return new TransformationNodeClass(name, displayName, description, creator, output, inputs, mainClass, 
-                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated,
+                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated, path,
                 methodName, isStatic);
         }
 
@@ -78,6 +79,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             JObject root = new JObject();
             AddOwnType(root);
+            AddName(root, nodeClass.Name);
             AddDescription(root, nodeClass.Description);
             AddDisplayName(root, nodeClass.DisplayName);
             AddCreator(root, nodeClass.Creator);

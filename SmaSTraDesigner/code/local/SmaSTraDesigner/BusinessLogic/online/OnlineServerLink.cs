@@ -301,7 +301,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            string folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? "created" : "generated"), clazz.Name);
+            string folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? WorkSpace.CREATED_DIR : WorkSpace.BASE_DIR), clazz.Name);
             string tmpName = Path.Combine(WorkSpace.DIR, TMP_PATH, "upload_" + clazz.Name + ".zip");
             ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);
 
@@ -416,7 +416,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             {
                 return new TransformationNodeClass(Name, Display, Description, "CREATOR", 
                     new DataType(Output), Inputs.Select(i => new DataType(i)).ToArray(),
-                    "", null, null, null, null, true, "", true
+                    "", null, null, null, null, true, "", "", true
                 );
             }
 
@@ -424,7 +424,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             {
                 return new DataSourceNodeClass(Name, Display, Description, "CREATOR",
                     new DataType(Output), "",
-                    null, null, null, null, true, "", "", ""
+                    null, null, null, null, true, "", "", "", ""
                 );
             }
 
@@ -432,7 +432,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             {
                 return new BufferNodeClass(Name, Display, Description, "CREATOR",
                     new DataType(Output), "",
-                    null, null, null, null, null, true, "", ""
+                    null, null, null, null, null, true, "", "", ""
                 );
             }
 
@@ -441,7 +441,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             {
                 return new CombinedNodeClass(Name, Display, Description, "CREATOR",
                     null, null, new DataType(Output), "",
-                    true, null
+                    true, "", null
                 );
             }
 
