@@ -176,10 +176,6 @@
                     Func<AbstractNodeClass, bool> combinedFilter = (n => { return toggleCombined || !(n is CombinedNodeClass); });
                     Func<AbstractNodeClass, bool> nameFilter = (n => { return string.IsNullOrWhiteSpace(this.FilterString) || n.Name.ToLower().Contains(FilterString); });
 
-                    
-                    Console.WriteLine("++++++ Filter Counts: baseFilter: " + classes.Values.Where(typeFilter).Where(baseFilter).Where(customFilter)
-                        .Where(combinedFilter).Count());
-
                     //Filter + Generate:
                     return classes.Values
                         .Where(typeFilter)

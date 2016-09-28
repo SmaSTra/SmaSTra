@@ -63,66 +63,55 @@
                 <MenuItem x:Name="mniGenerateJava" Header="Generate Java code..." Command="ctrlSupport:Commands.Generate" />
             </MenuItem>
         </Menu>
+        <Border Grid.Row="1" Grid.ColumnSpan="99" BorderBrush="Black" BorderThickness="1" Background="{StaticResource ColorPanelBackground}">
+        <StackPanel  Orientation="Horizontal" Margin="5">
+                <Button Command="ctrlSupport:Commands.Save" Grid.Column="0" Width="30" Background="Transparent" ToolTip="Save">
+                <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/save.png"/>
+            </Button>
+                <Button Command="ctrlSupport:Commands.Load" Grid.Column="1" Width="30" Background="Transparent" ToolTip="Open" Margin="5,0,0,0">
+                <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/open.png"/>
+            </Button>
+        </StackPanel>
+        </Border>
 
         <Grid Grid.ColumnSpan="99" Grid.Row="2" Background="{StaticResource ColorPanelBackground}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border Grid.Column="0" Grid.Row="0" BorderBrush="Black" BorderThickness="1,1,0,0">
-                <Grid x:Name="gridUpperMenuButtons" Width="100" Height="50" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Button Command="ctrlSupport:Commands.Save" Grid.Column="0" Width="30" Background="Transparent" ToolTip="Save">
-                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/save.png"/>
-                    </Button>
-                    <Button Command="ctrlSupport:Commands.Load" Grid.Column="1" Width="30" Background="Transparent" ToolTip="Open">
-                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/open.png"/>
-                    </Button>
-                </Grid>
-            </Border>
-
-
-            <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Background="{StaticResource ColorPanelBackground}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+            <ScrollViewer Grid.Column="0" Grid.Row="0" Background="{StaticResource ColorPanelBackground}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                 <StackPanel Orientation="Horizontal" x:Name="spnNodeTypeMenu">
-                    <Border BorderBrush="Black" BorderThickness="1,1,1,0">
+                    <Border BorderBrush="Black" BorderThickness="1,0,1,0">
                         <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" Checked="togDataSources_Checked" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="DataSources">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/0v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border x:Name="placeholderDataSources"></Border>
-                    <Border BorderBrush="Black" BorderThickness="0,1,1,0">
+                    <Border x:Name="placeholderDataSources" BorderBrush="Black" BorderThickness="0,0,3,0" ></Border>
+                    <Border BorderBrush="Black" BorderThickness="0,0,1,0">
                         <ToggleButton x:Name="togConversions" Style="{StaticResource ToggleButtonStyle}" Checked="togConversions_Checked" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Conversions">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/1v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border x:Name="placeholderConversions"></Border>
-                    <Border BorderBrush="Black" BorderThickness="0,1,1,0">
+                    <Border x:Name="placeholderConversions" BorderBrush="Black" BorderThickness="0,0,3,0"></Border>
+                    <Border BorderBrush="Black" BorderThickness="0,0,1,0">
                         <ToggleButton x:Name="togTransformations" Style="{StaticResource ToggleButtonStyle}" Checked="togTransformations_Checked" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Transformations">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/2v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border x:Name="placeholderTransformations"></Border>
-                    
+                    <Border x:Name="placeholderTransformations" BorderBrush="Black" BorderThickness="0,0,3,0"></Border>
+
                     <Grid x:Name="gridSideMenu" Margin="0,0,10,0" Background="{StaticResource ColorPanelBackground}">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -137,21 +126,24 @@
                                 <Binding ElementName="togTransformations" Path="IsChecked" Mode="OneWay" />
                             </MultiBinding>
                         </Grid.Visibility>
-                        <Border BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
+                        <Button Width="10" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Transparent" Click="ToggleButton_Checked">
+                            <Image   Source="pack://siteoforigin:,,,/Resources/pfeil_rechts.png" />
+                        </Button>
+                        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
                             <ToggleButton x:Name="tglDefaultTF" VerticalAlignment="Center" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleBasic, Mode=TwoWay}" >
                                 <WrapPanel ToolTip="Default Transformations">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
-                        <Border Grid.Column="1"  BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
+                        <Border Grid.Column="2"  BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
                             <ToggleButton x:Name="tglCustomTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleCustom, Mode=TwoWay}" >
                                 <WrapPanel ToolTip="Custom Transformations">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
-                        <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,0" >
+                        <Border Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,0" >
                             <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Center" IsChecked="{Binding Path=ToggleCombined, Mode=TwoWay}">
                                 <WrapPanel ToolTip="Combined Transformations">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
@@ -159,8 +151,8 @@
                             </ToggleButton>
                         </Border>
                     </Grid>
-                    
-                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" Grid.Column="1" Width="40" Margin="50,0,0,0" Background="Transparent" ToolTip="Online Menu">
+
+                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" VerticalAlignment="Center"  Width="40" Margin="50,0,0,0" Background="Transparent" ToolTip="Online Menu">
                         <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
                     </Button>
 
@@ -171,12 +163,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Grid Grid.Column="0" Grid.Row="1" Width="{Binding ElementName=gridUpperMenuButtons, Path=ActualWidth}">
-                
-                <Border BorderBrush="Black" BorderThickness="1,1,0,2"></Border>
-            </Grid>
-
-            <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,2">
+            <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,2">
                 <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="{StaticResource ColorPanelTitel}">
                     <StackPanel x:Name="spnNodeClasses" Orientation="Horizontal">
 
@@ -191,14 +178,11 @@
                     </StackPanel>
             </ScrollViewer>
             </Border>
-            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Height="{Binding ElementName=spnNodeClasses, Path=ActualHeight}" Margin="0,-10,0,10">
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Height="{Binding ElementName=spnNodeClasses, Path=ActualHeight}" Margin="0,-10,0,10">
                 <Image Width="{Binding ElementName=togDataSources, Path=ActualWidth}" Height="7" Visibility="{Binding ElementName=togDataSources, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.UseHidden}}" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/pfeil.png" />
-                <Image Width="{Binding ElementName=togDataSources, Path=ActualWidth}" Height="7" Visibility="{Binding ElementName=togConversions, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.UseHidden}}"  VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/pfeil.png" />
-                <Image Width="{Binding ElementName=togDataSources, Path=ActualWidth}" Height="7" Visibility="{Binding ElementName=togTransformations, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.UseHidden}}" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/pfeil.png" />
+                <Image Width="{Binding ElementName=togDataSources, Path=ActualWidth}" Height="7" Margin="5,0,0,0" Visibility="{Binding ElementName=togConversions, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.UseHidden}}"  VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/pfeil.png" />
+                <Image Width="{Binding ElementName=togDataSources, Path=ActualWidth}" Height="7" Margin="5,0,0,0" Visibility="{Binding ElementName=togTransformations, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.UseHidden}}" VerticalAlignment="Top" Source="pack://siteoforigin:,,,/Resources/pfeil.png" />
             </StackPanel>
-            <Grid Width="70" Grid.Column="2" Grid.Row="1">
-                <Border BorderBrush="Black" BorderThickness="0,1,1,2"></Border>
-            </Grid>
         </Grid>
 
         <GridSplitter Grid.Column="0" Grid.ColumnSpan="99" Grid.Row="3" Height="5" Background="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
