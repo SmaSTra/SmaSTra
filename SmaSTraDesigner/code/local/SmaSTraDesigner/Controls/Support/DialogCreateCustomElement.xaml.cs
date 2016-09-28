@@ -31,7 +31,7 @@ namespace SmaSTraDesigner.Controls.Support
         private string packageName = "";
         private string description = "No description";
 
-        private DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
+        private DataType[] allDataTypes = DataType.getDataTypes();
         private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
         private string outputTypeString = "OutputType";
         ClassManager classManager = Singleton<ClassManager>.Instance;
@@ -55,8 +55,7 @@ namespace SmaSTraDesigner.Controls.Support
         {
             InitializeComponent();
             this.DataContext = this;
-            classManager = Singleton<ClassManager>.Instance;
-            allDataTypes = classManager.getDataTypes();
+            allDataTypes = DataType.getDataTypes();
             cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "OutputType", SelectedDataType = allDataTypes[0] };
             InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "InputType", SelectedDataType = allDataTypes [0]});
             FirstPage = true;
@@ -236,13 +235,9 @@ namespace SmaSTraDesigner.Controls.Support
                 }
                 else
                 {   //create new DataType and update AllDataTypes[]
-                    DataType newDataType = new DataType(OutputTypeString);
+                    DataType newDataType = DataType.GetCachedType(OutputTypeString);
                     OutputType = newDataType;
-                    if (!AllDataTypes.Contains(newDataType))
-                    {
-                        classManager.AddDataType(newDataType.Name);
-                        AllDataTypes = classManager.getDataTypes();
-                    }
+                    AllDataTypes = DataType.getDataTypes();
                 }
             }
 
@@ -258,13 +253,9 @@ namespace SmaSTraDesigner.Controls.Support
                     }
                     else
                     {   //create new DataType and update AllDataTypes[]
-                        DataType newDataType = new DataType(inputTypeViewModel.InputTypeString);
+                        DataType newDataType = DataType.GetCachedType(inputTypeViewModel.InputTypeString);
                         inputTypeViewModel.SelectedDataType = newDataType;
-                        if (!AllDataTypes.Contains(newDataType))
-                        {
-                            classManager.AddDataType(newDataType.Name);
-                            AllDataTypes = classManager.getDataTypes();
-                        }
+                        AllDataTypes = DataType.getDataTypes();
                     }
                 }
                 InputTypes.Add(inputTypeViewModel.SelectedDataType);
@@ -413,7 +404,7 @@ namespace SmaSTraDesigner.Controls.Support
 
         public InputTypeViewModel()
         {
-            DataType[] allDataTypes = Singleton<ClassManager>.Instance.getDataTypes();
+            DataType[] allDataTypes = DataType.getDataTypes();
             allTypesString = new string[allDataTypes.Length + 1];
             for (int i = 1; i <= allDataTypes.Length; i++)
             {

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.tu_darmstadt.smastra.imagefilters.PictureFilter;
+import de.tu_darmstadt.smastra.markers.elements.DataType;
 
 /**
  * @author Tobias Welther
@@ -34,6 +35,7 @@ public class Picture {
     private final Set<String> appliedFilters = new HashSet<>();
 
 
+    @DataType(creatable = false)
     public Picture(int width, int height, Bitmap bitmap) {
         this.width = width;
         this.height = height;

@@ -84,22 +84,45 @@
 
             //Set the new Workspace:
             WorkSpace.DIR = newWorkspace;
-
-
-            //Copy all the Basic stuff in:
-            string newGeneratedPath = Path.Combine(WorkSpace.DIR, WorkSpace.BASE_DIR);
-            if (  !Directory.Exists(newGeneratedPath) 
-                || Directory.EnumerateFileSystemEntries(newGeneratedPath).Empty())
-            {
-                string orgGeneratedPath = WorkSpace.BASE_DIR;
-                DirCopy.PlainCopy(orgGeneratedPath, newGeneratedPath);
-            }
+            CopyDefault(WorkSpace.DIR);
 
 
             //Reload the managers:
+            DataType.ReloadFromBaseFolder();
             Singleton<SmaSTraConfiguration>.Instance.Reload();
             Singleton<ClassManager>.Instance.Reload();
             Singleton<Library>.Instance.loadLibrary();
+        }
+
+        /// <summary>
+        /// Copies the Default stuff to the new Directory.
+        /// </summary>
+        /// <param name="to">To copy to</param>
+        private static void CopyDefault(string to)
+        {
+            //Copy all the Basic stuff in:
+            string newBasePath = Path.Combine(to, WorkSpace.BASE_DIR);
+            if (!Directory.Exists(newBasePath)
+                || Directory.EnumerateFileSystemEntries(newBasePath).Empty())
+            {
+                DirCopy.PlainCopy(WorkSpace.BASE_DIR, newBasePath);
+            }
+
+            //Copy all Libs stuff:
+            string newLibsPath = Path.Combine(to, WorkSpace.LIBS_DIR);
+            if (!Directory.Exists(newLibsPath)
+                || Directory.EnumerateFileSystemEntries(newLibsPath).Empty())
+            {
+                DirCopy.PlainCopy(WorkSpace.LIBS_DIR, newLibsPath);
+            }
+
+            //Copy all DataType stuff:
+            string newDataTypesPath = Path.Combine(to, WorkSpace.DATA_TYPES_DIR);
+            if (!Directory.Exists(newDataTypesPath)
+                || Directory.EnumerateFileSystemEntries(newDataTypesPath).Empty())
+            {
+                DirCopy.PlainCopy(WorkSpace.DATA_TYPES_DIR, newDataTypesPath);
+            }
         }
 
 		#endregion event handlers

@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.io.File;
 
 import de.tu_darmstadt.smastra.generator.SmaSTraGeneratorBootstrap;
-import de.tu_darmstadt.smastra.sensors.AndroidActivityReognitionSensor;
 
 /**
  * A temporary workaround to generate Stuff.
@@ -15,7 +14,11 @@ public class GenerateFilesAsTest {
 
     @Test
     public void generateSources() throws Throwable{
-        SmaSTraGeneratorBootstrap.Generate(new File("base"));
-        //SmaSTraGeneratorBootstrap.Generate(new File("base"), AndroidActivityReognitionSensor.class);
+        //Create the Elements:
+        SmaSTraGeneratorBootstrap.GenerateElementsTo(new File("base"));
+        //SmaSTraGeneratorBootstrap.GenerateElementsTo(new File("base"), AndroidActivityReognitionSensor.class);
+
+        //Create the DataTypes:
+        SmaSTraGeneratorBootstrap.GenerateDataTypesTo(new File("datatypes"));
     }
 }

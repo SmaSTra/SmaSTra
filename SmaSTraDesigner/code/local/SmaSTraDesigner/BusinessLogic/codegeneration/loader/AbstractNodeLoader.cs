@@ -202,7 +202,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 .GetValueAsJObject(JSON_PROP_INPUT, new JObject())
                 .ToStringString()
                 .Values
-                .Select(cManager.AddDataType)
+                .Select(DataType.GetCachedType)
                 .ToArray();
         }
 
@@ -253,7 +253,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <returns>The output type.</returns>
         protected DataType ReadOutput(JObject root)
         {
-            return cManager.AddDataType(root.GetValueAsString(JSON_PROP_OUTPUT, ""));
+            return DataType.GetCachedType(root.GetValueAsString(JSON_PROP_OUTPUT, ""));
         }
 
         /// <summary>
@@ -293,7 +293,6 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <returns>The loaded Config</returns>
         protected ConfigElement[] ReadConfig(JObject root)
         {
-            ClassManager cManager = Singleton<ClassManager>.Instance;
             return root
                 .GetValueAsJArray(JSON_PROP_CONFIG, new JArray())
                 .ToJObj()
@@ -301,7 +300,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                     {
                         string key = o.GetValueAsString(JSON_PROP_CONFIG_KEY);
                         string description = o.GetValueAsString(JSON_PROP_DESCRIPTION);
-                        DataType type = cManager.AddDataType(o.GetValueAsString(JSON_PROP_CONFIG_CLASS_TYPE));
+                        DataType type = DataType.GetCachedType(o.GetValueAsString(JSON_PROP_CONFIG_CLASS_TYPE));
                         return new ConfigElement(key, description, type);
                     }
                 ).NonNull().ToArray();
@@ -314,13 +313,12 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// <returns>The ProxyProperties.</returns>
         protected ProxyProperty[] ReadProxyProperties(JObject root)
         {
-            ClassManager cManager = Singleton<ClassManager>.Instance;
             return root
                 .GetValueAsJArray(JSON_PROP_PROXY_PROPERTIES, new JArray())
                 .ToJObj()
                 .Select(o =>
                     {
-                        DataType type = cManager.AddDataType(o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_TYPE));
+                        DataType type = DataType.GetCachedType(o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_TYPE));
                         string name = o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_NAME);
                         string methodName = o.GetValueAsString(JSON_PROP_PROXY_PROPERTIES_METHOD);
                         return new ProxyProperty(type, name, methodName);

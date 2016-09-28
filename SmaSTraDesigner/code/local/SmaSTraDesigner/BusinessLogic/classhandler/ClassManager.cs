@@ -62,11 +62,6 @@
         /// </summary>
         private Dictionary<string, AbstractNodeClass> classes = new Dictionary<string, AbstractNodeClass>();
 
-		/// <summary>
-		/// Dictionary that keeps track of loaded data types to ensure no ambiguity.
-		/// </summary>
-		private Dictionary<string, DataType> dataTypes = new Dictionary<string, DataType>();
-
 		#endregion fields
 
 		#region events
@@ -238,31 +233,6 @@
             return nodeClass;
         }
 
-		/// <summary>
-		/// Interpret and load a DataType from given name.
-		/// </summary>
-		/// <param name="dataTypeName"></param>
-		/// <returns>Interpreted DataType instance.</returns>
-		public DataType AddDataType(string dataTypeName)
-		{
-			if (String.IsNullOrWhiteSpace(dataTypeName))
-			{
-				throw new ArgumentException("String argument 'dataTypeName' must not be null or empty (incl. whitespace).", "dataTypeName");
-			}
-
-			// Create DataType instance from name if it does not already exist.
-			if (!this.dataTypes.ContainsKey(dataTypeName))
-			{
-				return this.dataTypes[dataTypeName] = new DataType(dataTypeName);
-			}
-
-			return this.dataTypes[dataTypeName];
-		}
-
-        public DataType[] getDataTypes()
-        {
-            return dataTypes.Values.ToArray();
-        }
 
         /// <summary>
         /// This reloads everything in the ClassManager.

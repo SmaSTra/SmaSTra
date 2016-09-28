@@ -415,7 +415,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             if(Type == "transformation")
             {
                 return new TransformationNodeClass(Name, Display, Description, "CREATOR", 
-                    new DataType(Output), Inputs.Select(i => new DataType(i)).ToArray(),
+                    DataType.GetCachedType(Output), Inputs.Select(DataType.GetCachedType).ToArray(),
                     "", null, null, null, null, true, "", "", true
                 );
             }
@@ -423,7 +423,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             if(Type == "sensor")
             {
                 return new DataSourceNodeClass(Name, Display, Description, "CREATOR",
-                    new DataType(Output), "",
+                    DataType.GetCachedType(Output), "",
                     null, null, null, null, true, "", "", "", ""
                 );
             }
@@ -431,7 +431,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             if(Type == "buffer")
             {
                 return new BufferNodeClass(Name, Display, Description, "CREATOR",
-                    new DataType(Output), "",
+                    DataType.GetCachedType(Output), "",
                     null, null, null, null, null, true, "", "", ""
                 );
             }
@@ -440,7 +440,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             if(Type == "combined")
             {
                 return new CombinedNodeClass(Name, Display, Description, "CREATOR",
-                    null, null, new DataType(Output), "",
+                    null, null, DataType.GetCachedType(Output), "",
                     true, "", null
                 );
             }

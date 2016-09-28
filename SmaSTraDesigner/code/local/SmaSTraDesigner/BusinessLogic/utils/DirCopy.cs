@@ -74,49 +74,16 @@ namespace SmaSTraDesigner.BusinessLogic.utils
         }
 
         /// <summary>
-        /// Removing the metadata.json and adding the SmaSTraBase.aar 
+        /// Does a plain recursive copy from the source directory to the Destination directory.
         /// </summary>
-        /// <param name="sourceDirName">location of the generated-folder</param>
-        /// <param name="destDirName">destination directory, where the java-generation has taken place</param>
-        public static void FinalizeCopy(string sourceDirName, string destDirName)
-        {
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-            string libsDirName = destDirName + "\\libs\\";
-
-            // If the source directory does not exist, throw an exception.
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException(
-                    "Source directory does not exist or could not be found: "
-                    + sourceDirName);
-            }
-            // If the destination directory does not exist, create it.
-            if (!Directory.Exists(destDirName))
-            {
-                Directory.CreateDirectory(destDirName);
-            }
-            // If the libs directory does not yet exist, create it.
-            if (!Directory.Exists(libsDirName))
-            {
-                Directory.CreateDirectory(libsDirName);
-            }
-
-
-            FileInfo[] aar = dir.GetFiles("SmaSTraBase.aar"); //aar-file is the first element
-
-            // Create the path to the new copy of the file.
-            string libspath = Path.Combine(libsDirName, aar[0].Name);
-
-            // Copy the file.
-            aar[0].CopyTo(libspath, true);
-
-            string temppath = Path.Combine(destDirName, "metadata.json");
-
-            File.Delete(temppath);
-        }
-
+        /// <param name="sourceDir">To copy from</param>
+        /// <param name="destDir">To copy to</param>
         public static void PlainCopy(string sourceDir, string destDir)
         {
+            //If the Source does not exist, we can not copy anything!
+            if (!Directory.Exists(sourceDir)) return;
+            Directory.CreateDirectory(destDir);
+
             //Now Create all of the directories
             foreach (string dirPath in Directory.GetDirectories(sourceDir, "*",
                 SearchOption.AllDirectories))

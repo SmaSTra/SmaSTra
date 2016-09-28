@@ -437,6 +437,7 @@
   <PropertyGroup>
     <PostBuildEvent>cmd /c if exist "$(TargetDir)base\" rd /s /q  "$(TargetDir)base\"
 cmd /c if exist "$(TargetDir)libs\" rd /s /q  "$(TargetDir)libs\"
+cmd /c if exist "$(TargetDir)datatypes\" rd /s /q  "$(TargetDir)datatypes\"
 xcopy /E /Y "$(SolutionDir)..\data\*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
