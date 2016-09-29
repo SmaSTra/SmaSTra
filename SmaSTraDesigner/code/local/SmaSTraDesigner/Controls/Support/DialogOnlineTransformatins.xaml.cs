@@ -165,7 +165,10 @@ namespace SmaSTraDesigner.Controls.Support
         {
             if (SelectedClass != null) {
                 onlineServer.GetOnlineElement(SelectedClass.Name, callbackGetOnlineElement);
-                    }
+                    } else
+            {
+                tbStatusBar.Text = "Please select an element.";
+            }
         }
 
         private void uploadDropZone_Drop(object sender, DragEventArgs e)

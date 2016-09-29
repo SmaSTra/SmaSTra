@@ -389,5 +389,18 @@
                 }
             }
         }
+
+        private void propagate_MouseWheel(object sender, MouseWheelEventArgs e)
+        { // Prevents internal ScrollViewer from blocking outer ScrollViewer
+            if (!e.Handled)
+            {
+                e.Handled = true;
+                var propagateEvent = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                propagateEvent.RoutedEvent = UIElement.MouseWheelEvent;
+                propagateEvent.Source = sender;
+                var parent = ((FrameworkElement)sender).Parent as UIElement;
+                parent.RaiseEvent(propagateEvent);
+            }
+        }
     }
 }

@@ -183,6 +183,10 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 onlineServer.GetOnlineElement(SelectedClass.Name, callbackGetOnlineElement);
             }
+            else
+            {
+                StatusBarText = "Please select an element.";
+            }
         }
 
         public void uploadDropZone_Drop(object sender, DragEventArgs e)

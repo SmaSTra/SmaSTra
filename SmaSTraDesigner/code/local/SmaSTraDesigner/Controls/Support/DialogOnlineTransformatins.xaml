@@ -16,7 +16,7 @@
                     <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-                <DockPanel>
+                <DockPanel x:Name="dockOnlineElements">
                     <ListView x:Name="listOnlineElements" DockPanel.Dock="Top" Background="{StaticResource ColorPanelTitel}" ItemsSource="{Binding Path=OnlineElementsList}" SelectionChanged="listOnlineElements_SelectionChanged">
                         <ListView.ItemTemplate>
                     <DataTemplate>
@@ -30,13 +30,15 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-                <Button x:Name="UpdateButton" DockPanel.Dock="Bottom" Height="40" Content="Update list" Style="{StaticResource imageButtonTemplate}" Click="UpdateButton_Click" />
-
+                    <Button x:Name="UpdateButton" DockPanel.Dock="Bottom" Height="30" Style="{StaticResource imageButtonTemplate}" Click="UpdateButton_Click" >
+                        <TextBlock Text="Update list" FontSize="{StaticResource FontSizeMedium}"/>
+                    </Button>
+                    
                 </DockPanel>
 
                 <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
 
-                <ScrollViewer Grid.Column="2" Height="150">
+                <ScrollViewer Grid.Column="2" Height="{Binding ElementName=dockOnlineElements, Path=ActualHeight}" HorizontalScrollBarVisibility="Auto">
                     <StackPanel x:Name="spnElementDetails" >
                         <StackPanel.Resources>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
@@ -76,20 +78,10 @@
 
     </Grid>
 
-            
 
-            <Button x:Name="btnDownloadElement" Width="100" Content="Download" Click="btnDownloadElement_Click" >
-                <Button.Style>
-                    <Style BasedOn="{StaticResource imageButtonTemplate}" TargetType="Button">
-                            <Style.Triggers>
-                                <DataTrigger 
-                     Binding ="{Binding ElementName=listOnlineElements, Path=SelectedIndex}" 
-                     Value="-1">
-                                    <Setter Property="Button.IsEnabled" Value="false"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
+
+            <Button x:Name="btnDownloadElement" Width="100" Click="btnDownloadElement_Click" Style="{StaticResource imageButtonTemplate}">
+                <TextBlock Text="Download" FontSize="{StaticResource FontSizeLarge}" />
             </Button>
 
             <Grid x:Name="uploadDropZone" Background="LightGray" Height="50" Margin="0,20,0,0" AllowDrop="True" Drop="uploadDropZone_Drop">

@@ -32,7 +32,7 @@
         <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="20">
         <StackPanel>
                 <Grid Height="50" Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
-                    <Button IsCancel="True" Content="X" Width="25" HorizontalAlignment="Right" Margin="0,7,50,0" Height="25"/>
+                    <Button IsCancel="True" Content="X" FontSize="18" Width="25" HorizontalAlignment="Right" Margin="0,7,50,0" Height="25"/>
                 </Grid>
             <Grid>
     <StackPanel Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}}">
@@ -56,8 +56,10 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical" >
                                         <WrapPanel>
-                                                        <Button x:Name="btnDeleteInputType" Content="Delete" Width="80" Click="btnDeleteInputType_Click" Margin="0,0,10,0" Style="{StaticResource imageButtonTemplate}"/>
-                                            <ComboBox x:Name="cboxInputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1"  SelectionChanged="cboxTypesString_SelectionChanged" Margin="0,0,10,0">
+                                                            <Button x:Name="btnDeleteInputType" Width="60" Click="btnDeleteInputType_Click" Margin="0,0,10,0" Style="{StaticResource imageButtonTemplate}">
+                                                                <TextBlock Text="Delete" FontSize="{StaticResource FontSizeMedium}"/>
+                                                            </Button>
+                                                            <ComboBox x:Name="cboxInputTypeString" ItemsSource="{Binding Path=AllTypesString}" MinWidth="100" SelectedIndex="1"  SelectionChanged="cboxTypesString_SelectionChanged" Margin="0,0,10,0">
                                                 <ComboBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
@@ -74,8 +76,10 @@
                         </ItemsControl>
 
                                 </ScrollViewer>
-                                <Button x:Name="btnAddInput" Content="Add" Width="100" Click="btnAddInput_Click" Style="{StaticResource imageButtonTemplate}"/>
-                    </StackPanel>
+                                    <Button x:Name="btnAddInput" Width="80" HorizontalAlignment="Left" Margin="80,10,0,0" Click="btnAddInput_Click" Style="{StaticResource imageButtonTemplate}">
+                                        <TextBlock Text="Add" FontSize="{StaticResource FontSizeMedium}"/>
+                                    </Button>
+                                </StackPanel>
                         </Border>
                 <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Padding="5">
                     <StackPanel VerticalAlignment="Center">
@@ -95,8 +99,10 @@
                     </StackPanel>
                 </Border>
             </Grid>
-                    <Button x:Name="btnIONext" Content="Next" Width="100" HorizontalAlignment="Right" Margin="0,20,50,10" Click="btnIONext_Click" Style="{StaticResource imageButtonTemplate}" />
-        </StackPanel>
+                        <Button x:Name="btnIONext" Width="100" HorizontalAlignment="Right" Margin="0,20,50,10" Click="btnIONext_Click" Style="{StaticResource imageButtonTemplate}" >
+                            <TextBlock Text="Next" FontSize="{StaticResource FontSizeLarge}"/>
+                        </Button>
+                    </StackPanel>
 
                 <!-- Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}" -->
                 <StackPanel Margin="10,50,10,10" Visibility="{Binding Path=FirstPage, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}">
@@ -114,9 +120,13 @@
                     <TextBox x:Name="tboxDescription" Text="{Binding Path=Description}" MinWidth="300" Margin="10,10,10,10" />
                 </WrapPanel>
                     <Grid>
-                        <Button x:Name="btnIOBack" Content="Back" Width="100" HorizontalAlignment="Left" Click="btnIOBack_Click" Margin="50,20,0,10" Style="{StaticResource imageButtonTemplate}" />
-                    <Button x:Name="btnIOFinished" Content="Generate" Width="100" HorizontalAlignment="Right" Click="btnIOFinished_Click" Margin="0,20,50,10" Style="{StaticResource imageButtonTemplate}" />
-                    </Grid>
+                            <Button x:Name="btnIOBack" Width="100" HorizontalAlignment="Left" Click="btnIOBack_Click" Margin="50,20,0,10" Style="{StaticResource imageButtonTemplate}" >
+                                <TextBlock Text="Back" FontSize="{StaticResource FontSizeLarge}"/>
+                            </Button>
+                            <Button x:Name="btnIOFinished" Width="100" HorizontalAlignment="Right" Click="btnIOFinished_Click" Margin="0,20,50,10" Style="{StaticResource imageButtonTemplate}">
+                                <TextBlock Text="Generate" FontSize="{StaticResource FontSizeLarge}"/>
+                            </Button>
+                        </Grid>
                 </StackPanel>
             </Grid>
             <TextBlock x:Name="tbStatus" TextAlignment="Center" Margin="0,10,0,20"/>
