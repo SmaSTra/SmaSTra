@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Create Vector3d",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
   "display": "Create Vector3d",
   "description": "None",

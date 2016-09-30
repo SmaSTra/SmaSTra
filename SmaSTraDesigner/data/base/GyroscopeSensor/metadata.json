@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Gyroscope Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidGyroscopeSensor",
   "display": "Gyroscope Sensor",
   "description": "The Gyro sensor measuring 3d-circle acceleration",

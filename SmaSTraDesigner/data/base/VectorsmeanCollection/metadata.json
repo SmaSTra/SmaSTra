@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Vectors mean Collection",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3dCollections",
   "display": "Vectors mean Collection",
   "description": "None",

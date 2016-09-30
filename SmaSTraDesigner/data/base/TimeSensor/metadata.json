@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Time Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidTimeSensor",
   "display": "Time Sensor",
   "description": "Gets the current Time in MS",

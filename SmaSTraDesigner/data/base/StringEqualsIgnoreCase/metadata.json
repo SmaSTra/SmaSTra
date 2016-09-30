@@ -1,0 +1,19 @@
+{
+  "type": "transformation",
+  "name": "StringEqualsIgnoreCase",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.stringcomp.StringComparison",
+  "display": "StringEqualsIgnoreCase",
+  "description": "Checks if 2 strings are equals, ignores case-sensibility",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "StringEqualsIgnoreCase",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "java.lang.String",
+    "arg1": "java.lang.String"
+  }
+}

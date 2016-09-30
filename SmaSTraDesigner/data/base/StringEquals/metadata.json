@@ -1,0 +1,19 @@
+{
+  "type": "transformation",
+  "name": "StringEquals",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.stringcomp.StringComparison",
+  "display": "StringEquals",
+  "description": "Checks if 2 strings are equals.",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "StringEquals",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "java.lang.String",
+    "arg1": "java.lang.String"
+  }
+}

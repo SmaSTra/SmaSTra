@@ -20,6 +20,7 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
 
     protected static final String TYPE_PATH = "type";
     protected static final String NAME_PATH = "name";
+    protected static final String AUTHOR_PATH = "author";
     protected static final String MAIN_CLASS_PATH = "mainClass";
     protected static final String DISPLAY_PATH = "display";
     protected static final String DESCRIPTION_PATH = "description";
@@ -54,6 +55,7 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
         JsonObject obj = new JsonObject();
         obj.addProperty(TYPE_PATH, type);
         obj.addProperty(NAME_PATH, src.displayName);
+        obj.addProperty(AUTHOR_PATH, "SmaSTraBasic");
         obj.addProperty(MAIN_CLASS_PATH, src.getElementClass().getCanonicalName());
         obj.addProperty(DISPLAY_PATH, src.getDisplayName());
         obj.addProperty(DESCRIPTION_PATH, src.getDescription());

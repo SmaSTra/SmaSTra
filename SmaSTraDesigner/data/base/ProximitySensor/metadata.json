@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Proximity Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidProximitySensor",
   "display": "Proximity Sensor",
   "description": "Captures the nearest distance for the Proximity Sensor",

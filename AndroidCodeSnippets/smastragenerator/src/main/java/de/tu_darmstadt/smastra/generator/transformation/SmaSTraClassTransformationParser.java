@@ -102,7 +102,7 @@ public class SmaSTraClassTransformationParser {
      * @return the read Description or 'None' if none given.
      */
     private static String readDescription(Method method) {
-        return method.getAnnotation(Transformation.class).desctiption();
+        return method.getAnnotation(Transformation.class).description();
     }
 
 

@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "DoubleToInt",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.conversions.BasicConversions",
+  "display": "DoubleToInt",
+  "description": "Converts a double to an Int value.",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "DoubleToInt",
+  "static": true,
+  "output": "int",
+  "input": {
+    "arg0": "double"
+  }
+}

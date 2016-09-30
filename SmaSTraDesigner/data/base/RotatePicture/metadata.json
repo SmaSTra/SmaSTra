@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Rotate Picture",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.imagefilters.ImageFilters",
   "display": "Rotate Picture",
   "description": "Rotates a picture by X degree.",

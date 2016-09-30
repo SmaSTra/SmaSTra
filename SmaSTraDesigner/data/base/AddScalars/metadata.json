@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Add Scalars",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
   "display": "Add Scalars",
   "description": "None",

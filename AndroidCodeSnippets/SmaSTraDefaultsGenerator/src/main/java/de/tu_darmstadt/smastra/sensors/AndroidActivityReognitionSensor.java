@@ -143,8 +143,29 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
      * @return the current Activities.
      */
     @SensorOutput
-    public Map<String, Integer> getActivitiesToProbabilitiesMap() {
-        return activitiesToProbabilitiesMap;
+    public String getMostLikelyActivity() {
+        return findBestResult(activitiesToProbabilitiesMap);
+    }
+
+    /**
+     * This finds the best result of the Map passed.
+     * @param map to check.
+     * @return the best result.
+     */
+    private String findBestResult(Map<String,Integer> map){
+        if(map == null || map.isEmpty()) return "";
+
+        String result = "";
+        int prop = -1;
+
+        for(Map.Entry<String,Integer> entry : activitiesToProbabilitiesMap.entrySet()){
+            if(entry.getValue() > prop){
+                prop = entry.getValue();
+                result = entry.getKey();
+            }
+        }
+
+        return result;
     }
 
 

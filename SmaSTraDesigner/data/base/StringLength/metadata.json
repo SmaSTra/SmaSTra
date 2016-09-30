@@ -1,0 +1,18 @@
+{
+  "type": "transformation",
+  "name": "StringLength",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.stringcomp.StringComparison",
+  "display": "StringLength",
+  "description": "Gets the length of a String",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "StringLength",
+  "static": true,
+  "output": "int",
+  "input": {
+    "arg0": "java.lang.String"
+  }
+}

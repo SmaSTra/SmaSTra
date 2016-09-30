@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Bool 3 Or",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Bool 3 Or",
   "description": "None",

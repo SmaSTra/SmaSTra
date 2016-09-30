@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Add Vectors",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Add Vectors",
   "description": "None",

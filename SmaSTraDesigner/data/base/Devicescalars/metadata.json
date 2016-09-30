@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Device scalars",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
   "display": "Device scalars",
   "description": "None",

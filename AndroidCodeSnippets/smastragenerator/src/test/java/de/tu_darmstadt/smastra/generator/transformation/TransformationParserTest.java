@@ -48,7 +48,7 @@ public class TransformationParserTest {
     @NeedsOtherClass(TransformationParserTest.class)
     private static class TestClass1 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
-        @Transformation(displayName = "method1", desctiption = "Does Stuff")
+        @Transformation(displayName = "method1", description = "Does Stuff")
         public void method1(String vec1){}
 
     }
@@ -123,7 +123,7 @@ public class TransformationParserTest {
         @Transformation(displayName = "method1")
         public static String method1(String vec1){ return null; }
 
-        @Transformation(displayName = "method2", desctiption = "Does Stuff")
+        @Transformation(displayName = "method2", description = "Does Stuff")
         public void method2(String vec1){}
 
     }

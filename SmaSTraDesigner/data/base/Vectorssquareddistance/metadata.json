@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Vectors squared distance",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Vectors squared distance",
   "description": "None",

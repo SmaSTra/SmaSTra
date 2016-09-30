@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Vector Length",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Vector Length",
   "description": "None",

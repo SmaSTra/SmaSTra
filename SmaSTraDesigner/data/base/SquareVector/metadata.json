@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Square Vector",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Square Vector",
   "description": "None",
