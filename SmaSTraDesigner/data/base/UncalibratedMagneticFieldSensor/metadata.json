@@ -1,10 +1,10 @@
 {
   "type": "sensor",
-  "name": "Accelerometer Sensor",
+  "name": "Uncalibrated Magnetic Field Sensor",
   "author": "SmaSTraBasic",
-  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidAccelerometerSensor",
-  "display": "Accelerometer Sensor",
-  "description": "The Accelerometer sensor measuring 3d-Acceleration to the Device",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidUncalibratedMagnetometerSensor",
+  "display": "Uncalibrated Magnetic Field Sensor",
+  "description": "This measures the magnetic field strength in x,y,z direction, the values are uncalibrated.",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor",

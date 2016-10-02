@@ -7,8 +7,8 @@
   "description": "None",
   "neededPermissions": [],
   "needs": [
-    "de.tu_darmstadt.smastra.sensors.Vector3d",
-    "de.tu_darmstadt.smastra.math.Math3d"
+    "de.tu_darmstadt.smastra.math.Math3d",
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
   "config": [],
   "proxyProperties": [],
@@ -16,6 +16,6 @@
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "input": {
-    "arg0": "de.tu_darmstadt.smastra.markers.interfaces.Buffer"
+    "arg0": "java.util.Collection"
   }
 }

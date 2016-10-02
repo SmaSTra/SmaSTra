@@ -7,8 +7,8 @@
   "description": "Filters the Color passed (RGP).",
   "neededPermissions": [],
   "needs": [
-    "de.tu_darmstadt.smastra.imagefilters.PictureFilter",
-    "de.tu_darmstadt.smastra.sensors.Picture"
+    "de.tu_darmstadt.smastra.sensors.Picture",
+    "de.tu_darmstadt.smastra.imagefilters.PictureFilter"
   ],
   "config": [],
   "proxyProperties": [],

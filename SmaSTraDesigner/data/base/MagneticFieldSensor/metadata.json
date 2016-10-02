@@ -1,10 +1,10 @@
 {
   "type": "sensor",
-  "name": "Accelerometer Sensor",
+  "name": "Magnetic Field Sensor",
   "author": "SmaSTraBasic",
-  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidAccelerometerSensor",
-  "display": "Accelerometer Sensor",
-  "description": "The Accelerometer sensor measuring 3d-Acceleration to the Device",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidMagnetometerSensor",
+  "display": "Magnetic Field Sensor",
+  "description": "This measures the magnetic field strength in x,y,z direction.",
   "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor",
