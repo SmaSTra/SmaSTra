@@ -273,12 +273,13 @@ namespace SmaSTraDesigner.Controls.Support
             string outputTypeText = "";
             string methodNameText = "";
             string argumentsText = "(";
-            staticText = InputTypes.Empty() ? " static" : "";
+            staticText = InputTypes.Empty() ? "" : " static";
             outputTypeText = " " + OutputType.MinimizedName;
             methodNameText = InputTypes.Empty() ? " getData" : " " + ElementName.RemoveAll(" ", "_");
             for(int i = 0; i < InputTypes.Count; i++)
             {
-                argumentsText = argumentsText + InputTypes[i].MinimizedName + " arg" + i;
+                if (i != 0) argumentsText += ", ";
+                argumentsText += InputTypes[i].MinimizedName + " arg" + i;
             }
             argumentsText = argumentsText + ")";
 
