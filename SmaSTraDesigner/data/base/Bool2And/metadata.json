@@ -9,6 +9,7 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "and2",
   "static": true,
   "output": "boolean",

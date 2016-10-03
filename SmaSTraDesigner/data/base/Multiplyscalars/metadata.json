@@ -9,6 +9,7 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "multiply",
   "static": true,
   "output": "double",

@@ -11,6 +11,7 @@
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "distance",
   "static": true,
   "output": "double",

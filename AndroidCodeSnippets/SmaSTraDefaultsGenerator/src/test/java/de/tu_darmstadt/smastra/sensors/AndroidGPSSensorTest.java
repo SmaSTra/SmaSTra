@@ -1,9 +1,6 @@
 package de.tu_darmstadt.smastra.sensors;
 
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.test.mock.MockContext;
@@ -13,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.lang.reflect.Field;
+import de.tu_darmstadt.smastra.sensors.hardware.AndroidGPSSensor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

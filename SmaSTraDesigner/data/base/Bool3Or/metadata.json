@@ -9,6 +9,7 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "or",
   "static": true,
   "output": "boolean",

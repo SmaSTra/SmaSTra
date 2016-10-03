@@ -25,8 +25,8 @@ public class DataTypeParser {
         if(hasSkipAnnotation(clazz)) return null;
 
         for(Constructor<?> constructor : clazz.getConstructors()){
-            de.tu_darmstadt.smastra.markers.elements.DataType annotation =
-                    constructor.getAnnotation(de.tu_darmstadt.smastra.markers.elements.DataType.class);
+            de.tu_darmstadt.smastra.markers.elements.datatype.DataType annotation =
+                    constructor.getAnnotation(de.tu_darmstadt.smastra.markers.elements.datatype.DataType.class);
 
             //We have an Annotation -> Create stuff:
             if(annotation != null){
@@ -59,7 +59,7 @@ public class DataTypeParser {
         Collection<DataType> dataTypes = new ArrayList<>();
 
         Reflections reflections = new Reflections(new MethodAnnotationsScanner());
-        for(Constructor constructor : reflections.getConstructorsAnnotatedWith(de.tu_darmstadt.smastra.markers.elements.DataType.class)){
+        for(Constructor constructor : reflections.getConstructorsAnnotatedWith(de.tu_darmstadt.smastra.markers.elements.datatype.DataType.class)){
             Class<?> clazz = constructor.getDeclaringClass();
             DataType type = readFromClass(clazz);
             if(type != null) dataTypes.add(type);

@@ -11,6 +11,13 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
+  "extras": [
+    {
+      "type": "broadcast",
+      "broadcast": "de.tu_darmstadt.smastra.sensors.AndroidActivityReognitionSensor.IntentServiveActivityRecog",
+      "exportable": false
+    }
+  ],
   "dataMethod": "getMostLikelyActivity",
   "output": "java.lang.String",
   "start": "start",

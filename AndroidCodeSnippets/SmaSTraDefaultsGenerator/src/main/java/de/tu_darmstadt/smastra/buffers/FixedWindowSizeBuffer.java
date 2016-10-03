@@ -5,13 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
-import de.tu_darmstadt.smastra.markers.elements.BufferGet;
-import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
-import de.tu_darmstadt.smastra.markers.elements.Configuration;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferGet;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferInfo;
+import de.tu_darmstadt.smastra.markers.elements.config.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
-import de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor;
 import de.tu_darmstadt.smastra.utils.ConfigParserUtils;
 
 /**

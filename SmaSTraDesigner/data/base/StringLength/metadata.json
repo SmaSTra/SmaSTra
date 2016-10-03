@@ -9,6 +9,7 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "StringLength",
   "static": true,
   "output": "int",

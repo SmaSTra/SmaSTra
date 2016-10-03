@@ -1,6 +1,6 @@
 package de.tu_darmstadt.smastra.stringcomp;
 
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 /**
  * This is a lib for String comparisons.

@@ -6,7 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 
 /**
  * This is the base class for different SmaSTra Elements.
@@ -49,18 +50,24 @@ public abstract class SmaSTraElement {
      */
     protected final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
 
+    /**
+     * The extras to bundle in.
+     */
+    protected final List<AbstractSmaSTraExtra> extras = new ArrayList<>();
+
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass) {
-        this(displayName, description, elementClass, new String[0], null, null, null);
+        this(displayName, description, elementClass, new String[0], null, null, null, null);
     }
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions) {
-        this(displayName, description, elementClass, androidPermissions, null, null, null);
+        this(displayName, description, elementClass, androidPermissions, null, null, null, null);
     }
 
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses,
-                          List<ConfigurationElement> config, List<ProxyPropertyObj> proxyProperties) {
+                          List<ConfigurationElement> config, List<ProxyPropertyObj> proxyProperties,
+                          List<AbstractSmaSTraExtra> extras) {
 
         this.displayName = displayName;
         this.description = description;
@@ -70,6 +77,7 @@ public abstract class SmaSTraElement {
 
         if(proxyProperties != null) this.proxyProperties.addAll(proxyProperties);
         if(neededClasses != null) this.neededClasses.addAll(neededClasses);
+        if(extras != null ) this.extras.addAll(extras);
     }
 
 
@@ -111,6 +119,14 @@ public abstract class SmaSTraElement {
      */
     public Class<?> getElementClass() {
         return elementClass;
+    }
+
+    /**
+     * Gets the Extras for the Element.
+     * @return the extras.
+     */
+    public Collection<AbstractSmaSTraExtra> getExtras(){
+        return extras;
     }
 
     /**

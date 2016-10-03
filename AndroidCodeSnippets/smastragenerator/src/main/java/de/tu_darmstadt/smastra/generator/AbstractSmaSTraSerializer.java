@@ -9,8 +9,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
-import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 
 /**
  * This is the abstract base for a SmaSTra serialization to a metadata object.
@@ -37,6 +37,8 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
     protected static final String PROXY_PROPERTIES_TYPE_PATH = "type";
     protected static final String PROXY_PROPERTIES_NAME_PATH = "name";
     protected static final String PROXY_PROPERTIES_METHOD_PATH = "method";
+
+    protected static final String EXTRA_PATH = "extras";
 
 
     /**
@@ -104,6 +106,11 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
                 proxyArray.add(proxyObj);
             }
         }
+
+        //Write the Extras to the present:
+        JsonArray extras = new JsonArray();
+        obj.add(EXTRA_PATH, extras);
+        for(AbstractSmaSTraExtra extra : src.getExtras()) extras.add(extra.serialize());
 
         return obj;
     }

@@ -8,8 +8,8 @@ import java.util.List;
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
-import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 
 /**
  * Builder pattern for a SmaSTra Sensor.
@@ -32,6 +32,11 @@ public class SmaSTraSensorBuilder {
      * The Proxy-Properties to use.
      */
     private final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
+
+    /**
+     * The list of all extras to add.
+     */
+    private final List<AbstractSmaSTraExtra> extras = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -125,6 +130,16 @@ public class SmaSTraSensorBuilder {
         return this;
     }
 
+    public SmaSTraSensorBuilder addExtra(AbstractSmaSTraExtra extra){
+        if(extra != null) this.extras.add(extra);
+        return this;
+    }
+
+    public SmaSTraSensorBuilder addExtras(Collection<AbstractSmaSTraExtra> extras){
+        if(extras != null) this.extras.addAll(extras);
+        return this;
+    }
+
     public List<Class<?>> getNeedsOtherClasses() {
         return needsOtherClasses;
     }
@@ -157,6 +172,10 @@ public class SmaSTraSensorBuilder {
         return configuration;
     }
 
+    public List<AbstractSmaSTraExtra> getExtras() {
+        return extras;
+    }
+
     public void setStartMethod(String startMethod) {
         if(startMethod == null) return;
         this.startMethod = startMethod;
@@ -182,6 +201,6 @@ public class SmaSTraSensorBuilder {
 
         return new SmaSTraSensor(displayName, description, androidPermissions, needsOtherClasses,
                 output, dataMethodName, startMethod, stopMethod, clazz,
-                configuration, proxyProperties);
+                configuration, proxyProperties, extras);
     }
 }

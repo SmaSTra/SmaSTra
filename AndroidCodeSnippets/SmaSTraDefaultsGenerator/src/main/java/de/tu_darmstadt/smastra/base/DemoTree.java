@@ -3,7 +3,7 @@ package de.tu_darmstadt.smastra.base;
 import android.content.Context;
 
 import de.tu_darmstadt.smastra.math.Math3d;
-import de.tu_darmstadt.smastra.sensors.AndroidAccelerometerSensor;
+import de.tu_darmstadt.smastra.sensors.hardware.AndroidAccelerometerSensor;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 
 /**

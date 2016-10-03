@@ -12,6 +12,7 @@
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "Rotate90",
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Picture",

@@ -11,6 +11,7 @@
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "getX",
   "static": true,
   "output": "double",

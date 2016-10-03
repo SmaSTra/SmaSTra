@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 import de.tu_darmstadt.smastra.sensors.Picture;
 
 /**

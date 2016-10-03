@@ -1,6 +1,5 @@
 package de.tu_darmstadt.smastra.generator.transformation;
 
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,7 +9,8 @@ import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 
 /**
  * Builder pattern for a SmaSTra Transaction.
@@ -38,6 +38,11 @@ public class SmaSTraTransformationBuilder {
      * The Proxy properties to use.
      */
     private final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
+
+    /**
+     * The extras to use.
+     */
+    private final List<AbstractSmaSTraExtra> extras = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -141,6 +146,16 @@ public class SmaSTraTransformationBuilder {
         return this;
     }
 
+    public SmaSTraTransformationBuilder addExtra(AbstractSmaSTraExtra extra){
+        if(extra != null) this.extras.add(extra);
+        return this;
+    }
+
+    public SmaSTraTransformationBuilder addExtras(Collection<AbstractSmaSTraExtra> extras){
+        if(extras != null) this.extras.addAll(extras);
+        return this;
+    }
+
 
     public List<Input> getInputs() {
         return inputs;
@@ -182,6 +197,10 @@ public class SmaSTraTransformationBuilder {
         return config;
     }
 
+    public List<AbstractSmaSTraExtra> getExtras() {
+        return extras;
+    }
+
     /**
      * Generates the Transaction.
      *
@@ -194,6 +213,6 @@ public class SmaSTraTransformationBuilder {
         if(displayName == null) throw new ElementGenerationFailedException("No displayName defined.");
 
         return new SmaSTraTransformation(displayName, inputs, androidPermissions, needsOtherClasses, description, output,
-                methodName, clazz, isStatic, config, proxyProperties);
+                methodName, clazz, isStatic, config, proxyProperties, extras);
     }
 }

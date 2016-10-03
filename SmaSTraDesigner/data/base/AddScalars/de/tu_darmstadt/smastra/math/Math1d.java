@@ -1,6 +1,6 @@
 package de.tu_darmstadt.smastra.math;
 
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 /**
  * A static Math class.

@@ -2,14 +2,14 @@
   "type": "sensor",
   "name": "Magnetic Field Sensor",
   "author": "SmaSTraBasic",
-  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidMagnetometerSensor",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidMagnetometerSensor",
   "display": "Magnetic Field Sensor",
   "description": "This measures the magnetic field strength in x,y,z direction.",
   "neededPermissions": [],
   "needs": [
+    "de.tu_darmstadt.smastra.sensors.Data3d",
     "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor",
-    "de.tu_darmstadt.smastra.sensors.Vector3d",
-    "de.tu_darmstadt.smastra.sensors.Data3d"
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
   "config": [
     {
@@ -19,6 +19,7 @@
     }
   ],
   "proxyProperties": [],
+  "extras": [],
   "dataMethod": "getLastData",
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "start": "start",

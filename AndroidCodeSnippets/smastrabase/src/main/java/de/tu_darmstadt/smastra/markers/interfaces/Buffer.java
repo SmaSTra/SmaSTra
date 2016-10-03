@@ -3,8 +3,8 @@ package de.tu_darmstadt.smastra.markers.interfaces;
 import java.util.Collection;
 import java.util.Map;
 
-import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
-import de.tu_darmstadt.smastra.markers.elements.BufferGet;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferGet;
 
 /**
  * A marker interface to know that this is a Buffer for SmaSTra.

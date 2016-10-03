@@ -11,6 +11,7 @@
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "getZ",
   "static": true,
   "output": "double",

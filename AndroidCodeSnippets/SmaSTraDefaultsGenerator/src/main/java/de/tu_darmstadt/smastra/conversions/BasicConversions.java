@@ -1,6 +1,6 @@
 package de.tu_darmstadt.smastra.conversions;
 
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 /**
  * A simple conversion class for SmaSTra.

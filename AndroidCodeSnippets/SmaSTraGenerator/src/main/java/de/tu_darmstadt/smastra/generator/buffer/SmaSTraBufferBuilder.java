@@ -7,7 +7,8 @@ import java.util.List;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 
 /**
  * Builder pattern for a SmaSTra Sensor.
@@ -30,6 +31,11 @@ public class SmaSTraBufferBuilder {
      * The Proxy properties to use.
      */
     private final List<ProxyPropertyObj> proxyProperties = new ArrayList<>();
+
+    /**
+     * The extras to bundle in.
+     */
+    private final List<AbstractSmaSTraExtra> extras = new ArrayList<>();
 
     /**
      * The Description of the Transaction.
@@ -114,6 +120,16 @@ public class SmaSTraBufferBuilder {
         return this;
     }
 
+    public SmaSTraBufferBuilder addExtra(AbstractSmaSTraExtra extra){
+        if(extra != null) this.extras.add(extra);
+        return this;
+    }
+
+    public SmaSTraBufferBuilder addExtras(Collection<AbstractSmaSTraExtra> extras){
+        if(extras != null) this.extras.addAll(extras);
+        return this;
+    }
+
     public List<Class<?>> getNeedsOtherClasses() {
         return needsOtherClasses;
     }
@@ -161,6 +177,6 @@ public class SmaSTraBufferBuilder {
 
         return new SmaSTraBuffer(displayName, description, androidPermissions, needsOtherClasses,
                 bufferAddMethodName, bufferGetMethodName, clazz,
-                configuration, proxyProperties);
+                configuration, proxyProperties, extras);
     }
 }

@@ -11,6 +11,7 @@
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "add",
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",

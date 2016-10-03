@@ -23,10 +23,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
-import de.tu_darmstadt.smastra.markers.elements.SensorStart;
-import de.tu_darmstadt.smastra.markers.elements.SensorStop;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraBroadcast;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 /**
@@ -34,9 +36,12 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  *
  * @author Tobias Welther
  */
+@Extras(broadcasts = @ExtraBroadcast(clazz = AndroidActivityReognitionSensor.IntentServiveActivityRecog.class))
 @NeedsAndroidPermissions("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
 @SensorConfig(displayName = "Activity Recognition Sensor", description = "This sensor represents the Android Activity Recognition")
-public class AndroidActivityReognitionSensor extends BroadcastReceiver implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+public class AndroidActivityReognitionSensor
+        extends BroadcastReceiver
+        implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     private static final String BROADCAST_NAME = "ACTIVITY_RECOGNITION";
 
@@ -107,7 +112,7 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
      * Gets a PendingIntent to be sent for each activity detection.
      */
     private PendingIntent getActivityDetectionPendingIntent() {
-        Intent intent = new Intent(context, AndroidActivityReognitionSensor.class);
+        Intent intent = new Intent(context, IntentServiveActivityRecog.class);
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().
@@ -121,6 +126,21 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+
+
+    public static class IntentServiveActivityRecog extends BroadcastReceiver{
+
+        public IntentServiveActivityRecog() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent intent1 = new Intent(BROADCAST_NAME);
+            intent1.putExtras(intent);
+
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
+        }
+    }
 
 
     @Override

@@ -10,14 +10,17 @@ import java.util.Set;
 
 import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.generator.extras.ExtraFactory;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
-import de.tu_darmstadt.smastra.markers.elements.BufferGet;
-import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
-import de.tu_darmstadt.smastra.markers.elements.Configuration;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferGet;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferInfo;
+import de.tu_darmstadt.smastra.markers.elements.config.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
+import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
 
 /**
@@ -50,6 +53,7 @@ public class SmaSTraClassBufferParser {
             builder.setAndroidPermissions(readNeededPermissions(clazz));
             builder.addNeededClass(readNeededClasses(clazz));
             builder.addProxyProperties(readProxyProperties(clazz));
+            builder.addExtras(readExtras(clazz));
 
             builder.addConfigurationElements(readConfigElements(clazz));
 
@@ -59,6 +63,30 @@ public class SmaSTraClassBufferParser {
         }
 
         return null;
+    }
+
+
+    /**
+     * Reads the extras from a class.
+     * @param clazz to read from.
+     * @return the extras.
+     */
+    private static List<AbstractSmaSTraExtra> readExtras(Class<?> clazz){
+        List<AbstractSmaSTraExtra> result = new ArrayList<>();
+
+        //Check for Super-Definitions:
+        while(clazz != null && clazz != Object.class) {
+            Extras extras = clazz.getAnnotation(Extras.class);
+            if (extras != null) {
+                for (Object obj : extras.broadcasts()) result.add(ExtraFactory.buildFromExtra(obj));
+                for (Object obj : extras.services()) result.add(ExtraFactory.buildFromExtra(obj));
+                for (Object obj : extras.libraries()) result.add(ExtraFactory.buildFromExtra(obj));
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return result;
     }
 
 

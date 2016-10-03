@@ -6,20 +6,14 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
-import de.tu_darmstadt.smastra.generator.sensor.SensorParserTest;
-import de.tu_darmstadt.smastra.generator.sensor.SmaSTraClassSensorParser;
-import de.tu_darmstadt.smastra.generator.sensor.SmaSTraSensor;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
-import de.tu_darmstadt.smastra.markers.elements.BufferAdd;
-import de.tu_darmstadt.smastra.markers.elements.BufferGet;
-import de.tu_darmstadt.smastra.markers.elements.BufferInfo;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferAdd;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferGet;
+import de.tu_darmstadt.smastra.markers.elements.buffer.BufferInfo;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
-import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
-import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

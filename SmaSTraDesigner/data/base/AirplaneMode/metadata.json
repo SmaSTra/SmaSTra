@@ -1,0 +1,15 @@
+{
+  "type": "sensor",
+  "name": "Airplane Mode",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AirplaneModeSensor",
+  "display": "Airplane Mode",
+  "description": "Detects if the Airplane mode is toggled.",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "extras": [],
+  "dataMethod": "isOn",
+  "output": "boolean"
+}

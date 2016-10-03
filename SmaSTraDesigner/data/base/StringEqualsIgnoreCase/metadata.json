@@ -9,6 +9,7 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "StringEqualsIgnoreCase",
   "static": true,
   "output": "boolean",

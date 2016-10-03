@@ -7,7 +7,7 @@ import java.util.Collection;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 import static de.tu_darmstadt.smastra.generator.elements.Output.VOID_OUTPUT;
 import static junit.framework.Assert.assertEquals;

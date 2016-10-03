@@ -9,11 +9,11 @@ import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
-import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
-import de.tu_darmstadt.smastra.markers.elements.SensorStart;
-import de.tu_darmstadt.smastra.markers.elements.SensorStop;
+import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 import static junit.framework.Assert.assertEquals;

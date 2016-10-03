@@ -3,7 +3,7 @@ package de.tu_darmstadt.smastra.sensors;
 import android.hardware.SensorEvent;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 /**
  * This class represents a 3-D data entry.

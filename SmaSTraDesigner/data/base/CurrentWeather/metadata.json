@@ -1,0 +1,21 @@
+{
+  "type": "sensor",
+  "name": "Current Weather",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.online.CurrentWeatherSensor",
+  "display": "Current Weather",
+  "description": "Displays the current weather of the user.",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [
+    {
+      "type": "java.lang.String",
+      "method": "setAPIKey",
+      "name": "SetAPIKey"
+    }
+  ],
+  "extras": [],
+  "dataMethod": "getLastWeather",
+  "output": "java.lang.String"
+}

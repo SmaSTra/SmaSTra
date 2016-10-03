@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.tu_darmstadt.smastra.imagefilters.PictureFilter;
-import de.tu_darmstadt.smastra.markers.elements.DataType;
+import de.tu_darmstadt.smastra.markers.elements.datatype.DataType;
 
 /**
  * @author Tobias Welther

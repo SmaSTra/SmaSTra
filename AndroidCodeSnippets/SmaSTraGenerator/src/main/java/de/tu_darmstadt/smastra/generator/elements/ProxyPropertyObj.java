@@ -2,7 +2,7 @@ package de.tu_darmstadt.smastra.generator.elements;
 
 import java.lang.reflect.Method;
 
-import de.tu_darmstadt.smastra.markers.elements.ProxyProperty;
+import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 
 /**
  * This is a holder for the Proxy-Property.

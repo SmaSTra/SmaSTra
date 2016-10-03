@@ -2,9 +2,8 @@ package de.tu_darmstadt.smastra.math;
 
 import java.util.Collection;
 
-import de.tu_darmstadt.smastra.buffers.FixedWindowSizeBuffer;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
 import de.tu_darmstadt.smastra.sensors.Vector3d;
 

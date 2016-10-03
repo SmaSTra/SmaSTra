@@ -8,11 +8,11 @@ import android.hardware.SensorManager;
 
 import java.util.Map;
 
-import de.tu_darmstadt.smastra.markers.elements.Configuration;
-import de.tu_darmstadt.smastra.markers.elements.ConfigurationElement;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
-import de.tu_darmstadt.smastra.markers.elements.SensorStart;
-import de.tu_darmstadt.smastra.markers.elements.SensorStop;
+import de.tu_darmstadt.smastra.markers.elements.config.Configuration;
+import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStop;
 import de.tu_darmstadt.smastra.utils.ConfigParserUtils;
 
 /**

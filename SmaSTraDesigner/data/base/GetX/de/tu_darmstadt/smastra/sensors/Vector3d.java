@@ -1,6 +1,6 @@
 package de.tu_darmstadt.smastra.sensors;
 
-import de.tu_darmstadt.smastra.markers.elements.DataType;
+import de.tu_darmstadt.smastra.markers.elements.datatype.DataType;
 
 /**
  * This is a sub-part of the Data-3d.

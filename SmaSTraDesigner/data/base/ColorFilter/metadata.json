@@ -12,6 +12,7 @@
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "method": "ColorFilter",
   "static": true,
   "output": "de.tu_darmstadt.smastra.sensors.Picture",

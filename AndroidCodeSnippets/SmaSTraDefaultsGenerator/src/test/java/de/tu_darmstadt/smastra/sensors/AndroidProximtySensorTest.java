@@ -2,6 +2,8 @@ package de.tu_darmstadt.smastra.sensors;
 
 import android.hardware.Sensor;
 
+import de.tu_darmstadt.smastra.sensors.hardware.AndroidProximitySensor;
+
 /**
  * @author Tobias Welther
  */

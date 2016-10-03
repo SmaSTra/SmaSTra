@@ -12,9 +12,12 @@ import de.tu_darmstadt.smastra.generator.ElementGenerationFailedException;
 import de.tu_darmstadt.smastra.generator.elements.Input;
 import de.tu_darmstadt.smastra.generator.elements.Output;
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
+import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
+import de.tu_darmstadt.smastra.generator.extras.ExtraFactory;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.Transformation;
+import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 /**
  * Parses a class to a bunch of SmaSTra Transactions.
@@ -54,6 +57,7 @@ public class SmaSTraClassTransformationParser {
                 builder.setAndroidPermissions(readNeededPermissions(clazz));
                 builder.addNeededClass(readNeededClasses(clazz));
                 builder.addProxyProperties(readProxyProperties(method));
+                builder.addExtras(readExtras(clazz));
 
                 SmaSTraTransformation transaction = builder.build();
                 if(transaction != null) transformations.add(transaction);
@@ -63,6 +67,29 @@ public class SmaSTraClassTransformationParser {
         }
 
         return transformations;
+    }
+
+    /**
+     * Reads the extras from a class.
+     * @param clazz to read from.
+     * @return the extras.
+     */
+    private static List<AbstractSmaSTraExtra> readExtras(Class<?> clazz){
+        List<AbstractSmaSTraExtra> result = new ArrayList<>();
+
+        //Check for Super-Definitions:
+        while(clazz != null && clazz != Object.class) {
+            Extras extras = clazz.getAnnotation(Extras.class);
+            if (extras != null) {
+                for (Object obj : extras.broadcasts()) result.add(ExtraFactory.buildFromExtra(obj));
+                for (Object obj : extras.services()) result.add(ExtraFactory.buildFromExtra(obj));
+                for (Object obj : extras.libraries()) result.add(ExtraFactory.buildFromExtra(obj));
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return result;
     }
 
 

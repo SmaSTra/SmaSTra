@@ -4,6 +4,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import de.tu_darmstadt.smastra.sensors.hardware.AndroidTimeSensor;
+
 /**
  * A test for the Time stuff.
  * @author  Tobias Welther

@@ -2,18 +2,19 @@
   "type": "sensor",
   "name": "Gps Sensor",
   "author": "SmaSTraBasic",
-  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidGPSSensor",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidGPSSensor",
   "display": "Gps Sensor",
   "description": "The GPS sensor of the Device.",
   "neededPermissions": [
     "android.permission.ACCESS_COARSE_LOCATION"
   ],
   "needs": [
-    "de.tu_darmstadt.smastra.sensors.Vector3d",
-    "de.tu_darmstadt.smastra.sensors.Data3d"
+    "de.tu_darmstadt.smastra.sensors.Data3d",
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
   "config": [],
   "proxyProperties": [],
+  "extras": [],
   "dataMethod": "getLastData",
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "start": "start",

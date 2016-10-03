@@ -23,10 +23,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
-import de.tu_darmstadt.smastra.markers.elements.SensorConfig;
-import de.tu_darmstadt.smastra.markers.elements.SensorOutput;
-import de.tu_darmstadt.smastra.markers.elements.SensorStart;
-import de.tu_darmstadt.smastra.markers.elements.SensorStop;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraBroadcast;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStart;
+import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStop;
 import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
 
 /**
@@ -34,6 +36,7 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  *
  * @author Tobias Welther
  */
+@Extras(broadcasts = @ExtraBroadcast(clazz = AndroidActivityReognitionSensor.IntentServiveActivityRecog.class))
 @NeedsAndroidPermissions("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
 @SensorConfig(displayName = "Activity Recognition Sensor", description = "This sensor represents the Android Activity Recognition")
 public class AndroidActivityReognitionSensor

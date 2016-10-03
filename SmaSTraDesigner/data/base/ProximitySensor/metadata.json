@@ -2,7 +2,7 @@
   "type": "sensor",
   "name": "Proximity Sensor",
   "author": "SmaSTraBasic",
-  "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidProximitySensor",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidProximitySensor",
   "display": "Proximity Sensor",
   "description": "Captures the nearest distance for the Proximity Sensor",
   "neededPermissions": [],
@@ -17,6 +17,7 @@
     }
   ],
   "proxyProperties": [],
+  "extras": [],
   "dataMethod": "getLastData",
   "output": "double",
   "start": "start",
