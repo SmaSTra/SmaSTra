@@ -5,8 +5,13 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.online.CurrentWeatherSensor",
   "display": "Current Weather",
   "description": "Displays the current weather of the user.",
-  "neededPermissions": [],
-  "needs": [],
+  "neededPermissions": [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_COARSE_LOCATION"
+  ],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.online.Weather"
+  ],
   "config": [],
   "proxyProperties": [
     {
@@ -17,5 +22,5 @@
   ],
   "extras": [],
   "dataMethod": "getLastWeather",
-  "output": "java.lang.String"
+  "output": "de.tu_darmstadt.smastra.sensors.online.Weather"
 }

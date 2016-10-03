@@ -1,0 +1,21 @@
+{
+  "type": "transformation",
+  "name": "Weather to string",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.online.WeatherTransformations",
+  "display": "Weather to string",
+  "description": "Converts a Weather to a string",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.online.Weather"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "extras": [],
+  "method": "WeatherToString",
+  "static": true,
+  "output": "java.lang.String",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.online.Weather"
+  }
+}

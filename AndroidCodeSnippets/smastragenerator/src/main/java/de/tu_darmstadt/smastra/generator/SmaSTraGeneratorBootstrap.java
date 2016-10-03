@@ -14,6 +14,9 @@ import java.util.List;
 import de.tu_darmstadt.smastra.generator.datatype.DataType;
 import de.tu_darmstadt.smastra.generator.datatype.DataTypeParser;
 import de.tu_darmstadt.smastra.generator.datatype.DataTypeSerializer;
+import de.tu_darmstadt.smastra.generator.datatype.EnumDataType;
+import de.tu_darmstadt.smastra.generator.datatype.EnumDataTypeParser;
+import de.tu_darmstadt.smastra.generator.datatype.EnumDataTypeSerializer;
 
 /**
  * This starts generating the Resources.
@@ -45,6 +48,9 @@ public class SmaSTraGeneratorBootstrap {
         if(destinationFolder.exists()) FileUtils.deleteDirectory(destinationFolder);
         if(!destinationFolder.exists()) destinationFolder.mkdir();
 
+
+        //Parse and add Normal classes:
+        int normalTypes = 0;
         DataTypeSerializer serializer = new DataTypeSerializer();
         for(DataType type : DataTypeParser.getAllFromClassLoader()){
             File saveTo = new File(destinationFolder, type.getClazz().getCanonicalName() + ".json");
@@ -53,8 +59,27 @@ public class SmaSTraGeneratorBootstrap {
             String content = serializer.serialize(type, null, null).toString();
             try(FileWriter writer = new FileWriter(saveTo)){
                 IOUtils.write(content, writer);
+                normalTypes++;
             }
         }
+
+        System.out.println("Created " + normalTypes + " Normal DataTypes.");
+
+        //Parse and add enum classes:
+        int enumTypes = 0;
+        EnumDataTypeSerializer enumSerializer = new EnumDataTypeSerializer();
+        for(EnumDataType type : EnumDataTypeParser.getAllFromClassLoader()){
+            File saveTo = new File(destinationFolder, type.getEnumClass().getCanonicalName() + ".json");
+            if(saveTo.exists()) saveTo.delete();
+
+            String content = enumSerializer.serialize(type, null, null).toString();
+            try(FileWriter writer = new FileWriter(saveTo)){
+                IOUtils.write(content, writer);
+                enumTypes++;
+            }
+        }
+
+        System.out.println("Created " + enumTypes + " Enum DataTypes.");
     }
 
 

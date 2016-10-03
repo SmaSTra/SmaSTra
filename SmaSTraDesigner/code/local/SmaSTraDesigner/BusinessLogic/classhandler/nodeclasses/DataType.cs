@@ -34,8 +34,21 @@
         /// Constructor
         /// </summary>
         /// <param name="name">Data type name (is used as a unique identifier)</param>
-        private DataType(string name, string template, string type) : this(name, template, new string[] { type } )
+        private DataType(string name, string template, string type) 
+            : this(name, template, new string[] { type } )
         {}
+
+        /// <summary>
+        /// This is a special constructor for datatypes with fixed values.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="values"></param>
+        private DataType(string name, string[] values)
+            : this(name)
+        {
+            this.Creatable = true;
+            this.FixedValues = values == null ? new String[0] : values;
+        }
 
         /// <summary>
         /// Constructor
@@ -87,6 +100,12 @@
         /// If the element may be created by hand.
         /// </summary>
         public bool Creatable { get; }
+
+        /// <summary>
+        /// If this is not empty, this type can only have fixed values.
+        /// This is for example for Enums.
+        /// </summary>
+        public String[] FixedValues { get; }
 
 
         #endregion properties
@@ -158,6 +177,7 @@
 
         /// <summary>
         /// Gets the cached Type.
+        /// Creates a New one, if the cached does not exist.
         /// </summary>
         /// <param name="name">To get</param>
         public static DataType GetCachedType(string name)
@@ -176,6 +196,7 @@
 
         /// <summary>
         /// Gets Temp non registered types.
+        /// Does NOT register a new one if not exists.
         /// </summary>
         /// <param name="name">To get</param>
         public static DataType GetCachedOrNonRegisteredType(string name)
@@ -208,22 +229,35 @@
             string BaseFolder = Path.Combine(WorkSpace.DIR, WorkSpace.DATA_TYPES_DIR);
             if (!Directory.Exists(BaseFolder)) return;
 
-            foreach (string file in Directory.GetFiles(BaseFolder))
-            {
-                try
-                {
-                    JObject root = JObject.Parse(File.ReadAllText(file));
-                    string name = root.GetValueAsString("name");
-                    string template = root.GetValueAsString("template");
-                    string[] types = root.GetValueAsStringArray("types");
-                    bool creatable = root.GetValueAsBool("creatable", true);
-                    knownTypes.Add(new DataType(name, template, types, creatable));
-                }catch(Exception exp)
-                {
-                    Debug.Print("Could not read DataType in: " + file);
-                    Debug.Print(exp.ToString());
-                }
-            }
+            //Save the Stream, since we need to filter it twice:
+            IEnumerable<JObject> stream = Directory.GetFiles(BaseFolder)
+                .Select(File.ReadAllText)
+                .Select(JObject.Parse);
+
+            //Read normal:
+            stream
+                .Where(o => o.GetValueAsString("type") == "class")
+                .ForEachTryIgnore( root => 
+                    {
+                        string name = root.GetValueAsString("name");
+                        string template = root.GetValueAsString("template");
+                        string[] types = root.GetValueAsStringArray("types");
+                        bool creatable = root.GetValueAsBool("creatable", true);
+                        knownTypes.Add(new DataType(name, template, types, creatable));
+                    }
+                );
+
+
+            //Read Enum:
+            stream
+                .Where(o => o.GetValueAsString("type") == "enum")
+                .ForEachTryIgnore(root =>
+                    {
+                        string name = root.GetValueAsString("name");
+                        string[] values = root.GetValueAsStringArray("values", new String[0]);
+                        knownTypes.Add(new DataType(name, values));
+                    }
+                );
         }
 
         /// <summary>

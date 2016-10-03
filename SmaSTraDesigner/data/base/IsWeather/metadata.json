@@ -1,0 +1,22 @@
+{
+  "type": "transformation",
+  "name": "Is Weather",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.online.WeatherTransformations",
+  "display": "Is Weather",
+  "description": "Checks if the Weather is the weather wanted.",
+  "neededPermissions": [],
+  "needs": [
+    "de.tu_darmstadt.smastra.sensors.online.Weather"
+  ],
+  "config": [],
+  "proxyProperties": [],
+  "extras": [],
+  "method": "IsWeather",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "de.tu_darmstadt.smastra.sensors.online.Weather",
+    "arg1": "java.lang.String"
+  }
+}

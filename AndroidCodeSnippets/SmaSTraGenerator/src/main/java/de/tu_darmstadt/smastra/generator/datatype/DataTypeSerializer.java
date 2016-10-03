@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 public class DataTypeSerializer implements JsonSerializer<DataType> {
 
 
+    private static final String TYPE_PATH = "type";
     private static final String NAME_PATH = "name";
     private static final String TEMPLATE_PATH = "template";
     private static final String TYPES_PATH = "types";
@@ -27,6 +28,7 @@ public class DataTypeSerializer implements JsonSerializer<DataType> {
     @Override
     public JsonElement serialize(DataType src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject root = new JsonObject();
+        root.addProperty(TYPE_PATH, "class");
         root.addProperty(NAME_PATH, src.getClazz().getCanonicalName());
         root.addProperty(TEMPLATE_PATH, src.getTemplate());
         root.addProperty(CREATABLE_PATH, src.isCreatable());

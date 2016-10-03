@@ -1,5 +1,6 @@
 package de.tu_darmstadt.smastra.sensors.online;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,6 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
+import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
@@ -26,6 +29,8 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  * This is a simple Weather API call.
  * @author Tobias Welther
  */
+@NeedsAndroidPermissions({Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION})
+@NeedsOtherClass(Weather.class)
 @SensorConfig(displayName = "Current Weather", description = "Displays the current weather of the user.")
 public class CurrentWeatherSensor implements Sensor {
 
@@ -38,7 +43,7 @@ public class CurrentWeatherSensor implements Sensor {
     /**
      * The last cached weather.
      */
-    private String lastWeather = "Unknown";
+    private Weather lastWeather = Weather.UNKNOWN;
 
     /**
      * The API key to use.
@@ -112,12 +117,12 @@ public class CurrentWeatherSensor implements Sensor {
     }
 
 
-    private class UpdateWeatherAsync extends AsyncTask<Object,Void,String>{
+    private class UpdateWeatherAsync extends AsyncTask<Object,Void,Integer>{
 
         private CurrentWeatherSensor sensor;
 
         @Override
-        protected String doInBackground(Object... params) {
+        protected Integer doInBackground(Object... params) {
             double lat = (double) params[0];
             double lon = (double) params[1];
             String apiKey = params[2].toString();
@@ -144,15 +149,12 @@ public class CurrentWeatherSensor implements Sensor {
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
                 JsonObject obj = new JsonParser().parse(br).getAsJsonObject();
-                if(!obj.has("weather")) return "Unknown";
+                if(!obj.has("weather")) return -1;
 
                 JsonArray array = obj.get("weather").getAsJsonArray();
-                if(array.size() <= 0) return "Unknown";
+                if(array.size() <= 0) return -1;
 
-                String tempWeather = array.get(0).getAsJsonObject().get("main").getAsString();
-                if(tempWeather != null && !tempWeather.isEmpty()) {
-                    return tempWeather;
-                }
+                return array.get(0).getAsJsonObject().get("id").getAsInt();
             }catch (Throwable exp){
                 Log.w("Weather", "Error on getting weather", exp);
             }finally {
@@ -160,17 +162,17 @@ public class CurrentWeatherSensor implements Sensor {
                 try{ if(is != null) is.close(); }catch (Throwable exp2){}
             }
 
-            return "Unknown";
+            return -1;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
 
             //Update to the result:
             if(sensor != null){
-                sensor.lastWeather = s;
-                if(!s.equals("Unknown")) sensor.lastSuccess = System.currentTimeMillis();
+                sensor.lastWeather = Weather.parseWeatherByID(result);
+                if(sensor.lastWeather != Weather.UNKNOWN) sensor.lastSuccess = System.currentTimeMillis();
             }
         }
     }
@@ -183,7 +185,7 @@ public class CurrentWeatherSensor implements Sensor {
 
 
     @SensorOutput
-    public String getLastWeather(){
+    public Weather getLastWeather(){
         if(System.currentTimeMillis() > lastTried + 60_000) updateWeather();
         return lastWeather;
     }

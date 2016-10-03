@@ -1,1 +1,1 @@
-{"name":"de.tu_darmstadt.smastra.sensors.Vector3d","template":"new Vector3d({0},{1},{2});","creatable":true,"types":["double","double","double"]}
+{"type":"class","name":"de.tu_darmstadt.smastra.sensors.Vector3d","template":"new Vector3d({0},{1},{2});","creatable":true,"types":["double","double","double"]}

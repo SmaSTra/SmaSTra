@@ -1,0 +1,1 @@
+{"type":"enum","name":"de.tu_darmstadt.smastra.sensors.online.Weather","values":["THUNDER_STORM","DRIZZLE","RAINY","SNOW","ATMOSPHERE","CLEAR","CLOUDY","EXTREME","UNKNOWN"]}
