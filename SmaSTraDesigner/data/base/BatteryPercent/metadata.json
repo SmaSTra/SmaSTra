@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Battery Percent",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidBatteryStatusSensor",
   "display": "Battery Percent",
   "description": "Gives the percent of the battery (0-1, -1 if not readable))",

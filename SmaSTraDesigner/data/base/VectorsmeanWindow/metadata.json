@@ -1,13 +1,14 @@
 {
   "type": "transformation",
   "name": "Vectors mean Window",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3dCollections",
   "display": "Vectors mean Window",
   "description": "None",
   "neededPermissions": [],
   "needs": [
-    "de.tu_darmstadt.smastra.sensors.Vector3d",
-    "de.tu_darmstadt.smastra.math.Math3d"
+    "de.tu_darmstadt.smastra.math.Math3d",
+    "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
   "config": [],
   "proxyProperties": [],

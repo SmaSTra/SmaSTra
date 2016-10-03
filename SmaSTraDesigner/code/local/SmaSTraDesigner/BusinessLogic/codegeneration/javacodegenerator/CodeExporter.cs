@@ -124,7 +124,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
             //No permissions -> Nothing to do!
             if (permissions.Empty()) return;
 
-            XDocument doc = XDocument.Load(manifestPath);
+            XDocument doc = XDocument.Load(manifestPath, LoadOptions.PreserveWhitespace);
             var root = doc.Root;
 
             XElement[] nodes = root.Elements("uses-permission").ToArray();

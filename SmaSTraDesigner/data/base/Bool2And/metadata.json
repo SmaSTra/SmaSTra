@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Bool 2 And",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Bool 2 And",
   "description": "None",

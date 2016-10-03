@@ -1,0 +1,20 @@
+{
+  "type": "transformation",
+  "name": "SubString",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.stringcomp.StringComparison",
+  "display": "SubString",
+  "description": "Gets a String from-to the wanted length",
+  "neededPermissions": [],
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "method": "SubString",
+  "static": true,
+  "output": "java.lang.String",
+  "input": {
+    "arg0": "java.lang.String",
+    "arg1": "int",
+    "arg2": "int"
+  }
+}

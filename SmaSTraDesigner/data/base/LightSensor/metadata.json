@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Light Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidLightSensor",
   "display": "Light Sensor",
   "description": "Captures the Light value in lux",

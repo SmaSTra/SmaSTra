@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Square scalar",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
   "display": "Square scalar",
   "description": "None",

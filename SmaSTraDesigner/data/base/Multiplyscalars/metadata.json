@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Multiply scalars",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
   "display": "Multiply scalars",
   "description": "None",

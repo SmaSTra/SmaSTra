@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Loading Status",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidChargerSensor",
   "display": "Loading Status",
   "description": "Gives the Loading status (1 \u003d AC, 2 \u003d USB, 4 \u003d Wireless)",

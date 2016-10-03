@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Gps Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidGPSSensor",
   "display": "Gps Sensor",
   "description": "The GPS sensor of the Device.",

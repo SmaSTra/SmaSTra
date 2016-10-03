@@ -15,7 +15,7 @@ import de.tu_darmstadt.smastra.sensors.Picture;
 public class ImageFilters implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
 
-    @Transformation(displayName = "Gray Scale Filter", desctiption = "A Gray Scale filter for pictures.")
+    @Transformation(displayName = "Gray Scale Filter", description = "A Gray Scale filter for pictures.")
     public static Picture GrayScale(Picture picture){
         final String filterID = "GENERATED_GRAYS_CALE";
 
@@ -44,7 +44,7 @@ public class ImageFilters implements de.tu_darmstadt.smastra.markers.interfaces.
     }
 
 
-    @Transformation(displayName = "ColorFilter", desctiption = "Filters the Color passed (RGP).")
+    @Transformation(displayName = "ColorFilter", description = "Filters the Color passed (RGP).")
     public static Picture ColorFilter(Picture picture, int color){
         final String filterID = "COLOR_FILTER_" + color;
 
@@ -77,7 +77,7 @@ public class ImageFilters implements de.tu_darmstadt.smastra.markers.interfaces.
     }
 
 
-    @Transformation(displayName = "Rotate Picture", desctiption = "Rotates a picture by X degree.")
+    @Transformation(displayName = "Rotate Picture", description = "Rotates a picture by X degree.")
     public static Picture Rotate90(Picture picture, final double degree){
         final String filterID = "ROTATE_IMAGE_" + degree;
 

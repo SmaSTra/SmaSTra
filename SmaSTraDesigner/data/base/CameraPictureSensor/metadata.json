@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "CameraPictureSensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.CameraPictureSensor",
   "display": "CameraPictureSensor",
   "description": "Takes a picture by the camera",

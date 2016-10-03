@@ -148,7 +148,7 @@
         public const string GENERATION_TEMPLATE_TRANSFORM =
             "   protected void transform{0}(){{" + NL +
             "{1}" +
-            "       transformationData{0} = {2};" + NL +
+            "       transform{0} = {2};" + NL +
             "   }}"
 
             ;

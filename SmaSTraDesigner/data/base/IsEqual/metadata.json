@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Is Equal",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Is Equal",
   "description": "None",

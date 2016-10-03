@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Subtract Vectors",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Subtract Vectors",
   "description": "None",

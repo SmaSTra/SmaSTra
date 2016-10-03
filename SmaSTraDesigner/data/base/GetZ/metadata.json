@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Get Z",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
   "display": "Get Z",
   "description": "None",

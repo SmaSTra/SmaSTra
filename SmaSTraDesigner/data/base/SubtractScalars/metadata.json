@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Subtract Scalars",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
   "display": "Subtract Scalars",
   "description": "None",

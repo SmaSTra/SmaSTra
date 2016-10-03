@@ -36,7 +36,9 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  */
 @NeedsAndroidPermissions("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
 @SensorConfig(displayName = "Activity Recognition Sensor", description = "This sensor represents the Android Activity Recognition")
-public class AndroidActivityReognitionSensor extends BroadcastReceiver implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+public class AndroidActivityReognitionSensor
+        extends BroadcastReceiver
+        implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     private static final String BROADCAST_NAME = "ACTIVITY_RECOGNITION";
 
@@ -107,7 +109,7 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
      * Gets a PendingIntent to be sent for each activity detection.
      */
     private PendingIntent getActivityDetectionPendingIntent() {
-        Intent intent = new Intent(context, AndroidActivityReognitionSensor.class);
+        Intent intent = new Intent(context, IntentServiveActivityRecog.class);
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().
@@ -121,6 +123,21 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+
+
+    public static class IntentServiveActivityRecog extends BroadcastReceiver{
+
+        public IntentServiveActivityRecog() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent intent1 = new Intent(BROADCAST_NAME);
+            intent1.putExtras(intent);
+
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
+        }
+    }
 
 
     @Override
@@ -143,8 +160,29 @@ public class AndroidActivityReognitionSensor extends BroadcastReceiver implement
      * @return the current Activities.
      */
     @SensorOutput
-    public Map<String, Integer> getActivitiesToProbabilitiesMap() {
-        return activitiesToProbabilitiesMap;
+    public String getMostLikelyActivity() {
+        return findBestResult(activitiesToProbabilitiesMap);
+    }
+
+    /**
+     * This finds the best result of the Map passed.
+     * @param map to check.
+     * @return the best result.
+     */
+    private String findBestResult(Map<String,Integer> map){
+        if(map == null || map.isEmpty()) return "";
+
+        String result = "";
+        int prop = -1;
+
+        for(Map.Entry<String,Integer> entry : activitiesToProbabilitiesMap.entrySet()){
+            if(entry.getValue() > prop){
+                prop = entry.getValue();
+                result = entry.getKey();
+            }
+        }
+
+        return result;
     }
 
 

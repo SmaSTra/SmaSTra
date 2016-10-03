@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Multiply Vectors",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Multiply Vectors",
   "description": "None",

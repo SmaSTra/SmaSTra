@@ -1,14 +1,15 @@
 {
   "type": "sensor",
   "name": "Accelerometer Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidAccelerometerSensor",
   "display": "Accelerometer Sensor",
   "description": "The Accelerometer sensor measuring 3d-Acceleration to the Device",
   "neededPermissions": [],
   "needs": [
+    "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor",
     "de.tu_darmstadt.smastra.sensors.Vector3d",
-    "de.tu_darmstadt.smastra.sensors.Data3d",
-    "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor"
+    "de.tu_darmstadt.smastra.sensors.Data3d"
   ],
   "config": [
     {

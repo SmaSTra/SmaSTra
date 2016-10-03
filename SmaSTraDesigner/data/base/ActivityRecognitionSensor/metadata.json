@@ -1,6 +1,7 @@
 {
   "type": "sensor",
   "name": "Activity Recognition Sensor",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.sensors.AndroidActivityReognitionSensor",
   "display": "Activity Recognition Sensor",
   "description": "This sensor represents the Android Activity Recognition",
@@ -10,8 +11,8 @@
   "needs": [],
   "config": [],
   "proxyProperties": [],
-  "dataMethod": "getActivitiesToProbabilitiesMap",
-  "output": "java.util.Map",
+  "dataMethod": "getMostLikelyActivity",
+  "output": "java.lang.String",
   "start": "start",
   "stop": "stop"
 }

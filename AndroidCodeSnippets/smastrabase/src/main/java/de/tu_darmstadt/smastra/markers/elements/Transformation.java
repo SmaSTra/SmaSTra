@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Transformation {
     String displayName();
-    String desctiption() default "None";
+    String description() default "None";
 }

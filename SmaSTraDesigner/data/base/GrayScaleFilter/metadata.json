@@ -1,13 +1,14 @@
 {
   "type": "transformation",
   "name": "Gray Scale Filter",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.imagefilters.ImageFilters",
   "display": "Gray Scale Filter",
   "description": "A Gray Scale filter for pictures.",
   "neededPermissions": [],
   "needs": [
-    "de.tu_darmstadt.smastra.imagefilters.PictureFilter",
-    "de.tu_darmstadt.smastra.sensors.Picture"
+    "de.tu_darmstadt.smastra.sensors.Picture",
+    "de.tu_darmstadt.smastra.imagefilters.PictureFilter"
   ],
   "config": [],
   "proxyProperties": [],

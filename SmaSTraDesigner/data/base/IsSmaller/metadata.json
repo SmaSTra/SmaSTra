@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Is Smaller",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Is Smaller",
   "description": "None",

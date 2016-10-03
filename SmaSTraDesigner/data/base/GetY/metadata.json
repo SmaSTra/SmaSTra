@@ -1,6 +1,7 @@
 {
   "type": "transformation",
   "name": "Get Y",
+  "author": "SmaSTraBasic",
   "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
   "display": "Get Y",
   "description": "None",
