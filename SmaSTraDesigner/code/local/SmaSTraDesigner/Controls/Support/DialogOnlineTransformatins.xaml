@@ -84,9 +84,11 @@
                 <TextBlock Text="Download" FontSize="{StaticResource FontSizeLarge}" />
             </Button>
 
-            <Grid x:Name="uploadDropZone" Background="LightGray" Height="50" Margin="0,20,0,0" AllowDrop="True" Drop="uploadDropZone_Drop">
-                <TextBlock Text="Upload Drop Zone" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Grid>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="0,20,0,0">
+                <Grid x:Name="uploadDropZone" Background="LightGray" Height="50" ToolTip="Drop Elements here to upload them" AllowDrop="True" Drop="uploadDropZone_Drop">
+                    <TextBlock Text="Upload Drop Zone" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
 
             <TextBlock x:Name="tbStatusBar" HorizontalAlignment="Center" Margin="10" Style="{StaticResource TextBlockStyle}"/>
         </StackPanel>
