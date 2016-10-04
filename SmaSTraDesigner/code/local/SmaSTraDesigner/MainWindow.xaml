@@ -87,31 +87,28 @@
             <ScrollViewer Grid.Column="0" Grid.Row="0" Background="{StaticResource ColorPanelBackground}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                 <StackPanel Orientation="Horizontal" x:Name="spnNodeTypeMenu">
                     <Border BorderBrush="Black" BorderThickness="1,0,1,0">
-                        <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" Checked="togDataSources_Checked" VerticalContentAlignment="Center">
+                        <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleDataSources, Mode=TwoWay}" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="DataSources">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/0v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border x:Name="placeholderDataSources" BorderBrush="Black" BorderThickness="0,0,3,0" ></Border>
                     <Border BorderBrush="Black" BorderThickness="0,0,1,0">
-                        <ToggleButton x:Name="togConversions" Style="{StaticResource ToggleButtonStyle}" Checked="togConversions_Checked" VerticalContentAlignment="Center">
+                        <ToggleButton x:Name="togConversions" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleConversions, Mode=TwoWay}" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Conversions">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/1v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border x:Name="placeholderConversions" BorderBrush="Black" BorderThickness="0,0,3,0"></Border>
                     <Border BorderBrush="Black" BorderThickness="0,0,1,0">
-                        <ToggleButton x:Name="togTransformations" Style="{StaticResource ToggleButtonStyle}" Checked="togTransformations_Checked" VerticalContentAlignment="Center">
+                        <ToggleButton x:Name="togTransformations" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleTransformations, Mode=TwoWay}" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Transformations">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/2v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
-                    <Border x:Name="placeholderTransformations" BorderBrush="Black" BorderThickness="0,0,3,0"></Border>
 
-                    <Grid x:Name="gridSideMenu" Margin="0,0,10,0" Background="{StaticResource ColorPanelBackground}">
+                    <Grid x:Name="gridSideMenu" Margin="50,0,10,0" Background="{StaticResource ColorPanelBackground}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -122,33 +119,31 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.Visibility>
-                            <MultiBinding Converter="{StaticResource VisibilityAsBooleanConverter}" ConverterParameter="{x:Static wpfConverters:VisibilityAsBooleanConverterOptions.CombineWithOr}" >
+                            <MultiBinding Converter="{StaticResource VisibilityAsBooleanConverter}" ConverterParameter="{x:Static wpfConverters:VisibilityAsBooleanConverterOptions.UseHidden}" >
                                 <Binding ElementName="togDataSources" Path="IsChecked" Mode="OneWay" />
                                 <Binding ElementName="togConversions" Path="IsChecked" Mode="OneWay" />
                                 <Binding ElementName="togTransformations" Path="IsChecked" Mode="OneWay" />
                             </MultiBinding>
                         </Grid.Visibility>
-                        <Button Width="10" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Transparent" Margin="-2,0,0,0" Click="ToggleButton_Checked">
-                            <Image   Source="pack://siteoforigin:,,,/Resources/pfeil_rechts.png" />
-                        </Button>
-                        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
-                            <ToggleButton x:Name="tglDefaultTF" VerticalAlignment="Center" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleBasic, Mode=TwoWay}" >
+                        
+                        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,0">
+                            <ToggleButton x:Name="tglDefaultTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleBasic, Mode=TwoWay}" >
                                 <WrapPanel ToolTip="Default Elements">
-                                    <Image Width="30" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
+                                    <Image Width="35" Margin="5,0,5,0" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
-                        <Border Grid.Column="2"  BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
+                        <Border Grid.Column="2"  BorderBrush="Black" BorderThickness="0,0,1,0" >
                             <ToggleButton x:Name="tglCustomTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleCustom, Mode=TwoWay}" >
                                 <WrapPanel ToolTip="Custom Elements">
-                                    <Image Width="30" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
+                                    <Image Width="35" Margin="5,0,5,0" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
                         <Border Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,0" >
-                            <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Center" IsChecked="{Binding Path=ToggleCombined, Mode=TwoWay}">
+                            <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleCombined, Mode=TwoWay}">
                                 <WrapPanel ToolTip="Combined Elements">
-                                    <Image Width="30" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
+                                    <Image Width="35" Margin="5,0,5,0" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>

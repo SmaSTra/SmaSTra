@@ -52,39 +52,6 @@
             }
         }
 
-        private void togDataSources_Checked(object sender, RoutedEventArgs e)
-        {
-            int oldPosition = spnNodeTypeMenu.Children.IndexOf(gridSideMenu);
-            spnNodeTypeMenu.Children.RemoveAt(oldPosition);
-            int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderDataSources);
-            spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
-            ToggleButton_Checked(sender, e);
-
-            Singleton<ClassManager>.Instance.SelectedCategory = "datasource";
-        }
-
-        private void togConversions_Checked(object sender, RoutedEventArgs e)
-        {
-            int oldPosition = spnNodeTypeMenu.Children.IndexOf(gridSideMenu);
-            spnNodeTypeMenu.Children.RemoveAt(oldPosition);
-            int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderConversions);
-            spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
-            ToggleButton_Checked(sender, e);
-
-            Singleton<ClassManager>.Instance.SelectedCategory = "conversion";
-        }
-
-        private void togTransformations_Checked(object sender, RoutedEventArgs e)
-        {
-            int oldPosition = spnNodeTypeMenu.Children.IndexOf(gridSideMenu);
-            spnNodeTypeMenu.Children.RemoveAt(oldPosition);
-            int newPosition = spnNodeTypeMenu.Children.IndexOf(placeholderTransformations);
-            spnNodeTypeMenu.Children.Insert(newPosition, gridSideMenu);
-            ToggleButton_Checked(sender, e);
-
-            Singleton<ClassManager>.Instance.SelectedCategory = "transformation";
-        }
-
         private void spnLibrary_Drop(object sender, DragEventArgs e)
         {
             Singleton<Library>.Instance.Library_Drop(sender, e);

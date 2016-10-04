@@ -111,7 +111,7 @@
                         <TextBox x:Name="tboxMethodCode" Text="{Binding Path=MethodCode}" TextWrapping="Wrap" AcceptsReturn="True" MinWidth="300" MinHeight="150" Margin="10,0,10,0" />
             </ScrollViewer>
                     <TextBlock Text="}"/>
-                    <TextBlock x:Name="tbPackageName" TextAlignment="Left" Text="Packange name" Margin="0,10,0,0"/>
+                    <TextBlock x:Name="tbPackageName" TextAlignment="Left" Text="Package name" Margin="0,10,0,0"/>
             <WrapPanel>
                 <TextBox x:Name="tboxPackageName" Text="{Binding Path=PackageName}" MinWidth="300" Margin="10,10,10,20" />
             </WrapPanel>
