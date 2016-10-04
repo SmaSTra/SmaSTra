@@ -335,6 +335,16 @@
             }
         }
 
+        public Node Clone()
+        {
+            Node clone = Class.generateNode();
+            for(int i = 0; i < InputIOData.Count; i++)
+            {
+                clone.InputIOData[i].Value = InputIOData[i].Value;
+            }
+            return clone;
+        }
+
         #endregion not sorted yet
     }
 }

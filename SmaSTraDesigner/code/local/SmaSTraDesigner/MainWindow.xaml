@@ -17,6 +17,7 @@
     Closing="This_Closing">
     <Window.CommandBindings>
         <CommandBinding Command="ctrlSupport:Commands.DebugTest" CanExecute="DebugTest_CanExecute" Executed="DebugTest_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.New" CanExecute="New_CanExecute" Executed="New_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Load" CanExecute="Load_CanExecute" Executed="Load_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Exit" CanExecute="Exit_CanExecute" Executed="Exit_Executed" />
@@ -33,6 +34,7 @@
         <CommandBinding Command="ctrlSupport:Commands.OnlineTransformations" CanExecute="OnlineTransformations_CanExecute" Executed="OnlineTransformations_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Undo" CanExecute="Undo_CanExecute" Executed="Undo_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Redo" CanExecute="Redo_CanExecute" Executed="Redo_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.PasteNode" CanExecute="PasteNode_CanExecute" Executed="PasteNode_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
@@ -51,6 +53,7 @@
 
         <Menu x:Name="mnuMain" Grid.ColumnSpan="99" Grid.Row="0" HorizontalAlignment="Stretch">
             <MenuItem x:Name="mniFile" Header="File">
+                <MenuItem x:Name="mniNew" Header="New" Command="ctrlSupport:Commands.New" />
                 <MenuItem x:Name="mniSwitchWorkspace" Header="Switch Workspace" Command="ctrlSupport:Commands.SwitchWorkspace" />
                 <MenuItem x:Name="mniSave" Header="Save" Command="ctrlSupport:Commands.Save" />
                 <MenuItem x:Name="mniLoad" Header="Load" Command="ctrlSupport:Commands.Load" />
@@ -287,7 +290,7 @@
                         <ToggleButton x:Name="togPropertiesPanel" Content="Properties" IsChecked="True" Foreground="White" FontSize="{StaticResource FontSizeMedium}" Style="{StaticResource ToggleButtonStyle}"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     </Border>
                     <ScrollViewer x:Name="scrollProperties" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" PreviewMouseWheel="propagate_MouseWheel">
-                    <StackPanel x:Name="spnProperties" Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togPropertiesPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
+                    <StackPanel x:Name="spnProperties" Margin="5,0,0,0" Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togPropertiesPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}">
                         <StackPanel.Resources>
                             <logic:ConverterInputTypeName x:Key="InputTypeNameConverter" />
                             <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>

@@ -108,6 +108,15 @@
             }
         }
 
+        private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        private void New_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.tdTreeDesigner.Clear();
+        }
+
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -227,7 +236,14 @@
         }
         private void AddSelected_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.onNodeViewerSelectAdded((UcNodeViewer) e.OriginalSource);
+            UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
+            if (!nodeViewer.IsSelected)
+            {
+                this.tdTreeDesigner.onNodeViewerSelectAdded(nodeViewer);
+            } else
+            {
+                this.tdTreeDesigner.onNodeViewerSelectRemoved(nodeViewer);
+            }
         }
 
         private void ToOutputViewer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -261,7 +277,7 @@
         }
         private void AddToLibrary_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Class.generateNode());
+            Singleton<Library>.Instance.addLibraryNode((Node)((UcNodeViewer)e.OriginalSource).Node.Clone());
         }
 
 
@@ -358,6 +374,20 @@
         private void Redo_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             tdTreeDesigner.Redo();
+        }
+
+        private void PasteNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = this.tdTreeDesigner.SelectedNodeViewer != null && !(this.tdTreeDesigner.SelectedNodeViewer.Node is OutputNode);
+        }
+
+
+        private void PasteNode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Node pastedNode = this.tdTreeDesigner.SelectedNodeViewer.Node.Clone();
+            pastedNode.PosX = this.tdTreeDesigner.SelectedNodeViewer.Node.PosX;
+            pastedNode.PosY = this.tdTreeDesigner.SelectedNodeViewer.Node.PosY + 10;
+            this.tdTreeDesigner.AddNode(pastedNode);
         }
 
 

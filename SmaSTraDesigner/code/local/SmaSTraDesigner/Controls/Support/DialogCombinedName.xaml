@@ -27,7 +27,7 @@
             </Grid>
             <TextBlock Text="Enter a Name for the new Combined Node" TextAlignment="Center" />
             <TextBox x:Name="tboxCombinedElementName" Margin="10" />
-            <Button Click="OK_Clicked" Width="100" Margin="10" Style="{StaticResource imageButtonTemplate}" >
+            <Button Click="OK_Clicked" Width="100" Margin="10" IsDefault="True" Style="{StaticResource imageButtonTemplate}" >
                 <TextBlock Text="OK" FontSize="{StaticResource FontSizeLarge}"/>
             </Button>
         </StackPanel>

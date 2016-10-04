@@ -1154,7 +1154,7 @@
         {
             Node node = ((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1;
 			Point mousePos = e.GetPosition(this.cnvBackground);
-			Node newNode = node.Class.generateNode();
+			Node newNode = node.Clone();
             newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
             this.AddNode(newNode, true, true);
@@ -1223,6 +1223,14 @@
         {
             this.changingSelectedNodeViewers = true;
             nodeViewer.IsSelected = true;
+            this.changingSelectedNodeViewers = false;
+        }
+
+        public void onNodeViewerSelectRemoved(UcNodeViewer nodeViewer)
+        {
+            this.changingSelectedNodeViewers = true;
+            nodeViewer.IsSelected = false;
+            SelectedNodeViewers.Remove(nodeViewer);
             this.changingSelectedNodeViewers = false;
         }
 
@@ -1393,7 +1401,7 @@
 
         private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.LeftAlt))
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
             {
                 if (scaletransform == null)
                 {
@@ -1416,7 +1424,19 @@
 
                 e.Handled = true;
             }
-        }
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta < 0)
+                {
+                    scvCanvas.LineRight();
+                }
+                else
+                {
+                    scvCanvas.LineLeft();
+                }
+                e.Handled = true;
+            }
+            }
 
         #endregion event handlers
 

@@ -15,6 +15,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand New = new RoutedUICommand
+                        (
+                                "New",
+                                "New",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                       
+                                }
+                        );
+
         public static readonly RoutedUICommand Save = new RoutedUICommand
                         (
                                 "Save",
@@ -191,6 +202,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 new InputGestureCollection()
                                 {
                                     new KeyGesture(Key.Y, ModifierKeys.Control)
+                                }
+                        );
+
+        public static readonly RoutedUICommand PasteNode = new RoutedUICommand
+                        (
+                                "Paste Node",
+                                "PasteNode",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.V, ModifierKeys.Control)
                                 }
                         );
 
