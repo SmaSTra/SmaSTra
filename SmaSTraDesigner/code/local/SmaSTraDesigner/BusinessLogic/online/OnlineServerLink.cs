@@ -81,7 +81,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             try
             {
                 string address = GetBaseAddress() + "ping";
-                using (HttpClient client = new HttpClient())
+                using (HttpClient client = new HttpClient() { Timeout = new TimeSpan(0,0,0,2) })
                 using (HttpResponseMessage response = client.GetAsync(address).Result)
                 using (HttpContent content = response.Content)
                 {
@@ -92,8 +92,6 @@ namespace SmaSTraDesigner.BusinessLogic.online
             catch (Exception exp)
             {
                 Debug.Print("Server not reachable?! Check your config!");
-                Debug.Print(exp.ToString());
-
                 this.lastCheckedOnline = false;
             }
 

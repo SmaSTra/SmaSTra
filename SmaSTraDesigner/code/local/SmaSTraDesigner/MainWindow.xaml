@@ -31,6 +31,8 @@
         <CommandBinding Command="ctrlSupport:Commands.CreateCustomElement" CanExecute="CreateCustomElement_CanExecute" Executed="CreateCustomElement_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.SwitchWorkspace" CanExecute="SwitchWorkspace_CanExecute" Executed="SwitchWorkspace_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.OnlineTransformations" CanExecute="OnlineTransformations_CanExecute" Executed="OnlineTransformations_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Undo" CanExecute="Undo_CanExecute" Executed="Undo_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.Redo" CanExecute="Redo_CanExecute" Executed="Redo_Executed" />
     </Window.CommandBindings>
 
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
