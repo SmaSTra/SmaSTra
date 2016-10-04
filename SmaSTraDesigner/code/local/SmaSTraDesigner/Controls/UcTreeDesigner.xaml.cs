@@ -980,11 +980,21 @@
             foreach (Node node in nodes)
             {
                 AbstractNodeClass nodeClass = node.Class;
-                List<Node> nodeInputs = node.InputNodes.NonNull().ToList();
+                List<Node> nodeInputs = node.InputNodes.ToList();
+                List<IOData> inputIOData = node.InputIOData.ToList();
 
                 for (int i = 0; i < nodeInputs.Count(); i++)
                 {
                     Node subNode = nodeInputs[i];
+                    IOData ioData = inputIOData[i];
+
+                    //We found an IOdata.
+                    if (newNode.InputIOData.Contains(ioData))
+                    {
+                        index++;
+                    }
+
+                    //We found a connection.
                     if (subNode == null || !nodes.Contains(subNode))
                     {
                         if(subNode != null) AddConnection(new Connection(subNode, newNode, index));
