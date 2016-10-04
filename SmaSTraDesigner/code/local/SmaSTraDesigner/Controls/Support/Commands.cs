@@ -171,5 +171,29 @@ namespace SmaSTraDesigner.Controls.Support
                         );
 
 
+        public static readonly RoutedUICommand Undo = new RoutedUICommand
+                        (
+                                "Undo",
+                                "Undo",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.Z, ModifierKeys.Control)
+                                }
+                        );
+
+
+        public static readonly RoutedUICommand Redo = new RoutedUICommand
+                        (
+                                "Redo",
+                                "Redo",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.Y, ModifierKeys.Control)
+                                }
+                        );
+
+
     }
 }

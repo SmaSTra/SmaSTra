@@ -371,6 +371,29 @@
             }
         }
 
+
+
+        private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = tdTreeDesigner.CanUndo();
+        }
+
+        private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            tdTreeDesigner.Undo();
+        }
+
+        private void Redo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = tdTreeDesigner.CanRedo();
+        }
+
+        private void Redo_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            tdTreeDesigner.Redo();
+        }
+
+
         #endregion command handlers
 
         private void This_Closing(object sender, System.ComponentModel.CancelEventArgs e)

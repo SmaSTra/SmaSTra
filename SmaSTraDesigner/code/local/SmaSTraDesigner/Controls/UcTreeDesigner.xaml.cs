@@ -22,6 +22,7 @@
     using Support;
     using BusinessLogic.utils;
     using System.Windows.Threading;
+    using BusinessLogic.uitransactions;
 
     // TODO: (PS) Comment this.
     // TODO: (PS) Adapt for dynamic size changes for canvas.
@@ -187,6 +188,10 @@
         private UIConnectionRefresher connectionRefresher;
         private DispatcherTimer timer;
 
+        private Stack<UITransaction> undoStack = new Stack<UITransaction>();
+        private Stack<UITransaction> redoStack = new Stack<UITransaction>();
+
+
         #endregion fields
 
         #region constructors
@@ -344,7 +349,18 @@
         }
 
 
-		public void AddNode(Node node, bool select = false)
+        public void AddNodes(Node[] nodes, bool saveTransaction = false)
+        {
+            nodes.ForEach(n => AddNode(n, false, false));
+            if (saveTransaction)
+            {
+                this.undoStack.Push(new UITransactionAddNodes(nodes));
+                this.redoStack.Clear();
+            }
+        }
+
+
+        public void AddNode(Node node, bool select = false, bool saveTransaction = false)
 		{
             if (node == null)
 			{
@@ -392,6 +408,13 @@
 				nodeViewer.IsSelected = true;
 				nodeViewer.BringIntoView();
 			}
+
+            //Save the transaction if wanted to revert if possible.
+            if (saveTransaction)
+            {
+                this.undoStack.Push(new UITransactionAddNodes(node));
+                this.redoStack.Clear();
+            }
         }
 
 		public void RemoveConnection(Connection connection)
@@ -399,14 +422,34 @@
 			this.RemoveConnection(null, connection);
 		}
 
-		public void RemoveNode(Node node)
+
+        public void RemoveNodes(Node[] nodes, bool saveTransaction = false)
+        {
+            nodes.ForEach(n => RemoveNode(n, false));
+            if (saveTransaction)
+            {
+                this.undoStack.Push(new UITransactionDeleteNodes(nodes));
+                this.redoStack.Clear();
+            }
+        }
+
+
+		public void RemoveNode(Node node, bool saveTransaction = false)
 		{
 			UcNodeViewer nodeViewer;
 			if (this.nodeViewers.TryGetValue(node, out nodeViewer))
 			{
 				this.RemoveNode(nodeViewer);
 			}
+
+            //Add the Remove-Transaction back.
+            if (saveTransaction && node != null)
+            {
+                this.undoStack.Push(new UITransactionDeleteNodes(node));
+                this.redoStack.Clear();
+            }
 		}
+
 
 		internal void RegisterIOHandle(UcIOHandle ioHandle)
 		{
@@ -1027,12 +1070,14 @@
         /// <summary>
         /// This clears the complete GUI.
         /// </summary>
-        public void Clear()
+        public void Clear(bool saveTransaction = false)
         {
-            this.nodeViewers.Keys
+            Node[] toRemove = this.nodeViewers.Keys
                 .ToArray()
                 .Where(n => !(n is OutputNode))
-                .ForEach(RemoveNode);
+                .ToArray();
+
+            RemoveNodes(toRemove, saveTransaction);
         }
 
 
@@ -1112,17 +1157,65 @@
 			Node newNode = node.Class.generateNode();
             newNode.PosX = mousePos.X - this.cnvBackground.ActualWidth / 2;
 			newNode.PosY = mousePos.Y - this.cnvBackground.ActualHeight / 2;
-            this.AddNode(newNode, true);
+            this.AddNode(newNode, true, true);
             scvCanvas.Focus();
         }
 
         public void onDeleteCommand()
         {
-                foreach (var nodeViewer in this.SelectedNodeViewers)
-                {
-                    this.RemoveNode(nodeViewer);
-                }
+            RemoveNodes(
+                this.SelectedNodeViewers
+                    .Select(v => v.Node)
+                    .ToArray()
+                , true);
+
             SelectedNodeViewer = null;
+        }
+
+
+        public bool CanUndo()
+        {
+            return undoStack.Count > 0;
+        }
+
+
+        public void Undo()
+        {
+            //If we have nothing to Undo, we can't
+            if (undoStack.Empty())
+            {
+                return;
+            }
+
+            //First undo the Action.
+            UITransaction toUndo = undoStack.Pop();
+            toUndo.Undo(this);
+
+            //Then push to Redo stack if we want to apply it.
+            redoStack.Push(toUndo);
+        }
+
+
+        public bool CanRedo()
+        {
+            return redoStack.Count > 0;
+        }
+
+
+        public void Redo()
+        {
+            //If we have nothing to redo, we can't
+            if (redoStack.Empty())
+            {
+                return;
+            }
+
+            //First Redo the Action.
+            UITransaction toRedo = redoStack.Pop();
+            toRedo.Execute(this);
+
+            //Then push to Undo stack if we want to undo it.
+            undoStack.Push(toRedo);
         }
 
 
