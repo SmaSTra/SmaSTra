@@ -32,7 +32,7 @@ namespace SmaSTraDesigner.BusinessLogic.uitransactions
         {}
 
 
-        public void Execute(UcTreeDesigner designer)
+        public void Redo(UcTreeDesigner designer)
         {
             nodes.ForEach(n => designer.AddNode(n));
         }
