@@ -787,14 +787,21 @@
 			}
 		}
 
-		private void StopDragging(MouseButtonEventArgs e)
+		private void StopDragging(MouseButtonEventArgs e, bool saveTransaction = false)
 		{
-			this.mousePosOnViewer = null;
-			this.dragStart = null;
-            this.lastScrollPosition = null;
-
             if (movingNodeViewer != null)
             {
+                //Save the Transaction before actioning.
+                if (saveTransaction)
+                {
+                    this.undoStack.Push(new UITransactionMoveElements(
+                            this.SelectedNodeViewers.Select(v => v.Node).ToArray(),
+                            e.GetPosition(this.cnvBackground).X - dragStart.Value.X,
+                            e.GetPosition(this.cnvBackground).Y - dragStart.Value.Y
+                        ));
+                }
+
+
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 {
                     foreach (UcNodeViewer nodeViewer in SelectedNodeViewers)
@@ -803,7 +810,13 @@
                     }
                 }
             }
-			this.movingNodeViewer = null;
+
+
+            this.mousePosOnViewer = null;
+            this.dragStart = null;
+            this.lastScrollPosition = null;
+            this.movingNodeViewer = null;
+
 			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
 			{
 				this.MarkNodesInSelectionArea(true);
@@ -1322,7 +1335,7 @@
 
 		private void This_MouseLeave(object sender, MouseEventArgs e)
 		{
-			this.StopDragging(null);
+			this.StopDragging(null, true);
 		}
 
 		private void This_MouseMove(object sender, MouseEventArgs e)
@@ -1400,7 +1413,7 @@
 
 		private void This_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			this.StopDragging(e);
+			this.StopDragging(e, true);
 		}
 
 		private void TreeConnections_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
