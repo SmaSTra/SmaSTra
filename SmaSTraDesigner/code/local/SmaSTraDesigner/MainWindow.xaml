@@ -131,21 +131,21 @@
                         </Button>
                         <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
                             <ToggleButton x:Name="tglDefaultTF" VerticalAlignment="Center" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleBasic, Mode=TwoWay}" >
-                                <WrapPanel ToolTip="Default Transformations">
+                                <WrapPanel ToolTip="Default Elements">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
                         <Border Grid.Column="2"  BorderBrush="Black" BorderThickness="0,0,1,0" VerticalAlignment="Center">
                             <ToggleButton x:Name="tglCustomTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleCustom, Mode=TwoWay}" >
-                                <WrapPanel ToolTip="Custom Transformations">
+                                <WrapPanel ToolTip="Custom Elements">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
                                 </WrapPanel>
                             </ToggleButton>
                         </Border>
                         <Border Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,0" >
                             <ToggleButton x:Name="tglCombinedTF" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Center" IsChecked="{Binding Path=ToggleCombined, Mode=TwoWay}">
-                                <WrapPanel ToolTip="Combined Transformations">
+                                <WrapPanel ToolTip="Combined Elements">
                                     <Image Width="30" Source="pack://siteoforigin:,,,/Resources/combined_transf.png"/>
                                 </WrapPanel>
                             </ToggleButton>
@@ -367,11 +367,11 @@
                     </ScrollViewer>
                 </DockPanel>
 
-                <DockPanel>
+                <DockPanel x:Name="spnLibrary" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter"  >
                     <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="Black">
                         <ToggleButton x:Name="togLibraryPanel" Content="Library" IsChecked="True" Foreground="White" FontSize="{StaticResource FontSizeMedium}" Style="{StaticResource ToggleButtonStyle}"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     </Border>
-                    <StackPanel x:Name="spnLibrary" Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togLibraryPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" AllowDrop="True" Drop="spnLibrary_Drop" DragEnter="spnLibrary_DragEnter"  >
+                    <StackPanel Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togLibraryPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" >
                         <StackPanel.Resources>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
                             <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
