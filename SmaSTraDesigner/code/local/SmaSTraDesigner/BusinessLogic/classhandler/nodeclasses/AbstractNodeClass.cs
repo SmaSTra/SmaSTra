@@ -24,7 +24,7 @@
         /// <param name="needsOtherClasses">The other classes needed for the Java class to work</param>
         /// <param name="needsPermissions">The Permissions needed for this element</param>
         protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description, string creator,  DataType outputType, 
-            string mainClass, string[] needsOtherClasses, string[] needsPermissions,
+            string mainClass, string[] needsOtherClasses, NeedsExtra[] neededExtras,
             ConfigElement[] configuration, ProxyProperty[] proxyProperties,
             DataType[] inputTypes, bool userCreated, string nodePath)
 		{
@@ -47,7 +47,7 @@
 			this.InputTypes = inputTypes == null ? new DataType[0] : inputTypes;
             this.MainClass = mainClass;
             this.NeedsOtherClasses = needsOtherClasses == null ? new string[0] : needsOtherClasses;
-            this.NeedsPermissions = needsPermissions == null ? new string[0] : needsPermissions;
+            this.NeededExtras = neededExtras == null ? new NeedsExtra[0] : neededExtras;
             this.Configuration = configuration == null ? new ConfigElement[0] : configuration;
             this.ProxyProperties = proxyProperties == null ? new ProxyProperty[0] : proxyProperties;
             this.NodeType = nodeType;
@@ -112,11 +112,6 @@
         public string[] NeedsOtherClasses { get; }
 
         /// <summary>
-        /// The Permissions needed for this Element.
-        /// </summary>
-        public string[] NeedsPermissions { get; }
-
-        /// <summary>
         /// The Configuration of this element.
         /// </summary>
         public ConfigElement[] Configuration { get; }
@@ -125,6 +120,11 @@
         /// The Proxy Properties to use.
         /// </summary>
         public ProxyProperty[] ProxyProperties { get; }
+
+        /// <summary>
+        /// The needed Extras this class has.
+        /// </summary>
+        public NeedsExtra[] NeededExtras { get; }
 
         /// <summary>
         /// This indicates if the class was created by a user of a default class.

@@ -26,7 +26,6 @@ public class SmaSTraBufferSerializerTest {
                 .setBufferAddMethodName("TEST")
                 .setBufferGetMethodName("TEST")
                 .setClass(this.getClass())
-                .setAndroidPermissions(new String[]{"Test1", "Test2"})
                 .build();
 
         JsonObject obj = sut.serialize(buffer, SmaSTraSensor.class, null);
@@ -38,11 +37,6 @@ public class SmaSTraBufferSerializerTest {
         assertEquals("TEST", obj.get("display").getAsString());
         assertEquals("TEST", obj.get("bufferGet").getAsString());
         assertEquals("TEST", obj.get("bufferAdd").getAsString());
-
-        assertEquals(true, obj.get("neededPermissions").isJsonArray());
-        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test1")));
-        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test2")));
-
 
         assertTrue(obj.get("needs").isJsonArray());
         assertEquals(0, obj.get("needs").getAsJsonArray().size());

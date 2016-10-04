@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.conversions.BasicConversions",
   "display": "DoubleToInt",
   "description": "Converts a double to an Int value.",
-  "neededPermissions": [],
   "needs": [],
   "config": [],
   "proxyProperties": [],

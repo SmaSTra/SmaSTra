@@ -16,8 +16,8 @@ import de.tu_darmstadt.smastra.generator.extras.AbstractSmaSTraExtra;
 import de.tu_darmstadt.smastra.generator.extras.ExtraFactory;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
+import de.tu_darmstadt.smastra.markers.interfaces.SmaSTraExtra;
 
 /**
  * Parses a class to a bunch of SmaSTra Transactions.
@@ -54,7 +54,6 @@ public class SmaSTraClassTransformationParser {
                 builder.setDescription(readDescription(method));
                 builder.setOutput(readOutput(method));
                 builder.addInputs(readInput(method));
-                builder.setAndroidPermissions(readNeededPermissions(clazz));
                 builder.addNeededClass(readNeededClasses(clazz));
                 builder.addProxyProperties(readProxyProperties(method));
                 builder.addExtras(readExtras(clazz));
@@ -84,23 +83,13 @@ public class SmaSTraClassTransformationParser {
                 for (Object obj : extras.broadcasts()) result.add(ExtraFactory.buildFromExtra(obj));
                 for (Object obj : extras.services()) result.add(ExtraFactory.buildFromExtra(obj));
                 for (Object obj : extras.libraries()) result.add(ExtraFactory.buildFromExtra(obj));
+                for (Object obj : extras.permissions()) result.add(ExtraFactory.buildFromExtra(obj));
             }
 
             clazz = clazz.getSuperclass();
         }
 
         return result;
-    }
-
-
-    /**
-     * Reads the needed Permissions from the Class.
-     * @param clazz to use.
-     * @return the needed Permissions. Empty Array if none present.
-     */
-    private static String[] readNeededPermissions(Class<?> clazz) {
-        NeedsAndroidPermissions permsAnnotation = clazz.getAnnotation(NeedsAndroidPermissions.class);
-        return permsAnnotation == null ? new String[0] : permsAnnotation.value();
     }
 
     /**

@@ -26,7 +26,6 @@ public class SmaSTraSensorSerializerTest {
                 .setDisplayName("TEST")
                 .setDataMethodName("TEST")
                 .setClass(this.getClass())
-                .setAndroidPermissions(new String[]{"Test1", "Test2"})
                 .setOutput(new Output(String.class))
                 .build();
 
@@ -39,11 +38,6 @@ public class SmaSTraSensorSerializerTest {
         assertEquals("TEST", obj.get("dataMethod").getAsString());
         assertEquals("TEST", obj.get("display").getAsString());
         assertEquals(String.class.getCanonicalName(), obj.get("output").getAsString());
-
-        assertEquals(true, obj.get("neededPermissions").isJsonArray());
-        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test1")));
-        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test2")));
-
 
         assertTrue(obj.get("needs").isJsonArray());
         assertEquals(0, obj.get("needs").getAsJsonArray().size());

@@ -6,9 +6,11 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
+import de.tu_darmstadt.smastra.generator.extras.NeedsPermission;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
@@ -142,14 +144,14 @@ public class SensorParserTest {
     @Test
     public void testNeedsPermissionsReadingWorks() throws Throwable {
         SmaSTraSensor list = SmaSTraClassSensorParser.readFromClass(TestClass5.class);
-        assertEquals("TEST", list.getAndroidPermissions()[0]);
+        assertEquals("TEST", ((NeedsPermission)list.getExtras().iterator().next()).getPermission());
     }
 
 
 
     /* For testSkipMethodWithoutAnnotationWorks */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
+    @Extras(permissions = @ExtraPermission(permission = "TEST"))
     @SensorConfig(displayName = "fsaf")
     private static class TestClass5 implements Sensor {
 
@@ -176,7 +178,6 @@ public class SensorParserTest {
 
     /* For testStartStopIsReadCorrectlyIfPresent */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
     @SensorConfig(displayName = "fsaf")
     private static class TestClass6 implements Sensor {
 
@@ -205,7 +206,6 @@ public class SensorParserTest {
 
     /* For testSkipMethodWithoutAnnotationWorks */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
     @SensorConfig(displayName = "fsaf")
     private static class TestClass7 implements Sensor {
 
@@ -237,7 +237,6 @@ public class SensorParserTest {
 
     /* For testSkipMethodWithoutAnnotationWorks */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
     @SensorConfig(displayName = "fsaf")
     private static class TestClass8 implements Sensor {
 

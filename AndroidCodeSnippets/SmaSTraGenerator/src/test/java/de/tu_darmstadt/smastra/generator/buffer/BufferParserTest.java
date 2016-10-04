@@ -6,12 +6,14 @@ import java.util.Collection;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.generator.elements.ProxyPropertyObj;
+import de.tu_darmstadt.smastra.generator.extras.NeedsPermission;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
 import de.tu_darmstadt.smastra.markers.elements.buffer.BufferAdd;
 import de.tu_darmstadt.smastra.markers.elements.buffer.BufferGet;
 import de.tu_darmstadt.smastra.markers.elements.buffer.BufferInfo;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
 
@@ -127,14 +129,14 @@ public class BufferParserTest {
     @Test
     public void testNeedsPermissionsReadingWorks() throws Throwable {
         SmaSTraBuffer list = SmaSTraClassBufferParser.readFromClass(TestClass5.class);
-        assertEquals("TEST", list.getAndroidPermissions()[0]);
+        assertEquals("TEST", ((NeedsPermission)list.getExtras().iterator().next()).getPermission());
     }
 
 
 
     /* For testSkipMethodWithoutAnnotationWorks */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
+    @Extras(permissions = @ExtraPermission(permission = "TEST"))
     @BufferInfo(displayName = "fsaf")
     private static class TestClass5 implements Buffer<String> {
 
@@ -163,7 +165,6 @@ public class BufferParserTest {
 
     /* For testReadProxyPropertiesWorks */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
     @BufferInfo(displayName = "fsaf")
     private static class TestClass6 implements Buffer<Double> {
 

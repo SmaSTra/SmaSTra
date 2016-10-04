@@ -40,13 +40,13 @@ public class SmaSTraTransformation extends SmaSTraElement {
 
 
 
-    public SmaSTraTransformation(String displayName, List<Input> inputs, String[] androidPermissions,
+    public SmaSTraTransformation(String displayName, List<Input> inputs,
                                  List<Class<?>> needsOtherClasses, String description,
                                  Output output, String methodName, Class<?> clazz, boolean isStatic,
                                  List< ConfigurationElement> config, List<ProxyPropertyObj> proxyProperties,
                                  List<AbstractSmaSTraExtra> extras) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses, config, proxyProperties, extras);
+        super(displayName, description, clazz, needsOtherClasses, config, proxyProperties, extras);
         this.inputs = inputs;
         this.output = output;
         this.methodName = methodName;

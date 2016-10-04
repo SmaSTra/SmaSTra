@@ -332,14 +332,14 @@ namespace SmaSTraDesigner.Controls.Support
             string mainClass = PackageName + "." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
-            string[] neededPermissions = new string[0];
+            NeedsExtra[] neededExtras = new NeedsExtra[0];
             ConfigElement[] config = new ConfigElement[0];
             ProxyProperty[] proxyProperties = new ProxyProperty[0];
             string methodName = javaFreandlyName;
             bool isStatic = true;
 
             return new TransformationNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, InputTypes.ToArray(),
-                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, javaFreandlyName),
+                mainClass, neededOtherClasses, neededExtras, config, proxyProperties, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, javaFreandlyName),
                 methodName, isStatic);
         }
 
@@ -352,7 +352,7 @@ namespace SmaSTraDesigner.Controls.Support
             string mainClass = PackageName + "." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
-            string[] neededPermissions = new string[0];
+            NeedsExtra[] neededExtras = new NeedsExtra[0];
             ConfigElement[] config = new ConfigElement[0];
             ProxyProperty[] proxyProperties = new ProxyProperty[0];
             string dataMethod = "getData";
@@ -360,7 +360,7 @@ namespace SmaSTraDesigner.Controls.Support
             string stopMethod = "stop";
 
             return new DataSourceNodeClass(javaFreandlyName, ElementName, description, creator, OutputType, 
-                mainClass, neededOtherClasses, neededPermissions, config, proxyProperties, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, javaFreandlyName),
+                mainClass, neededOtherClasses, neededExtras, config, proxyProperties, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, javaFreandlyName),
                 dataMethod, startMethod, stopMethod);
         }
 

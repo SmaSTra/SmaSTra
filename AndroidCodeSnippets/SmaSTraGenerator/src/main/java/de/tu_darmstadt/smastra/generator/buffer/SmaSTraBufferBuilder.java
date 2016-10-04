@@ -63,12 +63,6 @@ public class SmaSTraBufferBuilder {
     private String bufferGetMethodName;
 
 
-    /**
-     * The Android permissions needed.
-     */
-    private String[] androidPermissions = new String[0];
-
-
 
     public SmaSTraBufferBuilder setDescription(String description) {
         this.description = description;
@@ -102,11 +96,6 @@ public class SmaSTraBufferBuilder {
 
     public SmaSTraBufferBuilder setBufferGetMethodName(String bufferGetMethodName) {
         this.bufferGetMethodName = bufferGetMethodName;
-        return this;
-    }
-
-    public SmaSTraBufferBuilder setAndroidPermissions(String[] androidPermissions) {
-        if(androidPermissions != null) this.androidPermissions = androidPermissions;
         return this;
     }
 
@@ -154,10 +143,6 @@ public class SmaSTraBufferBuilder {
         return bufferGetMethodName;
     }
 
-    public String[] getAndroidPermissions() {
-        return androidPermissions;
-    }
-
     public List<ConfigurationElement> getConfiguration() {
         return configuration;
     }
@@ -175,7 +160,7 @@ public class SmaSTraBufferBuilder {
         if(bufferAddMethodName == null) throw new ElementGenerationFailedException("No BufferAdd defined.");
         if(bufferGetMethodName == null) throw new ElementGenerationFailedException("No BufferGet defined.");
 
-        return new SmaSTraBuffer(displayName, description, androidPermissions, needsOtherClasses,
+        return new SmaSTraBuffer(displayName, description, needsOtherClasses,
                 bufferAddMethodName, bufferGetMethodName, clazz,
                 configuration, proxyProperties, extras);
     }

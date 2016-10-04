@@ -40,4 +40,19 @@ public class NeedsBroadcast extends AbstractSmaSTraExtra {
 
         return obj;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof  NeedsBroadcast){
+            return ((NeedsBroadcast) obj).broadcastClassName.equals(broadcastClassName);
+        }
+
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return ("broadcast" + broadcastClassName).hashCode();
+    }
 }

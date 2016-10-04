@@ -7,6 +7,7 @@ using System.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -38,7 +39,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             DataType output = ReadOutput(root);
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
-            string[] neededPermissions = ReadNeededPermissions(root);
+            NeedsExtra[] needsExtras = ReadExtras(root);
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             string methodName = ReadMethodName(root);
@@ -47,7 +48,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             bool userCreated = ReadUserCreated(root);
 
             return new TransformationNodeClass(name, displayName, description, creator, output, inputs, mainClass, 
-                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated, path,
+                needsOtherClasses, needsExtras, config, proxyProperties, userCreated, path,
                 methodName, isStatic);
         }
 
@@ -86,7 +87,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddOutput(root, nodeClass.OutputType);
             AddMainClass(root, nodeClass.MainClass);
             AddNeededClasses(root, nodeClass.NeedsOtherClasses);
-            AddPermissions(root, nodeClass.NeedsPermissions);
+            AddExtras(root, nodeClass.NeededExtras);
             AddConfig(root, nodeClass.Configuration);
             AddInputs(root, nodeClass.InputTypes);
             AddProxyProperties(root, nodeClass.ProxyProperties);
@@ -153,7 +154,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             TransformationNodeClass nodeClass = node.Class as TransformationNodeClass;
             codeExtension.AddTransformation(node as Transformation);
-            codeExtension.AddNeededPermissions(nodeClass.NeedsPermissions);
+            codeExtension.AddExtras(nodeClass.NeededExtras);
 
             string content = "";
             string args = "(";

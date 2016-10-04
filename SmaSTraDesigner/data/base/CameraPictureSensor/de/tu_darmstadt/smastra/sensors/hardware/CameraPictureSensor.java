@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
@@ -25,8 +26,8 @@ import de.tu_darmstadt.smastra.sensors.Picture;
  * This is a sensor class for the Camera.
  * @author Tobias Welther
  */
+@Extras(permissions = @ExtraPermission(permission = Manifest.permission.CAMERA))
 @NeedsOtherClass(Picture.class)
-@NeedsAndroidPermissions(Manifest.permission.CAMERA)
 @SensorConfig(displayName = "CameraPictureSensor", description = "Takes a picture by the camera")
 public class CameraPictureSensor implements Sensor {
 

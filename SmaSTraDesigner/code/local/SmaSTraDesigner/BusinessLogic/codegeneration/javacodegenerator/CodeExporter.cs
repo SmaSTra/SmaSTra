@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporters;
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporters;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -139,6 +140,20 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 
             doc.Save(manifestPath);
         }
+
+        protected void AddExtrasToManifest(string manifestPath, NeedsExtra[] extras) 
+        {
+            //No extras -> Nothing to do!
+            if (extras == null || extras.Empty()) return;
+
+            XDocument doc = XDocument.Load(manifestPath, LoadOptions.PreserveWhitespace);
+            var root = doc.Root;
+
+            //Now apply:
+            extras.ForEach(e => e.ApplyToManifest(root));
+            doc.Save(manifestPath);
+        }
+
 
         /// <summary>
         /// Adds the permissions passed to the manifest passed.

@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.math.Math3d",
   "display": "Subtract Vectors",
   "description": "None",
-  "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],

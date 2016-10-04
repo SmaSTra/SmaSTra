@@ -47,7 +47,6 @@ public class SensorBuilderTest {
         String displayName = "Test";
         Class<?> clazz = name.getClass();
         Output output = new Output(this.getClass());
-        String[] permissions = new String[]{"Perm1", "Perm2"};
         Collection<Class<?>> needsOtherClasses = Arrays.asList(this.getClass(), SmaSTraSensor.class);
 
         SmaSTraSensorBuilder sut = new SmaSTraSensorBuilder()
@@ -56,14 +55,12 @@ public class SensorBuilderTest {
             .setDescription(description)
             .setDisplayName(displayName)
             .setOutput(output)
-            .addNeededClass(needsOtherClasses)
-            .setAndroidPermissions(permissions);
+            .addNeededClass(needsOtherClasses);
 
         assertEquals(name, sut.getDataMethodName());
         assertEquals(description, sut.getDescription());
         assertEquals(clazz, sut.getClazz());
         assertEquals(output, sut.getOutput());
-        assertEquals(permissions, sut.getAndroidPermissions());
 
         //At least check for Needed Classes:
         for(Class<?> cl : needsOtherClasses) assertTrue(sut.getNeedsOtherClasses().contains(cl));

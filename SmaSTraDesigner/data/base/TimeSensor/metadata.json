@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidTimeSensor",
   "display": "Time Sensor",
   "description": "Gets the current Time in MS",
-  "neededPermissions": [],
   "needs": [],
   "config": [],
   "proxyProperties": [],

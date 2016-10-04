@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidBatteryStatusSensor",
   "display": "Battery Percent",
   "description": "Gives the percent of the battery (0-1, -1 if not readable))",
-  "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
   ],

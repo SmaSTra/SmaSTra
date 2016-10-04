@@ -26,4 +26,9 @@ public @interface Extras {
      * This are the extra Libs to bundle in.
      */
     ExtraLibrary[] libraries() default {};
+
+    /**
+     * This are extra Permissions needed.
+     */
+    ExtraPermission[] permissions() default {};
 }

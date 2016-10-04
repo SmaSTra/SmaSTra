@@ -140,9 +140,15 @@
     <Compile Include="BusinessLogic\classhandler\nodeclasses\CombinedNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\ConfigElement.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\DataSourceNodeClass.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\extras\NeedsLibrary.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\extras\NeedsBroadcast.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\extras\NeedsPermission.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\extras\NeedsService.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\IOData.cs" />
+    <Compile Include="BusinessLogic\classhandler\nodeclasses\extras\NeedsExtra.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\ProxyProperty.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\TransformationNodeClass.cs" />
+    <Compile Include="BusinessLogic\codegeneration\ExtrasFactory.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExporter.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\CodeExtension.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\exporters\EclipseExporter.cs" />

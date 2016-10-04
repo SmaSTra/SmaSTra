@@ -25,7 +25,6 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
     protected static final String DISPLAY_PATH = "display";
     protected static final String DESCRIPTION_PATH = "description";
 
-    protected static final String NEEDED_PERMISSIONS_PATH = "neededPermissions";
     protected static final String NEEDED_CLASSES_PATH = "needs";
 
     protected static final String CONFIG_PRE_PATH = "config";
@@ -61,12 +60,6 @@ public abstract class AbstractSmaSTraSerializer <T extends SmaSTraElement> imple
         obj.addProperty(MAIN_CLASS_PATH, src.getElementClass().getCanonicalName());
         obj.addProperty(DISPLAY_PATH, src.getDisplayName());
         obj.addProperty(DESCRIPTION_PATH, src.getDescription());
-
-
-        //Needed Permissions:
-        JsonArray permsArray = new JsonArray();
-        for(String perm : src.getAndroidPermissions()) permsArray.add(perm);
-        obj.add(NEEDED_PERMISSIONS_PATH, permsArray);
 
 
         //Needs other classes:

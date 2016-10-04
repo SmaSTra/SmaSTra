@@ -2,6 +2,7 @@ package de.tu_darmstadt.smastra.generator.extras;
 
 import de.tu_darmstadt.smastra.markers.elements.extras.ExtraBroadcast;
 import de.tu_darmstadt.smastra.markers.elements.extras.ExtraLibrary;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
 import de.tu_darmstadt.smastra.markers.elements.extras.ExtraService;
 
 /**
@@ -35,6 +36,12 @@ public class ExtraFactory {
         if(element instanceof ExtraLibrary){
             ExtraLibrary extraLibrary = (ExtraLibrary) element;
             return new NeedsLibrary(extraLibrary.libName());
+        }
+
+        //Permission:
+        if(element instanceof ExtraPermission){
+            ExtraPermission extraPermission = (ExtraPermission) element;
+            return new NeedsPermission(extraPermission.permission());
         }
 
 

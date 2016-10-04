@@ -18,7 +18,6 @@ import de.tu_darmstadt.smastra.markers.elements.buffer.BufferGet;
 import de.tu_darmstadt.smastra.markers.elements.buffer.BufferInfo;
 import de.tu_darmstadt.smastra.markers.elements.config.Configuration;
 import de.tu_darmstadt.smastra.markers.elements.config.ConfigurationElement;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
 import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.interfaces.Buffer;
@@ -50,7 +49,6 @@ public class SmaSTraClassBufferParser {
             builder.setBufferGetMethodName(readBufferGetMethodName(clazz));
             builder.setBufferAddMethodName(readBufferAddMethodName(clazz));
             builder.setDescription(readDescription(clazz));
-            builder.setAndroidPermissions(readNeededPermissions(clazz));
             builder.addNeededClass(readNeededClasses(clazz));
             builder.addProxyProperties(readProxyProperties(clazz));
             builder.addExtras(readExtras(clazz));
@@ -81,6 +79,7 @@ public class SmaSTraClassBufferParser {
                 for (Object obj : extras.broadcasts()) result.add(ExtraFactory.buildFromExtra(obj));
                 for (Object obj : extras.services()) result.add(ExtraFactory.buildFromExtra(obj));
                 for (Object obj : extras.libraries()) result.add(ExtraFactory.buildFromExtra(obj));
+                for (Object obj : extras.permissions()) result.add(ExtraFactory.buildFromExtra(obj));
             }
 
             clazz = clazz.getSuperclass();
@@ -89,25 +88,6 @@ public class SmaSTraClassBufferParser {
         return result;
     }
 
-
-    /**
-     * Reads the needed Permissions from the Class.
-     * @param clazz to use.
-     * @return the needed Permissions. Empty Array if none present.
-     */
-    private static String[] readNeededPermissions(Class<?> clazz) {
-        List<String> needed = new ArrayList<>();
-
-        //Iterate through the Super-Classes.
-        while(clazz != null && clazz != Object.class){
-            NeedsAndroidPermissions permsAnnotation = clazz.getAnnotation(NeedsAndroidPermissions.class);
-            if(permsAnnotation != null) needed.addAll(Arrays.asList(permsAnnotation.value()));
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return needed.toArray(new String[needed.size()]);
-    }
 
     /**
      * Reads the Data Method from the Class.

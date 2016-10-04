@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.math.Arithmetic",
   "display": "Is Greater",
   "description": "None",
-  "neededPermissions": [],
   "needs": [],
   "config": [],
   "proxyProperties": [],

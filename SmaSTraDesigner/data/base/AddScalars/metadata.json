@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.math.Math1d",
   "display": "Add Scalars",
   "description": "None",
-  "neededPermissions": [],
   "needs": [],
   "config": [],
   "proxyProperties": [],

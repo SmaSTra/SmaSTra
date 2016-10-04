@@ -94,7 +94,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
             string projectPath = eclipseProjectPath.FullName;
 
             //Add the permissions:
-            AddPermissionsToManifestWithoutBreakingLayout(manifestPath, codeExtension.GetNeededPermissions());
+            AddExtrasToManifest(manifestPath, codeExtension.GetExtras());
 
             //Copy classes:
             string srcDirPath = Path.Combine(projectPath, "src");

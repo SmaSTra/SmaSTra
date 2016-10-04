@@ -5,10 +5,9 @@
   "mainClass": "de.tu_darmstadt.smastra.imagefilters.ImageFilters",
   "display": "Rotate Picture",
   "description": "Rotates a picture by X degree.",
-  "neededPermissions": [],
   "needs": [
-    "de.tu_darmstadt.smastra.imagefilters.PictureFilter",
-    "de.tu_darmstadt.smastra.sensors.Picture"
+    "de.tu_darmstadt.smastra.sensors.Picture",
+    "de.tu_darmstadt.smastra.imagefilters.PictureFilter"
   ],
   "config": [],
   "proxyProperties": [],

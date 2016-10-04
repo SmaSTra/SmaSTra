@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.online.WeatherTransformations",
   "display": "Is Weather",
   "description": "Checks if the Weather is the weather wanted.",
-  "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.online.Weather"
   ],

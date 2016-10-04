@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.stringcomp.StringComparison",
   "display": "StringEquals",
   "description": "Checks if 2 strings are equals.",
-  "neededPermissions": [],
   "needs": [],
   "config": [],
   "proxyProperties": [],

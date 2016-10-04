@@ -19,7 +19,8 @@ import java.net.URL;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.proxyproperties.ProxyProperty;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
@@ -29,7 +30,11 @@ import de.tu_darmstadt.smastra.markers.interfaces.Sensor;
  * This is a simple Weather API call.
  * @author Tobias Welther
  */
-@NeedsAndroidPermissions({Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION})
+@Extras(permissions = {
+        @ExtraPermission(permission = Manifest.permission.INTERNET),
+        @ExtraPermission(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
+})
+
 @NeedsOtherClass(Weather.class)
 @SensorConfig(displayName = "Current Weather", description = "Displays the current weather of the user.")
 public class CurrentWeatherSensor implements Sensor {

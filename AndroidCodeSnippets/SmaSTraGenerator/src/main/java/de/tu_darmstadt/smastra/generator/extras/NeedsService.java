@@ -40,4 +40,18 @@ public class NeedsService extends AbstractSmaSTraExtra {
 
         return obj;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof  NeedsService){
+            return ((NeedsService) obj).serviceClassName.equals(serviceClassName);
+        }
+
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return ("service" + serviceClassName).hashCode();
+    }
 }

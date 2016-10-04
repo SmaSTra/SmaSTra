@@ -31,4 +31,19 @@ public class NeedsLibrary extends AbstractSmaSTraExtra {
 
         return obj;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof  NeedsLibrary){
+            return ((NeedsLibrary) obj).libName.equals(libName);
+        }
+
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return ("lib" + libName).hashCode();
+    }
 }

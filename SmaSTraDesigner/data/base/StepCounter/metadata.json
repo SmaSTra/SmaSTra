@@ -2,10 +2,9 @@
   "type": "sensor",
   "name": "Step Counter",
   "author": "SmaSTraBasic",
-  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidStepCounter",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.software.AndroidStepCounter",
   "display": "Step Counter",
   "description": "This gives the current steps.",
-  "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Abstract1dAndroidSensor"
   ],

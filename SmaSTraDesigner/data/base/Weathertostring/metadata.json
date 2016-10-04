@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.online.WeatherTransformations",
   "display": "Weather to string",
   "description": "Converts a Weather to a string",
-  "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.online.Weather"
   ],

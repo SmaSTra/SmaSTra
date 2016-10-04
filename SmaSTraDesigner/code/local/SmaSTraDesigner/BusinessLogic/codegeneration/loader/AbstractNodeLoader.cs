@@ -48,11 +48,6 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         private const string JSON_PROP_NEEDED_CLASSES = "needs";
 
         /// <summary>
-        /// Name of the needed Permissions property field in JSON metadata.
-        /// </summary>
-        private const string JSON_PROP_NEEDED_PERMISSIONS = "neededPermissions";
-
-        /// <summary>
         /// Name of the Config property field in JSON metadata.
         /// </summary>
         private const string JSON_PROP_CONFIG = "config";
@@ -102,6 +97,11 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// The Name of the Path if the user created a node.
         /// </summary>
         private const string JSON_PROP_USER_CREATED = "userCreated";
+
+        /// <summary>
+        /// The Name of the Path for the Extras of a Node
+        /// </summary>
+        private const string JSON_PROP_EXTRA_PATH = "extras";
 
         #endregion constants
 
@@ -270,10 +270,15 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// Reads the needed permissions.
         /// </summary>
         /// <param name="root">to read from</param>
-        /// <returns>The needed permissions.</returns>
-        protected string[] ReadNeededPermissions(JObject root)
+        /// <returns>The needed Extras.</returns>
+        protected NeedsExtra[] ReadExtras(JObject root)
         {
-            return root.GetValueAsStringArray(JSON_PROP_NEEDED_PERMISSIONS, new string[0]);
+            return root
+                .GetValueAsJArray(JSON_PROP_EXTRA_PATH, new JArray())
+                .ToJObj()
+                .Select(ExtrasFactory.read)
+                .NonNull()
+                .ToArray();
         }
 
         /// <summary>
@@ -429,13 +434,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         }
 
         /// <summary>
-        /// Adds the Permissions to the JObject passed.
+        /// Adds the Extras to the JObject passed.
         /// </summary>
         /// <param name="toAddTo">The JObject to add to</param>
         /// <param name="permissions">The permissions to add</param>
-        protected void AddPermissions(JObject toAddTo, string[] permissions)
+        protected void AddExtras(JObject toAddTo, NeedsExtra[] extras)
         {
-            toAddTo.Add(JSON_PROP_NEEDED_PERMISSIONS, permissions.ToJArray());
+            toAddTo.Add(JSON_PROP_EXTRA_PATH, extras
+                .Select(ExtrasFactory.serialize)
+                .ToJArray()
+            );
         }
 
         /// <summary>

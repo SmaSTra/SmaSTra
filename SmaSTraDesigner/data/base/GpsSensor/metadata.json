@@ -5,16 +5,18 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.AndroidGPSSensor",
   "display": "Gps Sensor",
   "description": "The GPS sensor of the Device.",
-  "neededPermissions": [
-    "android.permission.ACCESS_COARSE_LOCATION"
-  ],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Data3d",
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],
   "config": [],
   "proxyProperties": [],
-  "extras": [],
+  "extras": [
+    {
+      "type": "permission",
+      "permission": "android.permission.ACCESS_COARSE_LOCATION"
+    }
+  ],
   "dataMethod": "getLastData",
   "output": "de.tu_darmstadt.smastra.sensors.Vector3d",
   "start": "start",

@@ -36,11 +36,6 @@ public abstract class SmaSTraElement {
     protected final String description;
 
     /**
-     * The Android permissions needed.
-     */
-    protected final String[] androidPermissions;
-
-    /**
      * The needed configuration.
      */
     protected final List<ConfigurationElement> configuration;
@@ -57,22 +52,17 @@ public abstract class SmaSTraElement {
 
 
     public SmaSTraElement(String displayName, String description, Class<?> elementClass) {
-        this(displayName, description, elementClass, new String[0], null, null, null, null);
-    }
-
-    public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions) {
-        this(displayName, description, elementClass, androidPermissions, null, null, null, null);
+        this(displayName, description, elementClass, null, null, null, null);
     }
 
 
-    public SmaSTraElement(String displayName, String description, Class<?> elementClass, String[] androidPermissions, Collection<Class<?>> neededClasses,
+    public SmaSTraElement(String displayName, String description, Class<?> elementClass, Collection<Class<?>> neededClasses,
                           List<ConfigurationElement> config, List<ProxyPropertyObj> proxyProperties,
                           List<AbstractSmaSTraExtra> extras) {
 
         this.displayName = displayName;
         this.description = description;
         this.elementClass = elementClass;
-        this.androidPermissions = androidPermissions == null ? new String[0] : androidPermissions;
         this.configuration = config == null ? new ArrayList<ConfigurationElement>() : config;
 
         if(proxyProperties != null) this.proxyProperties.addAll(proxyProperties);
@@ -103,14 +93,6 @@ public abstract class SmaSTraElement {
      */
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * Gets the Android permissions needed.
-     * @return the needed Android permissions.
-     */
-    public String[] getAndroidPermissions() {
-        return androidPermissions;
     }
 
     /**

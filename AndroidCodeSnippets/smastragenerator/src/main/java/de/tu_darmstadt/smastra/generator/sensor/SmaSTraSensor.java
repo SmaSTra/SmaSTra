@@ -38,12 +38,12 @@ public class SmaSTraSensor extends SmaSTraElement {
     private final String stopMethod;
 
 
-    public SmaSTraSensor(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses, Output output,
+    public SmaSTraSensor(String displayName, String description, List<Class<?>> needsOtherClasses, Output output,
                          String dataMethodName, String startMethod, String stopMethod, Class<?> clazz,
                          List<ConfigurationElement> configuration, List<ProxyPropertyObj> proxyProperties,
                          List<AbstractSmaSTraExtra> extras) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration, proxyProperties, extras);
+        super(displayName, description, clazz, needsOtherClasses, configuration, proxyProperties, extras);
 
         this.output = output;
         this.dataMethodName = dataMethodName;

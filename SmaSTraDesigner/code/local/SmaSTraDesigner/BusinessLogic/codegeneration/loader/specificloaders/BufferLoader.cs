@@ -5,6 +5,7 @@ using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 {
@@ -31,7 +32,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             AddOutput(root, nodeClass.OutputType);
             AddMainClass(root, nodeClass.MainClass);
             AddNeededClasses(root, nodeClass.NeedsOtherClasses);
-            AddPermissions(root, nodeClass.NeedsPermissions);
+            AddExtras(root, nodeClass.NeededExtras);
             AddConfig(root, nodeClass.Configuration);
             AddProxyProperties(root, nodeClass.ProxyProperties);
             AddUserCreated(root, nodeClass.UserCreated);
@@ -58,8 +59,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         public override void CreateCode(Node node, CodeExtension codeExtension)
         {
             BufferNodeClass nodeClass = node.Class as BufferNodeClass;
-            codeExtension.AddNeededPermissions(nodeClass.NeedsPermissions);
             codeExtension.AddImport(nodeClass.MainClass);
+            codeExtension.AddExtras(nodeClass.NeededExtras);
 
             codeExtension.AddBuffer(node as BufferNode);
 
@@ -88,7 +89,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             DataType output = genericData;
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
-            string[] neededPermissions = ReadNeededPermissions(root);
+            NeedsExtra[] needsExtras = ReadExtras(root);
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             DataType[] inputTypes = ReadInputs(root).AddBefore(genericData);
@@ -98,7 +99,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             string bufferGetMethod = ReadBufferGet(root);
 
             return new BufferNodeClass(name, displayName, description, creator, output, mainClass,
-                needsOtherClasses, neededPermissions, config, proxyProperties, inputTypes, userCreated, path,
+                needsOtherClasses, needsExtras, config, proxyProperties, inputTypes, userCreated, path,
                 bufferAddMethod, bufferGetMethod);
         }
 

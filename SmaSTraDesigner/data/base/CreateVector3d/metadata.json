@@ -5,7 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.math.VectorUtils",
   "display": "Create Vector3d",
   "description": "None",
-  "neededPermissions": [],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Vector3d"
   ],

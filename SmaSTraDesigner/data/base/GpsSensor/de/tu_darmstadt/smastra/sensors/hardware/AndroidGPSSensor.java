@@ -12,7 +12,8 @@ import android.os.Looper;
 import java.util.Map;
 
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorConfig;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorOutput;
 import de.tu_darmstadt.smastra.markers.elements.sensors.SensorStart;
@@ -26,8 +27,8 @@ import de.tu_darmstadt.smastra.sensors.Vector3d;
  * @author Tobias Welther
  */
 @SuppressWarnings("MissingPermission")
+@Extras(permissions = @ExtraPermission(permission = Manifest.permission.ACCESS_COARSE_LOCATION))
 @NeedsOtherClass(Data3d.class)
-@NeedsAndroidPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)
 @SensorConfig(displayName = "Gps Sensor", description = "The GPS sensor of the Device.")
 public class AndroidGPSSensor implements Sensor, LocationListener {
 

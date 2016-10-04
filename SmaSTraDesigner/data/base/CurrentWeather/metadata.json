@@ -5,10 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.online.CurrentWeatherSensor",
   "display": "Current Weather",
   "description": "Displays the current weather of the user.",
-  "neededPermissions": [
-    "android.permission.INTERNET",
-    "android.permission.ACCESS_COARSE_LOCATION"
-  ],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.online.Weather"
   ],
@@ -20,7 +16,16 @@
       "name": "SetAPIKey"
     }
   ],
-  "extras": [],
+  "extras": [
+    {
+      "type": "permission",
+      "permission": "android.permission.INTERNET"
+    },
+    {
+      "type": "permission",
+      "permission": "android.permission.ACCESS_COARSE_LOCATION"
+    }
+  ],
   "dataMethod": "getLastWeather",
   "output": "de.tu_darmstadt.smastra.sensors.online.Weather"
 }

@@ -1,5 +1,6 @@
 ﻿using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -28,9 +29,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         private readonly List<string> imports = new List<string>();
 
         /// <summary>
-        /// The Permissions that need to be granted.
+        /// The Extras that need to be added.
         /// </summary>
-        private readonly List<string> permissionsNeeded = new List<string>();
+        private readonly List<NeedsExtra> extrasNeeded = new List<NeedsExtra>();
 
         /// <summary>
         /// The internal dictionary to use.
@@ -125,35 +126,34 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         }
 
         /// <summary>
-        /// Adds a needed Permission.
+        /// Adds a needed Extra.
         /// </summary>
-        public void AddNeededPermission(string permission)
+        public void AddExtra(NeedsExtra extra)
         {
-            if (string.IsNullOrWhiteSpace(permission)) return;
+            if (extra == null) return;
 
-            if (!permissionsNeeded.Contains(permission))
+            if (!extrasNeeded.Contains(extra))
             {
-                this.permissionsNeeded.Add(permission);
+                this.extrasNeeded.Add(extra);
             }
         }
 
         /// <summary>
-        /// Adds the Permissions passed to the System.
+        /// Adds the Extras passed to the System.
         /// </summary>
-        /// <param name="permissions">To add</param>
-        public void AddNeededPermissions(string[] permissions)
+        /// <param name="extras">To add</param>
+        public void AddExtras(NeedsExtra[] extras)
         {
-            if (permissions == null || permissions.Count() == 0) return;
-
-            permissions.ForEach(AddNeededPermission);
+            if (extras == null || extras.Empty()) return;
+            extras.ForEach(AddExtra);
         }
 
         /// <summary>
-        /// Gets all Needed Permissions.
+        /// Gets all Needed Extras.
         /// </summary>
-        public string[] GetNeededPermissions()
+        public NeedsExtra[] GetExtras()
         {
-            return permissionsNeeded.Distinct().ToArray();
+            return extrasNeeded.Distinct().ToArray();
         }
 
 

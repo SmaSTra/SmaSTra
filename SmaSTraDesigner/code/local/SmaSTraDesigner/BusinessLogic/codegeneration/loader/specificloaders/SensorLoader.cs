@@ -5,6 +5,7 @@ using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -30,7 +31,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             DataType output = ReadOutput(root);
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
-            string[] neededPermissions = ReadNeededPermissions(root);
+            NeedsExtra[] needsExtras = ReadExtras(root);
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             string dataMethod = ReadDataMethod(root);
@@ -39,7 +40,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             bool userCreated = ReadUserCreated(root);
 
             return new DataSourceNodeClass(name, displayName, description, creator, output, mainClass, 
-                needsOtherClasses, neededPermissions, config, proxyProperties, userCreated, path,
+                needsOtherClasses, needsExtras, config, proxyProperties, userCreated, path,
                 dataMethod, startMethod, stopMethod);
         }
 
@@ -73,7 +74,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             AddOutput(root, nodeClass.OutputType);
             AddMainClass(root, nodeClass.MainClass);
             AddNeededClasses(root, nodeClass.NeedsOtherClasses);
-            AddPermissions(root, nodeClass.NeedsPermissions);
+            AddExtras(root, nodeClass.NeededExtras);
             AddConfig(root, nodeClass.Configuration);
             AddProxyProperties(root, nodeClass.ProxyProperties);
             AddUserCreated(root, nodeClass.UserCreated);
@@ -126,7 +127,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         {
             DataSourceNodeClass nodeClass = node.Class as DataSourceNodeClass;
             codeExtension.AddSensor(node as DataSource);
-            codeExtension.AddNeededPermissions(nodeClass.NeedsPermissions);
+            codeExtension.AddExtras(nodeClass.NeededExtras);
 
             codeExtension.AddImport(nodeClass.OutputType.Name);
             codeExtension.AddImport(nodeClass.MainClass);

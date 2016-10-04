@@ -109,8 +109,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator.exporte
             string projectName = androidStudioProjectPath.Name;
             string workspacePath = androidStudioWorkspacePath.FullName;
 
-            //Add the permissions:
-            AddPermissionsToManifestWithoutBreakingLayout(manifestPath, codeExtension.GetNeededPermissions());
+            //Add the Extras:
+            AddExtrasToManifest(manifestPath, codeExtension.GetExtras());
 
             //Copy classes:
             string javaDirPath = Directory.GetParent(manifestPath).FullName;

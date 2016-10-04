@@ -5,9 +5,6 @@
   "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.CameraPictureSensor",
   "display": "CameraPictureSensor",
   "description": "Takes a picture by the camera",
-  "neededPermissions": [
-    "android.permission.CAMERA"
-  ],
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Picture"
   ],
@@ -19,7 +16,12 @@
       "name": "setSurfaceView"
     }
   ],
-  "extras": [],
+  "extras": [
+    {
+      "type": "permission",
+      "permission": "android.permission.CAMERA"
+    }
+  ],
   "dataMethod": "getLastData",
   "output": "de.tu_darmstadt.smastra.sensors.Picture",
   "start": "start",

@@ -27,7 +27,6 @@ public class SmaSTraTransformationSerializerTest {
                 .setDescription("TEST")
                 .setDisplayName("TEST")
                 .setMethodName("TEST")
-                .setAndroidPermissions(new String[]{"Test1", "Test2"})
                 .setClass(this.getClass())
                 .setOutput(Output.VOID_OUTPUT)
                 .setStatic(false)
@@ -43,10 +42,6 @@ public class SmaSTraTransformationSerializerTest {
         assertEquals("TEST", obj.get("display").getAsString());
         assertEquals(false, obj.get("static").getAsBoolean());
         assertEquals(Output.VOID_OUTPUT.getOutputParam().getCanonicalName(), obj.get("output").getAsString());
-
-        assertEquals(true, obj.get("neededPermissions").isJsonArray());
-        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test1")));
-        assertTrue(obj.get("neededPermissions").getAsJsonArray().contains(new JsonPrimitive("Test2")));
 
         assertTrue(obj.get("needs").isJsonArray());
         assertEquals(0, obj.get("needs").getAsJsonArray().size());

@@ -54,7 +54,6 @@ public class BufferBuilderTest {
         String description = "Something";
         String displayName = "Test";
         Class<?> clazz = name.getClass();
-        String[] permissions = new String[]{"Perm1", "Perm2"};
         Collection<Class<?>> needsOtherClasses = Arrays.asList(this.getClass(), SmaSTraSensor.class);
 
         SmaSTraBufferBuilder sut = new SmaSTraBufferBuilder()
@@ -63,12 +62,10 @@ public class BufferBuilderTest {
             .setClass(clazz)
             .setDescription(description)
             .setDisplayName(displayName)
-            .addNeededClass(needsOtherClasses)
-            .setAndroidPermissions(permissions);
+            .addNeededClass(needsOtherClasses);
 
         assertEquals(description, sut.getDescription());
         assertEquals(clazz, sut.getClazz());
-        assertEquals(permissions, sut.getAndroidPermissions());
         assertEquals(name, sut.getBufferAddMethodName());
         assertEquals(name2, sut.getBufferGetMethodName());
 

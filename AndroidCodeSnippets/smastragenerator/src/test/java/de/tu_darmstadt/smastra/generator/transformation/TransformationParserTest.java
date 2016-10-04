@@ -4,9 +4,11 @@ import org.junit.Test;
 
 import java.util.Collection;
 
+import de.tu_darmstadt.smastra.generator.extras.NeedsPermission;
 import de.tu_darmstadt.smastra.markers.NeedsOtherClass;
 import de.tu_darmstadt.smastra.markers.SkipParsing;
-import de.tu_darmstadt.smastra.markers.elements.NeedsAndroidPermissions;
+import de.tu_darmstadt.smastra.markers.elements.extras.ExtraPermission;
+import de.tu_darmstadt.smastra.markers.elements.extras.Extras;
 import de.tu_darmstadt.smastra.markers.elements.transformation.Transformation;
 
 import static de.tu_darmstadt.smastra.generator.elements.Output.VOID_OUTPUT;
@@ -185,14 +187,14 @@ public class TransformationParserTest {
     @Test
     public void testNeedsPermissionsReadingWorks() throws Throwable {
         Collection<SmaSTraTransformation> list = SmaSTraClassTransformationParser.readFromClass(TestClass6.class);
-        assertEquals("TEST", list.iterator().next().getAndroidPermissions()[0]);
+        assertEquals("TEST", ((NeedsPermission)list.iterator().next().getExtras().iterator().next()).getPermission());
     }
 
 
 
     /* For testSkipMethodWithoutAnnotationWorks */
     @SkipParsing
-    @NeedsAndroidPermissions("TEST")
+    @Extras(permissions = @ExtraPermission(permission = "TEST"))
     private static class TestClass6 implements de.tu_darmstadt.smastra.markers.interfaces.Transformation {
 
         public String method1(String vec1){ return null; }

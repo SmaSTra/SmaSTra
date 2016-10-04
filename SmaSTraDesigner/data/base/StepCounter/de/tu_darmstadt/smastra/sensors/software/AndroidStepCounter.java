@@ -1,4 +1,4 @@
-package de.tu_darmstadt.smastra.sensors.hardware;
+package de.tu_darmstadt.smastra.sensors.software;
 
 import android.content.Context;
 

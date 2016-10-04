@@ -27,12 +27,12 @@ public class SmaSTraBuffer extends SmaSTraElement {
     private final String bufferAddMethodName;
 
 
-    public SmaSTraBuffer(String displayName, String description, String[] androidPermissions, List<Class<?>> needsOtherClasses,
+    public SmaSTraBuffer(String displayName, String description, List<Class<?>> needsOtherClasses,
                          String bufferAddMethodName, String bufferGetMethodName, Class<?> clazz,
                          List<ConfigurationElement> configuration, List<ProxyPropertyObj> proxyProperties,
                          List<AbstractSmaSTraExtra> extras) {
 
-        super(displayName, description, clazz, androidPermissions, needsOtherClasses, configuration, proxyProperties, extras);
+        super(displayName, description, clazz, needsOtherClasses, configuration, proxyProperties, extras);
 
         this.bufferAddMethodName = bufferAddMethodName;
         this.bufferGetMethodName = bufferGetMethodName;
