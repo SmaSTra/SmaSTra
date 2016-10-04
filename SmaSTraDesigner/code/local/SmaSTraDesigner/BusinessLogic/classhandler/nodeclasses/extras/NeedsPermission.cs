@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras
@@ -27,6 +28,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras
 
             XName name = "{http://schemas.android.com/apk/res/android}" + "name";
             root.Add( new XElement("uses-permission", new XAttribute(name, Permission)));
+            root.Add(Environment.NewLine);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras
@@ -43,6 +44,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras
             XName name = "{http://schemas.android.com/apk/res/android}" + "name";
             XName exported = "{http://schemas.android.com/apk/res/android}" + "exported";
             application.Add( new XElement("receiver", new XAttribute(name, BroadcastClassName), new XAttribute(exported, Exportable) ));
+            application.Add(Environment.NewLine);
         }
     }
 }
