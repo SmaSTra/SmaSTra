@@ -87,21 +87,21 @@
             <ScrollViewer Grid.Column="0" Grid.Row="0" Background="{StaticResource ColorPanelBackground}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                 <StackPanel Orientation="Horizontal" x:Name="spnNodeTypeMenu">
                     <Border BorderBrush="Black" BorderThickness="1,0,1,0">
-                        <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" Checked="togDataSources_Checked" VerticalContentAlignment="Center">
+                        <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleDataSources, Mode=TwoWay}" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="DataSources">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/0v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
                     <Border BorderBrush="Black" BorderThickness="0,0,1,0">
-                        <ToggleButton x:Name="togConversions" Style="{StaticResource ToggleButtonStyle}" Checked="togConversions_Checked" VerticalContentAlignment="Center">
+                        <ToggleButton x:Name="togConversions" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleConversions, Mode=TwoWay}" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Conversions">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/1v1_blue.png"/>
                             </WrapPanel>
                         </ToggleButton>
                     </Border>
                     <Border BorderBrush="Black" BorderThickness="0,0,1,0">
-                        <ToggleButton x:Name="togTransformations" Style="{StaticResource ToggleButtonStyle}" Checked="togTransformations_Checked" VerticalContentAlignment="Center">
+                        <ToggleButton x:Name="togTransformations" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleTransformations, Mode=TwoWay}" VerticalContentAlignment="Center">
                             <WrapPanel ToolTip="Transformations">
                                 <Image Width="50" Source="pack://siteoforigin:,,,/Resources/2v1_blue.png"/>
                             </WrapPanel>

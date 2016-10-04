@@ -23,6 +23,21 @@
         #region fields
 
         /// <summary>
+        /// The Toggle for the DataSources
+        /// </summary>
+        private bool toggleDataSources = false;
+
+        /// <summary>
+        /// The Toggle for the Conversions
+        /// </summary>
+        private bool toggleConversions = false;
+
+        /// <summary>
+        /// The Toggle for the Transformations
+        /// </summary>
+        private bool toggleTransformations = false;
+
+        /// <summary>
         /// The Toggle for the Basic Elements
         /// </summary>
         private bool toggleBasic = false;
@@ -37,10 +52,6 @@
         /// </summary>
         private bool toggleCombined = false;
 
-        /// <summary>
-        /// The Type to filter for.
-        /// </summary>
-        private string selectedCategory = "none";
         /// <summary>
         /// The Name to filter for.
         /// </summary>
@@ -74,6 +85,50 @@
 
         #region properties
 
+        /// <summary>
+        /// The Toggle for the Basic Elements to Bind to the GUI.
+        /// </summary>
+        public bool ToggleDataSources
+        {
+            get
+            { return toggleDataSources; }
+            set
+            {
+                this.toggleDataSources = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+        /// <summary>
+        /// The Toggle for the Basic Elements to Bind to the GUI.
+        /// </summary>
+        public bool ToggleConversions
+        {
+            get
+            { return toggleConversions; }
+            set
+            {
+                this.toggleConversions = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
+
+        /// <summary>
+        /// The Toggle for the Basic Elements to Bind to the GUI.
+        /// </summary>
+        public bool ToggleTransformations
+        {
+            get
+            { return toggleTransformations; }
+            set
+            {
+                this.toggleTransformations = value;
+                this.filteredNodes = null;
+                this.OnPropertyChanged("FilteredNodes");
+            }
+        }
 
         /// <summary>
         /// The Toggle for the Basic Elements to Bind to the GUI.
@@ -121,22 +176,6 @@
             }
         }
 
-
-        /// <summary>
-        /// The Selected category to filter to Bind to the GUI.
-        /// </summary>
-        public string SelectedCategory
-        {
-            get
-            { return selectedCategory; }
-            set
-            {
-                this.selectedCategory = value;
-                this.filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
-            }
-        }
-
         /// <summary>
         /// The String to filter the names for to Bind to the GUI.
         /// </summary>
@@ -161,14 +200,10 @@
             {
                 if (this.filteredNodes == null)
                 {
-                    Func<AbstractNodeClass, bool> typeFilter = (n =>
-                    {
-                        if (this.SelectedCategory == "datasource") return n.InputTypes.Count() == 0;
-                        if (this.SelectedCategory == "conversion") return n.InputTypes.Count() == 1;
-                        if (this.SelectedCategory == "transformation") return n.InputTypes.Count() > 1;
-                        if (this.SelectedCategory == "buffer") return n is BufferNodeClass;
-                        return false;
-                    });
+
+                    Func<AbstractNodeClass, bool> dataSourceFilter = (n => { return ToggleDataSources || n.InputTypes.Length != 0; });
+                    Func<AbstractNodeClass, bool> conversionFilter = (n => { return ToggleConversions || n.InputTypes.Length != 1; });
+                    Func<AbstractNodeClass, bool> transformationFilter = (n => { return ToggleTransformations || n.InputTypes.Length < 2; });
 
                     Func<AbstractNodeClass, bool> baseFilter = (n => { return toggleBasic || n.UserCreated; });
                     Func<AbstractNodeClass, bool> customFilter = (n => { return toggleCustom || (!n.UserCreated || (n is CombinedNodeClass)); });
@@ -177,7 +212,9 @@
 
                     //Filter + Generate:
                     return classes.Values
-                        .Where(typeFilter)
+                        .Where(dataSourceFilter)
+                        .Where(conversionFilter)
+                        .Where(transformationFilter)
 
                         .Where(baseFilter)
                         .Where(customFilter)

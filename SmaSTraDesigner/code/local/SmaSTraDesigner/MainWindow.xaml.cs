@@ -52,21 +52,6 @@
             }
         }
 
-        private void togDataSources_Checked(object sender, RoutedEventArgs e)
-        {
-            Singleton<ClassManager>.Instance.SelectedCategory = "datasource";
-        }
-
-        private void togConversions_Checked(object sender, RoutedEventArgs e)
-        {
-            Singleton<ClassManager>.Instance.SelectedCategory = "conversion";
-        }
-
-        private void togTransformations_Checked(object sender, RoutedEventArgs e)
-        {
-            Singleton<ClassManager>.Instance.SelectedCategory = "transformation";
-        }
-
         private void spnLibrary_Drop(object sender, DragEventArgs e)
         {
             Singleton<Library>.Instance.Library_Drop(sender, e);
