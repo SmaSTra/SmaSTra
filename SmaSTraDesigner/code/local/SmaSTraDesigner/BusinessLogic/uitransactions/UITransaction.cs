@@ -15,7 +15,7 @@ namespace SmaSTraDesigner.BusinessLogic.uitransactions
         /// This can also be used for Redo.
         /// </summary>
         /// <param name="designer">To apply to.</param>
-        void Execute(UcTreeDesigner designer);
+        void Redo(UcTreeDesigner designer);
 
 
         /// <summary>

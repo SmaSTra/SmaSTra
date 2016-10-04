@@ -425,10 +425,14 @@
 
         public void RemoveNodes(Node[] nodes, bool saveTransaction = false)
         {
+            Connection[] connections = Tree.Connections
+                .Where(c => nodes.Contains(c.InputNode) || nodes.Contains(c.OutputNode))
+                .ToArray();
+
             nodes.ForEach(n => RemoveNode(n, false));
             if (saveTransaction)
             {
-                this.undoStack.Push(new UITransactionDeleteNodes(nodes));
+                this.undoStack.Push(new UITransactionDeleteNodes(nodes, connections));
                 this.redoStack.Clear();
             }
         }
@@ -445,7 +449,10 @@
             //Add the Remove-Transaction back.
             if (saveTransaction && node != null)
             {
-                this.undoStack.Push(new UITransactionDeleteNodes(node));
+                Connection[] connections = Tree.Connections
+                    .Where(c => (node == c.InputNode) || node == c.OutputNode)
+                    .ToArray();
+                this.undoStack.Push(new UITransactionDeleteNodes(node,connections));
                 this.redoStack.Clear();
             }
 		}
@@ -780,14 +787,21 @@
 			}
 		}
 
-		private void StopDragging(MouseButtonEventArgs e)
+		private void StopDragging(MouseButtonEventArgs e, bool saveTransaction = false)
 		{
-			this.mousePosOnViewer = null;
-			this.dragStart = null;
-            this.lastScrollPosition = null;
-
             if (movingNodeViewer != null)
             {
+                //Save the Transaction before actioning.
+                if (saveTransaction)
+                {
+                    this.undoStack.Push(new UITransactionMoveElements(
+                            this.SelectedNodeViewers.Select(v => v.Node).ToArray(),
+                            e.GetPosition(this.cnvBackground).X - dragStart.Value.X,
+                            e.GetPosition(this.cnvBackground).Y - dragStart.Value.Y
+                        ));
+                }
+
+
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 {
                     foreach (UcNodeViewer nodeViewer in SelectedNodeViewers)
@@ -796,7 +810,13 @@
                     }
                 }
             }
-			this.movingNodeViewer = null;
+
+
+            this.mousePosOnViewer = null;
+            this.dragStart = null;
+            this.lastScrollPosition = null;
+            this.movingNodeViewer = null;
+
 			if (this.bdrSelectionBorder.Visibility == Visibility.Visible)
 			{
 				this.MarkNodesInSelectionArea(true);
@@ -884,12 +904,23 @@
             MessageBoxResult result = MessageBox.Show("Do you want to unmerge " + node.Name + "?", "Unmerge " + node.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
             if (result != MessageBoxResult.OK) return;
 
+            UnmergeNode(node, true);
+        }
+
+        /// <summary>
+        /// Unmerges the node passed.
+        /// </summary>
+        /// <param name="node">To unmerge</param>
+        public void UnmergeNode(CombinedNode node, bool saveTransaction = false)
+        {
+            if (node == null) return;
+
             //Preserve the input Connections:
             List<Connection> newConnections = new List<Connection>();
-            for(int i = 0; i < node.InputNodes.Count(); i++)
+            for (int i = 0; i < node.InputNodes.Count(); i++)
             {
                 Node output = node.InputNodes[i];
-                Tuple<Node,int> input = node.inputConnections.GetValue(i, new Tuple<Node,int>(null,0));
+                Tuple<Node, int> input = node.inputConnections.GetValue(i, new Tuple<Node, int>(null, 0));
                 if (input != null && output != null)
                 {
                     newConnections.Add(new Connection(output, input.Item1, input.Item2));
@@ -897,10 +928,10 @@
             }
 
             //Build the internal Connections:
-            foreach(Node internalNode in node.includedNodes)
+            foreach (Node internalNode in node.includedNodes)
             {
                 List<Node> inputs = internalNode.InputNodes.ToList();
-                for(int i = 0; i < inputs.Count(); i++)
+                for (int i = 0; i < inputs.Count(); i++)
                 {
                     Node internalInput = inputs[i];
                     if (internalInput != null) newConnections.Add(new Connection(internalInput, internalNode, i));
@@ -911,10 +942,21 @@
             Connection outputConnection = Tree.Connections
                 .FirstOrDefault(c => c.OutputNode == node);
 
-            if(outputConnection.InputNode != null && outputConnection.OutputNode != null)
+            if (outputConnection.InputNode != null && outputConnection.OutputNode != null)
             {
                 RemoveConnection(outputConnection);
                 newConnections.Add(new Connection(node.outputNode, outputConnection.InputNode, outputConnection.InputIndex));
+            }
+
+            //Save the Transaction if needed.
+            //Be sure to save, before we remove the Stuff.
+            if (saveTransaction)
+            {
+                Connection[] oldConnections = Tree.Connections
+                    .Where(c => (c.InputNode == node || c.OutputNode == node))
+                    .ToArray();
+                this.undoStack.Push(new UITransactionUnmerge(node, newConnections.ToArray(), oldConnections));
+                this.redoStack.Clear();
             }
 
             //Remove the old node:
@@ -1212,7 +1254,7 @@
 
             //First Redo the Action.
             UITransaction toRedo = redoStack.Pop();
-            toRedo.Execute(this);
+            toRedo.Redo(this);
 
             //Then push to Undo stack if we want to undo it.
             undoStack.Push(toRedo);
@@ -1301,7 +1343,7 @@
 
 		private void This_MouseLeave(object sender, MouseEventArgs e)
 		{
-			this.StopDragging(null);
+			this.StopDragging(null, true);
 		}
 
 		private void This_MouseMove(object sender, MouseEventArgs e)
@@ -1379,7 +1421,7 @@
 
 		private void This_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			this.StopDragging(e);
+			this.StopDragging(e, true);
 		}
 
 		private void TreeConnections_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
