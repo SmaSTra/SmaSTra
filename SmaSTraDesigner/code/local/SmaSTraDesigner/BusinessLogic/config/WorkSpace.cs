@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace SmaSTraDesigner.BusinessLogic.config
+﻿namespace SmaSTraDesigner.BusinessLogic.config
 {
     public static class WorkSpace
     {

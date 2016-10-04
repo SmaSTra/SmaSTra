@@ -1,5 +1,4 @@
-﻿using SmaSTraDesigner.BusinessLogic.config;
-using System.IO;
+﻿using System.IO;
 
 namespace SmaSTraDesigner.BusinessLogic.utils
 {

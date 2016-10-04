@@ -5,7 +5,6 @@ using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using System.Linq;
-using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {

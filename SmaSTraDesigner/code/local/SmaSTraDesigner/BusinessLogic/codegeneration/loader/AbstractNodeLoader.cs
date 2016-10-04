@@ -2,7 +2,6 @@
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
-using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader

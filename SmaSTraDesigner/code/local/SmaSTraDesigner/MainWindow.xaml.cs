@@ -13,7 +13,6 @@
     using BusinessLogic.codegeneration.loader;
     using System.IO;
     using BusinessLogic.online;
-    using System.Diagnostics;
     using BusinessLogic.config;
     using System.Windows.Controls.Primitives;
 
