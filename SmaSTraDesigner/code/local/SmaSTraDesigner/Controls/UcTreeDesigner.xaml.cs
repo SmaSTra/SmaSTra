@@ -794,7 +794,7 @@
             if (movingNodeViewer != null)
             {
                 //Save the Transaction before actioning.
-                if (saveTransaction)
+                if (saveTransaction && e != null)
                 {
                     this.undoStack.Push(new UITransactionMoveElements(
                             this.SelectedNodeViewers.Select(v => v.Node).ToArray(),
