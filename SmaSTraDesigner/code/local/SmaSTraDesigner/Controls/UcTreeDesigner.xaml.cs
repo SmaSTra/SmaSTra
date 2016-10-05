@@ -425,6 +425,8 @@
 
         public void RemoveNodes(Node[] nodes, bool saveTransaction = false)
         {
+            nodes = nodes.Where(n => !(n is OutputNode)).ToArray();
+
             Connection[] connections = Tree.Connections
                 .Where(c => nodes.Contains(c.InputNode) || nodes.Contains(c.OutputNode))
                 .ToArray();
@@ -792,7 +794,7 @@
             if (movingNodeViewer != null)
             {
                 //Save the Transaction before actioning.
-                if (saveTransaction)
+                if (saveTransaction && e != null)
                 {
                     this.undoStack.Push(new UITransactionMoveElements(
                             this.SelectedNodeViewers.Select(v => v.Node).ToArray(),

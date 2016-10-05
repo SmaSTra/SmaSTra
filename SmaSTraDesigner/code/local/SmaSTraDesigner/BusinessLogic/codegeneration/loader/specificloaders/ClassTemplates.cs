@@ -146,7 +146,7 @@
         /// <br>{2} : Method call
         /// </summary>
         public const string GENERATION_TEMPLATE_TRANSFORM =
-            "   protected void transform{0}(){{" + NL +
+            "   public void transform{0}(){{" + NL +
             "{1}" +
             "       transform{0} = {2};" + NL +
             "   }}"
@@ -160,7 +160,7 @@
         /// <br>{2} : method call
         /// </summary>
         public const string GENERATION_TEMPLATE_TRANSFORM_LAST =
-            "   protected void transform{0}(){{" + NL +
+            "   public void transform{0}(){{" + NL +
             "{1}" +
             "       data = {2};" + NL +
             "   }}"

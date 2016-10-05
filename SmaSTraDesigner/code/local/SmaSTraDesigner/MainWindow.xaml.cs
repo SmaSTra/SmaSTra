@@ -114,7 +114,7 @@
         }
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.Clear();
+            this.tdTreeDesigner.Clear(true);
         }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -390,7 +390,7 @@
             Node pastedNode = this.tdTreeDesigner.SelectedNodeViewer.Node.Clone();
             pastedNode.PosX = this.tdTreeDesigner.SelectedNodeViewer.Node.PosX;
             pastedNode.PosY = this.tdTreeDesigner.SelectedNodeViewer.Node.PosY + 10;
-            this.tdTreeDesigner.AddNode(pastedNode);
+            this.tdTreeDesigner.AddNode(pastedNode, false, true);
         }
 
 
