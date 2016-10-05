@@ -63,6 +63,8 @@
         /// </summary>
         private Node[] filteredNodes = null;
 
+        private List<String> blackList = new List<string>();
+
 
 
 
@@ -209,6 +211,7 @@
                     Func<AbstractNodeClass, bool> customFilter = (n => { return toggleCustom || (!n.UserCreated || (n is CombinedNodeClass)); });
                     Func<AbstractNodeClass, bool> combinedFilter = (n => { return toggleCombined || !(n is CombinedNodeClass); });
                     Func<AbstractNodeClass, bool> nameFilter = (n => { return string.IsNullOrWhiteSpace(this.FilterString) || n.Name.ToLower().Contains(FilterString); });
+                    Func<AbstractNodeClass, bool> blackListFilter = (n => {return !blackList.Contains(n.Name); });
 
                     //Filter + Generate:
                     return classes.Values
@@ -221,6 +224,8 @@
                         .Where(combinedFilter)
 
                         .Where(nameFilter)
+
+                        .Where(blackListFilter)
 
                         .Distinct()
                         .Select(n => n.generateNode())
@@ -344,6 +349,15 @@
             typeName = typeName.Replace(" ", "").Replace("_", "").ToLower();
             return this.classes.Values
                 .FirstOrDefault(x => x.Name.Replace(" ", "").Replace("_", "").ToLower() == typeName);
+        }
+
+        public void removeNodeClass(AbstractNodeClass nodeClass)
+        {
+            if (!blackList.Contains(nodeClass.Name))
+            {
+                blackList.Add(nodeClass.Name);
+                this.OnPropertyChanged("FilteredNodes");
+            }
         }
 
         

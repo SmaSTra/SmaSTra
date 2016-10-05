@@ -165,7 +165,7 @@
                 }
                 else if (nodeViewer.IsPreview || !nodeViewer.IsSelected)
                 {
-                    e.CanExecute = false;
+                    e.CanExecute = true;
                 }
                 else
                 {
@@ -184,6 +184,9 @@
             if (sourceAsNodeViewer != null && sourceAsNodeViewer.IsLibrary)
             {
                 Singleton<Library>.Instance.removeLibraryNode((UcNodeViewer)e.OriginalSource);
+            }
+            else if (sourceAsNodeViewer.IsPreview && !sourceAsNodeViewer.IsLibrary) {
+                Singleton<ClassManager>.Instance.removeNodeClass(sourceAsNodeViewer.Node.Class);
             }
             else
             {
