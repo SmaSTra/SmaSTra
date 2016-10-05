@@ -136,6 +136,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\classhandler\CombinedClassGenerator.cs" />
+    <Compile Include="BusinessLogic\classhandler\NodeBlacklist.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\BufferNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\CombinedNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\ConfigElement.cs" />
