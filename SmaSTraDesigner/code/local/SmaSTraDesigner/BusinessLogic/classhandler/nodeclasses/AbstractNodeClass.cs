@@ -2,6 +2,7 @@
 {
     using classhandler.nodeclasses;
     using System;
+    using System.IO;
     using static ClassManager;
 
     /// <summary>
@@ -57,6 +58,15 @@
 
 
         #endregion constructors
+
+        #region variables
+
+        /// <summary>
+        /// The cached variable for Source.
+        /// </summary>
+        private string source = null;
+
+        #endregion variables
 
 
         #region properties
@@ -131,9 +141,56 @@
         /// </summary>
         public bool UserCreated { get; }
 
+        /// <summary>
+        /// The Source code of the Main-Class file.
+        /// May be a bit too much at this time.
+        /// Should be changed to the Method-Call only later.
+        /// </summary>
+        public string SourceCode
+        {
+            get
+            {
+                //Got the cached source.
+                if(source != null)
+                {
+                    return source;
+                }
+
+                //We have no MainClass:
+                if (string.IsNullOrWhiteSpace(MainClass))
+                {
+                    source = "No Source found";
+                    return source;
+                }
+
+                //We have a Main-Class, so we can browse our Source-Code.
+                source = ReadSourceCode();
+                if (source == null) source = "No Source found.";
+                return source;
+            }
+        }
+
         #endregion properties
 
         #region overrideable methods
+
+        /// <summary>
+        /// Reads the Source code.
+        /// By default, this reads the complete Class.
+        /// </summary>
+        /// <returns>The source code wanted.</returns>
+        protected virtual string ReadSourceCode()
+        {
+            //Start reading the Source-File:
+            string file = Path.Combine(NodePath, MainClass.Replace('.', Path.DirectorySeparatorChar) + ".java");
+            if (!File.Exists(file))
+            {
+                return null;
+            }
+
+            //Found the File -> Read!
+            return File.ReadAllText(file);
+        }
 
         /// <summary>
         /// This is called when a new node is generated.
