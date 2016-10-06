@@ -20,6 +20,12 @@
 
         #region consts
 
+        /// <summary>
+        /// FEATURE TOGGLE: Handle global Exceptions!
+        /// </summary>
+        private const bool HandleGlobalException = false;
+
+
         private const string REG_SUB_KEY = "SmaSTra";
         private const string REG_WORKSPACE_KEY = "workspace";
 
@@ -29,29 +35,46 @@
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
 		{
+            if (HandleGlobalException)
+            {
+                e.Handled = true;
+                Exception exp = e.Exception;
+
+                //TODO: Do a new Fanxy GUI for the Error-Handling!
+                MessageBox.Show(this.MainWindow, "Error: " + exp.ToString(), "Uh oh...", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            }
 		}
 
 		private void Application_Startup(object sender, StartupEventArgs e)
         {
             //Read the last used Workspace:
-            string lastWorkspace = "";
+            string lastWorkspace = readWorkSpaceFromRegestry();
+            SwitchWorkspace(lastWorkspace, null);
+        }
+
+        /// <summary>
+        /// Reads the Workspace from the Registry.
+        /// If not present, takes the current working directory.
+        /// </summary>
+        /// <returns>The Workspace</returns>
+        private string readWorkSpaceFromRegestry()
+        {
             try
             {
                 Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SmaSTra");
-                if(key != null)
+                if (key != null)
                 {
-                    lastWorkspace = key.GetValue(REG_WORKSPACE_KEY, "").ToString();
+                    string workSpace = key.GetValue(REG_WORKSPACE_KEY, "").ToString();
                     key.Close();
+                    return workSpace;
                 }
-            }catch (Exception exp) { Debug.Print(exp.ToString()); }
-
-            //We have the default Workspace -> Set it correct:
-            if (string.IsNullOrWhiteSpace(lastWorkspace))
+            }
+            catch (Exception exp)
             {
-                lastWorkspace = Directory.GetCurrentDirectory();
+                Debug.Print(exp.ToString());
             }
 
-            SwitchWorkspace(lastWorkspace, null);
+            return Directory.GetCurrentDirectory();
         }
 
 

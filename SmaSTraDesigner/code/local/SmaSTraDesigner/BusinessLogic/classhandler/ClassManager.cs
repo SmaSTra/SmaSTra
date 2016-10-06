@@ -1,7 +1,6 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
     using classhandler;
-    using classhandler.nodeclasses;
     using codegeneration.loader;
     using Common;
     using config;
@@ -261,7 +260,7 @@
             //Always update the filtered nodes.
             if(nodeClass != null)
             {
-                filteredNodes = null;
+                this.filteredNodes = null;
                 this.OnPropertyChanged("FilteredNodes");
             }
 
