@@ -208,6 +208,8 @@
                     Func<AbstractNodeClass, bool> baseFilter = (n => { return toggleBasic || n.UserCreated; });
                     Func<AbstractNodeClass, bool> customFilter = (n => { return toggleCustom || (!n.UserCreated || (n is CombinedNodeClass)); });
                     Func<AbstractNodeClass, bool> combinedFilter = (n => { return toggleCombined || !(n is CombinedNodeClass); });
+
+                    Func<AbstractNodeClass, bool> blacklistFilter = (n =>  !Singleton<NodeBlacklist>.Instance.IsOnBlackList(n) );
                     Func<AbstractNodeClass, bool> nameFilter = (n => { return string.IsNullOrWhiteSpace(this.FilterString) || n.Name.ToLower().Contains(FilterString); });
 
                     //Filter + Generate:
@@ -220,6 +222,7 @@
                         .Where(customFilter)
                         .Where(combinedFilter)
 
+                        .Where(blacklistFilter)
                         .Where(nameFilter)
 
                         .Distinct()

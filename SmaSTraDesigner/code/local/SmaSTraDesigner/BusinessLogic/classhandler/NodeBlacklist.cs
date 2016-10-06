@@ -20,6 +20,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         public NodeBlacklist()
         {
+            NodesOnBlacklist = new List<string>();
             Reload();
         }
 
