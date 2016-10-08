@@ -1,7 +1,6 @@
 ﻿namespace SmaSTraDesigner.BusinessLogic
 {
     using classhandler;
-    using classhandler.nodeclasses;
     using codegeneration.loader;
     using Common;
     using config;
@@ -62,8 +61,6 @@
         /// The cached filtered Nodes.
         /// </summary>
         private Node[] filteredNodes = null;
-
-        private List<String> blackList = new List<string>();
 
 
 
@@ -210,8 +207,9 @@
                     Func<AbstractNodeClass, bool> baseFilter = (n => { return toggleBasic || n.UserCreated; });
                     Func<AbstractNodeClass, bool> customFilter = (n => { return toggleCustom || (!n.UserCreated || (n is CombinedNodeClass)); });
                     Func<AbstractNodeClass, bool> combinedFilter = (n => { return toggleCombined || !(n is CombinedNodeClass); });
+
+                    Func<AbstractNodeClass, bool> blacklistFilter = (n =>  !Singleton<NodeBlacklist>.Instance.IsOnBlackList(n) );
                     Func<AbstractNodeClass, bool> nameFilter = (n => { return string.IsNullOrWhiteSpace(this.FilterString) || n.Name.ToLower().Contains(FilterString); });
-                    Func<AbstractNodeClass, bool> blackListFilter = (n => {return !blackList.Contains(n.Name); });
 
                     //Filter + Generate:
                     return classes.Values
@@ -223,9 +221,8 @@
                         .Where(customFilter)
                         .Where(combinedFilter)
 
+                        .Where(blacklistFilter)
                         .Where(nameFilter)
-
-                        .Where(blackListFilter)
 
                         .Distinct()
                         .Select(n => n.generateNode())
@@ -263,7 +260,7 @@
             //Always update the filtered nodes.
             if(nodeClass != null)
             {
-                filteredNodes = null;
+                this.filteredNodes = null;
                 this.OnPropertyChanged("FilteredNodes");
             }
 
@@ -349,30 +346,6 @@
             typeName = typeName.Replace(" ", "").Replace("_", "").ToLower();
             return this.classes.Values
                 .FirstOrDefault(x => x.Name.Replace(" ", "").Replace("_", "").ToLower() == typeName);
-        }
-
-        public void removeNodeClass(AbstractNodeClass nodeClass)
-        {
-            if (!blackList.Contains(nodeClass.Name))
-            {
-                blackList.Add(nodeClass.Name);
-                this.OnPropertyChanged("FilteredNodes");
-            }
-        }
-
-        
-        /// <summary>
-        /// Gets the First NodeClass found with that type name.
-        /// Returns null if none found.
-        /// </summary>
-        /// <param name="typeName">To search.</param>
-        /// <returns>The first found NodeClass with that name, null if none found.</returns>
-        public AbstractNodeClass[] GetFilteredNodeClasses(String filter)
-        {
-            filter = filter.ToLower();
-            return this.classes.Values
-                .Where(x => x.Name.Replace(" ","").Replace("_","").ToLower().Contains(filter) )
-                .ToArray();
         }
 
 
