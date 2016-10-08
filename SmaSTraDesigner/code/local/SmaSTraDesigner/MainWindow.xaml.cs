@@ -15,6 +15,7 @@
     using BusinessLogic.online;
     using BusinessLogic.config;
     using System.Windows.Controls.Primitives;
+    using BusinessLogic.classhandler;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -185,8 +186,13 @@
             {
                 Singleton<Library>.Instance.removeLibraryNode((UcNodeViewer)e.OriginalSource);
             }
-            else if (sourceAsNodeViewer.IsPreview && !sourceAsNodeViewer.IsLibrary) {
-                Singleton<ClassManager>.Instance.removeNodeClass(sourceAsNodeViewer.Node.Class);
+            else if (sourceAsNodeViewer != null && sourceAsNodeViewer.IsPreview && !sourceAsNodeViewer.IsLibrary) {
+                NodeBlacklist blacklist = Singleton<NodeBlacklist>.Instance;
+                if (!blacklist.IsOnBlackList(sourceAsNodeViewer.Node.Class))
+                {
+                    blacklist.Add(sourceAsNodeViewer.Node.Class.Name);
+                    Singleton<ClassManager>.Instance.Reload();
+                }
             }
             else
             {
