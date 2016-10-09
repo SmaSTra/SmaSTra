@@ -216,6 +216,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand About = new RoutedUICommand
+                        (
+                                "About",
+                                "About",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+
+                                }
+                        );
+
 
     }
 }

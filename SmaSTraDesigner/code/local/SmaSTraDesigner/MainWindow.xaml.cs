@@ -16,6 +16,7 @@
     using BusinessLogic.config;
     using System.Windows.Controls.Primitives;
     using BusinessLogic.classhandler;
+    using System.Reflection;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,6 +35,8 @@
             Online online = Singleton<Online>.Instance;
             online.MainWindow = this;
             this.spnOnlinePanel.DataContext = online;
+
+            textVersionNumber.Text = "Version: " + Assembly.GetExecutingAssembly().GetName().Version;
         }
 
 		#endregion constructors
@@ -296,7 +299,7 @@
         }
 
 
-        private void Merge_Execute(object sender, ExecutedRoutedEventArgs e)
+        private void Merge_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             this.tdTreeDesigner.TryMergeCurrentSelection();
         }
@@ -308,7 +311,7 @@
         }
 
 
-        private void Unmerge_Execute(object sender, ExecutedRoutedEventArgs e)
+        private void Unmerge_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             this.tdTreeDesigner.TryUnmergeSelectedNode();
         }
@@ -403,6 +406,17 @@
             pastedNode.PosX = this.tdTreeDesigner.SelectedNodeViewer.Node.PosX;
             pastedNode.PosY = this.tdTreeDesigner.SelectedNodeViewer.Node.PosY + 10;
             this.tdTreeDesigner.AddNode(pastedNode, false, true);
+        }
+
+        private void About_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+
+        private void About_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Put some fancy about text here", "About", MessageBoxButton.OK); ;
         }
 
 
