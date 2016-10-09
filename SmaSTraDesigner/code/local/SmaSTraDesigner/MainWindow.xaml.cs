@@ -367,7 +367,10 @@
 
         private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = tdTreeDesigner.CanUndo();
+            if (tdTreeDesigner != null)
+            {
+                e.CanExecute = tdTreeDesigner.CanUndo();
+            }
         }
 
         private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -377,7 +380,10 @@
 
         private void Redo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = tdTreeDesigner.CanRedo();
+            if (tdTreeDesigner != null)
+            {
+                e.CanExecute = tdTreeDesigner.CanRedo();
+            }
         }
 
         private void Redo_Executed(object sender, ExecutedRoutedEventArgs e)
