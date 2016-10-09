@@ -104,12 +104,10 @@
             e.CanExecute = true;
         }
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
-        {            
+        {
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
-            foreach (Node node in this.tdTreeDesigner.Tree.Nodes)
-            {
-                Console.WriteLine("++++++ node.Configuration.Count: " + node.Configuration.Count);
-            }
+
+            tdTreeDesigner.OrganizeNodes();
         }
 
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)

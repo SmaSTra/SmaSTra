@@ -1124,6 +1124,74 @@
             RemoveNodes(toRemove, saveTransaction);
         }
 
+        public void OrganizeNodes()
+        {
+            if(Tree != null && outOutputViewer != null)
+            {
+                float xDistance = 30;
+                float yDistance = 0;
+                List<Node> seenNodesList = new List<Node>();
+                Node currentNode = outOutputViewer.Node;
+                UcNodeViewer currentViewer = outOutputViewer;
+                UcNodeViewer positionedViewer;
+                seenNodesList.AddRange(currentNode.InputNodes);
+                while (seenNodesList.Count > 0) {
+                    double inputNodesHeight = 0;
+                    for (int i = 0; i < currentNode.InputNodes.Count(); i++) {
+                        Node positionNode = currentNode.InputNodes[i];
+                        if (positionNode != null)
+                        {
+                            seenNodesList.Add(positionNode);
+                                nodeViewers.TryGetValue(positionNode, out positionedViewer);
+                            if (positionedViewer != null)
+                            {
+                                positionNode.PosX = currentNode.PosX - positionedViewer.ActualWidth / 2 - currentViewer.ActualWidth / 2 - xDistance;
+                                if (i == 0)
+                                {
+                                    positionNode.PosY = currentNode.PosY - currentViewer.ActualHeight / 2 + positionedViewer.ActualHeight / 2;
+                                }
+                                else
+                                {
+                                    positionNode.PosY = currentNode.PosY + inputNodesHeight + positionedViewer.ActualHeight / 2 - currentViewer.ActualHeight / 2;
+                                }
+                                inputNodesHeight = inputNodesHeight + getNeededHeightForBranch(positionedViewer) + yDistance;
+                            }
+                        }
+                    }
+                    if (seenNodesList.Any())
+                    {
+                        currentNode = seenNodesList[0];
+                        if (currentNode != null)
+                        {
+                            nodeViewers.TryGetValue(currentNode, out currentViewer);
+                        }
+                        seenNodesList.RemoveAt(0);
+                    }
+                }
+                
+            }
+        }
+
+        private double getNeededHeightForBranch(UcNodeViewer branchRoot)
+        {
+            double neededHeight = 0;
+            UcNodeViewer inputNodeViewer;
+            foreach(Node inputNode in branchRoot.Node.InputNodes)
+            {
+                if (inputNode != null)
+                {
+                    nodeViewers.TryGetValue(inputNode, out inputNodeViewer);
+                    if(inputNodeViewer != null)
+                    {
+                        neededHeight = neededHeight + getNeededHeightForBranch(inputNodeViewer);
+                    }
+                }
+            }
+
+            neededHeight = Math.Max(neededHeight, branchRoot.ActualHeight + 20);
+            return neededHeight;
+        }
+
 
         #endregion methods
 
