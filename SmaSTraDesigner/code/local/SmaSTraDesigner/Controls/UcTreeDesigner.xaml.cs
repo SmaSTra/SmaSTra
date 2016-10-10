@@ -915,6 +915,7 @@ namespace SmaSTraDesigner.Controls
         /// Unmerges the node passed.
         /// </summary>
         /// <param name="node">To unmerge</param>
+        /// <param name="saveTransaction">If the Transaction will be saved in the Undo-Stack</param>
         public void UnmergeNode(CombinedNode node, bool saveTransaction = false)
         {
             if (node == null) return;
@@ -956,10 +957,7 @@ namespace SmaSTraDesigner.Controls
             //Be sure to save, before we remove the Stuff.
             if (saveTransaction)
             {
-                Connection[] oldConnections = Tree.Connections
-                    .Where(c => (c.InputNode == node || c.OutputNode == node))
-                    .ToArray();
-                this.undoStack.Push(new UITransactionUnmerge(node, newConnections.ToArray(), oldConnections));
+                this.undoStack.Push(new UITransactionUnmerge(node, newConnections.ToArray()));
                 this.redoStack.Clear();
             }
 

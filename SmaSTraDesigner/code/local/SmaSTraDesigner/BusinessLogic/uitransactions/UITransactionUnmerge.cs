@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.Controls;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -11,37 +13,56 @@ namespace SmaSTraDesigner.BusinessLogic.uitransactions
         /// <summary>
         /// The merged node.
         /// </summary>
-        private CombinedNode mergedNode;
+        private readonly CombinedNode _mergedNode;
 
         /// <summary>
-        /// The connections of the Merged Node.
+        /// The new connections that are added after Unmerge.
         /// </summary>
-        private Connection[] newConnections;
-
-        /// <summary>
-        /// The connections of the Merged Node.
-        /// </summary>
-        private Connection[] oldConnections;
+        private readonly Connection[] _newConnections;
 
 
-        public UITransactionUnmerge(CombinedNode mergedNode, Connection[] newConnections, Connection[] oldConnections)
+        public UITransactionUnmerge(CombinedNode mergedNode, Connection[] newConnections)
         {
-            this.mergedNode = mergedNode;
-            this.newConnections = newConnections;
-            this.oldConnections = oldConnections;
+            this._mergedNode = mergedNode;
+            this._newConnections = newConnections;
         }
+       
+
 
         public void Redo(UcTreeDesigner designer)
         {
-            designer.UnmergeNode(mergedNode);
+            designer.UnmergeNode(_mergedNode);
         }
 
         public void Undo(UcTreeDesigner designer)
         {
-            mergedNode.includedNodes.ForEach(n => designer.RemoveNode(n));
-            designer.AddNode(mergedNode);
+            //Reset the Positions:
+            _mergedNode.includedNodes
+                .ForEach(n => n.PosX -= _mergedNode.PosX)
+                .ForEach(n => n.PosY -= _mergedNode.PosY)
+                .ForEach(n => designer.RemoveNode(n));
 
-            oldConnections.ForEach(designer.AddConnection);
+            //Re-Apply the Inputs:
+            foreach (var node in _mergedNode.includedNodes)
+            {
+                _newConnections
+                    .Where(c => c.InputNode == node)
+                    .ForEach(c => node.SetInput(c.InputIndex, c.OutputNode));
+            }
+
+            //Finally Readd the node:
+            designer.AddNode(_mergedNode);
+
+            //Reapply all connections outside of the Node:
+            _newConnections
+                .Where(c => !_mergedNode.includedNodes.Contains(c.InputNode)) 
+                .Select(c => new Connection(_mergedNode, c.InputNode, c.InputIndex))
+                .ForEach(designer.AddConnection);
+            _newConnections
+                .Where(c => !_mergedNode.includedNodes.Contains(c.OutputNode))
+                .Select(c => new Connection(c.OutputNode, _mergedNode, c.InputIndex))
+                .ForEach(designer.AddConnection);
+
         }
     }
 }
