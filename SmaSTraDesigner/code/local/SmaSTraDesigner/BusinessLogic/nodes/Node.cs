@@ -337,7 +337,7 @@
 
         public Node Clone()
         {
-            Node clone = Class.generateNode();
+            Node clone = Class.GenerateNode();
             for(int i = 0; i < InputIOData.Count; i++)
             {
                 clone.InputIOData[i].Value = InputIOData[i].Value;

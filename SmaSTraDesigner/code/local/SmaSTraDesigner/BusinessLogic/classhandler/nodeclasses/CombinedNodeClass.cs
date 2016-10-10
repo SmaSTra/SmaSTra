@@ -43,7 +43,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         #endregion Constructor
 
-        public override Node generateNode()
+        public override Node GenerateNode()
         {
             return new CombinedNode(this);
         }

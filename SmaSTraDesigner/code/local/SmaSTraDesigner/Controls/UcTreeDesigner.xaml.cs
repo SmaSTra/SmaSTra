@@ -1,4 +1,6 @@
-﻿namespace SmaSTraDesigner.Controls
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+
+namespace SmaSTraDesigner.Controls
 {
     using System;
     using System.Collections.Generic;
@@ -1055,7 +1057,7 @@
             classManager.AddClass(generatedClass);
 
             //Generate the own Node:
-            Node newNode = generatedClass.generateNode();
+            Node newNode = generatedClass.GenerateNode();
             newNode.PosX = nodes.Average(n => n.PosX);
             newNode.PosY = nodes.Average(n => n.PosY);
 

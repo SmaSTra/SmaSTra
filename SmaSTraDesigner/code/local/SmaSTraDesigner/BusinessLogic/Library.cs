@@ -168,7 +168,7 @@ namespace SmaSTraDesigner.BusinessLogic
 
         public void Library_Drop(object sender, DragEventArgs e)
         {
-            Node node = (Node)((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1.Class.generateNode();
+            Node node = (Node)((Tuple<Node>)e.Data.GetData(typeof(Tuple<Node>))).Item1.Class.GenerateNode();
             
             addLibraryNode(node);
         }

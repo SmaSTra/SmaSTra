@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
 namespace SmaSTraDesigner.Controls.Support
 {
