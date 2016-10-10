@@ -32,7 +32,7 @@
         }
 
 
-        public override Node generateNode()
+        public override Node GenerateNode()
         {
             return new DataSource(this);
         }

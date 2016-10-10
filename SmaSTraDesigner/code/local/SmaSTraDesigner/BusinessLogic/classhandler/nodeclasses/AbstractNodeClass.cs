@@ -1,10 +1,8 @@
-﻿namespace SmaSTraDesigner.BusinessLogic
-{
-    using classhandler.nodeclasses;
-    using System;
-    using System.IO;
-    using static ClassManager;
+﻿using System;
+using System.IO;
 
+namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
+{
     /// <summary>
     /// Prodives information about a specific type of node.
     /// </summary>
@@ -18,25 +16,31 @@
         /// </summary>
         /// <param name="nodeType">The type of the Node.</param>
         /// <param name="name">This node class's identifying name.</param>
-        /// <param name="baseNode">This node class's base node that is cloned for creation of new nodes.</param>
+        /// <param name="displayName">The Display name to show.</param>
+        /// <param name="description">The description of the Element</param>
+        /// <param name="creator">The person who created this element</param>
         /// <param name="outputType">This node class's output's data type</param>
-        /// <param name="inputTypes">This node class's input's data types</param>
         /// <param name="mainClass">This is the MainClass in the java world</param>
         /// <param name="needsOtherClasses">The other classes needed for the Java class to work</param>
-        /// <param name="needsPermissions">The Permissions needed for this element</param>
-        protected AbstractNodeClass(NodeType nodeType, string name, string displayName, string description, string creator,  DataType outputType, 
+        /// <param name="neededExtras">The Extras needed for the Class.</param>
+        /// <param name="configuration">The Configuration to display.</param>
+        /// <param name="proxyProperties">The Proxy properties to display to the outside</param>
+        /// <param name="inputTypes">This node class's input's data types</param>
+        /// <param name="userCreated">If the element is user created</param>
+        /// <param name="nodePath">The File-Path to the root of the node in the file system</param>
+        protected AbstractNodeClass(ClassManager.NodeType nodeType, string name, string displayName, string description, string creator,  DataType outputType, 
             string mainClass, string[] needsOtherClasses, NeedsExtra[] neededExtras,
             ConfigElement[] configuration, ProxyProperty[] proxyProperties,
             DataType[] inputTypes, bool userCreated, string nodePath)
 		{
 			if (String.IsNullOrWhiteSpace(name))
 			{
-				throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", "name");
+				throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", nameof(name));
 			}
 
-			if (nodeType == NodeType.Transformation  && (inputTypes == null || inputTypes.Length == 0))
+			if (nodeType == ClassManager.NodeType.Transformation  && (inputTypes == null || inputTypes.Length == 0))
 			{
-				throw new ArgumentException("There must be input types given for a transformation node class", "inputTypes");
+				throw new ArgumentException("There must be input types given for a transformation node class", nameof(inputTypes));
 			}
 
             
@@ -45,12 +49,12 @@
             this.Description = description;
             this.Creator = creator;
 			this.OutputType = outputType;
-			this.InputTypes = inputTypes == null ? new DataType[0] : inputTypes;
+			this.InputTypes = inputTypes ?? new DataType[0];
             this.MainClass = mainClass;
-            this.NeedsOtherClasses = needsOtherClasses == null ? new string[0] : needsOtherClasses;
-            this.NeededExtras = neededExtras == null ? new NeedsExtra[0] : neededExtras;
-            this.Configuration = configuration == null ? new ConfigElement[0] : configuration;
-            this.ProxyProperties = proxyProperties == null ? new ProxyProperty[0] : proxyProperties;
+            this.NeedsOtherClasses = needsOtherClasses ?? new string[0];
+            this.NeededExtras = neededExtras ?? new NeedsExtra[0];
+            this.Configuration = configuration ?? new ConfigElement[0];
+            this.ProxyProperties = proxyProperties ?? new ProxyProperty[0];
             this.NodeType = nodeType;
             this.UserCreated = userCreated;
             this.NodePath = nodePath;
@@ -64,7 +68,7 @@
         /// <summary>
         /// The cached variable for Source.
         /// </summary>
-        private string source = null;
+        private string _source = null;
 
         #endregion variables
 
@@ -109,7 +113,7 @@
         /// <summary>
         /// The Node type of this class.
         /// </summary>
-        public NodeType NodeType { get; }
+        public ClassManager.NodeType NodeType { get; }
 
         /// <summary>
         /// The main class this is dedicated to.
@@ -151,22 +155,21 @@
             get
             {
                 //Got the cached source.
-                if(source != null)
+                if(_source != null)
                 {
-                    return source;
+                    return _source;
                 }
 
                 //We have no MainClass:
                 if (string.IsNullOrWhiteSpace(MainClass))
                 {
-                    source = "No Source found";
-                    return source;
+                    _source = "No Source found";
+                    return _source;
                 }
 
                 //We have a Main-Class, so we can browse our Source-Code.
-                source = ReadSourceCode();
-                if (source == null) source = "No Source found.";
-                return source;
+                _source = ReadSourceCode() ?? "No Source found.";
+                return _source;
             }
         }
 
@@ -196,7 +199,7 @@
         /// This is called when a new node is generated.
         /// </summary>
         /// <returns>The node to work with.</returns>
-        public abstract Node generateNode();
+        public abstract Node GenerateNode();
 
 
         public override string ToString()

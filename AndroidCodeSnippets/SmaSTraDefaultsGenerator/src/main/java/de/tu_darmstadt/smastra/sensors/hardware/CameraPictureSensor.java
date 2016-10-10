@@ -113,7 +113,7 @@ public class CameraPictureSensor implements Sensor {
 
 
     @ProxyProperty(name="setSurfaceView")
-    public void setTextureView(SurfaceView view){
+    public void setSurfaceView(SurfaceView view){
         this.view = view;
     }
 

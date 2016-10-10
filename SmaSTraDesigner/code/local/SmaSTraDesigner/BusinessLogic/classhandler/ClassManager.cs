@@ -1,4 +1,6 @@
-﻿namespace SmaSTraDesigner.BusinessLogic
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+
+namespace SmaSTraDesigner.BusinessLogic
 {
     using classhandler;
     using codegeneration.loader;
@@ -225,7 +227,7 @@
                         .Where(nameFilter)
 
                         .Distinct()
-                        .Select(n => n.generateNode())
+                        .Select(n => n.GenerateNode())
                         .NonNull()
                         .OrderBy(s => s.Class.Name)
                         .ToArray();
@@ -332,7 +334,7 @@
         public Node GetNewNodeForType(String typeName)
         {
             AbstractNodeClass node = GetNodeClassForType(typeName);
-            return node == null ? null : node.generateNode();
+            return node == null ? null : node.GenerateNode();
         }
 
         /// <summary>
