@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+﻿using System.Windows.Documents;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
 namespace SmaSTraDesigner.Controls
 {
@@ -1065,14 +1066,8 @@ namespace SmaSTraDesigner.Controls
             //add the new Node:
             AddNode(newNode, false);
 
-            //Save the Merge operation to the Undo-Stack:
-            if (saveTransaction)
-            {
-                this.undoStack.Push(new UITransactionMerge(newNode, null, null));
-                this.redoStack.Clear();
-            }
-
-            //Change the Connections:
+            //Change the incoming Connections:
+            var connectionsToAdd = new List<Connection>();
             int index = 0;
             foreach (Node node in nodes)
             {
@@ -1094,7 +1089,7 @@ namespace SmaSTraDesigner.Controls
                     //We found a connection.
                     if (subNode == null || !nodes.Contains(subNode))
                     {
-                        if(subNode != null) AddConnection(new Connection(subNode, newNode, index));
+                        if(subNode != null) connectionsToAdd.Add(new Connection(subNode, newNode, index));
                         index++;
                     }
                 }
@@ -1113,9 +1108,20 @@ namespace SmaSTraDesigner.Controls
                 if (rootOutputConnection != null)
                 {
                     RemoveConnection(rootOutputConnection.Value);
-                    AddConnection(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
+                    connectionsToAdd.Add(new Connection(newNode, rootOutputConnection.Value.InputNode, rootOutputConnection.Value.InputIndex));
                 }
             }
+
+            //Add all the new connections:
+            connectionsToAdd.ForEach(AddConnection);
+
+            //Save the Merge operation to the Undo-Stack:
+            if (saveTransaction)
+            {
+                this.undoStack.Push(new UITransactionMerge(newNode, connectionsToAdd.ToArray()));
+                this.redoStack.Clear();
+            }
+
 
             //At end -> Remove old ones!
             foreach (Node old in nodes) RemoveNode(old);
