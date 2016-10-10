@@ -125,7 +125,7 @@
         }
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.Tree.saveToFile();
+            this.tdTreeDesigner.Tree.SaveToFile();
         }
 
         private void Load_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -134,7 +134,7 @@
         }
         private void Load_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.Tree.loadFromFile();
+            this.tdTreeDesigner.Tree.LoadFromFile();
         }
 
         private void Exit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -153,7 +153,7 @@
         }
         private void Generate_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.Tree.createJava();
+            this.tdTreeDesigner.Tree.CreateJava();
         }
 
         private void Delete_CanExecute(object sender, CanExecuteRoutedEventArgs e)

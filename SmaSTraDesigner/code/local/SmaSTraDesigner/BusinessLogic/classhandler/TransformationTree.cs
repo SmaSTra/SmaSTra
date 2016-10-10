@@ -68,15 +68,6 @@
 			set;
 		}
 
-		//stores the path to the generated folder
-		//currently not in use. But should be used in the final form.
-		//TODO!
-		public string pathToGenerated
-		{
-			get;
-			set;
-		}
-
         #endregion properties
 
         #region methods
@@ -85,7 +76,7 @@
         /// Opens a Save File Dialog where the file to save can be specified. Then generates the java-Code and copies all needed subdirectories.
         /// Careful: current assumption is, that all our files are in Debug\\generated, which is hardcoded in the beginning of processSensor and processTransform. Changes have to be made there.
         /// </summary>
-        public void createJava()
+        public void CreateJava()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Java Source File Java Code (*.java)|*.java";
@@ -118,7 +109,7 @@
         /// <summary>
         /// Saves the current state to a file.
         /// </summary>
-        public void saveToFile()
+        public void SaveToFile()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "All files|*";
@@ -138,7 +129,7 @@
         /// <summary>
         /// Loads a saved state and restores it.
         /// </summary>
-        public void loadFromFile()
+        public void LoadFromFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "SmaSTra Save file|*.SmaSTra";
