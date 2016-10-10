@@ -1007,8 +1007,9 @@ namespace SmaSTraDesigner.Controls
 
         /// <summary>
         /// Does a Merge action on the current selection.
+        /// <param name="saveTransaction">If set to true, the action is added to the Undo-Stack.</param>
         /// </summary>
-        public void TryMergeCurrentSelection()
+        public void TryMergeCurrentSelection(bool saveTransaction = false)
         {
             if (!CanMergeCurrentSelection()) return;
 
@@ -1057,12 +1058,19 @@ namespace SmaSTraDesigner.Controls
             classManager.AddClass(generatedClass);
 
             //Generate the own Node:
-            Node newNode = generatedClass.GenerateNode();
+            CombinedNode newNode = (CombinedNode) generatedClass.GenerateNode();
             newNode.PosX = nodes.Average(n => n.PosX);
             newNode.PosY = nodes.Average(n => n.PosY);
 
             //add the new Node:
             AddNode(newNode, false);
+
+            //Save the Merge operation to the Undo-Stack:
+            if (saveTransaction)
+            {
+                this.undoStack.Push(new UITransactionMerge(newNode, null, null));
+                this.redoStack.Clear();
+            }
 
             //Change the Connections:
             int index = 0;

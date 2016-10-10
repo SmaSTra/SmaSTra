@@ -300,7 +300,7 @@ namespace SmaSTraDesigner
 
         private void Merge_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.tdTreeDesigner.TryMergeCurrentSelection();
+            this.tdTreeDesigner.TryMergeCurrentSelection(true);
         }
 
 
