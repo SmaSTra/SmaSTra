@@ -186,6 +186,8 @@ namespace SmaSTraDesigner.Controls
 		private HashSet<UcIOHandle> registeredIoHandles = new HashSet<UcIOHandle>();
         private ScaleTransform scaletransform;
         private int gridSize = 50; // TODO: Make to global variable
+        private float nodeDistanceX = 30;
+        private float nodeDistanceY = 20;
 
         private UIConnectionRefresher connectionRefresher;
         private DispatcherTimer timer;
@@ -1128,24 +1130,55 @@ namespace SmaSTraDesigner.Controls
         {
             if(Tree != null && outOutputViewer != null)
             {
-                float xDistance = 30;
-                float yDistance = 0;
-                List<Node> seenNodesList = new List<Node>();
-                Node currentNode = outOutputViewer.Node;
-                UcNodeViewer currentViewer = outOutputViewer;
-                UcNodeViewer positionedViewer;
-                seenNodesList.AddRange(currentNode.InputNodes);
-                while (seenNodesList.Count > 0) {
+                List<Node> remainingNodes = new List<Node>();
+                remainingNodes.AddRange(nodeViewers.Keys);
+                remainingNodes.RemoveRange(drawSubTree(outOutputViewer)); // Handling Nodes that are connected to Output
+                // Handling remaining Nodes from remainingNodesList
+                double verticaloffset = 0;
+                UcNodeViewer currentViewer;
+                Node currentNode;
+                while (remainingNodes.Any())
+                {
+                    currentNode = remainingNodes[0];
+                    nodeViewers.TryGetValue(currentNode, out currentViewer);
+                    Size neededSpace = getNeededSpaceForBranch(currentViewer, null);
+                    currentNode.PosX = outOutputViewer.Node.PosX + neededSpace.Width;
+                    currentNode.PosY = outOutputViewer.Node.PosY + verticaloffset;
+                    remainingNodes.RemoveRange(drawSubTree(currentViewer));
+                    verticaloffset = verticaloffset + neededSpace.Height;
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Organizes the Nodes that lead to subRoot
+        /// Returns a List of Nodes that have been handled
+        /// </summary>
+        private List<Node> drawSubTree(UcNodeViewer subRoot)
+        {
+            List<Node> handledNodesList = new List<Node>();
+            List<Node> seenNodesList = new List<Node>();
+            Node currentNode = subRoot.Node;
+            UcNodeViewer currentViewer = subRoot;
+            UcNodeViewer positionedViewer;
+            seenNodesList.AddRange(currentNode.InputNodes);
+            while (seenNodesList.Count > 0)
+            {
+                if (currentNode != null && !handledNodesList.Contains(currentNode))
+                {
+                    handledNodesList.Add(currentNode);
                     double inputNodesHeight = 0;
-                    for (int i = 0; i < currentNode.InputNodes.Count(); i++) {
+                    for (int i = 0; i < currentNode.InputNodes.Count(); i++)
+                    {
                         Node positionNode = currentNode.InputNodes[i];
                         if (positionNode != null)
                         {
                             seenNodesList.Add(positionNode);
-                                nodeViewers.TryGetValue(positionNode, out positionedViewer);
+                            nodeViewers.TryGetValue(positionNode, out positionedViewer);
                             if (positionedViewer != null)
                             {
-                                positionNode.PosX = currentNode.PosX - positionedViewer.ActualWidth / 2 - currentViewer.ActualWidth / 2 - xDistance;
+                                positionNode.PosX = currentNode.PosX - positionedViewer.ActualWidth / 2 - currentViewer.ActualWidth / 2 - nodeDistanceX;
                                 if (i == 0)
                                 {
                                     positionNode.PosY = currentNode.PosY - currentViewer.ActualHeight / 2 + positionedViewer.ActualHeight / 2;
@@ -1154,44 +1187,57 @@ namespace SmaSTraDesigner.Controls
                                 {
                                     positionNode.PosY = currentNode.PosY + inputNodesHeight + positionedViewer.ActualHeight / 2 - currentViewer.ActualHeight / 2;
                                 }
-                                inputNodesHeight = inputNodesHeight + getNeededHeightForBranch(positionedViewer) + yDistance;
+                                inputNodesHeight = inputNodesHeight + getNeededSpaceForBranch(positionedViewer, null).Height;
                             }
                         }
                     }
-                    if (seenNodesList.Any())
+                }
+                seenNodesList.Remove(currentNode);
+                if (seenNodesList.Any())
+                {
+                    currentNode = seenNodesList[0];
+                    if (currentNode != null)
                     {
-                        currentNode = seenNodesList[0];
-                        if (currentNode != null)
-                        {
-                            nodeViewers.TryGetValue(currentNode, out currentViewer);
-                        }
-                        seenNodesList.RemoveAt(0);
+                        nodeViewers.TryGetValue(currentNode, out currentViewer);
+                    } else
+                    {
+                        currentViewer = null;
                     }
                 }
-                
+                else currentNode = null;
             }
+
+            return handledNodesList;
         }
 
-        private double getNeededHeightForBranch(UcNodeViewer branchRoot)
+        private Size getNeededSpaceForBranch(UcNodeViewer branchRoot, List<Node> seenNodes)
         {
-            double neededHeight = 0;
+            if (seenNodes == null)
+            {
+                seenNodes = new List<Node>();
+            }
+            Size neededSpace = new Size();
             UcNodeViewer inputNodeViewer;
+            double maxWidth = 0;
             foreach(Node inputNode in branchRoot.Node.InputNodes)
             {
-                if (inputNode != null)
+                if (inputNode != null && !seenNodes.Contains(inputNode))
                 {
+                    seenNodes.Add(inputNode);
                     nodeViewers.TryGetValue(inputNode, out inputNodeViewer);
                     if(inputNodeViewer != null)
                     {
-                        neededHeight = neededHeight + getNeededHeightForBranch(inputNodeViewer);
+                        maxWidth = Math.Max(maxWidth, getNeededSpaceForBranch(inputNodeViewer, seenNodes).Width);
+                        // neededSpace.Width = neededSpace.Width + getNeededSpaceForBranch(inputNodeViewer, seenNodes).Width;
+                        neededSpace.Height = neededSpace.Height + getNeededSpaceForBranch(inputNodeViewer, seenNodes).Height;
                     }
+                    neededSpace.Width = maxWidth;
                 }
             }
 
-            neededHeight = Math.Max(neededHeight, branchRoot.ActualHeight + 20);
-            return neededHeight;
+            neededSpace = new Size(branchRoot.ActualWidth + nodeDistanceX + neededSpace.Width, Math.Max(branchRoot.ActualHeight + nodeDistanceY, neededSpace.Height));
+            return neededSpace;
         }
-
 
         #endregion methods
 
@@ -1349,6 +1395,16 @@ namespace SmaSTraDesigner.Controls
         public void onNodeViewerDoubleClick(UcNodeViewer nodeViewer)
         {
             nodeViewer.IsSelected = true;
+            foreach (UcNodeViewer connectedViewer in getConnectedNodeViewers(nodeViewer))
+            {
+                this.changingSelectedNodeViewers = true;
+                connectedViewer.IsSelected = true;
+                this.changingSelectedNodeViewers = false;
+            }
+        }
+
+        private List<UcNodeViewer> getConnectedNodeViewers(UcNodeViewer nodeViewer)
+        {
             List<UcNodeViewer> connectedNodeList = new List<UcNodeViewer>();
             connectedNodeList.Add(nodeViewer);
             int i = 0;
@@ -1371,14 +1427,12 @@ namespace SmaSTraDesigner.Controls
                         if (!connectedNodeList.Contains(connectedViewer) && connectedViewer != null)
                         {
                             connectedNodeList.Add(connectedViewer);
-                            this.changingSelectedNodeViewers = true;
-                            connectedViewer.IsSelected = true;
-                            this.changingSelectedNodeViewers = false;
                         }
                     }
                 }
                 i++;
             }
+            return connectedNodeList;
         }
 
         public void onNodeViewerSelected(UcNodeViewer nodeViewer)
