@@ -323,6 +323,16 @@ namespace SmaSTraDesigner.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap splashscreen {
+            get {
+                object obj = ResourceManager.GetObject("splashscreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap top_dark_blue {
             get {
                 object obj = ResourceManager.GetObject("top_dark_blue", resourceCulture);

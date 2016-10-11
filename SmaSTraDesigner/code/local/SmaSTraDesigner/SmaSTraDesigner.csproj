@@ -461,6 +461,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Resources\splashscreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </SplashScreen>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cmd /c if exist "$(TargetDir)base\" rd /s /q  "$(TargetDir)base\"
