@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using static SmaSTraDesigner.BusinessLogic.ClassManager;
 
 namespace SmaSTraDesigner.Controls.Support
@@ -30,7 +31,7 @@ namespace SmaSTraDesigner.Controls.Support
         private string packageName = "";
         private string description = "No description";
 
-        private DataType[] allDataTypes = DataType.getDataTypes();
+        private DataType[] allDataTypes = DataType.GetDataTypes();
         private ObservableCollection<InputTypeViewModel> inputTypesViewModels = new ObservableCollection<InputTypeViewModel>();
         private string outputTypeString = "OutputType";
         ClassManager classManager = Singleton<ClassManager>.Instance;
@@ -54,7 +55,7 @@ namespace SmaSTraDesigner.Controls.Support
         {
             InitializeComponent();
             this.DataContext = this;
-            allDataTypes = DataType.getDataTypes();
+            allDataTypes = DataType.GetDataTypes();
             cboxOutputTypeString.DataContext = new InputTypeViewModel() { InputTypeString = "OutputType", SelectedDataType = allDataTypes[0] };
             InputTypesViewModels.Add(new InputTypeViewModel() { InputTypeString = "InputType", SelectedDataType = allDataTypes [0]});
             FirstPage = true;
@@ -236,7 +237,7 @@ namespace SmaSTraDesigner.Controls.Support
                 {   //create new DataType and update AllDataTypes[]
                     DataType newDataType = DataType.GetCachedType(OutputTypeString);
                     OutputType = newDataType;
-                    AllDataTypes = DataType.getDataTypes();
+                    AllDataTypes = DataType.GetDataTypes();
                 }
             }
 
@@ -254,7 +255,7 @@ namespace SmaSTraDesigner.Controls.Support
                     {   //create new DataType and update AllDataTypes[]
                         DataType newDataType = DataType.GetCachedType(inputTypeViewModel.InputTypeString);
                         inputTypeViewModel.SelectedDataType = newDataType;
-                        AllDataTypes = DataType.getDataTypes();
+                        AllDataTypes = DataType.GetDataTypes();
                     }
                 }
                 InputTypes.Add(inputTypeViewModel.SelectedDataType);
@@ -331,7 +332,7 @@ namespace SmaSTraDesigner.Controls.Support
             string mainClass = PackageName + "." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
-            NeedsExtra[] neededExtras = new NeedsExtra[0];
+            INeedsExtra[] neededExtras = new INeedsExtra[0];
             ConfigElement[] config = new ConfigElement[0];
             ProxyProperty[] proxyProperties = new ProxyProperty[0];
             string methodName = javaFreandlyName;
@@ -351,7 +352,7 @@ namespace SmaSTraDesigner.Controls.Support
             string mainClass = PackageName + "." + javaFreandlyName;
             string creator = Environment.UserName;
             string[] neededOtherClasses = new string[0];
-            NeedsExtra[] neededExtras = new NeedsExtra[0];
+            INeedsExtra[] neededExtras = new INeedsExtra[0];
             ConfigElement[] config = new ConfigElement[0];
             ProxyProperty[] proxyProperties = new ProxyProperty[0];
             string dataMethod = "getData";
@@ -404,7 +405,7 @@ namespace SmaSTraDesigner.Controls.Support
 
         public InputTypeViewModel()
         {
-            DataType[] allDataTypes = DataType.getDataTypes();
+            DataType[] allDataTypes = DataType.GetDataTypes();
             allTypesString = new string[allDataTypes.Length + 1];
             for (int i = 1; i <= allDataTypes.Length; i++)
             {

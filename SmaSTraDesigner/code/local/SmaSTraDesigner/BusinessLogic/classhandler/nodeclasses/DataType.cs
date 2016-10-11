@@ -1,13 +1,13 @@
-﻿namespace SmaSTraDesigner.BusinessLogic
-{
-    using config;
-    using Newtonsoft.Json.Linq;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using utils;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.config;
+using SmaSTraDesigner.BusinessLogic.utils;
 
+namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
+{
     /// <summary>
     /// Stores information about a data type used by nodes for their inpot or output data.
     /// </summary>
@@ -17,7 +17,7 @@
         /// <summary>
         /// The List of DataTypes present in the system.
         /// </summary>
-        private static List<DataType> knownTypes = new List<DataType>();
+        private static readonly List<DataType> KnownTypes = new List<DataType>();
 
 
         #region constructors
@@ -26,15 +26,17 @@
         /// Constructor
         /// </summary>
         /// <param name="name">Data type name (is used as a unique identifier)</param>
-        private DataType(string name) : this(name, "{0}", new string[] { "Object" } )
+        private DataType(string name) : this(name, "{0}", new[] { "Object" } )
 		{}
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Data type name (is used as a unique identifier)</param>
+        /// <param name="template">The Template to apply while code generation</param>
+        /// <param name="type">The Type to apply in the template</param>
         private DataType(string name, string template, string type) 
-            : this(name, template, new string[] { type } )
+            : this(name, template, new[] { type } )
         {}
 
         /// <summary>
@@ -46,27 +48,30 @@
             : this(name)
         {
             this.Creatable = true;
-            this.FixedValues = values == null ? new String[0] : values;
+            this.FixedValues = values ?? new string[0];
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Data type name (is used as a unique identifier)</param>
+        /// <param name="template">The Template to apply while code generation</param>
+        /// <param name="types">The Types to apply in the template</param>
+        /// <param name="creatable">If the element is creatable</param>
         private DataType(string name, string template, string[] types = null, bool creatable = true)
         {
             System.Diagnostics.Debug.Print("DataType created: " + name);
             if (String.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", "name");
+                throw new ArgumentException("String argument 'name' must not be null or empty (incl. whitespace).", nameof(name));
             }
 
             this.Name = name;
-            this.MinimizedName = minimizeToClass(name);
+            this.MinimizedName = MinimizeToClass(name);
 
             this.TypeTemplate = template;
-            this.TypeTemplateVars = types == null ? new string[] { "object" } : types;
-            this.Creatable = true;
+            this.TypeTemplateVars = types ?? new[] { "object" };
+            this.Creatable = creatable;
         }
 
         #endregion constructors
@@ -104,7 +109,7 @@
         /// If this is not empty, this type can only have fixed values.
         /// This is for example for Enums.
         /// </summary>
-        public String[] FixedValues { get; }
+        public string[] FixedValues { get; }
 
 
         #endregion properties
@@ -113,13 +118,8 @@
 
         public override bool Equals(object obj)
 		{
-			DataType other = obj as DataType;
-			if (other == null)
-			{
-				return false;
-			}
-
-			return String.Equals(this.Name, other.Name, StringComparison.InvariantCultureIgnoreCase);
+			var other = obj as DataType;
+			return other != null && string.Equals(this.Name, other.Name, StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		public override int GetHashCode()
@@ -129,7 +129,7 @@
 
 		public override string ToString()
 		{
-			return String.Format("{0} {1}", this.GetType().Name, this.Name);
+			return $"{this.GetType().Name} {this.Name}";
 		}
 
 		#endregion overrideable methods
@@ -156,7 +156,7 @@
         /// <returns></returns>
         public DataType Copy()
         {
-            return new DataType(Name);
+            return new DataType(Name, TypeTemplate, TypeTemplateVars, Creatable);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@
         /// </summary>
         /// <param name="completeClassName"> This is the complete class name. For example 'java.util.List'</param>
         /// <returns>The last part of the Class name.</returns>
-        public static string minimizeToClass(string completeClassName)
+        public static string MinimizeToClass(string completeClassName)
         {
             return completeClassName.Split('.').Last();
         }
@@ -181,14 +181,13 @@
         /// <param name="name">To get</param>
         public static DataType GetCachedType(string name)
         {
-            DataType first = knownTypes
+            var first = KnownTypes
                 .FirstOrDefault(t => t.Name == name);
 
-            if(first == null)
-            {
-                first = new DataType(name);
-                knownTypes.Add(first);
-            }
+            if (first != null) return first;
+
+            first = new DataType(name);
+            KnownTypes.Add(first);
 
             return first;
         }
@@ -200,19 +199,19 @@
         /// <param name="name">To get</param>
         public static DataType GetCachedOrNonRegisteredType(string name)
         {
-            DataType first = knownTypes
+            var first = KnownTypes
                 .FirstOrDefault(t => t.Name == name);
 
-            return first == null ? new DataType(name) : first;
+            return first ?? new DataType(name);
         }
 
         /// <summary>
         /// Gets all Datatypes known.
         /// </summary>
         /// <returns>all known DataTypes.</returns>
-        public static DataType[] getDataTypes()
+        public static DataType[] GetDataTypes()
         {
-            return knownTypes.ToArray();
+            return KnownTypes.ToArray();
         }
 
         /// <summary>
@@ -221,15 +220,15 @@
         public static void ReloadFromBaseFolder()
         {
             //Clear the olds and readd the basics.
-            knownTypes.Clear();
+            KnownTypes.Clear();
             ReaddBasics();
 
             //Read the Base-Folder:
-            string BaseFolder = Path.Combine(WorkSpace.DIR, WorkSpace.DATA_TYPES_DIR);
-            if (!Directory.Exists(BaseFolder)) return;
+            var baseFolder = Path.Combine(WorkSpace.DIR, WorkSpace.DATA_TYPES_DIR);
+            if (!Directory.Exists(baseFolder)) return;
 
             //Save the Stream, since we need to filter it twice:
-            IEnumerable<JObject> stream = Directory.GetFiles(BaseFolder)
+            var stream = Directory.GetFiles(baseFolder)
                 .Select(File.ReadAllText)
                 .Select(JObject.Parse);
 
@@ -238,11 +237,11 @@
                 .Where(o => o.GetValueAsString("type") == "class")
                 .ForEachTryIgnore( root => 
                     {
-                        string name = root.GetValueAsString("name");
-                        string template = root.GetValueAsString("template");
-                        string[] types = root.GetValueAsStringArray("types");
-                        bool creatable = root.GetValueAsBool("creatable", true);
-                        knownTypes.Add(new DataType(name, template, types, creatable));
+                        var name = root.GetValueAsString("name");
+                        var template = root.GetValueAsString("template");
+                        var types = root.GetValueAsStringArray("types");
+                        var creatable = root.GetValueAsBool("creatable", true);
+                        KnownTypes.Add(new DataType(name, template, types, creatable));
                     }
                 );
 
@@ -252,9 +251,9 @@
                 .Where(o => o.GetValueAsString("type") == "enum")
                 .ForEachTryIgnore(root =>
                     {
-                        string name = root.GetValueAsString("name");
-                        string[] values = root.GetValueAsStringArray("values", new String[0]);
-                        knownTypes.Add(new DataType(name, values));
+                        var name = root.GetValueAsString("name");
+                        var values = root.GetValueAsStringArray("values", new string[0]);
+                        KnownTypes.Add(new DataType(name, values));
                     }
                 );
         }
@@ -265,10 +264,10 @@
         private static void ReaddBasics()
         {
             //Define the basic types:
-            knownTypes.Add(new DataType("double", "{0}d", "double"));
-            knownTypes.Add(new DataType("int", "{0}", "integer"));
-            knownTypes.Add(new DataType("boolean", "{0}", "boolean"));
-            knownTypes.Add(new DataType("string", "\"{0}\"", "string"));
+            KnownTypes.Add(new DataType("double", "{0}d", "double"));
+            KnownTypes.Add(new DataType("int", "{0}", "integer"));
+            KnownTypes.Add(new DataType("boolean", "{0}", "boolean"));
+            KnownTypes.Add(new DataType("string", "\"{0}\"", "string"));
         }
 
 

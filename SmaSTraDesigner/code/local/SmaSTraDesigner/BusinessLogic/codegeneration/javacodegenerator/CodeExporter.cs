@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Xml.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 {
@@ -123,7 +125,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// </summary>
         /// <param name="manifestPath">To load / save to</param>
         /// <param name="extras">To add</param>
-        protected void AddExtrasToManifest(string manifestPath, NeedsExtra[] extras) 
+        protected void AddExtrasToManifest(string manifestPath, INeedsExtra[] extras) 
         {
             //No extras -> Nothing to do!
             if (extras == null || extras.Empty()) return;

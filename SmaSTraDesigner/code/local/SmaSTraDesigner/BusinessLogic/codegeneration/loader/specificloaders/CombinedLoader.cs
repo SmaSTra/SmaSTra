@@ -6,6 +6,7 @@ using System.Linq;
 using Common;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -147,7 +148,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             AddConnections(root, combinedClass.Connections);
             AddSubNodes(root, combinedClass.SubElements);
-            AddOutputNodeID(root, combinedClass.OutputNodeUUID);
+            AddOutputNodeID(root, combinedClass.OutputNodeUuid);
 
             return root;
         }
@@ -260,9 +261,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
                 connections.Select(c =>
                 {
                     JObject obj = new JObject();
-                    obj.Add(JSON_PROP_CONNECTION_FIRST_NODE, c.firstNode);
-                    obj.Add(JSON_PROP_CONNECTION_SECOND_NODE, c.secondNode);
-                    obj.Add(JSON_PROP_CONNECTION_INDEX_NODE, c.position);
+                    obj.Add(JSON_PROP_CONNECTION_FIRST_NODE, c.FirstNode);
+                    obj.Add(JSON_PROP_CONNECTION_SECOND_NODE, c.SecondNode);
+                    obj.Add(JSON_PROP_CONNECTION_INDEX_NODE, c.Position);
                     return obj;
                 }).ToJArray()
             );

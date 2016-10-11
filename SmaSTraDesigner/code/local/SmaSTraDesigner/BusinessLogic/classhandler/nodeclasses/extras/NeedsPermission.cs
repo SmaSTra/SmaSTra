@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras
 {
-    public class NeedsPermission : NeedsExtra
+    public class NeedsPermission : INeedsExtra
     {
         
 

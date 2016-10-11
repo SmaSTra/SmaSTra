@@ -1,15 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
     public class IOData : INotifyPropertyChanged, ICloneable
     {
-        private Node parentNode;
-        private DataType type;
-        private string value; //TODO: needs better, typesafe solution
-        private Node connectedNode;
-        private string inputGUIString;
+        private Node _parentNode;
+        private DataType _type;
+        private string _value; //TODO: needs better, typesafe solution
+        private Node _connectedNode;
+        private string _inputGuiString;
 
         public IOData(DataType type, string value)
         {
@@ -22,15 +24,14 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             get
             {
-                return type;
+                return _type;
             }
-            set
+            private set
             {
-                if (type != value)
-                {
-                    type = value;
-                    this.NotifyPropertyChanged("Type");
-                }
+                if (_type == value) return;
+
+                _type = value;
+                this.NotifyPropertyChanged("Type");
             }
         }
 
@@ -38,20 +39,20 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             get
             {
-                return value;
+                return _value;
             }
             set
             {
-                if (this.value != value)
+                if (this._value == value) return;
+
+                if (string.IsNullOrWhiteSpace(this._value))
                 {
-                    if (string.IsNullOrWhiteSpace(this.value) && ParentNode != null)
-                    {
-                        ParentNode.removeConnection(this);
-                    }
-                    InputGUIString = string.IsNullOrWhiteSpace(value) ? "{" + Type.MinimizedName + "}" : value;
-                    this.value = value;
-                    this.NotifyPropertyChanged("Value");
+                    ParentNode?.removeConnection(this);
                 }
+
+                InputGUIString = string.IsNullOrWhiteSpace(value) ? "{" + Type.MinimizedName + "}" : value;
+                this._value = value;
+                this.NotifyPropertyChanged("Value");
             }
         }
 
@@ -59,20 +60,18 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             get
             {
-                return connectedNode;
+                return _connectedNode;
             }
             set
             {
-                if (connectedNode != value)
-                {
-                    connectedNode = value;
-                    this.NotifyPropertyChanged("ConnectedNode");
-                    if(connectedNode != null)
-                    {
-                        this.Value = "";
-                        InputGUIString = connectedNode.Name;
-                    }
-                }
+                if (_connectedNode == value) return;
+
+                _connectedNode = value;
+                this.NotifyPropertyChanged("ConnectedNode");
+                if (_connectedNode == null) return;
+
+                this.Value = "";
+                InputGUIString = _connectedNode.Name;
             }
         }
 
@@ -80,15 +79,14 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             get
             {
-                return parentNode;
+                return _parentNode;
             }
             set
             {
-                if (parentNode != value)
-                {
-                    parentNode = value;
-                    this.NotifyPropertyChanged("ParentNode");
-                }
+                if (_parentNode == value) return;
+
+                _parentNode = value;
+                this.NotifyPropertyChanged("ParentNode");
             }
         }
 
@@ -96,15 +94,14 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             get
             {
-                return inputGUIString;
+                return _inputGuiString;
             }
             set
             {
-                if (inputGUIString != value)
-                {
-                    inputGUIString = value;
-                    this.NotifyPropertyChanged("InputGUIString");
-                }
+                if (_inputGuiString == value) return;
+
+                _inputGuiString = value;
+                this.NotifyPropertyChanged("InputGUIString");
             }
         }
 
@@ -128,8 +125,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         public void NotifyPropertyChanged(string propName)
         {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }

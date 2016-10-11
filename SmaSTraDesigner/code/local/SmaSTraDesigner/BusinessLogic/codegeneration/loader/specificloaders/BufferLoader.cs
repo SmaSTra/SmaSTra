@@ -4,6 +4,7 @@ using static SmaSTraDesigner.BusinessLogic.ClassManager;
 using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
@@ -88,7 +89,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             DataType output = genericData;
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
-            NeedsExtra[] needsExtras = ReadExtras(root);
+            INeedsExtra[] needsExtras = ReadExtras(root);
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             DataType[] inputTypes = ReadInputs(root).AddBefore(genericData);

@@ -1,4 +1,6 @@
-﻿namespace SmaSTraDesigner.BusinessLogic
+﻿using SmaSTraDesigner.BusinessLogic.nodes;
+
+namespace SmaSTraDesigner.BusinessLogic
 {
 	using System;
 

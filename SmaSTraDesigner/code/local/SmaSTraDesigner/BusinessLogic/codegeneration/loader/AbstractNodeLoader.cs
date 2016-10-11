@@ -2,7 +2,9 @@
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -270,7 +272,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="root">to read from</param>
         /// <returns>The needed Extras.</returns>
-        protected NeedsExtra[] ReadExtras(JObject root)
+        protected INeedsExtra[] ReadExtras(JObject root)
         {
             return root
                 .GetValueAsJArray(JSON_PROP_EXTRA_PATH, new JArray())
@@ -437,7 +439,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
         /// </summary>
         /// <param name="toAddTo">The JObject to add to</param>
         /// <param name="permissions">The permissions to add</param>
-        protected void AddExtras(JObject toAddTo, NeedsExtra[] extras)
+        protected void AddExtras(JObject toAddTo, INeedsExtra[] extras)
         {
             toAddTo.Add(JSON_PROP_EXTRA_PATH, extras
                 .Select(ExtrasFactory.serialize)

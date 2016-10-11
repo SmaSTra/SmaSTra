@@ -1,14 +1,13 @@
-﻿namespace SmaSTraDesigner.BusinessLogic
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.utils;
+
+namespace SmaSTraDesigner.BusinessLogic.nodes
 {
-    using System;
-    using System.ComponentModel;
-    using classhandler;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using classhandler.nodeclasses;
-    using utils;
-
-
     /// <summary>
     /// Base class for all nodes.
     /// Provides information about a specific node in a TransformationTree.

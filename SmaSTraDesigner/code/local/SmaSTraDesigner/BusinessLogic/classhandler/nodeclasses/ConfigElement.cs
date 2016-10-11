@@ -44,14 +44,10 @@
         /// </summary>
         public string Value { get; set; }
 
-        public DataConfigElement(string key, string description, DataType type) 
-            : this(key, description, type, "")
-        {}
-
-        public DataConfigElement(string key, string description, DataType type, string Value)
+        public DataConfigElement(string key, string description, DataType type, string value = "")
             : base(key, description, type)
         {
-            this.Value = Value;
+            this.Value = value;
         }
 
         /// <summary>

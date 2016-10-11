@@ -1,4 +1,6 @@
-﻿namespace SmaSTraDesigner
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+
+namespace SmaSTraDesigner
 {
     using System.Windows;
 

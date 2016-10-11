@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
@@ -13,7 +15,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
         public bool IsStatic { get; }
 
         public TransformationNodeClass(string name, string displayName, string description, string creator, DataType outputType, DataType[] inputTypes,
-            string mainClass, string[] needsOtherClasses, NeedsExtra[] needsExtra, ConfigElement[] config, ProxyProperty[] proxyProperties,
+            string mainClass, string[] needsOtherClasses, INeedsExtra[] needsExtra, ConfigElement[] config, ProxyProperty[] proxyProperties,
             bool userCreated, string nodePath,
             string methodName, bool isStatic)
             : base(ClassManager.NodeType.Transformation, name, displayName, description, creator, outputType, 

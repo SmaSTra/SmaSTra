@@ -1,4 +1,5 @@
 ﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner
 {

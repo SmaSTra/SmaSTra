@@ -1,6 +1,6 @@
 ﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
-namespace SmaSTraDesigner.BusinessLogic
+namespace SmaSTraDesigner.BusinessLogic.nodes
 {
     /// <summary>
     /// Represents a transformation that combines data inputs to another output value.

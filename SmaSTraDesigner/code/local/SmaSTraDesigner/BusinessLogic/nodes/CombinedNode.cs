@@ -80,7 +80,7 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                         }
 
                         //We have our output node:
-                        if(subNode != null && subNode.NodeUUID == ownClass.OutputNodeUUID)
+                        if(subNode != null && subNode.NodeUUID == ownClass.OutputNodeUuid)
                         {
                             this.outputNode = subNode;
                         }
@@ -92,9 +92,9 @@ namespace SmaSTraDesigner.BusinessLogic.nodes
                     //Generate the Connections:
                     foreach(SimpleConnection connection in ownClass.Connections)
                     {
-                        string first = connection.firstNode;
-                        string second = connection.secondNode;
-                        int index = connection.position;
+                        string first = connection.FirstNode;
+                        string second = connection.SecondNode;
+                        int index = connection.Position;
 
                         //Search for the 2 nodes:
                         Node firstNode = this.includedNodes.FirstOrDefault(n => n.NodeUUID == first);

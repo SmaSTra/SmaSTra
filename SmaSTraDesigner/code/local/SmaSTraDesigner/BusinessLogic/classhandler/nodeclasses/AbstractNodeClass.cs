@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
@@ -29,7 +31,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
         /// <param name="userCreated">If the element is user created</param>
         /// <param name="nodePath">The File-Path to the root of the node in the file system</param>
         protected AbstractNodeClass(ClassManager.NodeType nodeType, string name, string displayName, string description, string creator,  DataType outputType, 
-            string mainClass, string[] needsOtherClasses, NeedsExtra[] neededExtras,
+            string mainClass, string[] needsOtherClasses, INeedsExtra[] neededExtras,
             ConfigElement[] configuration, ProxyProperty[] proxyProperties,
             DataType[] inputTypes, bool userCreated, string nodePath)
 		{
@@ -52,7 +54,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 			this.InputTypes = inputTypes ?? new DataType[0];
             this.MainClass = mainClass;
             this.NeedsOtherClasses = needsOtherClasses ?? new string[0];
-            this.NeededExtras = neededExtras ?? new NeedsExtra[0];
+            this.NeededExtras = neededExtras ?? new INeedsExtra[0];
             this.Configuration = configuration ?? new ConfigElement[0];
             this.ProxyProperties = proxyProperties ?? new ProxyProperty[0];
             this.NodeType = nodeType;
@@ -93,7 +95,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
         /// <summary>
         /// Gets or sets a display name for this node class.
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName { get; }
 
         /// <summary>
         /// Gets this node class's input's data types.
@@ -138,7 +140,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
         /// <summary>
         /// The needed Extras this class has.
         /// </summary>
-        public NeedsExtra[] NeededExtras { get; }
+        public INeedsExtra[] NeededExtras { get; }
 
         /// <summary>
         /// This indicates if the class was created by a user of a default class.
@@ -204,7 +206,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 
         public override string ToString()
 		{
-			return String.Format("{0} {1}", this.GetType().Name, this.Name);
+			return $"{this.GetType().Name} {this.Name}";
 		}
 
 		#endregion overrideable methods

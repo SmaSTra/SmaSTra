@@ -5,6 +5,7 @@ using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
 using System.Collections.Generic;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 {
@@ -30,7 +31,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// <summary>
         /// The Extras that need to be added.
         /// </summary>
-        private readonly List<NeedsExtra> extrasNeeded = new List<NeedsExtra>();
+        private readonly List<INeedsExtra> extrasNeeded = new List<INeedsExtra>();
 
         /// <summary>
         /// The internal dictionary to use.
@@ -127,7 +128,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// <summary>
         /// Adds a needed Extra.
         /// </summary>
-        public void AddExtra(NeedsExtra extra)
+        public void AddExtra(INeedsExtra extra)
         {
             if (extra == null) return;
 
@@ -141,7 +142,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// Adds the Extras passed to the System.
         /// </summary>
         /// <param name="extras">To add</param>
-        public void AddExtras(NeedsExtra[] extras)
+        public void AddExtras(INeedsExtra[] extras)
         {
             if (extras == null || extras.Empty()) return;
             extras.ForEach(AddExtra);
@@ -150,7 +151,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
         /// <summary>
         /// Gets all Needed Extras.
         /// </summary>
-        public NeedsExtra[] GetExtras()
+        public INeedsExtra[] GetExtras()
         {
             return extrasNeeded.Distinct().ToArray();
         }
@@ -283,7 +284,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
             for (int i = 0; i < nextSensor; i++)
             {
                 DataSource sensor = sensors[i];
-                sensorOutput += string.Format("   private {0} sensor{1};\n", DataType.minimizeToClass(sensor.Class.MainClass), i);
+                sensorOutput += string.Format("   private {0} sensor{1};\n", DataType.MinimizeToClass(sensor.Class.MainClass), i);
             }
 
             return sensorOutput;
@@ -326,7 +327,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
                 DataSource sensor = sensors[i];
                 DataSourceNodeClass clazz = sensor.Class as DataSourceNodeClass;
 
-                initVarCode += string.Format("       sensor{0} = new {1}(context);\n", i, DataType.minimizeToClass(sensor.Class.MainClass));
+                initVarCode += string.Format("       sensor{0} = new {1}(context);\n", i, DataType.MinimizeToClass(sensor.Class.MainClass));
 
                 //Build the Config part:
                 foreach(DataConfigElement element in sensor.Configuration)
@@ -343,7 +344,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
                 TransformationNodeClass clazz = transformation.Class as TransformationNodeClass;
                 if (clazz.IsStatic) continue;
 
-                initVarCode += string.Format("       trans{0} = new {1}();\n", i, DataType.minimizeToClass(transformation.Class.MainClass));
+                initVarCode += string.Format("       trans{0} = new {1}();\n", i, DataType.MinimizeToClass(transformation.Class.MainClass));
 
                 //Build the Config part:
                 foreach (DataConfigElement element in transformation.Configuration)

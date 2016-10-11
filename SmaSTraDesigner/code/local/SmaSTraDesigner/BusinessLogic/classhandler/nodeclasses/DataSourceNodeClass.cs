@@ -1,4 +1,7 @@
-﻿namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
+using SmaSTraDesigner.BusinessLogic.nodes;
+
+namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
     public class DataSourceNodeClass : AbstractNodeClass
     {
@@ -19,7 +22,7 @@
         public string StopMethod { get; }
 
         public DataSourceNodeClass(string name, string displayName, string description, string creator, DataType outputType,
-            string mainClass, string[] needsOtherClasses, NeedsExtra[] needsExtra, ConfigElement[] config, ProxyProperty[] proxyProperties,
+            string mainClass, string[] needsOtherClasses, INeedsExtra[] needsExtra, ConfigElement[] config, ProxyProperty[] proxyProperties,
             bool userCreated, string nodePath,
             string dataMethod, string startMethod, string stopMethod)
             : base(ClassManager.NodeType.Sensor, name, displayName, description, creator, outputType, 

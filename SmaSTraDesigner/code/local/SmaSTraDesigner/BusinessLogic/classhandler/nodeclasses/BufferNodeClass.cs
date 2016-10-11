@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.BusinessLogic.nodes;
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
@@ -21,7 +22,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 
 
         public BufferNodeClass(string name, string displayName, string description, string creator,
-            DataType outputType, string mainClass, string[] needsOtherClasses, NeedsExtra[] needsExtra, 
+            DataType outputType, string mainClass, string[] needsOtherClasses, INeedsExtra[] needsExtra, 
             ConfigElement[] configuration, ProxyProperty[] proxyProperties, DataType[] inputTypes,
             bool userCreated, string nodePath,
             string bufferAdd, string bufferGet) 

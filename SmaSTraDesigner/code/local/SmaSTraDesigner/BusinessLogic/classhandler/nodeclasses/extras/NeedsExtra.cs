@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
 
-namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
+namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras
 {
-    public interface NeedsExtra
+    public interface INeedsExtra
     {
 
         /// <summary>

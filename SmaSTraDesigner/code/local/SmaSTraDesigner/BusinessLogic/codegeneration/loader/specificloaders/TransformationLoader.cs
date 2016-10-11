@@ -1,14 +1,13 @@
-﻿using Common.ExtensionMethods;
+﻿using System.Linq;
 using Newtonsoft.Json.Linq;
-using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
-using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
-using SmaSTraDesigner.BusinessLogic.utils;
-using System.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.utils;
 
-namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
+namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 {
     class TransformationLoader : AbstractNodeLoader
     {
@@ -38,7 +37,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             DataType output = ReadOutput(root);
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
-            NeedsExtra[] needsExtras = ReadExtras(root);
+            INeedsExtra[] needsExtras = ReadExtras(root);
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             string methodName = ReadMethodName(root);
@@ -231,7 +230,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 
             //Extract the method call:
             string methodCall = (nodeClass.IsStatic
-                ? (DataType.minimizeToClass(nodeClass.MainClass))
+                ? (DataType.MinimizeToClass(nodeClass.MainClass))
                 : (nodeClass.NodeType.ToString() + codeExtension.GetTransformId(node as Transformation)))
                 + "." + nodeClass.Method + args;
 

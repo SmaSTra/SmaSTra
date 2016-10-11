@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SmaSTraDesigner.BusinessLogic.nodes;
-using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
-namespace SmaSTraDesigner.BusinessLogic.classhandler
+namespace SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses
 {
     public class CombinedNodeClass : AbstractNodeClass
     {
@@ -23,7 +22,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <summary>
         /// The Property for the Output-node.
         /// </summary>
-        public string OutputNodeUUID { private set; get; }
+        public string OutputNodeUuid { private set; get; }
 
         #endregion Properties
 
@@ -32,13 +31,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         public CombinedNodeClass(string name,
                 string displayName, string description, string creator,
                 List<SimpleSubNode> subElements, List<SimpleConnection> connections,
-                DataType outputType, string outputNodeUUID, bool userCreated, string nodePath,
+                DataType outputType, string outputNodeUuid, bool userCreated, string nodePath,
                 DataType[] inputTypes = null)
                     : base(ClassManager.NodeType.Combined, name, displayName, description, creator, outputType, "", null, null, null, null, inputTypes, userCreated, nodePath)
         {
-            this.SubElements = subElements == null ? new List<SimpleSubNode>() : subElements;
-            this.Connections = connections == null ? new List<SimpleConnection>() : connections;
-            this.OutputNodeUUID = outputNodeUUID;
+            this.SubElements = subElements ?? new List<SimpleSubNode>();
+            this.Connections = connections ?? new List<SimpleConnection>();
+            this.OutputNodeUuid = outputNodeUuid;
         }
 
         #endregion Constructor
@@ -55,13 +54,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
         public string Name { get; private set; }
         public string Uuid { get; private set; }
-        public string Type { get; private set; }
-        public double PosX { get; private set; }
-        public double PosY { get; private set; }
+        public string Type { get; }
+        public double PosX { get; }
+        public double PosY { get; }
 
-        public IOData[] Data { get; set; }
+        public IOData[] Data { get; }
 
-        public DataConfigElement[] Configuration { get; set; }
+        public DataConfigElement[] Configuration { get; }
 
 
 
@@ -74,7 +73,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             this.PosY = node.PosY - centerY;
 
             this.Data = node.InputIOData.Select(d => (IOData) d.Clone()).ToArray();
-            this.Configuration = node.Configuration.Select(c => (DataConfigElement)c.Clone()).ToArray();
+            this.Configuration = node.Configuration.Select(c => c.Clone()).ToArray();
         }
 
         public SimpleSubNode(string name, string uuid, string type, double posX, double posY, 
@@ -97,37 +96,36 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         public Node GetAsRealNode(ClassManager classManager)
         {
             //If no name -> give it the Type name:
-            if(Name == null || Name.Count() == 0)
+            if(string.IsNullOrEmpty(Name))
             {
                 Name = Type;
             }
 
             //If no UUID -> Give it a new one!
-            if(Uuid == null || Uuid.Count() == 0)
+            if(string.IsNullOrEmpty(Uuid))
             {
                 Uuid = System.Guid.NewGuid().ToString();
             }
 
-            Node node = classManager.GetNewNodeForType(Type);
+            var node = classManager.GetNewNodeForType(Type);
+            if (node == null) return null;
+
             //Set the node property if present:
-            if (node != null)
+            node.Name = Name;
+            node.ForceUUID(Uuid);
+            node.PosX = PosX;
+            node.PosY = PosY;
+
+            //Apply the IOData:
+            for(var i = 0; i < node.InputIOData.Count; i++)
             {
-                node.Name = Name;
-                node.ForceUUID(Uuid);
-                node.PosX = PosX;
-                node.PosY = PosY;
+                node.InputIOData[i].Value = Data[i].Value;
+            }
 
-                //Apply the IOData:
-                for(int i = 0; i < node.InputIOData.Count(); i++)
-                {
-                    node.InputIOData[i].Value = Data[i].Value;
-                }
-
-                //Apply the Configuration:
-                for (int i = 0; i < node.Configuration.Count(); i++)
-                {
-                    node.Configuration[i].Value = Configuration[i].Value;
-                }
+            //Apply the Configuration:
+            for (var i = 0; i < node.Configuration.Count; i++)
+            {
+                node.Configuration[i].Value = Configuration[i].Value;
             }
 
             return node;
@@ -140,15 +138,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
     {
         public SimpleConnection(string node1, string node2, int position)
         {
-            this.firstNode = node1;
-            this.secondNode = node2;
-            this.position = position;
+            this.FirstNode = node1;
+            this.SecondNode = node2;
+            this.Position = position;
         }
 
 
-        public string firstNode { private set; get; }
-        public string secondNode { private set; get; }
-        public int position { private set; get; }
+        public string FirstNode { private set; get; }
+        public string SecondNode { private set; get; }
+        public int Position { private set; get; }
     }
 
     #endregion SubClasses

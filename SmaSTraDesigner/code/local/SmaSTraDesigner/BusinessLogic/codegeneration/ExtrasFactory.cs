@@ -17,7 +17,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
         /// </summary>
         /// <param name="root">To Read from.</param>
         /// <returns></returns>
-        public static NeedsExtra read(JObject root)
+        public static INeedsExtra read(JObject root)
         {
             string type = root.GetValueAsString(TYPE_PATH, "");
             if (type.Empty()) return null;
@@ -81,7 +81,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
 
 
 
-        public static JObject serialize(NeedsExtra extra)
+        public static JObject serialize(INeedsExtra extra)
         {
             if (extra is NeedsBroadcast) return serializeBroadcast(extra as NeedsBroadcast);
             if (extra is NeedsService) return serializeService(extra as NeedsService);

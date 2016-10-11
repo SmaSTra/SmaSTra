@@ -5,6 +5,8 @@ using Common.ExtensionMethods;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
+using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {
@@ -30,7 +32,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
             DataType output = ReadOutput(root);
             string mainClass = ReadMainClass(root);
             string[] needsOtherClasses = ReadNeededClasses(root);
-            NeedsExtra[] needsExtras = ReadExtras(root);
+            INeedsExtra[] needsExtras = ReadExtras(root);
             ConfigElement[] config = ReadConfig(root);
             ProxyProperty[] proxyProperties = ReadProxyProperties(root);
             string dataMethod = ReadDataMethod(root);

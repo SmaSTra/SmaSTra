@@ -1,4 +1,7 @@
-﻿namespace SmaSTraDesigner.Controls
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.nodes;
+
+namespace SmaSTraDesigner.Controls
 {
     using System;
     using System.Windows;
