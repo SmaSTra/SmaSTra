@@ -97,6 +97,7 @@ namespace SmaSTraDesigner.Controls
 			{
 				if (subject.NodeViewer != null)
 				{
+                    
 					subject.NodeViewer.IsSelected = true;
 					foreach (var other in subject.NodeViewer.IoHandles)
 					{
@@ -290,6 +291,9 @@ namespace SmaSTraDesigner.Controls
 			if (!this.IsPreview)
 			{
 				this.IsSelected = true;
+                if (CommandBindings.Count > 0) {
+                    CommandBindings[0].Command.Execute(this);
+                        }
 				e.Handled = true;
 			}
 		}

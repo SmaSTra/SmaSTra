@@ -19,6 +19,7 @@ namespace SmaSTraDesigner
     using System.Windows.Controls.Primitives;
     using BusinessLogic.classhandler;
     using System.Reflection;
+    using System.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -96,6 +97,28 @@ namespace SmaSTraDesigner
             Singleton<Online>.Instance.spnOnlinePanel_IsVisibleChanged(sender, e);
         }
 
+        private void focusNodePropertieInput(int index)
+        {
+            if (icNodeClassInputTypes.Items.Count > 0 && index < icNodeClassInputTypes.Items.Count) {
+                var itemContainer = icNodeClassInputTypes.ItemContainerGenerator.ContainerFromItem(icNodeClassInputTypes.Items[index]) as FrameworkElement;
+                if (itemContainer != null)
+                {
+                    try
+                    {
+                        TextBox inputTextBox = icNodeClassInputTypes.ItemTemplate.FindName("tboxInputValue", itemContainer) as TextBox;
+                        if (inputTextBox != null)
+                        {
+                            inputTextBox.Focus();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+
 
         #endregion event handlers
 
@@ -109,7 +132,7 @@ namespace SmaSTraDesigner
         {
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
 
-            
+            focusNodePropertieInput(0);
         }
 
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -456,6 +479,31 @@ namespace SmaSTraDesigner
                 UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
                 new DialogCustomCode(nodeViewer.Node).Show();
             }
+        }
+
+        private void FocusInputValue_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            UcIOHandle ioHandle = e.Parameter as UcIOHandle;
+            if (ioHandle != null)
+            {
+                e.CanExecute = ioHandle.IsInput && !ioHandle.NodeViewer.IsPreview && Singleton<NodeProperties>.Instance.ActiveNode == ioHandle.Node;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void FocusInputValue_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            UcIOHandle ioHandle = e.Parameter as UcIOHandle;
+            if(ioHandle != null)
+            {
+                if (Singleton<NodeProperties>.Instance.ActiveNode == ioHandle.Node) {
+                    focusNodePropertieInput(ioHandle.InputIndex);
+                }
+            }
+            e.Handled = false;
         }
 
 

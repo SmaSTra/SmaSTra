@@ -249,5 +249,16 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand FocusInputValue = new RoutedUICommand
+                        (
+                                "Focus Input Value",
+                                "FocusInputValue",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+
+                                }
+                        );
+
     }
 }

@@ -38,6 +38,7 @@
         <CommandBinding Command="ctrlSupport:Commands.OrganizeNodes" CanExecute="OrganizeNodes_CanExecute" Executed="OrganizeNodes_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.CustomCode" CanExecute="CustomCode_CanExecute" Executed="CustomCode_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.About" CanExecute="About_CanExecute" Executed="About_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.FocusInputValue" CanExecute="FocusInputValue_CanExecute" Executed="FocusInputValue_Executed" />
     </Window.CommandBindings>
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">
             <Grid.ColumnDefinitions>
@@ -351,7 +352,7 @@
                                                         <TextBlock Text=": " TextWrapping="Wrap"/>
                                                         <Grid>
                                                             <TextBlock Text="{Binding Path=ConnectedNode.Name, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="#898989"/>
-                                                            <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="Transparent" PreviewTextInput="InputType_PreviewTextInput"/>
+                                                            <TextBox x:Name="tboxInputValue" Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="Transparent" PreviewTextInput="InputType_PreviewTextInput"/>
                                                         </Grid>
                                                     </WrapPanel>
                                                 </StackPanel>
