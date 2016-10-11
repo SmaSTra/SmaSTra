@@ -109,7 +109,7 @@ namespace SmaSTraDesigner
         {
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
 
-            tdTreeDesigner.OrganizeNodes();
+            
         }
 
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -417,6 +417,17 @@ namespace SmaSTraDesigner
         private void About_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             new DialogAbout().Show();
+        }
+
+        private void OrganizeNodes_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+
+        private void OrganizeNodes_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            tdTreeDesigner.OrganizeNodes();
         }
 
 

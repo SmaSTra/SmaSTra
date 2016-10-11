@@ -227,6 +227,17 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand OrganizeNodes = new RoutedUICommand
+                        (
+                                "Organize Nodes",
+                                "OrganizeNodes",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+                                    new KeyGesture(Key.F, ModifierKeys.Control)
+                                }
+                        );
+
 
     }
 }

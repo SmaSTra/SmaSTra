@@ -35,6 +35,7 @@
         <CommandBinding Command="ctrlSupport:Commands.Undo" CanExecute="Undo_CanExecute" Executed="Undo_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.Redo" CanExecute="Redo_CanExecute" Executed="Redo_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.PasteNode" CanExecute="PasteNode_CanExecute" Executed="PasteNode_Executed" />
+        <CommandBinding Command="ctrlSupport:Commands.OrganizeNodes" CanExecute="OrganizeNodes_CanExecute" Executed="OrganizeNodes_Executed" />
         <CommandBinding Command="ctrlSupport:Commands.About" CanExecute="About_CanExecute" Executed="About_Executed" />
     </Window.CommandBindings>
     <Grid MaxHeight="{Binding ElementName=This, Path=ActualHeight}">

@@ -1153,7 +1153,7 @@ namespace SmaSTraDesigner.Controls
                 Node currentNode;
                 while (remainingNodes.Any())
                 {
-                    currentNode = remainingNodes[0];
+                    currentNode = getRootNode(remainingNodes[0]);
                     nodeViewers.TryGetValue(currentNode, out currentViewer);
                     Size neededSpace = getNeededSpaceForBranch(currentViewer, null);
                     currentNode.PosX = outOutputViewer.Node.PosX + neededSpace.Width;
@@ -1228,7 +1228,7 @@ namespace SmaSTraDesigner.Controls
         {
             if (seenNodes == null)
             {
-                seenNodes = new List<Node>();
+                seenNodes = new List<Node>(); // List of seen nodes to detect cylces
             }
             Size neededSpace = new Size();
             UcNodeViewer inputNodeViewer;
@@ -1241,9 +1241,9 @@ namespace SmaSTraDesigner.Controls
                     nodeViewers.TryGetValue(inputNode, out inputNodeViewer);
                     if(inputNodeViewer != null)
                     {
-                        maxWidth = Math.Max(maxWidth, getNeededSpaceForBranch(inputNodeViewer, seenNodes).Width);
-                        // neededSpace.Width = neededSpace.Width + getNeededSpaceForBranch(inputNodeViewer, seenNodes).Width;
-                        neededSpace.Height = neededSpace.Height + getNeededSpaceForBranch(inputNodeViewer, seenNodes).Height;
+                        Size successorSpace = getNeededSpaceForBranch(inputNodeViewer, seenNodes);
+                        maxWidth = Math.Max(maxWidth, successorSpace.Width);
+                        neededSpace.Height = neededSpace.Height + successorSpace.Height;
                     }
                     neededSpace.Width = maxWidth;
                 }
@@ -1251,6 +1251,35 @@ namespace SmaSTraDesigner.Controls
 
             neededSpace = new Size(branchRoot.ActualWidth + nodeDistanceX + neededSpace.Width, Math.Max(branchRoot.ActualHeight + nodeDistanceY, neededSpace.Height));
             return neededSpace;
+        }
+
+        /// <summary>
+        /// returns the root node that is connected with the given node
+        /// if there is a cycle, any node within the cycle is returned
+        /// </summary>
+        private Node getRootNode(Node node)
+        {
+            List<Node> visitedNodesList = new List<Node>(); // visited list to detect cycles
+            bool isRoot = false;
+            while (!isRoot)
+            {
+                isRoot = true;
+                foreach(Connection connection in Tree.Connections)
+                {
+                    if (connection.OutputNode.Equals(node) && connection.InputNode != null)
+                    {
+                        if (visitedNodesList.Contains(connection.InputNode))
+                        {// cycle detected
+                            return node;
+                        }
+                        visitedNodesList.Add(connection.InputNode);
+                        isRoot = false;
+                        node = connection.InputNode;
+                        break;
+                    }
+                }
+            }
+            return node;            
         }
 
         #endregion methods
