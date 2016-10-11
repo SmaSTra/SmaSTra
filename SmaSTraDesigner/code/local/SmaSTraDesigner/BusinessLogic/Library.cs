@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 
 namespace SmaSTraDesigner.BusinessLogic
 {

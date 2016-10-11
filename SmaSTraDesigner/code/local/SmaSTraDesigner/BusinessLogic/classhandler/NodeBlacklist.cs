@@ -9,13 +9,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
     public class NodeBlacklist
     {
 
-        private const string NODE_BLACKLIST_FILE_NAME = "node.blacklist";
+        private const string NodeBlacklistFileName = "node.blacklist";
 
 
         /// <summary>
         /// The Blacklist to use.
         /// </summary>
-        public List<string> NodesOnBlacklist { get; }
+        private List<string> NodesOnBlacklist { get; }
 
 
 
@@ -34,10 +34,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         {
             NodesOnBlacklist.Clear();
 
-            string path = Path.Combine(WorkSpace.DIR, NODE_BLACKLIST_FILE_NAME);
+            var path = Path.Combine(WorkSpace.DIR, NodeBlacklistFileName);
             if (!File.Exists(path)) return;
 
-            string[] names = File.ReadAllLines(path);
+            var names = File.ReadAllLines(path);
             NodesOnBlacklist.AddRange(names);
         }
 
@@ -97,7 +97,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// </summary>
         private void Save()
         {
-            string path = Path.Combine(WorkSpace.DIR, NODE_BLACKLIST_FILE_NAME);
+            var path = Path.Combine(WorkSpace.DIR, NodeBlacklistFileName);
             if (File.Exists(path)) File.Delete(path);
 
             File.WriteAllLines(path, NodesOnBlacklist.Distinct().ToArray());

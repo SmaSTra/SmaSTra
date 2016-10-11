@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Common;
 using SmaSTraDesigner.Controls;
 using System.Windows;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic

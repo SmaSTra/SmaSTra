@@ -13,14 +13,14 @@ using SmaSTraDesigner.BusinessLogic.nodes;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
-    class CombinedClassGenerator
+    public class CombinedClassGenerator
     {
 
 
         #region StaticMethods
 
 
-        private static bool SubTreeContains(Node root, List<Node> nodes)
+        private static bool SubTreeContains(Node root, ICollection<Node> nodes)
         {
             //Remove the first element:
             if (root != null) nodes.Remove(root);
@@ -29,15 +29,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             if (!nodes.Any()) return true;
 
             //Check recursivcely:
-            foreach (Node input in root.InputNodes.NonNull())
-            {
-                if (SubTreeContains(input, nodes)) return true;
-            }
-
-            return false;
+            return root != null && root.InputNodes.NonNull().Any(input => SubTreeContains(input, nodes));
         }
 
-        private static bool IsCyclic(Node root, List<Node> nodes, List<Node> visited)
+        private static bool IsCyclic(Node root, ICollection<Node> nodes, ICollection<Node> visited)
         {
             //If empty -> Everything is okay!
             if (!nodes.Any()) return false;
@@ -48,7 +43,9 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             visited.Add(root);
 
             //Check recursivcely:
-            foreach (Node input in root.InputNodes.NonNull())
+            if (root == null) return false;
+
+            foreach (var input in root.InputNodes.NonNull())
             {
                 if (visited.Contains(input)) return true;
                 if (IsCyclic(input, nodes, visited)) return true;
@@ -64,12 +61,12 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <summary>
         /// The Nodes to use for generation.
         /// </summary>
-        private List<Node> nodes = new List<Node>();
+        private readonly List<Node> _nodes = new List<Node>();
 
         /// <summary>
         /// The Cached node class to not having to rebuild it all the time when calling the getter.
         /// </summary>
-        private CombinedNodeClass cachedNodeClass = null;
+        private CombinedNodeClass _cachedNodeClass = null;
 
         #endregion fields
 
@@ -78,12 +75,12 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <summary>
         /// The Name to set.
         /// </summary>
-        public String Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The Description to set.
         /// </summary>
-        public String Description { get; set; }
+        public string Description { get; set; }
 
 
         #endregion properties
@@ -121,11 +118,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <param name="node">to add</param>
         public void AddNode(Node node)
         {
-            if (node != null)
-            {
-                this.nodes.Add(node);
-                this.cachedNodeClass = null;
-            }
+            if (node == null) return;
+
+            this._nodes.Add(node);
+            this._cachedNodeClass = null;
         }
 
         /// <summary>
@@ -134,11 +130,10 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <param name="nodes">to add</param>
         public void AddNodes(IEnumerable<Node> nodes)
         {
-            if (nodes != null && nodes.Any())
-            {
-                this.nodes.AddRange(nodes);
-                this.cachedNodeClass = null;
-            }
+            if (nodes == null || !nodes.Any()) return;
+
+            this._nodes.AddRange(nodes);
+            this._cachedNodeClass = null;
         }
 
         /// <summary>
@@ -156,7 +151,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <returns>true if connected</returns>
         public bool IsCyclic()
         {
-            return IsCyclic(GetRootNode(), nodes, new List<Node>());
+            return IsCyclic(GetRootNode(), _nodes, new List<Node>());
         }
 
 
@@ -166,31 +161,31 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <returns>The node class or null if not possible.</returns>
         public CombinedNodeClass GenerateClass()
         {
-            if (cachedNodeClass != null) return cachedNodeClass;
+            if (_cachedNodeClass != null) return _cachedNodeClass;
 
-            Node root = GetRootNode();
+            var root = GetRootNode();
             if (root == null) return null;
 
             //Generate Inputs + Sub-Hirachy.
-            List<DataType> inputs = new List<DataType>();
-            List<SimpleConnection> connections = new List<SimpleConnection>();
-            List<SimpleSubNode> subNodes = new List<SimpleSubNode>();
+            var inputs = new List<DataType>();
+            var connections = new List<SimpleConnection>();
+            var subNodes = new List<SimpleSubNode>();
 
-            double centerX = nodes.Average(n => n.PosX);
-            double centerY = nodes.Average(n => n.PosY);
+            var centerX = _nodes.Average(n => n.PosX);
+            var centerY = _nodes.Average(n => n.PosY);
 
-            int input = 0;
+            var input = 0;
 
-            foreach ( Node node in nodes)
+            foreach ( var node in _nodes)
             {
-                AbstractNodeClass nodeClass = node.Class;
-                Node[] nodeInputs = node.InputNodes;
+                var nodeClass = node.Class;
+                var nodeInputs = node.InputNodes;
 
                 subNodes.Add(new SimpleSubNode(node, centerX, centerY));
-                for(int i = 0; i < nodeInputs.Count(); i++)
+                for(var i = 0; i < nodeInputs.Count(); i++)
                 {
-                    Node subNode = nodeInputs[i];
-                    if (subNode == null || !nodes.Contains(subNode))
+                    var subNode = nodeInputs[i];
+                    if (subNode == null || !_nodes.Contains(subNode))
                     {
                         inputs.Add(nodeClass.InputTypes[i]);
                         connections.Add(new SimpleConnection(node.NodeUUID, "input"+input, i));
@@ -202,15 +197,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             }
 
             //Generate the BaseNode:
-            DataType output = root.Class.OutputType;
-            string creator = Environment.UserName;
+            var output = root.Class.OutputType;
+            var creator = Environment.UserName;
 
             //Finally generate the NodeClass
-            CombinedNodeClass finalNodeClass = new CombinedNodeClass(Name, Name, Description, creator, 
+            var finalNodeClass = new CombinedNodeClass(Name, Name, Description, creator, 
                 subNodes, connections, output, root.NodeUUID, true, Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR, Name.RemoveAll(" ","_")),
                 inputs.ToArray());
 
-            this.cachedNodeClass = finalNodeClass;
+            this._cachedNodeClass = finalNodeClass;
             return finalNodeClass;
         }
 
@@ -220,19 +215,19 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// </summary>
         public bool SaveToDisc()
         {
-            CombinedNodeClass toSave = GenerateClass();
+            var toSave = GenerateClass();
             if (toSave == null) return false;
 
-            string savePath = Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR);
+            var savePath = Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR);
             savePath = Path.Combine(savePath, toSave.DisplayName);
 
             if (Directory.Exists(savePath)) return false;
             Singleton<NodeLoader>.Instance.saveToFolder(toSave, savePath);
 
             //Now save the depencies to the depencies.zip.
-            string tmpSaveFolder = Path.Combine(savePath, "dependencies");
+            var tmpSaveFolder = Path.Combine(savePath, "dependencies");
             Directory.CreateDirectory(tmpSaveFolder);
-            this.nodes
+            this._nodes
                 .Select(n => n.Class)
                 .Where(n => n.UserCreated && n != toSave)
                 .Distinct()
@@ -246,7 +241,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             //Generate the Zip file from that directory:
             if (!Directory.EnumerateFileSystemEntries(tmpSaveFolder).Empty())
             {
-                string zipPath = Path.Combine(savePath, "dependencies.zip");
+                var zipPath = Path.Combine(savePath, "dependencies.zip");
                 ZipFile.CreateFromDirectory(tmpSaveFolder, zipPath, CompressionLevel.NoCompression, false);
             }
 
@@ -261,8 +256,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <returns>the Root node or null</returns>
         public Node GetRootNode()
         {
-            foreach (Node node in nodes) if (SubTreeContains(node, nodes.ToList())) return node;
-            return null;
+            return _nodes.FirstOrDefault(node => SubTreeContains(node, _nodes.ToList()));
         }
 
         /// <summary>
@@ -270,7 +264,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// </summary>
         /// <param name="newName"></param>
         /// <returns></returns>
-        internal bool ExistsName(string newName)
+        internal static bool ExistsName(string newName)
         {
             return Singleton<ClassManager>.Instance.GetNodeClassForType(newName) != null;
         }

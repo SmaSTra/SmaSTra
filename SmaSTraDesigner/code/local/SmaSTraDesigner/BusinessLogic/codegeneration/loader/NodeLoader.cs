@@ -8,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.nodes;
-using static SmaSTraDesigner.BusinessLogic.ClassManager;
+using static SmaSTraDesigner.BusinessLogic.classhandler.ClassManager;
 
 namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader
 {

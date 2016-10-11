@@ -1031,7 +1031,7 @@ namespace SmaSTraDesigner.Controls
                     if (!string.IsNullOrWhiteSpace(dialog.CombinedElementName))
                     {
                         newName = dialog.CombinedElementName;
-                        if (generator.ExistsName(newName))
+                        if (CombinedClassGenerator.ExistsName(newName))
                         {
                             MessageBox.Show("The name " + newName + " already exists. Please choose another one!", "Name taken");
                             newName = "";

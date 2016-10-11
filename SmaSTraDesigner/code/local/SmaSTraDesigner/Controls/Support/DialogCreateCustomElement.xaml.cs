@@ -13,8 +13,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
-using static SmaSTraDesigner.BusinessLogic.ClassManager;
+using static SmaSTraDesigner.BusinessLogic.classhandler.ClassManager;
 
 namespace SmaSTraDesigner.Controls.Support
 {

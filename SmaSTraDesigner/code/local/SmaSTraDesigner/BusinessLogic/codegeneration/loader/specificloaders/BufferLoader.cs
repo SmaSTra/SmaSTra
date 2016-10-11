@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
-using static SmaSTraDesigner.BusinessLogic.ClassManager;
+using static SmaSTraDesigner.BusinessLogic.classhandler.ClassManager;
 using SmaSTraDesigner.BusinessLogic.utils;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using System.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using SmaSTraDesigner.BusinessLogic.nodes;
 

@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+﻿using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 
 namespace SmaSTraDesigner
 {
@@ -114,6 +115,7 @@ namespace SmaSTraDesigner
             //Reload the managers:
             DataType.ReloadFromBaseFolder();
             Singleton<SmaSTraConfiguration>.Instance.Reload();
+            Singleton<NodeBlacklist>.Instance.Reload();
             Singleton<ClassManager>.Instance.Reload();
             Singleton<Library>.Instance.loadLibrary();
         }
