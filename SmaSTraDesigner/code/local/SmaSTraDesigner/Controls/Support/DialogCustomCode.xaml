@@ -1,0 +1,21 @@
+﻿<Window x:Class="SmaSTraDesigner.Controls.Support.DialogCustomCode"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
+        mc:Ignorable="d"
+        ShowInTaskbar="False"
+        Title="Code" MaxWidth="1000" MaxHeight="900" SizeToContent="WidthAndHeight"
+        Background="{StaticResource ColorPanelBackground}">
+    <Grid>
+        <StackPanel>
+            <ScrollViewer MaxWidth="900" MaxHeight="700" HorizontalScrollBarVisibility="Auto">
+            <TextBlock x:Name="textCustomCode" Text="Default text" HorizontalAlignment="Center" Margin="5,20,5,20" Style="{StaticResource TextBlockStyle}" />
+            </ScrollViewer>
+            <Button Width="100" IsDefault="True" Margin="0,0,0,10" Style="{StaticResource imageButtonTemplate}" Click="Button_Click">
+                <TextBlock Text="OK" FontSize="{StaticResource FontSizeLarge}"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

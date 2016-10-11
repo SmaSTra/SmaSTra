@@ -107,6 +107,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Support\DialogCustomCode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Support\DialogOnlineTransformatins.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -206,6 +210,9 @@
     </Compile>
     <Compile Include="Controls\Support\DialogCreateCustomElement.xaml.cs">
       <DependentUpon>DialogCreateCustomElement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Support\DialogCustomCode.xaml.cs">
+      <DependentUpon>DialogCustomCode.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Support\DialogOnlineTransformatins.xaml.cs">
       <DependentUpon>DialogOnlineTransformatins.xaml</DependentUpon>

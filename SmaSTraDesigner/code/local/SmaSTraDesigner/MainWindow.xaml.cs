@@ -423,11 +423,39 @@ namespace SmaSTraDesigner
         {
             e.CanExecute = true;
         }
-
-
+        
         private void OrganizeNodes_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             tdTreeDesigner.OrganizeNodes();
+        }
+
+        private void CustomCode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                Node node = (e.OriginalSource as UcNodeViewer).Node;
+                if (node.Class.UserCreated && !(node is CombinedNode))
+                {
+                    e.CanExecute = true;
+                } else
+                {
+                    e.CanExecute = false;
+                }
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+
+        private void CustomCode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.OriginalSource as UcNodeViewer != null)
+            {
+                UcNodeViewer nodeViewer = (UcNodeViewer)e.OriginalSource;
+                new DialogCustomCode(nodeViewer.Node).Show();
+            }
         }
 
 

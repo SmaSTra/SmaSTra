@@ -238,6 +238,16 @@ namespace SmaSTraDesigner.Controls.Support
                                 }
                         );
 
+        public static readonly RoutedUICommand CustomCode = new RoutedUICommand
+                        (
+                                "Custom Code",
+                                "CustomCode",
+                                typeof(Commands),
+                                new InputGestureCollection()
+                                {
+
+                                }
+                        );
 
     }
 }
