@@ -16,8 +16,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-            <Image Stretch="Uniform" Width="130" Grid.Column="0" HorizontalAlignment="Left" Margin="5,0,0,5" Source="pack://siteoforigin:,,,/Resources/logo_kom.png"/>
-                <Image Stretch="Uniform" Width="130" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,5,5" Source="pack://siteoforigin:,,,/Resources/logo_tud.png"/>
+                <Grid Background="White" Margin="0,0,0,4">
+            <Image Stretch="Uniform" Width="130" Grid.Column="0"  HorizontalAlignment="Left" Margin="5,0,0,5" Source="pack://siteoforigin:,,,/Resources/logo_software_ag.png"/>
+                </Grid>
+                    <Image Stretch="Uniform" Width="130" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,5,5" Source="pack://siteoforigin:,,,/Resources/logo_tud.png"/>
             </Grid>
             <Button Width="100" IsDefault="True" Margin="0,0,0,10" Style="{StaticResource imageButtonTemplate}" Click="Button_Click">
                 <TextBlock Text="OK" FontSize="{StaticResource FontSizeLarge}"/>

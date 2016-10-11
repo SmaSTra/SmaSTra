@@ -862,24 +862,32 @@ namespace SmaSTraDesigner.Controls
 					}
 				}
 
-				if (handleUnderCursor != null && handleUnderCursor.IsConnectionCompatible == true)
-				{
-					UcIOHandle iHandle, oHandle;
-					if (handleUnderCursor.IsInput)
-					{
-						iHandle = handleUnderCursor;
-						oHandle = this.ConnectingIOHandle;
-					}
-					else
-					{
-						iHandle = this.ConnectingIOHandle;
-						oHandle = handleUnderCursor;
-					}
-
-					this.AddConnection(oHandle, iHandle, null);
-				}
+                TryToConnect(handleUnderCursor);
 			}
 		}
+
+        private void TryToConnect(UcIOHandle otherHandle)
+        {
+                if (otherHandle != null && otherHandle.IsConnectionCompatible == true)
+                {
+                    UcIOHandle iHandle, oHandle;
+                    if (otherHandle.IsInput)
+                    {
+                        iHandle = otherHandle;
+                        oHandle = this.ConnectingIOHandle;
+                    }
+                    else
+                    {
+                        iHandle = this.ConnectingIOHandle;
+                        oHandle = otherHandle;
+                    }
+
+                    this.AddConnection(oHandle, iHandle, null);
+                }
+            
+        }
+
+
 
 
 

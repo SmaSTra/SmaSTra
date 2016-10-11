@@ -193,16 +193,6 @@ namespace SmaSTraDesigner.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_samastra {
-            get {
-                object obj = ResourceManager.GetObject("icon_samastra", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap input_trans {
             get {
                 object obj = ResourceManager.GetObject("input_trans", resourceCulture);
@@ -216,6 +206,26 @@ namespace SmaSTraDesigner.Properties {
         internal static System.Drawing.Bitmap logo_kom {
             get {
                 object obj = ResourceManager.GetObject("logo_kom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_smastra {
+            get {
+                object obj = ResourceManager.GetObject("logo_smastra", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_software_ag {
+            get {
+                object obj = ResourceManager.GetObject("logo_software_ag", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

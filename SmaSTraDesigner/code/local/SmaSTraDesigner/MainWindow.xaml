@@ -13,7 +13,7 @@
 	mc:Ignorable="d"
 	x:Name="This" 
     Title="{Binding Source={x:Static conf:WorkSpace.DIR}, Mode=OneWay, StringFormat=SmaSTra   WorkSpace:({0})}"
-    d:DesignWidth="900" d:DesignHeight="650" Icon="pack://siteoforigin:,,,/Resources/icon_samastra.png"
+    d:DesignWidth="900" d:DesignHeight="650" Icon="pack://siteoforigin:,,,/Resources/logo_smastra.png"
     Closing="This_Closing">
     <Window.CommandBindings>
         <CommandBinding Command="ctrlSupport:Commands.DebugTest" CanExecute="DebugTest_CanExecute" Executed="DebugTest_Executed" />

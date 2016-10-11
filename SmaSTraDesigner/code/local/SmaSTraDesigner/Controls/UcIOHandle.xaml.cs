@@ -97,7 +97,6 @@ namespace SmaSTraDesigner.Controls
 			{
 				if (subject.NodeViewer != null)
 				{
-                    
 					subject.NodeViewer.IsSelected = true;
 					foreach (var other in subject.NodeViewer.IoHandles)
 					{
