@@ -115,6 +115,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Support\SplashWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\UcDataSourceViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -220,6 +224,9 @@
     <Compile Include="Controls\Support\NodeListTemplateSelector.cs" />
     <Compile Include="Controls\Support\DialogCombinedName.xaml.cs">
       <DependentUpon>DialogCombinedName.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Support\SplashWindow.xaml.cs">
+      <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\UcDataSourceViewer.xaml.cs">
       <DependentUpon>UcDataSourceViewer.xaml</DependentUpon>
@@ -478,11 +485,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <SplashScreen Include="Resources\splashscreen.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </SplashScreen>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="logo_smastra.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -492,6 +494,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\logo_software_ag.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\splashscreen.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

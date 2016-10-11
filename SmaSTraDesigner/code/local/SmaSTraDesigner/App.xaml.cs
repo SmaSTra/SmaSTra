@@ -14,6 +14,8 @@ namespace SmaSTraDesigner
     using Controls;
     using System.Diagnostics;
     using System;
+    using Controls.Support;
+    using System.Threading;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -50,9 +52,17 @@ namespace SmaSTraDesigner
 
 		private void Application_Startup(object sender, StartupEventArgs e)
         {
+            SplashWindow splash = new SplashWindow();
+            splash.Show();
+
             //Read the last used Workspace:
             string lastWorkspace = readWorkSpaceFromRegestry();
             SwitchWorkspace(lastWorkspace, null);
+            
+            MainWindow main = new MainWindow();
+            Thread.Sleep(2000);
+            splash.Close();
+            main.Show();
         }
 
         /// <summary>

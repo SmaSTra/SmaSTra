@@ -8,7 +8,7 @@
 	xmlns:wpfConverters="clr-namespace:Common.Resources.Converters;assembly=WpfCommonLib"
 	xmlns:ctrl="clr-namespace:SmaSTraDesigner.Controls"
 	xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
-	StartupUri="MainWindow.xaml" Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
+	Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
 	<Application.Resources>
 		<wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
 		<presConverters:LambdaConverter x:Key="ToolTipConverter" />
