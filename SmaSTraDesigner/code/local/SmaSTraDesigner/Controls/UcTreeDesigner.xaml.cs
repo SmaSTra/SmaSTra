@@ -474,6 +474,7 @@ namespace SmaSTraDesigner.Controls
 		private void AddConnection(UcIOHandle oHandle, UcIOHandle iHandle, Connection? connection)
 		{
 			this.RemoveConnection(iHandle, null);
+            this.RemoveConnection(oHandle, null);
             System.Diagnostics.Debug.Print("adding connection: oNode: " + oHandle.Node.Name + "  iNode: " + iHandle.Node.Name);
 
 			if (connection == null)
