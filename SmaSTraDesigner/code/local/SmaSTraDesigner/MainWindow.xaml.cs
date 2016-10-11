@@ -416,7 +416,7 @@ namespace SmaSTraDesigner
 
         private void About_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBox.Show("Put some fancy about text here", "About", MessageBoxButton.OK); ;
+            new DialogAbout().Show();
         }
 
 
