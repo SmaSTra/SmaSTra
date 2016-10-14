@@ -537,5 +537,10 @@ namespace SmaSTraDesigner
                 parent.RaiseEvent(propagateEvent);
             }
         }
+
+        private void btnFilterClear_Click(object sender, RoutedEventArgs e)
+        {
+            tboxNodeFilter.Text = "";
+        }
     }
 }

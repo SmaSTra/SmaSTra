@@ -40,7 +40,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <summary>
         /// The Toggle for the Basic Elements
         /// </summary>
-        private bool _toggleBasic;
+        private bool _toggleBasic = true;
 
         /// <summary>
         /// The Toggle for the Custom Elements
