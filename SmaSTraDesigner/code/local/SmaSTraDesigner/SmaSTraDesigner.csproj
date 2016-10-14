@@ -175,6 +175,7 @@
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\SensorLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\loader\specificloaders\TransformationLoader.cs" />
     <Compile Include="BusinessLogic\codegeneration\javacodegenerator\NewJavaGenerator.cs" />
+    <Compile Include="BusinessLogic\compilers\JavaCompiler.cs" />
     <Compile Include="BusinessLogic\config\SmaSTraConfiguration.cs" />
     <Compile Include="BusinessLogic\config\WorkSpace.cs" />
     <Compile Include="BusinessLogic\nodes\BufferNode.cs" />

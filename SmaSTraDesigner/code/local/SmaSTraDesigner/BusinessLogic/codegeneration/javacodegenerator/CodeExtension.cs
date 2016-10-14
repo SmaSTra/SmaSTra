@@ -16,8 +16,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 
         #region consts
 
+        public static readonly string[] importBlacklist = { "double", "byte", "long", "float", "short", "char", "int", "integer", "boolean" };
         private readonly string[] StaticImports = { "android.content.Context", "de.tu_darmstadt.smastra.base.SmaSTraTreeExecutor" };
-        private readonly string[] importBlacklist = { "double", "byte", "long", "float", "short", "char", "int", "integer", "boolean" };
 
         #endregion consts
 

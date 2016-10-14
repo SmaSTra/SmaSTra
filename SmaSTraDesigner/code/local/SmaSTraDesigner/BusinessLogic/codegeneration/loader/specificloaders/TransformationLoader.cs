@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
-using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses.extras;
 using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
@@ -15,12 +15,12 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         /// <summary>
         /// This is the Path for the Method Name to call.
         /// </summary>
-        private const string JSON_PROP_METHOD_NAME = "method";
+        private const string JsonPropMethodName = "method";
 
         /// <summary>
         /// This is the path to identify if the method is static.
         /// </summary>
-        private const string JSON_PROP_STATIC = "static";
+        private const string JsonPropStatic = "static";
 
 
 
@@ -30,20 +30,20 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 
         public override AbstractNodeClass loadFromJson(string path, JObject root)
         {
-            string name = ReadName(root);
-            string displayName = ReadDisplayName(root).EmptyDefault(name);
-            string description = ReadDescription(root).EmptyDefault("No Description");
-            string creator = ReadCreator(root).EmptyDefault("Unknown");
-            DataType output = ReadOutput(root);
-            string mainClass = ReadMainClass(root);
-            string[] needsOtherClasses = ReadNeededClasses(root);
-            INeedsExtra[] needsExtras = ReadExtras(root);
-            ConfigElement[] config = ReadConfig(root);
-            ProxyProperty[] proxyProperties = ReadProxyProperties(root);
-            string methodName = ReadMethodName(root);
-            bool isStatic = ReadIsStatic(root);
-            DataType[] inputs = ReadInputs(root);
-            bool userCreated = ReadUserCreated(root);
+            var name = ReadName(root);
+            var displayName = ReadDisplayName(root).EmptyDefault(name);
+            var description = ReadDescription(root).EmptyDefault("No Description");
+            var creator = ReadCreator(root).EmptyDefault("Unknown");
+            var output = ReadOutput(root);
+            var mainClass = ReadMainClass(root);
+            var needsOtherClasses = ReadNeededClasses(root);
+            var needsExtras = ReadExtras(root);
+            var config = ReadConfig(root);
+            var proxyProperties = ReadProxyProperties(root);
+            var methodName = ReadMethodName(root);
+            var isStatic = ReadIsStatic(root);
+            var inputs = ReadInputs(root);
+            var userCreated = ReadUserCreated(root);
 
             return new TransformationNodeClass(name, displayName, description, creator, output, inputs, mainClass, 
                 needsOtherClasses, needsExtras, config, proxyProperties, userCreated, path,
@@ -57,7 +57,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         /// <returns>The method to call</returns>
         protected string ReadMethodName(JObject toReadFrom)
         {
-            return toReadFrom.GetValueAsString(JSON_PROP_METHOD_NAME, "");
+            return toReadFrom.GetValueAsString(JsonPropMethodName, "");
         }
 
         /// <summary>
@@ -67,16 +67,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         /// <returns>if the method is static</returns>
         protected bool ReadIsStatic(JObject toReadFrom)
         {
-            return toReadFrom.GetValueAsBool(JSON_PROP_STATIC, true);
+            return toReadFrom.GetValueAsBool(JsonPropStatic, true);
         }
 
 
 
         public override JObject classToJson(AbstractNodeClass nodeClass)
         {
-            TransformationNodeClass transClass = nodeClass as TransformationNodeClass;
+            var transClass = nodeClass as TransformationNodeClass;
 
-            JObject root = new JObject();
+            var root = new JObject();
             AddOwnType(root);
             AddName(root, nodeClass.Name);
             AddDescription(root, nodeClass.Description);
@@ -105,7 +105,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         /// <param name="methodName">The Methodname to add</param>
         protected void AddMethodName(JObject toAddTo, string methodName)
         {
-            toAddTo.Add(JSON_PROP_METHOD_NAME, methodName);
+            toAddTo.Add(JsonPropMethodName, methodName);
         }
 
         /// <summary>
@@ -115,23 +115,24 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
         /// <param name="isStatic">If the method is static</param>
         protected void AddStatic(JObject toAddTo, bool isStatic)
         {
-            toAddTo.Add(JSON_PROP_STATIC, isStatic);
+            toAddTo.Add(JsonPropStatic, isStatic);
         }
 
 
         public override string GenerateClassFromSnippet(AbstractNodeClass nodeClass, string methodCode)
         {
-            string package = GetPackageFromMainclass(nodeClass.MainClass);
-            string imports = nodeClass.InputTypes
+            var package = GetPackageFromMainclass(nodeClass.MainClass);
+            var imports = nodeClass.InputTypes
                 .ToArray()
                 .Concat(new[] { nodeClass.OutputType })
                 .Distinct()
                 .Select(i => "import " + i.MinimizedName + ";")
+                .Select(i => !CodeExtension.importBlacklist.Contains(i))
                 .StringJoin("\n");
                 
 
-            string methodArgs = "";
-            for (int i = 0 ; i < nodeClass.InputTypes.Count(); i++) 
+            var methodArgs = "";
+            for (var i = 0 ; i < nodeClass.InputTypes.Count(); i++) 
             {
                 if (i > 0) methodArgs += ", ";
                 methodArgs += nodeClass.InputTypes[i].MinimizedName + " arg"+i;
@@ -150,19 +151,19 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
 
         public override void CreateCode(Node node, CodeExtension codeExtension)
         {
-            TransformationNodeClass nodeClass = node.Class as TransformationNodeClass;
+            var nodeClass = node.Class as TransformationNodeClass;
             codeExtension.AddTransformation(node as Transformation);
             codeExtension.AddExtras(nodeClass.NeededExtras);
 
-            string content = "";
-            string args = "(";
-            int currentTransform = codeExtension.GetCurrentStep();
+            var content = "";
+            var args = "(";
+            var currentTransform = codeExtension.GetCurrentStep();
 
-            for(int i = 0; i < nodeClass.InputTypes.Count(); i++)
+            for(var i = 0; i < nodeClass.InputTypes.Count(); i++)
             {
-                DataType inputType = nodeClass.InputTypes[i];
-                Node inputNode = node.InputNodes[i];
-                IOData ioData = node.InputIOData[i];
+                var inputType = nodeClass.InputTypes[i];
+                var inputNode = node.InputNodes[i];
+                var ioData = node.InputIOData[i];
 
                 //Add the args:
                 if (i != 0) args += ", ";
@@ -178,16 +179,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
                 }
                 else
                 {
-                    DataSource inAsSource = inputNode as DataSource;
-                    Transformation inAsTransform = inputNode as Transformation;
-                    BufferNode inAsBuffer = inputNode as BufferNode;
-                    DataSourceNodeClass inAsSourceClass = inAsSource == null ? null : inAsSource.Class as DataSourceNodeClass;
-                    TransformationNodeClass inAsTransClass = inAsTransform == null ? null : inAsTransform.Class as TransformationNodeClass;
-                    BufferNodeClass inAsBufferClass = inAsBuffer == null ? null : inAsBuffer.Class as BufferNodeClass;
+                    var inAsSource = inputNode as DataSource;
+                    var inAsTransform = inputNode as Transformation;
+                    var inAsBuffer = inputNode as BufferNode;
+                    var inAsSourceClass = inAsSource?.Class as DataSourceNodeClass;
+                    var inAsTransClass = inAsTransform?.Class as TransformationNodeClass;
+                    var inAsBufferClass = inAsBuffer?.Class as BufferNodeClass;
 
 
-                    string typeName = "";
-                    string optionalMethodCall = "";
+                    var typeName = "";
+                    var optionalMethodCall = "";
 
                     switch (inputNode.Class.NodeType)
                     {
@@ -209,16 +210,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
                             break;
 
                         default:
-                            break;
+                            throw new ArgumentOutOfRangeException();
                     }
 
 
 
-                    int outputIndex = codeExtension.GetOutputIndex(inputNode);
+                    var outputIndex = codeExtension.GetOutputIndex(inputNode);
 
                     content += string.Format(ClassTemplates.GENERATION_TEMPLATE_TRANSFORM_VAR_LINE,
                         inputType.MinimizedName,
-                        i.ToString(),
+                        i,
                         typeName,
                         outputIndex,
                         optionalMethodCall);
@@ -229,16 +230,16 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             args += ")";
 
             //Extract the method call:
-            string methodCall = (nodeClass.IsStatic
+            var methodCall = (nodeClass.IsStatic
                 ? (DataType.MinimizeToClass(nodeClass.MainClass))
                 : (nodeClass.NodeType.ToString() + codeExtension.GetTransformId(node as Transformation)))
                 + "." + nodeClass.Method + args;
 
-            string template = codeExtension.RootNode == node 
+            var template = codeExtension.RootNode == node 
                 ? ClassTemplates.GENERATION_TEMPLATE_TRANSFORM_LAST 
                 : ClassTemplates.GENERATION_TEMPLATE_TRANSFORM;
 
-            string code = string.Format( 
+            var code = string.Format( 
                 template,
                 currentTransform,
                 content,
