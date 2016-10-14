@@ -428,7 +428,7 @@ namespace SmaSTraDesigner
             Node pastedNode = this.tdTreeDesigner.SelectedNodeViewer.Node.Clone();
             pastedNode.PosX = this.tdTreeDesigner.SelectedNodeViewer.Node.PosX;
             pastedNode.PosY = this.tdTreeDesigner.SelectedNodeViewer.Node.PosY + 10;
-            this.tdTreeDesigner.AddNode(pastedNode, false, true);
+            this.tdTreeDesigner.AddNode(pastedNode, true, true);
         }
 
         private void About_CanExecute(object sender, CanExecuteRoutedEventArgs e)
