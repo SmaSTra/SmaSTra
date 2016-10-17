@@ -27,7 +27,7 @@
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="5,0,5,0">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="8,0,8,0">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
@@ -80,13 +80,16 @@
                 <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbSourceName}" Height="{Binding ActualHeight, ElementName=tbSourceName}">
                 </Image>
             </Grid>
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbSourceName}">
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Height="7" Width="{Binding ActualWidth, ElementName=tbSourceName}">
             </Image>
+            <Grid>
             <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Height="{Binding ActualHeight, ElementName=tbSourceName}" Width="{Binding ActualWidth, ElementName=tbSourceName}">
             </Image>
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Height="10" Width="{Binding ActualWidth, ElementName=tbSourceName}">
+                <local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-14,0" />
+            </Grid>
+            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Height="7" Width="{Binding ActualWidth, ElementName=tbSourceName}">
             </Image>
         </StackPanel>
-        <local:UcIOHandle x:Name="ucUIHandleOutput" IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-14,0" />
+        
     </Grid>
 </local:UcNodeViewer>

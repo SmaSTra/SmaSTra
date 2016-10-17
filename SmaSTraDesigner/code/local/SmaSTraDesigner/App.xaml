@@ -23,6 +23,24 @@
             <ctrl:UcDataSourceViewer Margin="5,5" IsPreview="True" />
         </DataTemplate>
 
+        <sys:Double x:Key="FontSizeLarge">18</sys:Double>
+        <sys:Double x:Key="FontSizeMedium">15</sys:Double>
+        <sys:Double x:Key="FontSizeSmall">12</sys:Double>
+
+        <SolidColorBrush x:Key="ColorPanelBackground" Color="#696969"/>
+        <SolidColorBrush x:Key="ColorPanelTitel" Color="Gray"/>
+        <SolidColorBrush x:Key="ColorPanelHighlight" Color="LightGray"/>
+        <SolidColorBrush x:Key="ColorDefault" Color="White"/>
+        <SolidColorBrush x:Key="ColorBoolean" Color="GreenYellow"/>
+        <SolidColorBrush x:Key="ColorDouble" Color="Blue"/>
+        <SolidColorBrush x:Key="ColorLong" Color="DarkBlue"/>
+        <SolidColorBrush x:Key="ColorMap" Color="Purple"/>
+        <SolidColorBrush x:Key="ColorInt" Color="LightBlue"/>
+        <SolidColorBrush x:Key="ColorPicture" Color="LightPink"/>
+        <SolidColorBrush x:Key="ColorVector3d" Color="Yellow"/>
+        <SolidColorBrush x:Key="ColorCollection" Color="Brown"/>
+        <SolidColorBrush x:Key="ColorBuffer" Color="DarkRed"/>
+
 
         <ToolTip x:Key="nodeViewerToolTip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" Visibility="{Binding Path=IsPreview, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}" Background="Transparent">
             <Rectangle Width="{Binding ActualWidth}" Height="{Binding ActualHeight}" >
@@ -45,7 +63,7 @@
         </Style>
 
         <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
@@ -59,10 +77,10 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Background" Value="{StaticResource ColorPanelHighlight}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="Gray" />
+                    <Setter Property="Background" Value="{StaticResource ColorPanelTitel}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -86,6 +104,35 @@
             </Setter>
         </Style>
 
+        <Style x:Key="ButtonCustomBackground" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Background" Value="Transparent" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ColorPanelTitel}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ColorPanelHighlight}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key ="imageButtonTemplate" TargetType ="{x:Type Button}">
             <Setter Property ="Template">
                 <Setter.Value>
@@ -107,24 +154,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <sys:Double x:Key="FontSizeLarge">18</sys:Double>
-        <sys:Double x:Key="FontSizeMedium">15</sys:Double>
-        <sys:Double x:Key="FontSizeSmall">12</sys:Double>
-
-        <SolidColorBrush x:Key="ColorPanelBackground" Color="#696969"/>
-        <SolidColorBrush x:Key="ColorPanelTitel" Color="Gray"/>
-        <SolidColorBrush x:Key="ColorDefault" Color="White"/>
-        <SolidColorBrush x:Key="ColorBoolean" Color="GreenYellow"/>
-        <SolidColorBrush x:Key="ColorDouble" Color="Blue"/>
-        <SolidColorBrush x:Key="ColorLong" Color="DarkBlue"/>
-        <SolidColorBrush x:Key="ColorMap" Color="Purple"/>
-        <SolidColorBrush x:Key="ColorInt" Color="LightBlue"/>
-        <SolidColorBrush x:Key="ColorPicture" Color="LightPink"/>
-        <SolidColorBrush x:Key="ColorVector3d" Color="Yellow"/>
-        <SolidColorBrush x:Key="ColorCollection" Color="Brown"/>
-        <SolidColorBrush x:Key="ColorBuffer" Color="DarkRed"/>
-
 
         <!-- Begin of ScrollViewer Style. Source: http://www.codeproject.com/Articles/41787/Creating-a-Blend-like-Scrollbar-->
         <SolidColorBrush x:Key="StandardBorderBrush" Color="DarkGray"></SolidColorBrush>

@@ -33,38 +33,38 @@
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="5,0,5,0">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="8,0,8,0">
         <Border x:Name="borderHighlightBorder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-			<Border.Style>
-				<Style TargetType="{x:Type Border}">
-					<Setter Property="BorderBrush">
-						<Setter.Value>
-							<SolidColorBrush>
-								<SolidColorBrush.Color>
-									<Color R="0" G="0" B="0" A="0" />
-								</SolidColorBrush.Color>
-							</SolidColorBrush>
-						</Setter.Value>
-					</Setter>
-					<Setter Property="BorderThickness" Value="2" />
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush>
+                                <SolidColorBrush.Color>
+                                    <Color R="0" G="0" B="0" A="0" />
+                                </SolidColorBrush.Color>
+                            </SolidColorBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="2" />
 
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderBrush" Value="Black" />
                             <Setter Property="BorderThickness" Value="5" />
                             <Setter Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect BlurRadius="20" ShadowDepth="0" Color="Blue"/>
                                 </Setter.Value>
                             </Setter>
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
-							<Setter Property="BorderBrush" Value="DarkBlue" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
+                            <Setter Property="BorderBrush" Value="DarkBlue" />
                             <Setter Property="BorderThickness" Value="5" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Border.Style>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid >
                 <Grid.Style>
                     <Style TargetType="Grid">
@@ -77,42 +77,7 @@
                     </Style>
                 </Grid.Style>
             </Grid>
-		</Border>
-		
-<!--
-        <Image Stretch="Fill" Width="{Binding ActualWidth, ElementName=tbTransformationName}">
-            <Image.Style>
-                <Style TargetType="{x:Type Image}">
-                    <Setter Property="Source" Value="pack://siteoforigin:,,,/Resources/blue_window.png" />
-                    <Setter Property="Height" Value="100" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
-                            <Setter Property="Source" Value="pack://siteoforigin:,,,/Resources/tuerkis_window.png" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="2">
-                            <Setter Property="Height" Value="115" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="3">
-                            <Setter Property="Height" Value="135" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Image.Style>
-        </Image>
-
-        <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=Class.InputTypes, Converter={StaticResource InputItemsSourceConverter}}" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="True" Margin="-10,15,0,0">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" Margin="0,5,0,5" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
--->
+        </Border>
 
         <StackPanel>
             <Grid>
@@ -135,45 +100,49 @@
             <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7" >
             </Image>
 
-            <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=InputIOData, Converter={StaticResource InputItemsSourceConverter}}" IsHitTestVisible="True">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/mid_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" >
-                            </Image>
-                            <WrapPanel>
-                                <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}">
-                                    <Grid.Style>
-                                        <Style TargetType="Grid">
-                                            <Setter Property="Opacity" Value="0.5"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=Value.Length}" Value="0">
-                                                    <Setter Property="Opacity" Value="1"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Grid.Style>
-                                    <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" Margin="-7,5,0,5" >
-                                    </local:UcIOHandle>
-                                </Grid>
-                                <TextBlock DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" Text="{Binding Path=InputGUIString}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="{Binding ActualWidth, ElementName=tbTransformationName}" Padding="10,0,10,0" Margin="-5,3,0,-5" />
-                            </WrapPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid>
+                <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=InputIOData, Converter={StaticResource InputItemsSourceConverter}}" IsHitTestVisible="True">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Image Stretch="Fill"  Source="pack://siteoforigin:,,,/Resources/mid_window.png" Height="{Binding ActualHeight, ElementName=tbTransformationName}" Width="{Binding ActualWidth, ElementName=tbTransformationName}" >
+                                </Image>
+                                <WrapPanel>
+                                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Opacity" Value="0.5"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=Value.Length}" Value="0">
+                                                        <Setter Property="Opacity" Value="1"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <local:UcIOHandle IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-7,0,0,0" >
+                                        </local:UcIOHandle>
+                                    </Grid>
+                                    <TextBlock DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" FontFamily="Tahoma Regular" Text="{Binding Path=InputGUIString}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="{Binding ActualWidth, ElementName=tbTransformationName}" Padding="10,0,10,0" Margin="-5,3,0,-5" />
+                                </WrapPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-14,0" />
+            </Grid>
 
             <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7">         
             </Image>
 
         </StackPanel>
 
-        <local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-14,0" />
+        <!--<local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,-14,0" />-->
 
     </Grid>
 </local:UcNodeViewer>

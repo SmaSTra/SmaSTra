@@ -75,39 +75,19 @@
                 </MenuItem>
             <MenuItem Header="About" Command="ctrlSupport:Commands.About" />
         </Menu>
-            <Border Grid.Row="1" Grid.ColumnSpan="99" BorderBrush="Black" BorderThickness="1" Background="{StaticResource ColorPanelBackground}">
+            <Border Grid.Row="1" Grid.ColumnSpan="99" BorderBrush="Black" BorderThickness="1,1,1,0" Background="{StaticResource ColorPanelBackground}">
                 <StackPanel  Orientation="Horizontal" Margin="5">
-                    <Button Command="ctrlSupport:Commands.Save" Grid.Column="0" Width="30" Background="Transparent" ToolTip="Save">
-                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/save.png"/>
+                <Button Command="ctrlSupport:Commands.Save" Grid.Column="0" Width="30" ToolTip="Save" Style="{StaticResource ButtonCustomBackground}">
+                        <Image Stretch="Uniform" Margin="1,2,1,2" Source="pack://siteoforigin:,,,/Resources/save.png"/>
                     </Button>
-                    <Button Command="ctrlSupport:Commands.Load" Grid.Column="1" Width="30" Background="Transparent" ToolTip="Open" Margin="5,0,0,0">
-                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/open.png"/>
+                    <Button Command="ctrlSupport:Commands.Load" Grid.Column="1" Width="30" ToolTip="Open" Margin="5,0,0,0" Style="{StaticResource ButtonCustomBackground}">
+                    <Image Stretch="Uniform" Margin="1" Source="pack://siteoforigin:,,,/Resources/open.png"/>
                     </Button>
-                    <Button Command="ctrlSupport:Commands.Undo" Grid.Column="1" Width="30" Background="Transparent" ToolTip="Open" Margin="50,0,0,0">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="1"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Opacity" Value="0.5" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/previous_button.png"/>
+                <Button Command="ctrlSupport:Commands.Undo" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Undo" Margin="50,0,0,0">
+                    <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/backward.png"/>
                     </Button>
-                    <Button Command="ctrlSupport:Commands.Redo" Grid.Column="1" Width="30" Background="Transparent" ToolTip="Open" Margin="5,0,0,0">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="1"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Opacity" Value="0.5" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/next_button.png"/>
+                <Button Command="ctrlSupport:Commands.Redo" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Redo" Margin="5,0,0,0">
+                    <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/forward.png"/>
                     </Button>
                 </StackPanel>
             </Border>
@@ -120,7 +100,7 @@
                     <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <ScrollViewer Grid.Column="0" Grid.Row="0" Background="{StaticResource ColorPanelBackground}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                <Border Grid.Column="0" Grid.Row="0" BorderBrush="Black" BorderThickness="0,1,0,0" Background="{StaticResource ColorPanelBackground}" >
                     <StackPanel Orientation="Horizontal" x:Name="spnNodeTypeMenu">
                         <Border BorderBrush="Black" BorderThickness="1,0,1,0">
                             <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleDataSources, Mode=TwoWay}" VerticalContentAlignment="Center">
@@ -162,7 +142,7 @@
                                 </MultiBinding>
                             </Grid.Visibility>
 
-                            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,0">
+                            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1,0,1,0">
                                 <ToggleButton x:Name="tglDefaultTF" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleBasic, Mode=TwoWay}" >
                                     <WrapPanel ToolTip="Default Elements">
                                         <Image Width="35" Margin="5,0,5,0" Source="pack://siteoforigin:,,,/Resources/default_transf.png"/>
@@ -216,11 +196,11 @@
                         </Button>
                     </StackPanel>
 
-                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" VerticalAlignment="Center"  Width="40" Margin="50,0,0,0" Background="Transparent" ToolTip="Online Menu">
+                    <Button x:Name="btnOnlineTransformations" Command="ctrlSupport:Commands.OnlineTransformations" VerticalAlignment="Center"  Width="40" Margin="50,0,0,0" ToolTip="Online Menu" Style="{StaticResource ButtonCustomBackground}">
                         <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/datenaustausch_online.png"/>
                     </Button>
                 </StackPanel>
-                </ScrollViewer>
+                </Border>
 
                 <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="1,1,1,2">
                     <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="{StaticResource ColorPanelTitel}">
@@ -229,7 +209,7 @@
                             <ItemsControl x:Name="icFilteredElements" ItemsSource="{Binding Path=FilteredNodes}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel />
+                                        <WrapPanel/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>

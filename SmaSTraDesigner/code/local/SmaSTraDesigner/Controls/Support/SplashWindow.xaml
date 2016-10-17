@@ -10,9 +10,9 @@
         WindowStyle="None"  
         Background="Transparent"
         AllowsTransparency="True"
-        Title="SplashWindow" Height="900" Width="900">
+        Title="SplashWindow" Height="400" Width="400">
     <Grid>
         <Image Stretch="Uniform" Grid.Column="0"  HorizontalAlignment="Left" Margin="5,0,0,5" Source="pack://siteoforigin:,,,/Resources/splashscreen.png"/>
-        <TextBlock x:Name="tbVersionNumber" Text="1.0.0" FontSize="27" FontStyle="Normal" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,280,100,0"/>
+        <TextBlock x:Name="tbVersionNumber" Text="1.0.0" FontSize="20" FontStyle="Normal" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,118,56,162"/>
     </Grid>
 </Window>

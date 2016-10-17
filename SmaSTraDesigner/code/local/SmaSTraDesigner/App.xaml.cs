@@ -60,7 +60,7 @@ namespace SmaSTraDesigner
             SwitchWorkspace(lastWorkspace, null);
             
             MainWindow main = new MainWindow();
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
             splash.Close();
             main.Show();
         }
