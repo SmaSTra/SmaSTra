@@ -135,12 +135,12 @@
                                     <Image Grid.Column="2" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/right_middle_window_78.png" />
                                 </Grid>
                                 <WrapPanel>
-                                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}">
+                                    <Grid >
                                         <Grid.Style>
                                             <Style TargetType="Grid">
                                                 <Setter Property="Opacity" Value="0.5"/>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Path=Value.Length}" Value="0">
+                                                    <DataTrigger Binding="{Binding Path=Item1.Value.Length}" Value="0">
                                                         <Setter Property="Opacity" Value="1"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>

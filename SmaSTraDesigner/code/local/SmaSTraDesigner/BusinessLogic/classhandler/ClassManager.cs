@@ -124,7 +124,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                         _allNodeViewers.Add(currentViewer);
                     }
                 }
-                Console.WriteLine("AllNodeViewers");
                 return _allNodeViewers;
             }
         }
@@ -140,7 +139,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 {
                     nodeViewer.Visibility = FilteredNodeClasses.Contains(nodeViewer.Node.Class.Name) ? Visibility.Visible : Visibility.Collapsed;
                 }
-                Console.WriteLine("FilteredNodeViewers");
                 return AllNodeViewers;
             }
         }
@@ -289,9 +287,6 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                     .NonNull()
                     .OrderBy(s => s)
                     .ToArray();
-
-                Console.WriteLine("FilteredNodeClasses");
-
 
                 return this._filteredNodeClasses;
             }
