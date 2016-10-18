@@ -190,7 +190,11 @@ namespace SmaSTraDesigner
                 {
                     e.CanExecute = true;
                 }
-                else if (nodeViewer.IsPreview || !nodeViewer.IsSelected)
+                else if (nodeViewer.IsPreview)
+                {
+                    e.CanExecute = nodeViewer.Node.Class.UserCreated;
+                }
+                else if (!nodeViewer.IsSelected)
                 {
                     e.CanExecute = true;
                 }
