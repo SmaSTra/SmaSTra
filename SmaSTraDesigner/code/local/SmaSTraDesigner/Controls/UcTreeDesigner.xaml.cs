@@ -502,7 +502,7 @@ namespace SmaSTraDesigner.Controls
             Line newLine = new Line()
 			{
 				DataContext = connection.Value,
-				Stroke = getColorFromType(iHandle.DataTypeName),
+				Stroke = getColorFromType(oHandle.DataTypeName),
 				StrokeThickness = 2
 			};
 			BindingOperations.SetBinding(newLine, Line.X1Property,

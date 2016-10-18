@@ -15,15 +15,13 @@
     </local:UcNodeViewer.InputBindings>
     <local:UcNodeViewer.ContextMenu>
         <ContextMenu>
-            <MenuItem Command="ctrlSupport:Commands.SelectConnected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-            <MenuItem Command="ctrlSupport:Commands.AddSelected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-            <MenuItem Command="ctrlSupport:Commands.AddToLibrary" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-            <Separator />
-            <MenuItem Command="ctrlSupport:Commands.Merge" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-            <MenuItem Command="ctrlSupport:Commands.Unmerge" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-            <MenuItem Command="ctrlSupport:Commands.CustomCode" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-            <Separator />
-            <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+            <MenuItem Command="ctrlSupport:Commands.SelectConnected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
+            <MenuItem Command="ctrlSupport:Commands.AddSelected" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
+            <MenuItem Command="ctrlSupport:Commands.AddToLibrary" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
+            <MenuItem Command="ctrlSupport:Commands.Merge" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
+            <MenuItem Command="ctrlSupport:Commands.Unmerge" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
+            <MenuItem Command="ctrlSupport:Commands.CustomCode" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
+            <MenuItem Command="ctrlSupport:Commands.Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Visibility="{Binding Path=IsEnabled , RelativeSource={RelativeSource Self}, Converter={StaticResource VisibilityAsBooleanConverter}}"/>
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
 

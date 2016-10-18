@@ -10,8 +10,8 @@
 	xmlns:ctrlSupport="clr-namespace:SmaSTraDesigner.Controls.Support"
 	Startup="Application_Startup" DispatcherUnhandledException="Application_DispatcherUnhandledException">
 	<Application.Resources>
-		<wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
-		<presConverters:LambdaConverter x:Key="ToolTipConverter" />
+        <wpfConverters:VisibilityAsBooleanConverter x:Key="VisibilityAsBooleanConverter" />
+        <presConverters:LambdaConverter x:Key="ToolTipConverter" />
 		<ctrlSupport:NodeListTemplateSelector x:Key="NodeListTemplateSelector" />
 		<DataTemplate x:Key="TransformationNodeTemplate">
 			<ctrl:UcTransformationViewer Margin="5,5" IsPreview="True" />
