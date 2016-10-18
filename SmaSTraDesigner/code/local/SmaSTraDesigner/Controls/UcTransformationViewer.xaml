@@ -83,22 +83,38 @@
             <Grid>
                 <TextBlock Name="tbTransformationName" FontFamily="Tahoma Regular" Foreground="White" Text="{Binding Path=Name}" TextAlignment="Center" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="80" Padding="10,3,10,3.5"  >
                     <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
+                        <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Background" Value="{StaticResource ColorDouble}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=Class.InputTypes.Length}" Value="1">
                                     <Setter Property="Background" Value="{StaticResource ColorLong}" />
                                 </DataTrigger>
                             </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
+                        </Style>
+                    </TextBlock.Style>
                 </TextBlock>
-                <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window_ohne_farbe_cut.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="{Binding ActualHeight, ElementName=tbTransformationName}">
-                </Image>
+                <Grid Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="{Binding ActualHeight, ElementName=tbTransformationName}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/left_name_window.png"/>
+                    <Image Grid.Column="1" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/middle_name_window.png" />
+                    <Image Grid.Column="2" Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/right_name_window.png"/>
+                </Grid>
             </Grid>
 
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/top_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7" >
-            </Image>
+            <Grid Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/left_top_window.png" />
+                <Image Grid.Column="1" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/middle_top_window.png" />
+                <Image Grid.Column="2" Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/right_top_window.png" />
+            </Grid>
 
             <Grid>
                 <ItemsControl x:Name="icInputHandles" ItemsSource="{Binding Path=InputIOData, Converter={StaticResource InputItemsSourceConverter}}" IsHitTestVisible="True">
@@ -110,8 +126,16 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Image Stretch="Fill"  Source="pack://siteoforigin:,,,/Resources/mid_window.png" Height="{Binding ActualHeight, ElementName=tbTransformationName}" Width="{Binding ActualWidth, ElementName=tbTransformationName}" >
-                                </Image>
+                                <Grid Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="{Binding ActualHeight, ElementName=tbTransformationName}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/left_middle_window_78.png" />
+                                    <Image Grid.Column="1" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/middle_middle_window_75.png"  />
+                                    <Image Grid.Column="2" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/right_middle_window_78.png" />
+                                </Grid>
                                 <WrapPanel>
                                     <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}">
                                         <Grid.Style>
@@ -137,8 +161,16 @@
                 <local:UcIOHandle IsInput="False" DataContext="{Binding ElementName=This, Path=DataContext.OutputIOData}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-14,0" />
             </Grid>
 
-            <Image Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/bottom_window.png" Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7">         
-            </Image>
+            <Grid Width="{Binding ActualWidth, ElementName=tbTransformationName}" Height="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/left_bottom_window.png"/>
+                <Image Grid.Column="1" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/middle_bottom_window.png" />
+                <Image Grid.Column="2" Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/right_bottom_window.png" />
+            </Grid>
 
         </StackPanel>
 

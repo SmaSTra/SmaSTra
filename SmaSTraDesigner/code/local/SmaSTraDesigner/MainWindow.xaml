@@ -337,7 +337,7 @@
                                 </StackPanel.Resources>
                                 <WrapPanel>
                                     <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeName ,UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeName ,UpdateSourceTrigger=PropertyChanged}" MinWidth="50" />
                                 </WrapPanel>
                                 <WrapPanel>
                                     <TextBlock Text="Class: " HorizontalAlignment="Left" VerticalAlignment="Center"/>

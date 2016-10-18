@@ -243,6 +243,46 @@ namespace SmaSTraDesigner.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap left_bottom_window {
+            get {
+                object obj = ResourceManager.GetObject("left_bottom_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap left_middle_window_78 {
+            get {
+                object obj = ResourceManager.GetObject("left_middle_window_78", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap left_name_window {
+            get {
+                object obj = ResourceManager.GetObject("left_name_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap left_top_window {
+            get {
+                object obj = ResourceManager.GetObject("left_top_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_kom {
             get {
                 object obj = ResourceManager.GetObject("logo_kom", resourceCulture);
@@ -296,6 +336,46 @@ namespace SmaSTraDesigner.Properties {
         internal static System.Drawing.Bitmap mid_window {
             get {
                 object obj = ResourceManager.GetObject("mid_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap middle_bottom_window {
+            get {
+                object obj = ResourceManager.GetObject("middle_bottom_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap middle_middle_window_75 {
+            get {
+                object obj = ResourceManager.GetObject("middle_middle_window_75", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap middle_name_window {
+            get {
+                object obj = ResourceManager.GetObject("middle_name_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap middle_top_window {
+            get {
+                object obj = ResourceManager.GetObject("middle_top_window", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -363,6 +443,46 @@ namespace SmaSTraDesigner.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap right_bottom_window {
+            get {
+                object obj = ResourceManager.GetObject("right_bottom_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap right_middle_window_78 {
+            get {
+                object obj = ResourceManager.GetObject("right_middle_window_78", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap right_name_window {
+            get {
+                object obj = ResourceManager.GetObject("right_name_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap right_top_window {
+            get {
+                object obj = ResourceManager.GetObject("right_top_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap save {
             get {
                 object obj = ResourceManager.GetObject("save", resourceCulture);
@@ -406,16 +526,6 @@ namespace SmaSTraDesigner.Properties {
         internal static System.Drawing.Bitmap top_window {
             get {
                 object obj = ResourceManager.GetObject("top_window", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap top_window_ohne_farbe {
-            get {
-                object obj = ResourceManager.GetObject("top_window_ohne_farbe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
