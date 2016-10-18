@@ -28,7 +28,7 @@
 			FrameworkElement element = (FrameworkElement)container;
 			if (item is Transformation)
 			{
-				return element.FindResource("TransformationNodeTemplate") as DataTemplate;
+                return element.FindResource("TransformationNodeTemplate") as DataTemplate;
 			}
 			else if (item is OutputNode)
 			{

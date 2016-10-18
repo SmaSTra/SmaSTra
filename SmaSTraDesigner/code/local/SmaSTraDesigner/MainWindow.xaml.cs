@@ -195,11 +195,9 @@ namespace SmaSTraDesigner
                     if (nodeViewer.Node.Class.UserCreated)
                     {
                         e.CanExecute = true;
-                        System.Console.WriteLine("+++++++ e.Source: " + e.Source);
                     } else
                     {
                         e.CanExecute = false;
-                        System.Console.WriteLine("+++++++ e.Source: " + e.Source);
                     }
                 }
                 else if (!nodeViewer.IsSelected)

@@ -14,7 +14,7 @@
         <presConverters:LambdaConverter x:Key="ToolTipConverter" />
 		<ctrlSupport:NodeListTemplateSelector x:Key="NodeListTemplateSelector" />
 		<DataTemplate x:Key="TransformationNodeTemplate">
-			<ctrl:UcTransformationViewer Margin="5,5" IsPreview="True" />
+            <ctrl:UcTransformationViewer Margin="5,5" IsPreview="True" />
 		</DataTemplate>
 		<DataTemplate x:Key="OutputNodeTemplate">
 			<ctrl:UcOutputViewer Margin="5,5" IsPreview="True" />

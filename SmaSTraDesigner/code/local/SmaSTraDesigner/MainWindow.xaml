@@ -206,7 +206,7 @@
                     <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="{StaticResource ColorPanelTitel}">
                         <StackPanel x:Name="spnNodeClasses" Orientation="Horizontal">
 
-                            <ItemsControl x:Name="icFilteredElements" ItemsSource="{Binding Path=FilteredNodes}" ItemTemplateSelector="{StaticResource NodeListTemplateSelector}" >
+                        <ItemsControl x:Name="icFilteredElements" ItemsSource="{Binding Path=FilteredNodeViewers}" >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel/>

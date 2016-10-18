@@ -11,6 +11,8 @@ using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.config;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
+using SmaSTraDesigner.Controls;
+using System.Collections.ObjectModel;
 
 namespace SmaSTraDesigner.BusinessLogic.classhandler
 {
@@ -21,6 +23,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 	{
 
         #region fields
+
+        /// <summary>
+        /// Array of one Node of each type.
+        /// </summary>
+        private List<UcNodeViewer> _allNodeViewers;
 
         /// <summary>
         /// The Toggle for the DataSources
@@ -59,9 +66,9 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
 
 
         /// <summary>
-        /// The cached filtered Nodes.
+        /// The cached filtered Node Classes.
         /// </summary>
-        private Node[] _filteredNodes;
+        private String[] _filteredNodeClasses;
 
 
 
@@ -86,6 +93,59 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         #region properties
 
         /// <summary>
+        /// The Array of all Node Classes.
+        /// </summary>
+        public List<UcNodeViewer> AllNodeViewers
+        {
+            get
+            { if (_allNodeViewers == null) {
+                    Node[] allNodes = _classes.Values
+                    .Distinct()
+                    .Select(n => n.GenerateNode())
+                    .NonNull()
+                    .OrderBy(s => s.Class.Name)
+                    .ToArray();
+
+                    _allNodeViewers = new List<UcNodeViewer>();
+                    for (int i = 0; i < allNodes.Length; i++)
+                    {
+                        
+                        Node currentNode = allNodes[i];
+                        UcNodeViewer currentViewer;
+                        if(currentNode.Class.InputTypes.Count() > 0)
+                        {
+                            currentViewer = new UcTransformationViewer();
+                        } else
+                        {
+                            currentViewer = new UcDataSourceViewer();
+                        }
+                        currentViewer.DataContext = currentNode;
+                        currentViewer.IsPreview = true;
+                        _allNodeViewers.Add(currentViewer);
+                    }
+                }
+                Console.WriteLine("AllNodeViewers");
+                return _allNodeViewers;
+            }
+        }
+
+        /// <summary>
+        /// A List of all NodesViewers with 
+        /// </summary>
+        public List<UcNodeViewer> FilteredNodeViewers
+        {
+            get
+            {
+                foreach (UcNodeViewer nodeViewer in AllNodeViewers)
+                {
+                    nodeViewer.Visibility = FilteredNodeClasses.Contains(nodeViewer.Node.Class.Name) ? Visibility.Visible : Visibility.Collapsed;
+                }
+                Console.WriteLine("FilteredNodeViewers");
+                return AllNodeViewers;
+            }
+        }
+
+        /// <summary>
         /// The Toggle for the Basic Elements to Bind to the GUI.
         /// </summary>
         public bool ToggleDataSources
@@ -95,8 +155,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._toggleDataSources = value;
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
@@ -110,8 +170,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._toggleConversions = value;
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
@@ -125,8 +185,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._toggleTransformations = value;
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
@@ -139,8 +199,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._toggleBasic = value;
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
@@ -155,8 +215,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._toggleCustom = value;
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
@@ -171,8 +231,8 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._toggleCombined = value;
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
@@ -186,19 +246,19 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             set
             {
                 this._filterString = value.ToLower();
-                this._filteredNodes = null;
-                this.OnPropertyChanged("FilteredNodes");
+                this._filteredNodeClasses = null;
+                this.OnPropertyChanged("FilteredNodeViewers");
             }
         }
 
         /// <summary>
         /// Gets the Filtered Nodes. To bind to the GUI.
         /// </summary>
-        public Node[] FilteredNodes
+        public String[] FilteredNodeClasses
         {
             get
             {
-                if (this._filteredNodes != null) return this._filteredNodes;
+                if (this._filteredNodeClasses != null) return this._filteredNodeClasses;
 
                 Func<AbstractNodeClass, bool> dataSourceFilter = (n => ToggleDataSources || n.InputTypes.Length != 0);
                 Func<AbstractNodeClass, bool> conversionFilter = (n => ToggleConversions || n.InputTypes.Length != 1);
@@ -212,7 +272,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 Func<AbstractNodeClass, bool> nameFilter = (n => string.IsNullOrWhiteSpace(this.FilterString) || n.Name.ToLower().Contains(FilterString));
 
                 //Filter + Generate:
-                return _classes.Values
+                this._filteredNodeClasses = _classes.Values
                     .Where(dataSourceFilter)
                     .Where(conversionFilter)
                     .Where(transformationFilter)
@@ -225,10 +285,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                     .Where(nameFilter)
 
                     .Distinct()
-                    .Select(n => n.GenerateNode())
+                    .Select(n => n.Name)
                     .NonNull()
-                    .OrderBy(s => s.Class.Name)
+                    .OrderBy(s => s)
                     .ToArray();
+
+                Console.WriteLine("FilteredNodeClasses");
+
+
+                return this._filteredNodeClasses;
             }
         }
 
@@ -245,6 +310,11 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// <returns></returns>
         public AbstractNodeClass AddClass(AbstractNodeClass nodeClass)
         {
+            return AddClass(nodeClass, true);
+        }
+
+        private AbstractNodeClass AddClass(AbstractNodeClass nodeClass, bool updateGUI)
+        {
             if (nodeClass == null) return null;
 
             //If already present -> Do not add!
@@ -254,8 +324,13 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             this._classes.Add(nodeClass.Name, nodeClass);
 
             //Always update the filtered nodes.
-            this._filteredNodes = null;
-            this.OnPropertyChanged("FilteredNodes");
+            this._filteredNodeClasses = null;
+            _allNodeViewers = null;
+            if (updateGUI)
+            {
+                this.OnPropertyChanged("FilteredNodeClasses");
+                this.OnPropertyChanged("FilteredNodeViewers");
+            }
 
             return nodeClass;
         }
@@ -269,14 +344,15 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             //Clear all the classes already present:
             this._classes.Clear();
 
-            _filteredNodes = null;
+            _filteredNodeClasses = null;
+            _allNodeViewers = null;
 
             //Now reload ower folders:
             LoadClasses(Path.Combine(WorkSpace.DIR, WorkSpace.BASE_DIR));
             LoadClasses(Path.Combine(WorkSpace.DIR, WorkSpace.CREATED_DIR));
 
-
-            this.OnPropertyChanged("FilteredNodes");
+            this.OnPropertyChanged("FilteredNodeClasses");
+            this.OnPropertyChanged("FilteredNodeViewers");
 
         }
 
@@ -300,7 +376,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 {
                     var loadedClass = loader.loadFromFolder(dir);
                     if (loadedClass == null) throw new Exception("Could not Load Class.... *Mumble... Mumble*");
-                    AddClass(loadedClass);
+                    AddClass(loadedClass, false);
                 }
                 catch (FileNotFoundException e)
                 {
