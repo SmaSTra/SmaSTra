@@ -1,0 +1,19 @@
+{
+  "type": "transformation",
+  "name": "TimeBetweenHour",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.time.TimeTransformations",
+  "display": "TimeBetweenHour",
+  "description": "Returns true if the Time is between these two hours.",
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "extras": [],
+  "method": "isBetween",
+  "static": true,
+  "output": "boolean",
+  "input": {
+    "arg0": "int",
+    "arg1": "int"
+  }
+}

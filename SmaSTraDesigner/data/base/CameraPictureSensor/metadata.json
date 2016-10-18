@@ -12,7 +12,7 @@
   "proxyProperties": [
     {
       "type": "android.view.SurfaceView",
-      "method": "setTextureView",
+      "method": "setSurfaceView",
       "name": "setSurfaceView"
     }
   ],

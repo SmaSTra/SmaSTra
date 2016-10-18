@@ -6,8 +6,8 @@
   "display": "Gps Sensor",
   "description": "The GPS sensor of the Device.",
   "needs": [
-    "de.tu_darmstadt.smastra.sensors.Data3d",
-    "de.tu_darmstadt.smastra.sensors.Vector3d"
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "de.tu_darmstadt.smastra.sensors.Data3d"
   ],
   "config": [],
   "proxyProperties": [],

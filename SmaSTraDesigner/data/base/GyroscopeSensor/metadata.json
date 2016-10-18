@@ -7,8 +7,8 @@
   "description": "The Gyro sensor measuring 3d-circle acceleration",
   "needs": [
     "de.tu_darmstadt.smastra.sensors.Abstract3dAndroidSensor",
-    "de.tu_darmstadt.smastra.sensors.Data3d",
-    "de.tu_darmstadt.smastra.sensors.Vector3d"
+    "de.tu_darmstadt.smastra.sensors.Vector3d",
+    "de.tu_darmstadt.smastra.sensors.Data3d"
   ],
   "config": [
     {
