@@ -308,6 +308,12 @@ namespace SmaSTraDesigner.Controls.Support
                 return;
             }
 
+            if (PackageName.Contains(" "))
+            {
+                tbStatus.Text = "Space is not allowed in package names. Use \".\" instead";
+                return;
+            }
+
             DialogResult = true;
         }
         

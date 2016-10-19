@@ -135,7 +135,7 @@
                                     <Image Grid.Column="2" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/right_middle_window_78.png" />
                                 </Grid>
                                 <WrapPanel>
-                                    <Grid >
+                                    <Grid>
                                         <Grid.Style>
                                             <Style TargetType="Grid">
                                                 <Setter Property="Opacity" Value="0.5"/>
