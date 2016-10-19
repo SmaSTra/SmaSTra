@@ -283,6 +283,8 @@ namespace SmaSTraDesigner.Controls
                 }
         }
 
+
+
         private Boolean loadedCompletely = false;
         public Boolean LoadedCompletely
         {

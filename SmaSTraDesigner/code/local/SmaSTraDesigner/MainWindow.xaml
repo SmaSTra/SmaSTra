@@ -274,8 +274,8 @@
                                             <StackPanel.Resources>
                                                 <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
                                             </StackPanel.Resources>
-                                        <WrapPanel Margin="5,5,0,5">
-                                            <ItemsControl ItemsSource="{Binding Path=TempViewerList}">
+                                        <Grid Margin="5,5,0,5">
+                                            <ItemsControl x:Name="icOnlinePreview" ItemsSource="{Binding Path=TempViewerList}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <StackPanel>
@@ -283,7 +283,8 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                             </ItemsControl>
-                                        </WrapPanel>
+                                            <Rectangle Width="{Binding Path=ActualWidth, ElementName=icOnlinePreview}" Height="{Binding Path=ActualHeight, ElementName=icOnlinePreview}" Fill="Transparent"/>
+                                        </Grid>
                                         <WrapPanel>
                                                 <TextBlock Text="Name: "/>
                                                 <TextBlock x:Name="tbDetailName" Text="{Binding Path=SelectedClass.Name}"/>
