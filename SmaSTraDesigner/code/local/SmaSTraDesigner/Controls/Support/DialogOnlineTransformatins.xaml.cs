@@ -54,6 +54,7 @@ namespace SmaSTraDesigner.Controls.Support
                 {
                     selectedClass = value;
                     this.NotifyPropertyChanged("SelectedClass");
+                    this.NotifyPropertyChanged("TempViewerList");
                 }
             }
         }
@@ -133,6 +134,35 @@ namespace SmaSTraDesigner.Controls.Support
                 default:
                     tbStatusBar.Text = "Error: " + downloadSingleResponse.ToString();
                     return;
+            }
+        }
+
+        public UcNodeViewer generateTempNodeViewer()
+        {
+            UcNodeViewer tempNodeViewer = null;
+            if (SelectedClass != null)
+            {
+                Node tempNode = SelectedClass.GenerateTempClass().GenerateNode();
+                if (tempNode.Class.InputTypes.Length > 0)
+                {
+                    tempNodeViewer = new UcTransformationViewer();
+                }
+                else
+                {
+                    tempNodeViewer = new UcDataSourceViewer();
+                }
+                tempNodeViewer.DataContext = tempNode;
+                tempNodeViewer.IsPreview = true;
+            }
+            return tempNodeViewer;
+        }
+
+
+        public UcNodeViewer[] TempViewerList //TODO: this is only an array because an ItemsControl handles the display of the selected NodeViewer
+        {
+            get
+            {
+                return new UcNodeViewer[] { generateTempNodeViewer() };
             }
         }
 

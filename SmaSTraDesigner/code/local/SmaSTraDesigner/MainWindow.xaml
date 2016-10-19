@@ -274,7 +274,17 @@
                                             <StackPanel.Resources>
                                                 <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
                                             </StackPanel.Resources>
-                                            <WrapPanel>
+                                        <WrapPanel Margin="5,5,0,5">
+                                            <ItemsControl ItemsSource="{Binding Path=TempViewerList}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel>
+                                                        </StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+                                        </WrapPanel>
+                                        <WrapPanel>
                                                 <TextBlock Text="Name: "/>
                                                 <TextBlock x:Name="tbDetailName" Text="{Binding Path=SelectedClass.Name}"/>
                                             </WrapPanel>
@@ -300,11 +310,11 @@
                                                 <TextBlock Text="Output: "/>
                                                 <TextBlock x:Name="tbDetailOutput" Text="{Binding Path=SelectedClass.Output}"/>
                                             </WrapPanel>
-                                            <WrapPanel>
-                                                <TextBlock Text="Type: "/>
-                                                <TextBlock x:Name="tbDetailType" Text="{Binding Path=SelectedClass.Type}"/>
-                                            </WrapPanel>
-                                        </StackPanel>
+                                        <WrapPanel>
+                                            <TextBlock Text="Type: "/>
+                                            <TextBlock x:Name="tbDetailType" Text="{Binding Path=SelectedClass.Type}"/>
+                                        </WrapPanel>
+                                    </StackPanel>
                                     </ScrollViewer>
                                 </Grid>
                             </Border>
