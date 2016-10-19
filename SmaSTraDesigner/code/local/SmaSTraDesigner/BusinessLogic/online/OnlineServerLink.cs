@@ -1,6 +1,5 @@
 ﻿using Common;
 using Newtonsoft.Json.Linq;
-using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.config;
@@ -24,23 +23,23 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <summary>
         /// The path for the TMP directory.
         /// </summary>
-        private const string TMP_PATH = "tmp";
+        private const string TmpPath = "tmp";
 
         /// <summary>
         /// The last check if the web-server is there.
         /// </summary>
-        private long lastCheckedOnlineTime = 0;
+        private long _lastCheckedOnlineTime;
 
         /// <summary>
         /// The last check if the web-server is there.
         /// </summary>
-        private bool lastCheckedOnline = false;
+        private bool _lastCheckedOnline;
 
 
 
         public OnlineServerLink()
         {
-            Directory.CreateDirectory(Path.Combine(WorkSpace.DIR, TMP_PATH));
+            Directory.CreateDirectory(Path.Combine(WorkSpace.DIR, TmpPath));
         }
 
 
@@ -59,7 +58,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            Task t = new Task(() => startDownloadAll(callback));
+            var t = new Task(() => StartDownloadAll(callback));
             t.Start();
         }
 
@@ -71,31 +70,31 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <returns>if the service is online. Be aware, that this is sync!</returns>
         private bool CheckOnlineSync()
         {
-            long now = System.DateTime.Now.Ticks;
-            if((lastCheckedOnlineTime + 10000) > now)
+            var now = System.DateTime.Now.Ticks;
+            if((_lastCheckedOnlineTime + 10000) > now)
             {
-                return lastCheckedOnline;
+                return _lastCheckedOnline;
             }
 
-            this.lastCheckedOnlineTime = now;
+            this._lastCheckedOnlineTime = now;
             try
             {
-                string address = GetBaseAddress() + "ping";
-                using (HttpClient client = new HttpClient() { Timeout = new TimeSpan(0,0,0,2) })
-                using (HttpResponseMessage response = client.GetAsync(address).Result)
-                using (HttpContent content = response.Content)
+                var address = GetBaseAddress() + "ping";
+                using (var client = new HttpClient() { Timeout = new TimeSpan(0,0,0,2) })
+                using (var response = client.GetAsync(address).Result)
+                using (response.Content)
                 {
-                    HttpStatusCode status = response.StatusCode;
-                    this.lastCheckedOnline = status == HttpStatusCode.OK;
+                    var status = response.StatusCode;
+                    this._lastCheckedOnline = status == HttpStatusCode.OK;
                 }
             }
-            catch (Exception exp)
+            catch (Exception)
             {
                 Debug.Print("Server not reachable?! Check your config!");
-                this.lastCheckedOnline = false;
+                this._lastCheckedOnline = false;
             }
 
-            return lastCheckedOnline;
+            return _lastCheckedOnline;
         }
         
 
@@ -104,20 +103,20 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Starts the Download of all Elements.
         /// </summary>
         /// <param name="callback">To call</param>
-        private async void startDownloadAll(Action<List<SimpleClass>, DownloadAllResponse> callback)
+        private async void StartDownloadAll(Action<List<SimpleClass>, DownloadAllResponse> callback)
         {
-            List<SimpleClass> classList = new List<SimpleClass>();
+            var classList = new List<SimpleClass>();
 
-            string address = GetBaseAddress() + "all";
-            DownloadAllResponse resp = DownloadAllResponse.FAILED_EXCEPTION;
+            var address = GetBaseAddress() + "all";
+            DownloadAllResponse resp;
 
             try
             {
-                using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(address))
-                using (HttpContent content = response.Content)
+                using (var client = new HttpClient())
+                using (var response = await client.GetAsync(address))
+                using (var content = response.Content)
                 {
-                    HttpStatusCode status = response.StatusCode;
+                    var status = response.StatusCode;
                     if(status != HttpStatusCode.OK)
                     {
                         resp = DownloadAllResponse.FAILED_EXCEPTION;
@@ -131,19 +130,19 @@ namespace SmaSTraDesigner.BusinessLogic.online
 
 
                     // ... Read the string.
-                    string result = await content.ReadAsStringAsync();
+                    var result = await content.ReadAsStringAsync();
                     JArray.Parse(result)
                         .ToJObj()
                         .ForEach(o =>
                         {
-                            string type = o.GetValueAsString("type", "");
-                            string name = o.GetValueAsString("name", "");
-                            string display = o.GetValueAsString("display", "");
-                            string description = o.GetValueAsString("description", "");
-                            string[] inputs = o.GetValueAsStringArray("inputs");
-                            string output = o.GetValueAsString("output", "");
+                            var type = o.GetValueAsString("type");
+                            var name = o.GetValueAsString("name");
+                            var display = o.GetValueAsString("display");
+                            var description = o.GetValueAsString("description");
+                            var inputs = o.GetValueAsStringArray("inputs");
+                            var output = o.GetValueAsString("output");
 
-                            SimpleClass newElement = new SimpleClass(type, name, display, description, inputs, output);
+                            var newElement = new SimpleClass(type, name, display, description, inputs, output);
                             classList.Add(newElement);
                         });
 
@@ -171,6 +170,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Starts a call for all elements on the web-server.
         /// Calls the callback when done.
         /// </summary>
+        /// <param name="name">The name to get.</param>
         /// <param name="callback">to call when done.</param>
         public void GetOnlineElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
@@ -181,7 +181,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            Task t = new Task(() => startDownloadOfElement(name, callback));
+            var t = new Task(() => StartDownloadOfElement(name, callback));
             t.Start();
         }
 
@@ -190,17 +190,17 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void startDownloadOfElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
+        private async void StartDownloadOfElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
         {
             byte[] data = null;
 
-            DownloadSingleResponse resp = DownloadSingleResponse.FAILED_EXCEPTION;
-            string address = GetBaseAddress() + "get?name=" + name;
+            var resp = DownloadSingleResponse.FAILED_EXCEPTION;
+            var address = GetBaseAddress() + "get?name=" + name;
             try
             {
-                using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(address))
-                using (HttpContent content = response.Content)
+                using (var client = new HttpClient())
+                using (var response = await client.GetAsync(address))
+                using (var content = response.Content)
                 {
                     //Did work!
                     if (response.StatusCode == HttpStatusCode.OK)
@@ -236,14 +236,14 @@ namespace SmaSTraDesigner.BusinessLogic.online
             //If download failed -> break!
             if (resp != DownloadSingleResponse.SUCCESS)
             {
-                if (callback != null) callback.Invoke(null, resp);
+                callback?.Invoke(null, resp);
                 return;
             }
 
-            string workSpace = WorkSpace.DIR;
-            string tmpPath = Path.Combine(workSpace, TMP_PATH, name + "_download");
-            string tmpZipPath = Path.Combine(tmpPath, "data.zip");
-            string destDir = Path.Combine(workSpace, "created", name);
+            var workSpace = WorkSpace.DIR;
+            var tmpPath = Path.Combine(workSpace, TmpPath, name + "_download");
+            var tmpZipPath = Path.Combine(tmpPath, "data.zip");
+            var destDir = Path.Combine(workSpace, "created", name);
 
             //Just to be sure we do not have some old remainings.
             if(Directory.Exists(tmpPath)) Directory.Delete(tmpPath, true);
@@ -253,7 +253,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             Directory.CreateDirectory(destDir);
 
             //Write and do your stuff:
-            File.WriteAllBytes(tmpZipPath, data);
+            if (data != null) File.WriteAllBytes(tmpZipPath, data);
             try
             {
                 ZipFile.ExtractToDirectory(tmpZipPath, destDir);
@@ -281,7 +281,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 }
             }
 
-            if (callback != null) callback.Invoke(newElement, resp);
+            callback?.Invoke(newElement, resp);
         }
 
 
@@ -289,6 +289,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// Starts a call for all elements on the web-server.
         /// Calls the callback when done.
         /// </summary>
+        /// <param name="clazz">The class to upload</param>
         /// <param name="callback">to call when done.</param>
         public void UploadElement(AbstractNodeClass clazz, Action<string,UploadResponse> callback)
         {
@@ -299,37 +300,37 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            string folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? WorkSpace.CREATED_DIR : WorkSpace.BASE_DIR), clazz.Name);
-            string tmpName = Path.Combine(WorkSpace.DIR, TMP_PATH, "upload_" + clazz.Name + ".zip");
+            var folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? WorkSpace.CREATED_DIR : WorkSpace.BASE_DIR), clazz.Name);
+            var tmpName = Path.Combine(WorkSpace.DIR, TmpPath, "upload_" + clazz.Name + ".zip");
             ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);
 
-            Task t = new Task(() => uploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n,b) =>
+            var t = new Task(() => UploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n,b) =>
             {
                 File.Delete(tmpName);
-                if(callback != null) callback.Invoke(n,b);
+                callback.Invoke(n,b);
             }));
             t.Start();
         }
-
 
 
         /// <summary>
         /// Starts to upload the Data of the Zip file.
         /// </summary>
         /// <param name="name">To get</param>
+        /// <param name="data">The data to upload</param>
         /// <param name="callback">to call when done</param>
-        private async void uploadFile(string name, byte[] data, Action<string,UploadResponse> callback)
+        private async void UploadFile(string name, byte[] data, Action<string,UploadResponse> callback)
         {
-            UploadResponse resp = UploadResponse.FAILED_DUPLICATE_NAME;
+            var resp = UploadResponse.FAILED_DUPLICATE_NAME;
 
             var contentToSend = new ByteArrayContent(data);
             contentToSend.Headers.Add("name", name);
 
             try
             {
-                string address = GetBaseAddress() + "add";
-                using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.PostAsync(address, contentToSend))
+                var address = GetBaseAddress() + "add";
+                using (var client = new HttpClient())
+                using (var response = await client.PostAsync(address, contentToSend))
                 {
                     //Did work!
                     if (response.StatusCode == HttpStatusCode.OK)
@@ -362,7 +363,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
 
 
             //Tell if worked:
-            if (callback != null) callback.Invoke(name, resp);
+            callback?.Invoke(name, resp);
         }
 
         /// <summary>
@@ -371,10 +372,10 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <returns>the base address</returns>
         private string GetBaseAddress()
         {
-            SmaSTraConfiguration config = Singleton<SmaSTraConfiguration>.Instance;
-            string host = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_HOST_PATH, "http://localhost");
-            string port = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PORT_PATH, "8080");
-            string prefix = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PREFIX_PATH, "SmaSTraWebServer");
+            var config = Singleton<SmaSTraConfiguration>.Instance;
+            var host = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_HOST_PATH, "http://localhost");
+            var port = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PORT_PATH, "8080");
+            var prefix = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PREFIX_PATH, "SmaSTraWebServer");
 
             return host + ":" + port + "/" + prefix + "/";
         }
@@ -410,40 +411,33 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <returns>The temp. Class.</returns>
         public AbstractNodeClass GenerateTempClass()
         {
-            if(Type == "transformation")
+            switch (Type)
             {
-                return new TransformationNodeClass(Name, Display, Description, "CREATOR", 
-                    DataType.GetCachedType(Output), Inputs.Select(DataType.GetCachedType).ToArray(),
-                    "", null, null, null, null, true, "", "", true
-                );
-            }
+                case "transformation":
+                    return new TransformationNodeClass(Name, Display, Description, "CREATOR", 
+                        DataType.GetCachedType(Output), Inputs.Select(DataType.GetCachedType).ToArray(),
+                        "", null, null, null, null, true, "", "", true
+                    );
+                case "sensor":
+                    return new DataSourceNodeClass(Name, Display, Description, "CREATOR",
+                        DataType.GetCachedType(Output), "",
+                        null, null, null, null, true, "", "", "", ""
+                    );
+                case "buffer":
+                    return new BufferNodeClass(Name, Display, Description, "CREATOR",
+                        DataType.GetCachedType(Output), "",
+                        null, null, null, null, null, true, "", "", ""
+                    );
+                case "combined":
+                    //This will fail:
+                    return new CombinedNodeClass(Name, Display, Description, "CREATOR",
+                        null, null, DataType.GetCachedType(Output), "",
+                        true, ""
+                    );
 
-            if(Type == "sensor")
-            {
-                return new DataSourceNodeClass(Name, Display, Description, "CREATOR",
-                    DataType.GetCachedType(Output), "",
-                    null, null, null, null, true, "", "", "", ""
-                );
+                default:
+                    return null;
             }
-
-            if(Type == "buffer")
-            {
-                return new BufferNodeClass(Name, Display, Description, "CREATOR",
-                    DataType.GetCachedType(Output), "",
-                    null, null, null, null, null, true, "", "", ""
-                );
-            }
-
-            //This will fail:
-            if(Type == "combined")
-            {
-                return new CombinedNodeClass(Name, Display, Description, "CREATOR",
-                    null, null, DataType.GetCachedType(Output), "",
-                    true, "", null
-                );
-            }
-
-            return null;
         }
 
     }
