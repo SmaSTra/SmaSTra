@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public class SmaSTraElement implements Comparable<SmaSTraElement> {
 
@@ -101,7 +102,7 @@ public class SmaSTraElement implements Comparable<SmaSTraElement> {
 		JsonArray inputArray = new JsonArray();
 		obj.add(INPUT_PATH, inputArray);
 		for(String input : inputs){
-			inputArray.add(input);
+			inputArray.add(new JsonPrimitive(input));
 		}
 		
 		obj.addProperty(OUTPUT_PATH, output);

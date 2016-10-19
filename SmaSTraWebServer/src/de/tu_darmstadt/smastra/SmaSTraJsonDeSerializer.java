@@ -45,7 +45,7 @@ public class SmaSTraJsonDeSerializer {
 			String[] inputs = new String[inputsObj.size()];
 			Iterator<java.util.Map.Entry<String, JsonElement>> it = inputsObj.entrySet().iterator();
 			for(int i = 0; i < inputsObj.size(); i++){
-				inputs[i] = it.next().getValue().toString();
+				inputs[i] = it.next().getValue().getAsString();
 			}
 			
 			String output = obj.has("output") 
