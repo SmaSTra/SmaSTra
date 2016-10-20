@@ -1233,7 +1233,10 @@ namespace SmaSTraDesigner.Controls
                 }
                 else currentNode = null;
             }
-
+            if (!handledNodesList.Contains(subRoot.Node)) // Handling DataSources that are not connected
+            {
+                handledNodesList.Add(subRoot.Node);
+            }
             return handledNodesList;
         }
 
@@ -1432,12 +1435,25 @@ namespace SmaSTraDesigner.Controls
             undoStack.Push(toRedo);
         }
 
+        public void onNodeSelectAdded(Node node)
+        {
+            UcNodeViewer nodeViewer;
+            nodeViewers.TryGetValue(node, out nodeViewer);
+            if (nodeViewer != null) onNodeViewerSelectAdded(nodeViewer);
+        }
 
         public void onNodeViewerSelectAdded(UcNodeViewer nodeViewer)
         {
             this.changingSelectedNodeViewers = true;
             nodeViewer.IsSelected = true;
             this.changingSelectedNodeViewers = false;
+        }
+
+        public void onNodeViewerSelectRemoved(Node node)
+        {
+            UcNodeViewer nodeViewer;
+            nodeViewers.TryGetValue(node, out nodeViewer);
+            if (nodeViewer != null) onNodeViewerSelectRemoved(nodeViewer);
         }
 
         public void onNodeViewerSelectRemoved(UcNodeViewer nodeViewer)

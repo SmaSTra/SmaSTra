@@ -430,16 +430,36 @@ namespace SmaSTraDesigner
 
         private void PasteNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = this.tdTreeDesigner.SelectedNodeViewer != null && !(this.tdTreeDesigner.SelectedNodeViewer.Node is OutputNode);
+            e.CanExecute = this.tdTreeDesigner.SelectedNodeViewer != null;
         }
 
 
         private void PasteNode_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Node pastedNode = this.tdTreeDesigner.SelectedNodeViewer.Node.Clone();
-            pastedNode.PosX = this.tdTreeDesigner.SelectedNodeViewer.Node.PosX;
-            pastedNode.PosY = this.tdTreeDesigner.SelectedNodeViewer.Node.PosY + 10;
-            this.tdTreeDesigner.AddNode(pastedNode, true, true);
+            List<Node> nodeListToAdd = new List<Node>();
+            List<UcNodeViewer> nodeViewerListToRemove = new List<UcNodeViewer>();
+            foreach (UcNodeViewer nodeViewer in this.tdTreeDesigner.SelectedNodeViewers)
+            { if (!(nodeViewer == null || nodeViewer.Node is OutputNode))
+                {
+                    Node pastedNode = nodeViewer.Node.Clone();
+                    pastedNode.PosX = nodeViewer.Node.PosX;
+                    pastedNode.PosY = nodeViewer.Node.PosY + 10;
+                    nodeListToAdd.Add(pastedNode);
+                    nodeViewerListToRemove.Add(nodeViewer);
+                }
+            }
+            foreach (UcNodeViewer nodeViewerToRemove in nodeViewerListToRemove)
+            {
+            this.tdTreeDesigner.onNodeViewerSelectRemoved(nodeViewerToRemove);
+            }
+            foreach (Node nodeToAdd in nodeListToAdd)
+            {
+                this.tdTreeDesigner.AddNode(nodeToAdd, false, true);
+            }
+            foreach (Node nodeToAdd in nodeListToAdd)
+            {
+                this.tdTreeDesigner.onNodeSelectAdded(nodeToAdd);
+            }
         }
 
         private void About_CanExecute(object sender, CanExecuteRoutedEventArgs e)
