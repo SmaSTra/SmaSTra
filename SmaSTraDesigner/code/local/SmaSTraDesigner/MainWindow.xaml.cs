@@ -1,5 +1,6 @@
 ﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.savingloading;
 
 namespace SmaSTraDesigner
 {
@@ -521,6 +522,9 @@ namespace SmaSTraDesigner
 
         private void This_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //Before closing, we try to save the current state:
+            RegularSaver.Save(this.tdTreeDesigner);
+
             DialogClosingApplication closingDialog = new DialogClosingApplication();
             if(closingDialog.ShowDialog() == true)
             {

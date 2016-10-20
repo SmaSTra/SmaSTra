@@ -10,20 +10,21 @@ namespace SmaSTraDesigner.BusinessLogic.config
     public class SmaSTraConfiguration
     {
 
-        public const string ONLINE_SERVICE_HOST_PATH = "onlineServiceHost";
-        public const string ONLINE_SERVICE_PORT_PATH = "onlineServicePort";
-        public const string ONLINE_SERVICE_PREFIX_PATH = "onlineServicePrefix";
+        public const string OnlineServiceHostPath = "onlineServiceHost";
+        public const string OnlineServicePortPath = "onlineServicePort";
+        public const string OnlineServicePrefixPath = "onlineServicePrefix";
+        public const string LoadLastStatePath = "loadLastState";
 
 
         /// <summary>
         /// The path for the config.
         /// </summary>
-        private const string CONFIG_PATH = "config.prop";
+        private const string ConfigPath = "config.prop";
 
         /// <summary>
         /// The configuration to use.
         /// </summary>
-        private readonly Dictionary<string, string> config = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _config = new Dictionary<string, string>();
 
 
         public SmaSTraConfiguration()
@@ -37,18 +38,18 @@ namespace SmaSTraDesigner.BusinessLogic.config
         /// </summary>
         public void Reload()
         {
-            config.Clear();
+            _config.Clear();
 
             //Checks if the default file is present.
-            if (!File.Exists(Path.Combine(WorkSpace.DIR, CONFIG_PATH))) createDefaultConfig();
+            if (!File.Exists(Path.Combine(WorkSpace.DIR, ConfigPath))) CreateDefaultConfig();
 
             //Loads and reads the config finally:
-            string[] lines = File.ReadAllLines(Path.Combine(WorkSpace.DIR, CONFIG_PATH));
+            var lines = File.ReadAllLines(Path.Combine(WorkSpace.DIR, ConfigPath));
             lines.ForEach(l =>
             {
-                string[] split = l.Split(new char[]{ '=' }, 2);
+                var split = l.Split(new[]{ '=' }, 2);
                 if (split.Count() != 2) return;
-                config[split[0]] = split[1];
+                _config[split[0]] = split[1];
             });
         }
 
@@ -61,7 +62,7 @@ namespace SmaSTraDesigner.BusinessLogic.config
         /// <returns>the wanted option or the defaultvalue.</returns>
         public string GetConfigOption(string key, string defaultValue)
         {
-            return config.ContainsKey(key) ? config[key] : defaultValue;
+            return _config.ContainsKey(key) ? _config[key] : defaultValue;
         }
 
 
@@ -72,8 +73,8 @@ namespace SmaSTraDesigner.BusinessLogic.config
         /// <param name="value"> the value to set.</param>
         public void SetConfigOption(string key, string value)
         {
-            this.config[key] = value;
-            saveConfig(config, Path.Combine(WorkSpace.DIR, CONFIG_PATH));
+            _config[key] = value;
+            SaveConfig(_config, Path.Combine(WorkSpace.DIR, ConfigPath));
         }
 
 
@@ -81,15 +82,18 @@ namespace SmaSTraDesigner.BusinessLogic.config
         /// <summary>
         /// Creates the default config.
         /// </summary>
-        private void createDefaultConfig()
+        private void CreateDefaultConfig()
         {
-            Dictionary<string, string> config = new Dictionary<string, string>();
-            config[ONLINE_SERVICE_HOST_PATH] = "http://localhost";
-            config[ONLINE_SERVICE_PORT_PATH] = "8080";
-            config[ONLINE_SERVICE_PREFIX_PATH] = "SmaSTraWebServer";
+            var defaultConfig = new Dictionary<string, string>
+            {
+                [OnlineServiceHostPath] = "http://localhost",
+                [OnlineServicePortPath] = "8080",
+                [OnlineServicePrefixPath] = "SmaSTraWebServer",
+                [LoadLastStatePath] = "true"
+            };
             //TODO Add new Default config stuff here:
 
-            saveConfig(config, Path.Combine(WorkSpace.DIR, CONFIG_PATH));
+            SaveConfig(defaultConfig, Path.Combine(WorkSpace.DIR, ConfigPath));
         }
 
         /// <summary>
@@ -97,14 +101,14 @@ namespace SmaSTraDesigner.BusinessLogic.config
         /// </summary>
         /// <param name="config">to save</param>
         /// <param name="path">to save to</param>
-        private void saveConfig(Dictionary<string,string> config, string path)
+        private void SaveConfig(Dictionary<string,string> config, string path)
         {
-            ///Be sure we do not have any config here!
+            //Be sure we do not have any config here!
             if (File.Exists(path)) File.Delete(path);
 
             //Convert to readable strings:
-            string[] configStrings = config
-                .Select((entry, index) => { return entry.Key + "=" + entry.Value; })
+            var configStrings = config
+                .Select((entry, index) => entry.Key + "=" + entry.Value)
                 .ToArray()
                 .Sort();
 

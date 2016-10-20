@@ -375,9 +375,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
         private string GetBaseAddress()
         {
             var config = Singleton<SmaSTraConfiguration>.Instance;
-            var host = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_HOST_PATH, "http://localhost");
-            var port = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PORT_PATH, "8080");
-            var prefix = config.GetConfigOption(SmaSTraConfiguration.ONLINE_SERVICE_PREFIX_PATH, "SmaSTraWebServer");
+            var host = config.GetConfigOption(SmaSTraConfiguration.OnlineServiceHostPath, "http://localhost");
+            var port = config.GetConfigOption(SmaSTraConfiguration.OnlineServicePortPath, "8080");
+            var prefix = config.GetConfigOption(SmaSTraConfiguration.OnlineServicePrefixPath, "SmaSTraWebServer");
 
             return host + ":" + port + "/" + prefix + "/";
         }

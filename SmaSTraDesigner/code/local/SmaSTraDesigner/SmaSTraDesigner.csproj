@@ -186,8 +186,9 @@
     <Compile Include="BusinessLogic\nodes\Node.cs" />
     <Compile Include="BusinessLogic\classhandler\nodeclasses\AbstractNodeClass.cs" />
     <Compile Include="BusinessLogic\classhandler\ClassManager.cs" />
-    <Compile Include="BusinessLogic\codegeneration\serializers\NodeSerializer.cs" />
-    <Compile Include="BusinessLogic\codegeneration\serializers\TreeSerializer.cs" />
+    <Compile Include="BusinessLogic\savingloading\RegularSaver.cs" />
+    <Compile Include="BusinessLogic\savingloading\serializers\NodeSerializer.cs" />
+    <Compile Include="BusinessLogic\savingloading\serializers\TreeSerializer.cs" />
     <Compile Include="BusinessLogic\nodes\OutputNode.cs" />
     <Compile Include="BusinessLogic\nodes\Transformation.cs" />
     <Compile Include="BusinessLogic\classhandler\TransformationTree.cs" />

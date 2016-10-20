@@ -1,46 +1,31 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
-using SmaSTraDesigner.BusinessLogic.serializers;
-using System.Dynamic;
-using System;
-using Newtonsoft.Json.Linq;
 using Common;
-using SmaSTraDesigner.Controls;
-using System.Windows;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.nodes;
 
-namespace SmaSTraDesigner.BusinessLogic
+namespace SmaSTraDesigner.BusinessLogic.savingloading.serializers
 {
 
 
-    class TreeSerilizer
+    public class TreeSerilizer
     {
 
-        private static TransformationTree tree;
-
+        
 
         public static void Serialize(TransformationTree transformationTree, string targetFile)
         {
-            tree = transformationTree;
-            //Before we start -> Check if we are connected at all:
-            if (tree == null || tree.OutputNode.InputNodes[0] == null)
-            {
-                Console.WriteLine("Root node is not connected to any node! Can not save!");
-                MessageBox.Show("Root node is not connected to any node! Can not save!");
-                return;
-            }
-
-
             //Generate the Serializer:
             var nodeSerializer = new NodeSerializer();
 
             //Combine the JSON:
             dynamic json = new ExpandoObject();
-            json.nodes = tree.Nodes.Select(nodeSerializer.serializeNode);
-            json.connections = tree.Connections.Select(nodeSerializer.serializeNodeConnection);
+            json.nodes = transformationTree.Nodes.Select(nodeSerializer.serializeNode);
+            json.connections = transformationTree.Connections.Select(nodeSerializer.serializeNodeConnection);
 
 
             //Create the Json settings:
@@ -48,7 +33,7 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                Formatting = Newtonsoft.Json.Formatting.Indented
+                Formatting = Formatting.Indented
             };
 
             //Generate a string and write it to the file:
@@ -59,22 +44,21 @@ namespace SmaSTraDesigner.BusinessLogic
 
         public static void Deserialize(TransformationTree transformationTree, string targetFile)
         {
-            tree = transformationTree;
             //Read the singleton ClassManager.
-            ClassManager classManager = Singleton<ClassManager>.Instance;
+            var classManager = Singleton<ClassManager>.Instance;
 
             //First clear old tree:
-            foreach (Node node in new List<Node>(tree.Nodes)) if(!(node is OutputNode)) tree.DesignTree.RemoveNode(node);
-            foreach (Connection connection in new List<Connection>(tree.Connections)) tree.DesignTree.RemoveConnection(connection);
+            foreach (var node in new List<Node>(transformationTree.Nodes)) if(!(node is OutputNode)) transformationTree.DesignTree.RemoveNode(node);
+            foreach (var connection in new List<Connection>(transformationTree.Connections)) transformationTree.DesignTree.RemoveConnection(connection);
 
             //Generate the Serializer + lists:
             var nodeSerializer = new NodeSerializer();
-            UcTreeDesigner treeDesigner = tree.DesignTree;
+            var treeDesigner = transformationTree.DesignTree;
 
-            List<Node> newNodes = new List<Node>();
-            List<Connection> newConnections = new List<Connection>();
+            var newNodes = new List<Node>();
+            var newConnections = new List<Connection>();
 
-            JObject json = JObject.Parse(File.ReadAllText(targetFile));
+            var json = JObject.Parse(File.ReadAllText(targetFile));
 
             //Seems like this is the only way this is synthactically correct....
             //Read Nodes:
@@ -97,15 +81,15 @@ namespace SmaSTraDesigner.BusinessLogic
             }
 
             //Then add new ones. FIRST THE NODES!
-            foreach (Node node in newNodes)
+            foreach (var node in newNodes)
             {
                 if(node is OutputNode)
                 {
-                    tree.OutputNode.PosX = node.PosX;
-                    tree.OutputNode.PosY = node.PosY;
-                    tree.OutputNode.Name = node.Name;
+                    transformationTree.OutputNode.PosX = node.PosX;
+                    transformationTree.OutputNode.PosY = node.PosY;
+                    transformationTree.OutputNode.Name = node.Name;
                 }
-                else treeDesigner.AddNode(node, false);
+                else treeDesigner.AddNode(node);
             }
 
             //Apply the Connections at last.

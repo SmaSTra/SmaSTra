@@ -1,5 +1,6 @@
 ﻿using SmaSTraDesigner.BusinessLogic.classhandler;
 using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.savingloading;
 
 namespace SmaSTraDesigner
 {
@@ -31,8 +32,8 @@ namespace SmaSTraDesigner
         private const bool HandleGlobalException = false;
 
 
-        private const string REG_SUB_KEY = "SmaSTra";
-        private const string REG_WORKSPACE_KEY = "workspace";
+        private const string RegSubKey = "SmaSTra";
+        private const string RegWorkspaceKey = "workspace";
 
         #endregion consts
 
@@ -43,20 +44,21 @@ namespace SmaSTraDesigner
             if (HandleGlobalException)
             {
                 e.Handled = true;
-                Exception exp = e.Exception;
+                var exp = e.Exception;
 
                 //TODO: Do a new Fanxy GUI for the Error-Handling!
                 MessageBox.Show(this.MainWindow, "Error: " + exp.ToString(), "Uh oh...", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
 		}
 
+        
 		private void Application_Startup(object sender, StartupEventArgs e)
         {
             SplashWindow splash = new SplashWindow();
             splash.Show();
 
             //Read the last used Workspace:
-            string lastWorkspace = readWorkSpaceFromRegestry();
+            string lastWorkspace = ReadWorkSpaceFromRegestry();
             SwitchWorkspace(lastWorkspace, null);
             
             MainWindow main = new MainWindow();
@@ -70,14 +72,14 @@ namespace SmaSTraDesigner
         /// If not present, takes the current working directory.
         /// </summary>
         /// <returns>The Workspace</returns>
-        private string readWorkSpaceFromRegestry()
+        private string ReadWorkSpaceFromRegestry()
         {
             try
             {
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SmaSTra");
+                var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RegSubKey);
                 if (key != null)
                 {
-                    string workSpace = key.GetValue(REG_WORKSPACE_KEY, "").ToString();
+                    var workSpace = key.GetValue(RegWorkspaceKey, "").ToString();
                     key.Close();
                     return workSpace;
                 }
@@ -104,17 +106,17 @@ namespace SmaSTraDesigner
 
             //Save the new Workspace to the Registry:
             try{
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SmaSTra");
-                key.SetValue(REG_WORKSPACE_KEY, newWorkspace);
-                key.Close();
+                var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(RegSubKey);
+                if (key != null)
+                {
+                    key.SetValue(RegWorkspaceKey, newWorkspace);
+                    key.Close();
+                }
             }catch(Exception exp){ Debug.Print(exp.ToString()); }
 
 
             //Clear the current Tree and the GUI:
-            if (treeDesigner != null)
-            {
-                treeDesigner.Clear();
-            }
+            treeDesigner?.Clear();
 
 
             //Set the new Workspace:
@@ -128,6 +130,9 @@ namespace SmaSTraDesigner
             Singleton<NodeBlacklist>.Instance.Reload();
             Singleton<ClassManager>.Instance.Reload();
             Singleton<Library>.Instance.loadLibrary();
+
+            //Restore last state:
+            if(treeDesigner != null) RegularSaver.TryLoad(treeDesigner);
         }
 
         /// <summary>

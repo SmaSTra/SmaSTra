@@ -1,34 +1,34 @@
-﻿using Newtonsoft.Json.Linq;
-using SmaSTraDesigner.BusinessLogic.classhandler;
-using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
-using SmaSTraDesigner.BusinessLogic.utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using SmaSTraDesigner.BusinessLogic.classhandler;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.nodes;
+using SmaSTraDesigner.BusinessLogic.utils;
 
-namespace SmaSTraDesigner.BusinessLogic.serializers
+namespace SmaSTraDesigner.BusinessLogic.savingloading.serializers
 {
     class NodeSerializer
     {
 
         public JObject serializeNode(Node node)
         {
-            JObject obj = new JObject();
+            var obj = new JObject();
             obj.Add("NodeType", node is OutputNode ? "OutputNode" : node.Class.Name);
             obj.Add("NodeName", node.Name);
             obj.Add("PosX", node.PosX);
             obj.Add("PosY", node.PosY);
             obj.Add("NodeUUID", node.NodeUUID);
 
-            JArray inputProperties =
+            var inputProperties =
                 node.InputIOData
                 .Select(serialize)
                 .ToJArray();
             obj.Add("InputIOData", inputProperties);
 
-            JArray configOptions = 
+            var configOptions = 
                 node.Configuration
                 .Select(serialize)
                 .ToJArray();
@@ -40,7 +40,7 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
 
         private JObject serialize(IOData data)
         {
-            JObject obj = new JObject();
+            var obj = new JObject();
             obj.Add("type", data.Type.Name);
             obj.Add("value", data.Value);
 
@@ -49,7 +49,7 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
 
         private JObject serialize(DataConfigElement config)
         {
-            JObject obj = new JObject();
+            var obj = new JObject();
             obj.Add("key", config.Key);
             obj.Add("value", config.Value);
 
@@ -61,12 +61,12 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
         {
             if (obj == null || classManager == null) return null;
 
-            String nodeType = obj.GetValueAsString("NodeType", null);
-            String nodeName = obj.GetValueAsString("NodeName", nodeName = nodeType.Replace("_", " "));
-            string uuid = obj.GetValueAsString("NodeUUID", Guid.NewGuid().ToString());
+            var nodeType = obj.GetValueAsString("NodeType", null);
+            string nodeName = obj.GetValueAsString("NodeName", nodeName = nodeType.Replace("_", " "));
+            var uuid = obj.GetValueAsString("NodeUUID", Guid.NewGuid().ToString());
 
-            double posX = Double.Parse( obj["PosX"].ToString());
-            double posY = Double.Parse( obj["PosY"].ToString());
+            var posX = double.Parse( obj["PosX"].ToString());
+            var posY = double.Parse( obj["PosY"].ToString());
 
             Node newNode;
 
@@ -90,23 +90,23 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
             newNode.ForceUUID(uuid);
 
             //Set the IO Data:
-            JArray ioDataArray = obj.GetValue("InputIOData", new JArray()) as JArray;
+            var ioDataArray = obj.GetValue("InputIOData", new JArray()) as JArray;
             if(ioDataArray != null)
             {
-                for(int i = 0; i < ioDataArray.Count; i++)
+                for(var i = 0; i < ioDataArray.Count; i++)
                 {
-                    IOData data = deserializeIOData(ioDataArray[i] as JObject);
+                    var data = deserializeIOData(ioDataArray[i] as JObject);
                     if (data != null) newNode.InputIOData[i].Value = data.Value;
                 }
             }
 
             //Set the Configuration Data:
-            JArray configArray = obj.GetValue("Configuration", new JArray()) as JArray;
+            var configArray = obj.GetValue("Configuration", new JArray()) as JArray;
             if (configArray != null)
             {
-                for (int i = 0; i < configArray.Count; i++)
+                for (var i = 0; i < configArray.Count; i++)
                 {
-                    JObject configObj = configArray[i] as JObject;
+                    var configObj = configArray[i] as JObject;
                     if(configObj != null) newNode.Configuration[i].Value = configObj.GetValueAsString("value", "");                    
                 }
             }
@@ -119,8 +119,8 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
         {
             if (obj == null) return null;
 
-            string typeName = obj.GetValueAsString("type", "");
-            string value = obj.GetValueAsString("value", "");
+            var typeName = obj.GetValueAsString("type", "");
+            var value = obj.GetValueAsString("value", "");
 
             return new IOData(DataType.GetCachedType(typeName), value);
         }
@@ -128,12 +128,12 @@ namespace SmaSTraDesigner.BusinessLogic.serializers
 
         public Connection? deserializeConnection(dynamic obj, IEnumerable<Node> nodes)
         {
-            String inputName = obj["input"].ToString();
-            String outputName = obj["output"].ToString();
-            int inputIndex = (int) obj["inputIndex"];
+            var inputName = obj["input"].ToString();
+            var outputName = obj["output"].ToString();
+            var inputIndex = (int) obj["inputIndex"];
             
-            Node input = nodes.FirstOrDefault<Node>(n => n.NodeUUID.Equals(inputName));
-            Node output = nodes.FirstOrDefault<Node>(n => n.NodeUUID.Equals(outputName));
+            var input = nodes.FirstOrDefault<Node>(n => n.NodeUUID.Equals(inputName));
+            var output = nodes.FirstOrDefault<Node>(n => n.NodeUUID.Equals(outputName));
             if (input == null || output == null) return null;
 
             return new Connection(output, input, inputIndex);

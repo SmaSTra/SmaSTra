@@ -1,5 +1,5 @@
-﻿using System.Windows.Documents;
-using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+using SmaSTraDesigner.BusinessLogic.savingloading;
 
 namespace SmaSTraDesigner.Controls
 {
@@ -191,7 +191,8 @@ namespace SmaSTraDesigner.Controls
         private float nodeDistanceY = 20;
 
         private UIConnectionRefresher connectionRefresher;
-        private DispatcherTimer timer;
+        private DispatcherTimer timerConnection;
+        private DispatcherTimer timerSave;
 
         private Stack<UITransaction> undoStack = new Stack<UITransaction>();
         private Stack<UITransaction> redoStack = new Stack<UITransaction>();
@@ -210,10 +211,15 @@ namespace SmaSTraDesigner.Controls
             this.InitializeComponent();
 
             //Start a timer to update the connections:
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(100);
-            timer.Tick += timer_tick;
-            timer.Start();
+		    timerConnection = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(100)};
+            timerConnection.Tick += (a, b) => { connectionRefresher.Tick(); } ;
+            timerConnection.Start();
+
+
+            //Start a timer to save regularly:
+            timerSave = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
+		    timerSave.Tick += (a,b) => { RegularSaver.Save(this); };
+            timerSave.Start();
 
 
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
@@ -258,6 +264,9 @@ namespace SmaSTraDesigner.Controls
 				};
 
 				this.MakeBindings(this.outOutputViewer);
+
+                //This is a workaround to load the last state if present.
+                RegularSaver.TryLoad(this);
 			}
 		}
 
@@ -347,11 +356,6 @@ namespace SmaSTraDesigner.Controls
             }
 		}
 
-
-        void timer_tick(object sender, EventArgs e)
-        {
-            connectionRefresher.Tick();
-        }
 
 
         public void AddNodes(Node[] nodes, bool saveTransaction = false)
