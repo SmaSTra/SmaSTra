@@ -442,6 +442,7 @@ namespace SmaSTraDesigner
             { if (!(nodeViewer == null || nodeViewer.Node is OutputNode))
                 {
                     Node pastedNode = nodeViewer.Node.Clone();
+                    pastedNode.Name = nodeViewer.Node.Name;
                     pastedNode.PosX = nodeViewer.Node.PosX;
                     pastedNode.PosY = nodeViewer.Node.PosY + 10;
                     nodeListToAdd.Add(pastedNode);

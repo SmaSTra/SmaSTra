@@ -333,6 +333,16 @@ namespace SmaSTraDesigner.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap merge {
+            get {
+                object obj = ResourceManager.GetObject("merge", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mid_window {
             get {
                 object obj = ResourceManager.GetObject("mid_window", resourceCulture);
@@ -546,6 +556,16 @@ namespace SmaSTraDesigner.Properties {
         internal static System.Drawing.Bitmap tuerkis_window {
             get {
                 object obj = ResourceManager.GetObject("tuerkis_window", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap unmerge {
+            get {
+                object obj = ResourceManager.GetObject("unmerge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

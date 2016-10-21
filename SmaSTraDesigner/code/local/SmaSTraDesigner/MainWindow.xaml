@@ -104,7 +104,7 @@
                     <StackPanel Orientation="Horizontal" x:Name="spnNodeTypeMenu">
                         <Border BorderBrush="Black" BorderThickness="1,0,1,0">
                             <ToggleButton x:Name="togDataSources" Style="{StaticResource ToggleButtonStyle}" IsChecked="{Binding Path=ToggleDataSources, Mode=TwoWay}" VerticalContentAlignment="Center">
-                                <WrapPanel ToolTip="DataSources">
+                                <WrapPanel ToolTip="Datasources">
                                     <Image Width="50" Source="pack://siteoforigin:,,,/Resources/0v1_blue.png"/>
                                 </WrapPanel>
                             </ToggleButton>
@@ -421,7 +421,7 @@
                         <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="Black">
                             <ToggleButton x:Name="togLibraryPanel" Content="Library" IsChecked="True" Foreground="White" FontSize="{StaticResource FontSizeMedium}" Style="{StaticResource ToggleButtonStyle}"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                         </Border>
-                        <StackPanel Background="{StaticResource ColorPanelBackground}" Visibility="{Binding ElementName=togLibraryPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" >
+                        <StackPanel MinHeight="100" Background="{StaticResource ColorPanelTitel}" Visibility="{Binding ElementName=togLibraryPanel, Path=IsChecked, Converter={StaticResource VisibilityAsBooleanConverter}}" >
                             <StackPanel.Resources>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"/>
                                 <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
