@@ -29,7 +29,7 @@ namespace SmaSTraDesigner
         /// <summary>
         /// FEATURE TOGGLE: Handle global Exceptions!
         /// </summary>
-        private const bool HandleGlobalException = false;
+        private const bool HandleGlobalException = true;
 
 
         private const string RegSubKey = "SmaSTra";
@@ -47,7 +47,7 @@ namespace SmaSTraDesigner
                 var exp = e.Exception;
 
                 //TODO: Do a new Fanxy GUI for the Error-Handling!
-                MessageBox.Show(this.MainWindow, "Error: " + exp.ToString(), "Uh oh...", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                new DialogErrorHandler(exp) {Topmost = true}.ShowDialog();
             }
 		}
 
