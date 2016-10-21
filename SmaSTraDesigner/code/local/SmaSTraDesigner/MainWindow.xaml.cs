@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
+﻿using System;
+using SmaSTraDesigner.BusinessLogic.classhandler.nodeclasses;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.savingloading;
 
@@ -132,8 +133,8 @@ namespace SmaSTraDesigner
         private void DebugTest_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             // executed with "Ctrl+T". Put anything that shall be tested here. a command is less intrusive than a "debug test button" on the GUI
-
             focusNodePropertieInput(0);
+            throw new Exception();
         }
 
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)

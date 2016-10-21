@@ -27,4 +27,11 @@ namespace SmaSTraDesigner.BusinessLogic.online
         FAILED_SERVER_NOT_REACHABLE,
         FAILED_EXCEPTION
     }
+
+    public enum UploadExceptionResponse
+    {
+        SUCCESS,
+        FAILED_SERVER_NOT_REACHABLE,
+        FAILED_EXCEPTION
+    }
 }

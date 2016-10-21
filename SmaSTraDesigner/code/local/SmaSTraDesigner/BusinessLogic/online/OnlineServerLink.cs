@@ -73,7 +73,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         private bool CheckOnlineSync()
         {
             var now = System.DateTime.Now.Ticks;
-            if((_lastCheckedOnlineTime + 10000) > now)
+            if ((_lastCheckedOnlineTime + 10000) > now)
             {
                 return _lastCheckedOnline;
             }
@@ -82,7 +82,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             try
             {
                 var address = GetBaseAddress() + "ping";
-                using (var client = new HttpClient() { Timeout = new TimeSpan(0,0,0,2) })
+                using (var client = new HttpClient() {Timeout = new TimeSpan(0, 0, 0, 2)})
                 using (var response = client.GetAsync(address).Result)
                 using (response.Content)
                 {
@@ -98,9 +98,9 @@ namespace SmaSTraDesigner.BusinessLogic.online
 
             return _lastCheckedOnline;
         }
-        
 
-        
+
+
         /// <summary>
         /// Starts the Download of all Elements.
         /// </summary>
@@ -119,7 +119,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 using (var content = response.Content)
                 {
                     var status = response.StatusCode;
-                    if(status != HttpStatusCode.OK)
+                    if (status != HttpStatusCode.OK)
                     {
                         resp = DownloadAllResponse.FAILED_EXCEPTION;
                         callback.Invoke(classList, resp);
@@ -174,7 +174,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">The name to get.</param>
         /// <param name="callback">to call when done.</param>
-        public void GetOnlineElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
+        public void GetOnlineElement(string name, Action<AbstractNodeClass, DownloadSingleResponse> callback)
         {
             if (name == null || callback == null) return;
             if (!CheckOnlineSync())
@@ -192,7 +192,8 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="name">To get</param>
         /// <param name="callback">to call when done</param>
-        private async void StartDownloadOfElement(string name, Action<AbstractNodeClass,DownloadSingleResponse> callback)
+        private async void StartDownloadOfElement(string name,
+            Action<AbstractNodeClass, DownloadSingleResponse> callback)
         {
             byte[] data = null;
 
@@ -211,7 +212,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
                         resp = DownloadSingleResponse.SUCCESS;
                     }
 
-                    if(response.StatusCode == HttpStatusCode.BadRequest)
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         resp = DownloadSingleResponse.FAILED_NO_NAME;
                     }
@@ -248,7 +249,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
             var destDir = Path.Combine(workSpace, "created", name);
 
             //Just to be sure we do not have some old remainings.
-            if(Directory.Exists(tmpPath)) Directory.Delete(tmpPath, true);
+            if (Directory.Exists(tmpPath)) Directory.Delete(tmpPath, true);
 
             //Now create new stuff:
             Directory.CreateDirectory(tmpPath);
@@ -259,7 +260,8 @@ namespace SmaSTraDesigner.BusinessLogic.online
             try
             {
                 ZipFile.ExtractToDirectory(tmpZipPath, destDir);
-            }catch(Exception exp)
+            }
+            catch (Exception exp)
             {
                 Debug.Print(exp.ToString());
                 resp = DownloadSingleResponse.FAILED_WHILE_EXTRACTING;
@@ -276,7 +278,8 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 try
                 {
                     newElement = Singleton<NodeLoader>.Instance.loadFromFolder(destDir);
-                }catch(Exception exp)
+                }
+                catch (Exception exp)
                 {
                     Debug.Print(exp.ToString());
                     resp = DownloadSingleResponse.FAILED_WHILE_LOADING;
@@ -293,7 +296,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// </summary>
         /// <param name="clazz">The class to upload</param>
         /// <param name="callback">to call when done.</param>
-        public void UploadElement(AbstractNodeClass clazz, Action<string,UploadResponse> callback)
+        public void UploadElement(AbstractNodeClass clazz, Action<string, UploadResponse> callback)
         {
             if (clazz == null || callback == null) return;
             if (!CheckOnlineSync())
@@ -302,14 +305,15 @@ namespace SmaSTraDesigner.BusinessLogic.online
                 return;
             }
 
-            var folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? WorkSpace.CREATED_DIR : WorkSpace.BASE_DIR), clazz.Name);
+            var folder = Path.Combine(WorkSpace.DIR, (clazz.UserCreated ? WorkSpace.CREATED_DIR : WorkSpace.BASE_DIR),
+                clazz.Name);
             var tmpName = Path.Combine(WorkSpace.DIR, TmpPath, "upload_" + clazz.Name + ".zip");
             ZipFile.CreateFromDirectory(folder, tmpName, CompressionLevel.NoCompression, false);
 
-            var t = new Task(() => UploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n,b) =>
+            var t = new Task(() => UploadFile(clazz.Name, File.ReadAllBytes(tmpName), (n, b) =>
             {
                 File.Delete(tmpName);
-                callback.Invoke(n,b);
+                callback.Invoke(n, b);
             }));
             t.Start();
         }
@@ -321,7 +325,7 @@ namespace SmaSTraDesigner.BusinessLogic.online
         /// <param name="name">To get</param>
         /// <param name="data">The data to upload</param>
         /// <param name="callback">to call when done</param>
-        private async void UploadFile(string name, byte[] data, Action<string,UploadResponse> callback)
+        private async void UploadFile(string name, byte[] data, Action<string, UploadResponse> callback)
         {
             var resp = UploadResponse.FAILED_DUPLICATE_NAME;
 
@@ -340,12 +344,12 @@ namespace SmaSTraDesigner.BusinessLogic.online
                         resp = UploadResponse.SUCCESS;
                     }
 
-                    if (response.StatusCode == (HttpStatusCode)409)
+                    if (response.StatusCode == (HttpStatusCode) 409)
                     {
                         resp = UploadResponse.FAILED_DUPLICATE_NAME;
                     }
 
-                    if (response.StatusCode == (HttpStatusCode)422)
+                    if (response.StatusCode == (HttpStatusCode) 422)
                     {
                         resp = UploadResponse.FAILED_NO_NAME;
                     }
@@ -369,6 +373,78 @@ namespace SmaSTraDesigner.BusinessLogic.online
         }
 
         /// <summary>
+        /// Starts to upload the Exception passed.
+        /// </summary>
+        /// <param name="exp">To upload</param>
+        /// <param name="callback">to call when done</param>
+        public void UploadException(Exception exp, Action<UploadExceptionResponse> callback)
+        {
+            if (exp == null || callback == null) return;
+            if (!CheckOnlineSync())
+            {
+                callback.Invoke(UploadExceptionResponse.FAILED_SERVER_NOT_REACHABLE);
+                return;
+            }
+
+            var t = new Task(() => StartUploadOfException(exp, callback));
+            t.Start();
+        }
+
+        /// <summary>
+        /// Starts to upload the Exception passed.
+        /// </summary>
+        /// <param name="expToUpload">To upload</param>
+        /// <param name="callback">to call when done</param>
+        private async void StartUploadOfException(Exception expToUpload, Action<UploadExceptionResponse> callback)
+        {
+            var resp = UploadExceptionResponse.FAILED_EXCEPTION;
+
+            var contentToSend = new StringContent(expToUpload.ToString());
+            contentToSend.Headers.Add("type", "exception");
+
+            try
+            {
+                var address = GetBaseAddress() + "exception";
+                using (var client = new HttpClient())
+                using (var response = await client.PostAsync(address, contentToSend))
+                {
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.OK: resp = UploadExceptionResponse.SUCCESS; break;
+                        default: 
+                            resp = UploadExceptionResponse.FAILED_SERVER_NOT_REACHABLE; break;
+                    }
+                }
+            }
+            catch (HttpRequestException exp)
+            {
+                Debug.Print("Server not reachable?! Check your config!");
+                Debug.Print(exp.ToString());
+                resp = UploadExceptionResponse.FAILED_SERVER_NOT_REACHABLE;
+            }
+            catch (Exception exp)
+            {
+                Debug.Print("Exception while Uploading Exception: " + exp);
+                Debug.Print(exp.ToString());
+            }
+
+
+            //Tell if worked:
+            callback?.Invoke(resp);
+        }
+
+
+        /// <summary>
+        /// If the online service is reachable.
+        /// </summary>
+        /// <returns>true if reachable.</returns>
+        public bool IsReachable()
+        {
+            return CheckOnlineSync();
+        }
+
+
+        /// <summary>
         /// Gets the base address for the Online-service.
         /// </summary>
         /// <returns>the base address</returns>
@@ -381,7 +457,6 @@ namespace SmaSTraDesigner.BusinessLogic.online
 
             return host + ":" + port + "/" + prefix + "/";
         }
-
     }
 
 
