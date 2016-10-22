@@ -118,7 +118,6 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 case DownloadAllResponse.SUCCESS:
                     StatusBarText = "Success: Online elements updated";
-                    //TODO: update list
                     OnlineElementsList = new ObservableCollection<SimpleClass>(simpleOnlineElementsList);
                     return;
                 default:
@@ -152,7 +151,7 @@ namespace SmaSTraDesigner.BusinessLogic
             {
                 case UploadResponse.SUCCESS:
                     StatusBarText = "Success: Element uploaded";
-                    //TODO handle download
+                    onlineServer.GetAllOnlineElements(new Action<List<SimpleClass>, DownloadAllResponse>(callbackGetAllOnlineElements));
                     return;
                 default:
                     StatusBarText = "Error: " + downloadSingleResponse.ToString();

@@ -142,8 +142,11 @@
                                     <Image Grid.Column="1" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/middle_middle_window_75.png"  />
                                     <Image Grid.Column="2" Stretch="Fill" Source="pack://siteoforigin:,,,/Resources/right_middle_window_78.png" />
                                 </Grid>
-                                <WrapPanel>
-                                    <Grid>
+                                <Grid MaxWidth="{Binding Path=ActualWidth, ElementName=tbTransformationName}">
+                                    <TextBlock x:Name="tboxInputLabel" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" FontFamily="Tahoma Regular" Text="{Binding Path=InputGUIString}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="{Binding ActualWidth, ElementName=tbTransformationName}" Padding="13,0,0,0" Margin="-5,3,0,-5" />
+                                    <Button x:Name="btnInputLabel" ClickMode="Press" Margin="10,0,5,0"  Width="{Binding Path=ActualWidth, ElementName=tbTransformationName}" Height="{Binding Path=ActualHeight, ElementName=tboxInputLabel}" Opacity="0" Command="ctrlSupport:Commands.FocusInputValue" CommandParameter="{Binding ElementName=ucInputHandle}"/>
+                                </Grid>
+                                <Grid>
                                         <Grid.Style>
                                             <Style TargetType="Grid">
                                                 <Setter Property="Opacity" Value="0.5"/>
@@ -157,12 +160,6 @@
                                         <local:UcIOHandle x:Name="ucInputHandle" IsInput="True" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" InputIndex="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item2}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-7,0,0,0" >
                                         </local:UcIOHandle>
                                     </Grid>
-                                    <Grid>
-                                        
-                                        <TextBlock x:Name="tboxInputLabel" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Item1}" FontFamily="Tahoma Regular" Text="{Binding Path=InputGUIString}" Foreground="White" Height="{Binding ActualHeight, ElementName=tbTransformationName}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="{Binding ActualWidth, ElementName=tbTransformationName}" Padding="10,0,10,0" Margin="-5,3,0,-5" />
-                                        <Button Width="{Binding Path=ActualWidth, ElementName=tboxInputLabel}" Height="{Binding Path=ActualHeight, ElementName=tboxInputLabel}" Opacity="0" Command="ctrlSupport:Commands.FocusInputValue" CommandParameter="{Binding ElementName=ucInputHandle}"/>
-                                    </Grid>
-                                </WrapPanel>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
