@@ -1035,10 +1035,12 @@ namespace SmaSTraDesigner.Controls
             if (result != MessageBoxResult.OK) return;
 
             string newName = "";
+            string newDescription = "";
             while (newName == "")
             {
                 DialogCombinedName dialog = new DialogCombinedName();
                 dialog.CombinedElementName = "New Name";
+                dialog.CombinedElementDescription = "No description";
                 if (dialog.ShowDialog() == true)
                 {
                     if (!string.IsNullOrWhiteSpace(dialog.CombinedElementName))
@@ -1054,13 +1056,16 @@ namespace SmaSTraDesigner.Controls
                         MessageBox.Show("An empty name is not supported. Aborting.", "Abort Merging");
                         return;
                     }
-                }else
+                    newDescription = dialog.CombinedElementDescription;
+                }
+                else
                 {
                     return;
                 }
             }
 
             generator.Name = newName;
+            generator.Description = newDescription;
             AbstractNodeClass generatedClass = generator.GenerateClass();
             if (generatedClass == null) return;
 

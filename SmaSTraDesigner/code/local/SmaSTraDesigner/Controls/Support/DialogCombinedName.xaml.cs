@@ -15,6 +15,12 @@ namespace SmaSTraDesigner.Controls.Support
             set { tboxCombinedElementName.Text = value; }
         }
 
+        public string CombinedElementDescription
+        {
+            get { return tboxCombinedElementDescription.Text; }
+            set { tboxCombinedElementDescription.Text = value; }
+        }
+
         private void OK_Clicked(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = true;

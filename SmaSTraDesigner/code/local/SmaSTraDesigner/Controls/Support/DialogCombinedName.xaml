@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmaSTraDesigner.Controls.Support"
         mc:Ignorable="d"
-        Title="DialogCombinedName" Height="170" Width="370" Loaded="Window_Loaded"
+        Title="DialogCombinedName" Width="400" SizeToContent="Height" Loaded="Window_Loaded"
         ShowInTaskbar="False"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -25,8 +25,10 @@
             <Grid Height="50" Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
                 <Button IsCancel="True" Content="X" Width="25" HorizontalAlignment="Right" Margin="0,7,20,0" Height="25"/>
             </Grid>
-            <TextBlock Text="Enter a Name for the new Combined Node" TextAlignment="Center" />
-            <TextBox x:Name="tboxCombinedElementName" Margin="10" />
+            <TextBlock Text="Enter a name for the new Combined Node" TextAlignment="Center" />
+            <TextBox x:Name="tboxCombinedElementName" Margin="10,0,10,0" />
+            <TextBlock Text="Enter a description for the new Combined Node" TextAlignment="Center" Margin="10,10,10,0" />
+            <TextBox x:Name="tboxCombinedElementDescription" Margin="10,0,10,0" AcceptsReturn="True" TextWrapping="Wrap" />
             <Button Click="OK_Clicked" Width="100" Margin="10" IsDefault="True" Style="{StaticResource imageButtonTemplate}" >
                 <TextBlock Text="OK" FontSize="{StaticResource FontSizeLarge}"/>
             </Button>
