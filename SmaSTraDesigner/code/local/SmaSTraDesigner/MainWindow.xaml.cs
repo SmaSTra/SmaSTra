@@ -517,7 +517,7 @@ namespace SmaSTraDesigner
         private void FocusInputValue_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             UcIOHandle ioHandle = e.Parameter as UcIOHandle;
-            if (ioHandle != null)
+            if (ioHandle != null && ioHandle.NodeViewer != null && ioHandle.Node != null)
             {
                 e.CanExecute = ioHandle.IsInput && !ioHandle.NodeViewer.IsPreview && Singleton<NodeProperties>.Instance.ActiveNode == ioHandle.Node;
             }
