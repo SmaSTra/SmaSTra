@@ -147,7 +147,7 @@ namespace SmaSTraDesigner.BusinessLogic
             NodeSerializer serializer = new NodeSerializer();
             ClassManager cManager = Singleton<ClassManager>.Instance;
 
-            JObject json = JObject.Parse(File.ReadAllText(LIB_FILE_NAME));
+            JObject json = JObject.Parse(File.ReadAllText(Path.Combine(WorkSpace.DIR, LIB_FILE_NAME)));
             JToken arrayToken = new JObject();
             json.TryGetValue("lib", out arrayToken);
 
