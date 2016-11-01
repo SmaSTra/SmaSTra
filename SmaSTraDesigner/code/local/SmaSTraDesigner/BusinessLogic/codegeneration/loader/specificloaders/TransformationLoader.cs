@@ -126,8 +126,9 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
                 .ToArray()
                 .Concat(new[] { nodeClass.OutputType })
                 .Distinct()
-                .Select(i => "import " + i.MinimizedName + ";")
-                .Select(i => !CodeExtension.importBlacklist.Contains(i))
+                .Select(i => i.MinimizedName)
+                .Where(i => !CodeExtension.importBlacklist.Contains(i))
+                .Select(i => "import " + i + ";")
                 .StringJoin("\n");
                 
 
