@@ -1,4 +1,5 @@
-﻿using SmaSTraDesigner.BusinessLogic.nodes;
+﻿using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
+using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.savingloading.serializers;
 
 namespace SmaSTraDesigner.BusinessLogic

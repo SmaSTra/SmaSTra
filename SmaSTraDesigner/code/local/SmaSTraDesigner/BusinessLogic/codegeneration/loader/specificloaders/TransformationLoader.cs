@@ -159,11 +159,14 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
             var args = "(";
             var currentTransform = codeExtension.GetCurrentStep();
 
-            for(var i = 0; i < nodeClass.InputTypes.Count(); i++)
+            for(var i = 0; i < nodeClass.InputTypes.Length; i++)
             {
                 var inputType = nodeClass.InputTypes[i];
                 var inputNode = node.InputNodes[i];
                 var ioData = node.InputIOData[i];
+
+                //If we have a combined node, we have to proxy it's output node:
+                if (inputNode is CombinedNode) inputNode = ((CombinedNode) inputNode).outputNode;
 
                 //Add the args:
                 if (i != 0) args += ", ";
@@ -182,6 +185,7 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders
                     var inAsSource = inputNode as DataSource;
                     var inAsTransform = inputNode as Transformation;
                     var inAsBuffer = inputNode as BufferNode;
+
                     var inAsSourceClass = inAsSource?.Class as DataSourceNodeClass;
                     var inAsTransClass = inAsTransform?.Class as TransformationNodeClass;
                     var inAsBufferClass = inAsBuffer?.Class as BufferNodeClass;

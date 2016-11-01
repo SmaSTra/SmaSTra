@@ -1,16 +1,14 @@
-﻿using Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Common;
 using Common.ExtensionMethods;
-using SmaSTraDesigner.BusinessLogic.classhandler;
-using SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader;
 using SmaSTraDesigner.BusinessLogic.codegeneration.loader.specificloaders;
 using SmaSTraDesigner.BusinessLogic.nodes;
 using SmaSTraDesigner.BusinessLogic.utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace SmaSTraDesigner.BusinessLogic.codegeneration
+namespace SmaSTraDesigner.BusinessLogic.codegeneration.javacodegenerator
 {
     class NewJavaGenerator
     {
@@ -18,13 +16,13 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
         /// <summary>
         /// The tree to use for generation.
         /// </summary>
-        private readonly TransformationTree tree;
+        private readonly TransformationTree _tree;
 
 
         /// <summary>
         /// All the code extension stuff needed.
         /// </summary>
-        private readonly CodeExtension codeExtension = new CodeExtension();
+        private readonly CodeExtension _codeExtension = new CodeExtension();
 
         /// <summary>
         /// Creates a new Generator.
@@ -32,20 +30,20 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
         /// <param name="tree">To generate with.</param>
         public NewJavaGenerator(TransformationTree tree)
         {
-            this.tree = tree;
+            this._tree = tree;
         }
 
         /// <summary>
         /// Returns true if the Tree is valid for serialization.
         /// </summary>
         /// <returns>true if valid for building.</returns>
-        public bool isValidTree()
+        public bool IsValidTree()
         {
-            return isValidTree(tree.OutputNode, new List<Node>());
+            return IsValidTree(_tree.OutputNode, new List<Node>());
         }
 
 
-        private bool isValidTree(Node current, List<Node> visited)
+        private bool IsValidTree(Node current, ICollection<Node> visited)
         {
             //Found a already visited node:
             if (visited.Contains(current))
@@ -62,10 +60,10 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
             else
             {
                 //No-Output node!
-                for (int i = 0; i < current.InputNodes.Count(); i++)
+                for (var i = 0; i < current.InputNodes.Count(); i++)
                 {
-                    Node inputNode = current.InputNodes[i];
-                    IOData data = current.InputIOData[i];
+                    var inputNode = current.InputNodes[i];
+                    var data = current.InputIOData[i];
                     if (inputNode == null && !data.IsSet())
                     {
                         return false;
@@ -75,104 +73,102 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
             
 
             visited.Add(current);
-            return !current.InputNodes.NonNull().Any(n => !isValidTree(current, visited));
+            return current.InputNodes.NonNull().All(n => IsValidTree(current, visited));
         }
 
 
         /// <summary>
         /// Creates the Java Class and all it's dependencies at the destination
         /// </summary>
-        /// <param name="destination">To create at.</param>
+        /// <param name="destinationFolder">To create at.</param>
+        /// <param name="name">To use for creation</param>
         public void CreateJavaSource(string destinationFolder, string name)
         {
             if (!name.EndsWith(".java")) name += ".java";
 
             //Little hack, since the visited list is populated!
-            OutputNode rootNode = tree.OutputNode;
-            List<Node> nodes = new List<Node>();
-            if (!isValidTree(rootNode, nodes))
+            var rootNode = _tree.OutputNode;
+            var nodes = new List<Node>();
+            if (!IsValidTree(rootNode, nodes))
             {
                 throw new InvalidTreeExection();
             }
 
 
             //Set the root node:
-            Node root = tree.OutputNode.InputNodes[0];
+            var root = _tree.OutputNode.InputNodes[0];
             if (root is CombinedNode) root = (root as CombinedNode).outputNode;
 
-            codeExtension.RootNode = root;
-            codeExtension.Package = "Test";
+            _codeExtension.RootNode = root;
+            _codeExtension.Package = "Test";
 
             //Get our Output type.
-            codeExtension.OutputType = rootNode.InputNodes[0].Class.OutputType;
-            codeExtension.ClassName = name.RemoveAll(".java");
+            _codeExtension.OutputType = rootNode.InputNodes[0].Class.OutputType;
+            _codeExtension.ClassName = name.RemoveAll(".java");
 
             //Generate the Traverse Data:
-            Stack<QueueStatus> stack = new Stack<QueueStatus>();
-            Stack<Node> executeStack = new Stack<Node>();
+            var stack = new Stack<QueueStatus>();
+            var executeStack = new Stack<Node>();
 
-            stack.Push(new QueueStatus(tree.OutputNode, 0));
+            stack.Push(new QueueStatus(_tree.OutputNode, 0));
             executeStack.Push(root);
 
             //Get the loader for generating.
-            NodeLoader loader = Singleton<NodeLoader>.Instance;
+            var loader = Singleton<NodeLoader>.Instance;
 
             //Pre-Process the Stack:
             while (!stack.Empty())
             {
-                QueueStatus current = stack.Pop();
+                var current = stack.Pop();
                 if(current == null) { break;  } //Should not happen! Safetynet!
 
-                int index = current.index;
-                Node node = current.node.InputNodes[index];
+                var index = current.Index;
+                var node = current.Node.InputNodes[index];
 
                 //Check for combined nodes:
                 if (node is CombinedNode)
                 {
                     node = (node as CombinedNode).outputNode;
+                    executeStack.Push(node);
                 }
 
                 //Add next all to Stack:
-                if (current != null)
-                {
-                    node.InputNodes
-                        .ForEachNonNull((n, i) => {
-                            //Prevent doubles:
-                            QueueStatus status = new QueueStatus(n, i);
-                            if (!stack.Contains(status))
-                            {
-                                stack.Push(new QueueStatus(node, i));
-                                executeStack.Push(node.InputNodes[i]);
-                            }
-                        });
-                }
+                node.InputNodes
+                    .ForEachNonNull((n, i) => {
+                        //Prevent doubles:
+                        var status = new QueueStatus(n, i);
+                        if (stack.Contains(status)) return;
+
+                        stack.Push(new QueueStatus(node, i));
+                        executeStack.Push(node.InputNodes[i]);
+                    });
             }
 
             //Now lets execute!
             while (!executeStack.Empty())
             {
-                Node next = executeStack.Pop();
+                var next = executeStack.Pop();
                 if (next == null) continue;
 
                 //Now really process:
-                loader.CreateCode(next, codeExtension);
+                loader.CreateCode(next, _codeExtension);
             }
 
 
             //Build the rest:
-            string sensorVars = codeExtension.BuildSensorDataVars();
-            string transVars = codeExtension.BuildTransformDataVars();
-            string initCode = codeExtension.BuildInitCode();
-            string startCode = codeExtension.BuildStartCode();
-            string stopCode = codeExtension.BuildStopCode();
-            string proxyPropertyCode = codeExtension.BuildProxyPropertyCode();
-            string transformations = codeExtension.BuildTransformations();
+            var sensorVars = _codeExtension.BuildSensorDataVars();
+            var transVars = _codeExtension.BuildTransformDataVars();
+            var initCode = _codeExtension.BuildInitCode();
+            var startCode = _codeExtension.BuildStartCode();
+            var stopCode = _codeExtension.BuildStopCode();
+            var proxyPropertyCode = _codeExtension.BuildProxyPropertyCode();
+            var transformations = _codeExtension.BuildTransformations();
 
-            string TheCode = ClassTemplates.GenerateTotal(
-                codeExtension.BuildPackage(),
-                codeExtension.BuildImports(),
-                codeExtension.BuildClassName(),
-                codeExtension.BuildOutputType(),
+            var theCode = ClassTemplates.GenerateTotal(
+                _codeExtension.BuildPackage(),
+                _codeExtension.BuildImports(),
+                _codeExtension.BuildClassName(),
+                _codeExtension.BuildOutputType(),
                 initCode,
                 sensorVars,
                 transVars,
@@ -182,8 +178,8 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
                 transformations
                 );
 
-            CodeExporter exporter = Singleton<CodeExporter>.Instance;
-            exporter.save(destinationFolder, TheCode, codeExtension);
+            var exporter = Singleton<CodeExporter>.Instance;
+            exporter.save(destinationFolder, theCode, _codeExtension);
         }
 
 
@@ -199,24 +195,24 @@ namespace SmaSTraDesigner.BusinessLogic.codegeneration
 
     class QueueStatus
     {
-        public Node node { get; set; }
-        public int index { get; set; }
+        public Node Node { get; set; }
+        public int Index { get; set; }
 
         public QueueStatus(Node node, int index)
         {
-            this.node = node;
-            this.index = index;
+            this.Node = node;
+            this.Index = index;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is QueueStatus) return (obj as QueueStatus).node == node;
+            if (obj is QueueStatus) return (obj as QueueStatus).Node == Node;
             return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return node.GetHashCode();
+            return Node.GetHashCode();
         }
     }
 
