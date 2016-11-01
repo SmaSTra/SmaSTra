@@ -571,7 +571,7 @@ namespace SmaSTraDesigner.Controls
                     color = (SolidColorBrush)Application.Current.FindResource("ColorBuffer");
                     break;
                 case "int":
-                    color = (SolidColorBrush)Application.Current.FindResource("Colorint");
+                    color = (SolidColorBrush)Application.Current.FindResource("ColorInt");
                     break;
                 case "Picture":
                     color = (SolidColorBrush)Application.Current.FindResource("ColorPicture");
