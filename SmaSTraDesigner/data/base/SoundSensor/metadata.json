@@ -1,0 +1,21 @@
+{
+  "type": "sensor",
+  "name": "Sound Sensor",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.SoundMeter",
+  "display": "Sound Sensor",
+  "description": "Get Sound MaxAmplitude",
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "extras": [
+    {
+      "type": "permission",
+      "permission": "android.permission.RECORD_AUDIO"
+    }
+  ],
+  "dataMethod": "getLastData",
+  "output": "double",
+  "start": "start",
+  "stop": "stop"
+}

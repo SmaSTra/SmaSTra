@@ -330,7 +330,10 @@ namespace SmaSTraDesigner
 
         private void Merge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = this.tdTreeDesigner.CanMergeCurrentSelection();
+            if (this.tdTreeDesigner != null)
+            {
+                e.CanExecute = this.tdTreeDesigner.CanMergeCurrentSelection();
+            }
         }
 
 
@@ -342,7 +345,10 @@ namespace SmaSTraDesigner
 
         private void Unmerge_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = this.tdTreeDesigner.CanUnmerge();
+            if (this.tdTreeDesigner != null)
+            {
+                e.CanExecute = this.tdTreeDesigner.CanUnmerge();
+            }
         }
 
 

@@ -33,7 +33,7 @@
         </ContextMenu>
     </local:UcNodeViewer.ContextMenu>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="8,0,8,0">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="11,0,11,0">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">

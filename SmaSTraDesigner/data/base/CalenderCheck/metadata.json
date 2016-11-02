@@ -1,0 +1,21 @@
+{
+  "type": "sensor",
+  "name": "CalenderCheck",
+  "author": "SmaSTraBasic",
+  "mainClass": "de.tu_darmstadt.smastra.sensors.hardware.CalenderCheck",
+  "display": "CalenderCheck",
+  "description": "check how much event in calender now",
+  "needs": [],
+  "config": [],
+  "proxyProperties": [],
+  "extras": [
+    {
+      "type": "permission",
+      "permission": "android.permission.READ_CALENDAR"
+    }
+  ],
+  "dataMethod": "getLastData",
+  "output": "double",
+  "start": "start",
+  "stop": "stop"
+}

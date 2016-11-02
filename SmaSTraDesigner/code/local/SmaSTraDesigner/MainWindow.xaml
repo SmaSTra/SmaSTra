@@ -89,7 +89,16 @@
                 <Button Command="ctrlSupport:Commands.Redo" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Redo" Margin="5,0,0,0">
                     <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/forward.png"/>
                     </Button>
-                </StackPanel>
+                <Button Command="ctrlSupport:Commands.Merge" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Merge" Margin="30,0,0,0">
+                    <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/merge.png"/>
+                </Button>
+                <Button Command="ctrlSupport:Commands.Unmerge" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Unmerge" Margin="5,0,0,0">
+                    <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/unmerge.png"/>
+                </Button>
+                <Button Command="ctrlSupport:Commands.CreateCustomElement" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Unmerge" Margin="5,0,0,0">
+                    <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
+                </Button>
+            </StackPanel>
             </Border>
 
             <Grid Grid.ColumnSpan="99" Grid.Row="2" Background="{StaticResource ColorPanelBackground}">
@@ -377,8 +386,8 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </WrapPanel>
-                                <TextBlock Text="Configuration: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <WrapPanel>
+                                <TextBlock Text="Configuration: " Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <WrapPanel Visibility="Collapsed">
                                     <ItemsControl x:Name="icNodeConfiguration" ItemsSource="{Binding Path=NodeConfiguration, UpdateSourceTrigger=PropertyChanged}" >
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
@@ -388,9 +397,9 @@
                                                 </DataTemplate.Resources>
                                                 <StackPanel Orientation="Vertical" >
                                                     <WrapPanel>
-                                                        <TextBlock Text="{Binding Path=DataType.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
+                                                        <TextBlock Text="{Binding Path=Key, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
                                                         <TextBlock Text=": " TextWrapping="Wrap"/>
-                                                        <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50"/>
+                                                        <TextBlock Text="{Binding Path=DataType.Name, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50"/>
                                                     </WrapPanel>
                                                 </StackPanel>
                                             </DataTemplate>

@@ -24,133 +24,147 @@
 			</Style.Triggers>
 		</Style>
 	</UserControl.Style>
-	<Grid>
-		<Ellipse x:Name="inputEllipse" Stretch="Uniform" Margin="0.3,0.3,0.3,0.3">
-			<Ellipse.Style>
-                <Style TargetType="Ellipse">
-                    <Setter Property="Fill" Value="{StaticResource ColorDefault}" />
-                    <Setter Property="Stroke" Value="{StaticResource ColorDefault}" />
-					<Setter Property="StrokeThickness" Value="2" />
-					<Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="boolean">
-                            <Setter Property="Fill" Value="{StaticResource ColorBoolean}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorBoolean}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="double">
-                            <Setter Property="Fill" Value="{StaticResource ColorDouble}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorDouble}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="long">
-                            <Setter Property="Fill" Value="{StaticResource ColorLong}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorLong}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Map">
-                            <Setter Property="Fill" Value="{StaticResource ColorMap}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorMap}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Vector3d">
-                            <Setter Property="Fill" Value="{StaticResource ColorVector3d}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorVector3d}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="int">
-                            <Setter Property="Fill" Value="{StaticResource ColorInt}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorInt}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Picture">
-                            <Setter Property="Fill" Value="{StaticResource ColorPicture}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorPicture}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Buffer">
-                            <Setter Property="Fill" Value="{StaticResource ColorBuffer}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorBuffer}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Collection">
-                            <Setter Property="Fill" Value="{StaticResource ColorCollection}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorCollection}" />
-                        </DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="False">
-							<Setter Property="Visibility" Value="Collapsed" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="Stroke" Value="Black" />
-							<Setter Property="StrokeThickness" Value="3" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="True">
-							<Setter Property="Stroke" Value="Green" />
-							<Setter Property="StrokeThickness" Value="3" />
-						</DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
-                            <Setter Property="Stroke" Value="Red" />
-                            <Setter Property="StrokeThickness" Value="3" />
-                        </DataTrigger>
-                    </Style.Triggers>
-				</Style>
-			</Ellipse.Style>
-		</Ellipse>
-        <Image Stretch="Uniform" Visibility="{Binding ElementName=inputEllipse, Path=Visibility}" Source="pack://siteoforigin:,,,/Resources/input_trans.png"/>
+    <Grid x:Name="gridHandlePanel">
+        <Ellipse x:Name="inputEllipse" Stretch="Uniform" Margin="0.3,0.3,0.3,0.3">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                        <Setter Property="Fill" Value="{StaticResource ColorDefault}" />
+                        <Setter Property="Stroke" Value="{StaticResource ColorDefault}" />
+                        <Setter Property="StrokeThickness" Value="2" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="boolean">
+                                <Setter Property="Fill" Value="{StaticResource ColorBoolean}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorBoolean}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="double">
+                                <Setter Property="Fill" Value="{StaticResource ColorDouble}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorDouble}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="long">
+                                <Setter Property="Fill" Value="{StaticResource ColorLong}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorLong}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Map">
+                                <Setter Property="Fill" Value="{StaticResource ColorMap}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorMap}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Vector3d">
+                                <Setter Property="Fill" Value="{StaticResource ColorVector3d}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorVector3d}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="int">
+                                <Setter Property="Fill" Value="{StaticResource ColorInt}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorInt}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Picture">
+                                <Setter Property="Fill" Value="{StaticResource ColorPicture}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorPicture}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Buffer">
+                                <Setter Property="Fill" Value="{StaticResource ColorBuffer}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorBuffer}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Collection">
+                                <Setter Property="Fill" Value="{StaticResource ColorCollection}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorCollection}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+                                <Setter Property="Stroke" Value="Black" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="True">
+                                <Setter Property="Stroke" Value="Green" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+                                <Setter Property="Stroke" Value="Red" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
+            <Image Stretch="Uniform" Visibility="{Binding ElementName=inputEllipse, Path=Visibility}" Source="pack://siteoforigin:,,,/Resources/input_trans.png"/>
 
-        <Polygon x:Name="outputPolygon" Points="0.0,0.0 1.0,0.5 0.0,1.0"  Stretch="Fill" Margin="0.9,0.5,2.0,0.5">
-			<Polygon.Style>
-				<Style TargetType="Polygon">
-                    <Setter Property="Fill" Value="{StaticResource ColorDefault}" />
-                    <Setter Property="Stroke" Value="{StaticResource ColorDefault}" />
-					<Setter Property="StrokeThickness" Value="2" />
-					<Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="boolean">
-                            <Setter Property="Fill" Value="{StaticResource ColorBoolean}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorBoolean}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="double">
-                            <Setter Property="Fill" Value="{StaticResource ColorDouble}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorDouble}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="long">
-                            <Setter Property="Fill" Value="{StaticResource ColorLong}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorLong}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Map">
-                            <Setter Property="Fill" Value="{StaticResource ColorMap}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorMap}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Vector3d">
-                            <Setter Property="Fill" Value="{StaticResource ColorVector3d}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorVector3d}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="int">
-                            <Setter Property="Fill" Value="{StaticResource ColorInt}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorInt}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Picture">
-                            <Setter Property="Fill" Value="{StaticResource ColorPicture}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorPicture}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Buffer">
-                            <Setter Property="Fill" Value="{StaticResource ColorBuffer}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorBuffer}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Collection">
-                            <Setter Property="Fill" Value="{StaticResource ColorCollection}" />
-                            <Setter Property="Stroke" Value="{StaticResource ColorCollection}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="True">
-							<Setter Property="Visibility" Value="Collapsed" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
-							<Setter Property="Stroke" Value="Black" />
-							<Setter Property="StrokeThickness" Value="3" />
-						</DataTrigger>
-						<DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="True">
-							<Setter Property="Stroke" Value="Green" />
-							<Setter Property="StrokeThickness" Value="3" />
-						</DataTrigger>
+            <Polygon x:Name="outputPolygon" Points="0.0,0.0 1.0,0.5 0.0,1.0"  Stretch="Fill" Margin="0.9,0.5,2.0,0.5">
+                <Polygon.Style>
+                    <Style TargetType="Polygon">
+                        <Setter Property="Fill" Value="{StaticResource ColorDefault}" />
+                        <Setter Property="Stroke" Value="{StaticResource ColorDefault}" />
+                        <Setter Property="StrokeThickness" Value="2" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="boolean">
+                                <Setter Property="Fill" Value="{StaticResource ColorBoolean}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorBoolean}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="double">
+                                <Setter Property="Fill" Value="{StaticResource ColorDouble}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorDouble}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="long">
+                                <Setter Property="Fill" Value="{StaticResource ColorLong}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorLong}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Map">
+                                <Setter Property="Fill" Value="{StaticResource ColorMap}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorMap}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Vector3d">
+                                <Setter Property="Fill" Value="{StaticResource ColorVector3d}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorVector3d}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="int">
+                                <Setter Property="Fill" Value="{StaticResource ColorInt}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorInt}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Picture">
+                                <Setter Property="Fill" Value="{StaticResource ColorPicture}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorPicture}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Buffer">
+                                <Setter Property="Fill" Value="{StaticResource ColorBuffer}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorBuffer}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=DataTypeName }" Value="Collection">
+                                <Setter Property="Fill" Value="{StaticResource ColorCollection}" />
+                                <Setter Property="Stroke" Value="{StaticResource ColorCollection}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsInput}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
+                                <Setter Property="Stroke" Value="Black" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="True">
+                                <Setter Property="Stroke" Value="Green" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+                                <Setter Property="Stroke" Value="Red" />
+                                <Setter Property="StrokeThickness" Value="3" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Polygon.Style>
+            </Polygon>
+        <Image Stretch="Uniform" Visibility="{Binding ElementName=outputPolygon, Path=Visibility}" Source="pack://siteoforigin:,,,/Resources/target_trans.png"/>
+        <Grid x:Name="gridCross">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
-                            <Setter Property="Stroke" Value="Red" />
-                            <Setter Property="StrokeThickness" Value="3" />
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
-				</Style>
-			</Polygon.Style>
-		</Polygon>
-        <Image Stretch="Uniform" Visibility="{Binding ElementName=outputPolygon, Path=Visibility}" Source="pack://siteoforigin:,,,/Resources/target_trans.png"/>
-	</Grid>
+                </Style>
+            </Grid.Style>
+        <Line  X1="0" Y1="0" X2="{Binding ElementName=gridHandlePanel, Path='ActualWidth'}" Y2="{Binding ElementName='gridHandlePanel', Path='ActualHeight'}"  Stroke="Red" StrokeThickness="1" />
+        <Line  X1="0" Y1="{Binding ElementName='gridHandlePanel', Path='ActualHeight'}" X2="{Binding ElementName='gridHandlePanel', Path='ActualWidth'}" Y2="0" Stroke="Red" StrokeThickness="1" />
+        </Grid>
+    </Grid>
 </UserControl>
