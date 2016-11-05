@@ -31,7 +31,7 @@ namespace SmaSTraDesigner.Controls.Support
 
             this.exp = exp;
             this.ExpText = exp.ToString();
-            this.UploadText = "Upload";
+            this.UploadText = "Report";
 
             this.OnlineServiceReachable = Singleton<OnlineServerLink>.Instance.IsReachable();
         }
