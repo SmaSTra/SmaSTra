@@ -806,7 +806,7 @@ namespace SmaSTraDesigner.Controls
                 //Save the Transaction before actioning.
                 if (saveTransaction && e != null)
                 {
-                    this.undoStack.Push(new UITransactionMoveElements(
+                    this.undoStack.Push(new UITransactionTranslateElements(
                             this.SelectedNodeViewers.Select(v => v.Node).ToArray(),
                             e.GetPosition(this.cnvBackground).X - dragStart.Value.X,
                             e.GetPosition(this.cnvBackground).Y - dragStart.Value.Y
@@ -1158,28 +1158,39 @@ namespace SmaSTraDesigner.Controls
             RemoveNodes(toRemove, saveTransaction);
         }
 
-        public void OrganizeNodes()
+        public void OrganizeNodes(bool saveTransaction = false)
         {
             if(Tree != null && outOutputViewer != null)
             {
-                List<Node> remainingNodes = new List<Node>();
+                //Save the Transaction before actioning.
+                var builder = new MoveElementsBuilder(Tree.Nodes.ToArray());
+                builder.SaveOld();
+
+                var remainingNodes = new List<Node>();
                 remainingNodes.AddRange(nodeViewers.Keys);
                 remainingNodes.RemoveRange(drawSubTree(outOutputViewer)); // Handling Nodes that are connected to Output
+
                 // Handling remaining Nodes from remainingNodesList
                 double verticaloffset = 0;
-                UcNodeViewer currentViewer;
-                Node currentNode;
                 while (remainingNodes.Any())
                 {
-                    currentNode = getRootNode(remainingNodes[0]);
+                    var currentNode = getRootNode(remainingNodes[0]);
+                    UcNodeViewer currentViewer;
                     nodeViewers.TryGetValue(currentNode, out currentViewer);
-                    Size neededSpace = getNeededSpaceForBranch(currentViewer, null);
+
+                    var neededSpace = getNeededSpaceForBranch(currentViewer, null);
                     currentNode.PosX = outOutputViewer.Node.PosX + neededSpace.Width;
                     currentNode.PosY = outOutputViewer.Node.PosY + verticaloffset;
                     remainingNodes.RemoveRange(drawSubTree(currentViewer));
                     verticaloffset = verticaloffset + neededSpace.Height;
                 }
 
+                //Only save if we need to.
+                if (saveTransaction)
+                {
+                    builder.SaveNew();
+                    this.undoStack.Push(builder.Build());
+                }
             }
         }
 
