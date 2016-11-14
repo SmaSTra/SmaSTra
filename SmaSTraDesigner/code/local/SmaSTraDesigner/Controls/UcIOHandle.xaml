@@ -79,7 +79,11 @@
                                 <Setter Property="Stroke" Value="Green" />
                                 <Setter Property="StrokeThickness" Value="3" />
                             </DataTrigger>
-                           <!-- <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Stroke" Value="Black" />
+                            <Setter Property="StrokeThickness" Value="3" />
+                        </DataTrigger>
+                        <!-- <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
                                 <Setter Property="Stroke" Value="Red" />
                                 <Setter Property="StrokeThickness" Value="3" />
                             </DataTrigger> -->
@@ -143,7 +147,11 @@
                                 <Setter Property="Stroke" Value="Green" />
                                 <Setter Property="StrokeThickness" Value="3" />
                             </DataTrigger>
-                          <!-- <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+                        <DataTrigger Binding="{Binding ElementName=This, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Stroke" Value="Black" />
+                            <Setter Property="StrokeThickness" Value="3" />
+                        </DataTrigger>
+                        <!-- <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
                                 <Setter Property="Stroke" Value="Red" />
                                 <Setter Property="StrokeThickness" Value="3" />
                             </DataTrigger> -->
