@@ -149,6 +149,10 @@
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
+                            <Trigger Property ="IsEnabled" Value ="False">
+                                <Setter Property="Opacity" Value="0.5">
+                                </Setter>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>

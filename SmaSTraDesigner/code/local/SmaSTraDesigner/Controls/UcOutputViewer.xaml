@@ -56,6 +56,11 @@
                         <DataTrigger Binding="{Binding ElementName=This, Path=IsSelected}" Value="True">
                             <Setter Property="BorderBrush" Value="Black" />
                             <Setter Property="BorderThickness" Value="5" />
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Color="Yellow"/>
+                                </Setter.Value>
+                            </Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding ElementName=This, Path=IsInSelectionArea}" Value="True">
                             <Setter Property="BorderBrush" Value="DarkBlue" />

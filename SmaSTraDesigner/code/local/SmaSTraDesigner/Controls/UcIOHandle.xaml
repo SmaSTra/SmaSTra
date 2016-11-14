@@ -79,10 +79,10 @@
                                 <Setter Property="Stroke" Value="Green" />
                                 <Setter Property="StrokeThickness" Value="3" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+                           <!-- <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
                                 <Setter Property="Stroke" Value="Red" />
                                 <Setter Property="StrokeThickness" Value="3" />
-                            </DataTrigger>
+                            </DataTrigger> -->
                         </Style.Triggers>
                     </Style>
                 </Ellipse.Style>
@@ -143,11 +143,11 @@
                                 <Setter Property="Stroke" Value="Green" />
                                 <Setter Property="StrokeThickness" Value="3" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
+                          <!-- <DataTrigger Binding="{Binding ElementName=This, Path=IsConnectionCompatible}" Value="False">
                                 <Setter Property="Stroke" Value="Red" />
                                 <Setter Property="StrokeThickness" Value="3" />
-                            </DataTrigger>
-                        </Style.Triggers>
+                            </DataTrigger> -->
+                    </Style.Triggers>
                     </Style>
                 </Polygon.Style>
             </Polygon>
@@ -163,8 +163,8 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-        <Line  X1="0" Y1="0" X2="{Binding ElementName=gridHandlePanel, Path='ActualWidth'}" Y2="{Binding ElementName='gridHandlePanel', Path='ActualHeight'}"  Stroke="Red" StrokeThickness="1" />
-        <Line  X1="0" Y1="{Binding ElementName='gridHandlePanel', Path='ActualHeight'}" X2="{Binding ElementName='gridHandlePanel', Path='ActualWidth'}" Y2="0" Stroke="Red" StrokeThickness="1" />
+        <Line  X1="0" Y1="0" X2="{Binding ElementName=gridHandlePanel, Path='ActualWidth'}" Y2="{Binding ElementName='gridHandlePanel', Path='ActualHeight'}"  Stroke="Red" StrokeThickness="2" />
+        <Line  X1="0" Y1="{Binding ElementName='gridHandlePanel', Path='ActualHeight'}" X2="{Binding ElementName='gridHandlePanel', Path='ActualWidth'}" Y2="0" Stroke="Red" StrokeThickness="2" />
         </Grid>
     </Grid>
 </UserControl>

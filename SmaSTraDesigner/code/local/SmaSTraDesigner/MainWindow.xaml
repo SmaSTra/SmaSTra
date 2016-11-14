@@ -95,7 +95,7 @@
                 <Button Command="ctrlSupport:Commands.Unmerge" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Unmerge" Margin="5,0,0,0">
                     <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/unmerge.png"/>
                 </Button>
-                <Button Command="ctrlSupport:Commands.CreateCustomElement" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Unmerge" Margin="5,0,0,0">
+                <Button Command="ctrlSupport:Commands.CreateCustomElement" Grid.Column="1" Width="30" Style="{StaticResource ButtonCustomBackground}" ToolTip="Create custom element" Margin="5,0,0,0">
                     <Image Stretch="Uniform" Source="pack://siteoforigin:,,,/Resources/custom_elements.png"/>
                 </Button>
             </StackPanel>
@@ -356,14 +356,14 @@
                                     <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxtyle}"/>
                                 </StackPanel.Resources>
                                 <WrapPanel>
-                                    <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="Name: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBox  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeName ,UpdateSourceTrigger=PropertyChanged}" MinWidth="50" />
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <TextBlock Text="Class: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="Class: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClass ,UpdateSourceTrigger=PropertyChanged}" />
                                 </WrapPanel>
-                                <TextBlock Text="Input: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="Input: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <WrapPanel>
                                     <ItemsControl x:Name="icNodeClassInputTypes" ItemsSource="{Binding Path=NodeInputIOData, UpdateSourceTrigger=PropertyChanged}" >
                                         <ItemsControl.ItemTemplate>
@@ -374,10 +374,10 @@
                                                 </DataTemplate.Resources>
                                                 <StackPanel Orientation="Vertical" >
                                                     <WrapPanel>
-                                                        <TextBlock Text="{Binding Path=Type.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
-                                                        <TextBlock Text=": " TextWrapping="Wrap"/>
+                                                    <TextBlock MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" Text="{Binding Path=Type.Name, Converter={StaticResource InputTypeNameConverter}, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap"/>
+                                                        
                                                         <Grid>
-                                                            <TextBlock Text="{Binding Path=ConnectedNode.Name, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="#898989"/>
+                                                        <TextBlock MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" Text="{Binding Path=ConnectedNode.Name, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" Background="#898989"/>
                                                             <TextBox x:Name="tboxInputValue" Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" MinWidth="50" Background="Transparent" PreviewTextInput="InputType_PreviewTextInput"/>
                                                         </Grid>
                                                     </WrapPanel>
@@ -386,7 +386,7 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </WrapPanel>
-                                <TextBlock Text="Configuration: " Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="Configuration: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <WrapPanel Visibility="Collapsed">
                                     <ItemsControl x:Name="icNodeConfiguration" ItemsSource="{Binding Path=NodeConfiguration, UpdateSourceTrigger=PropertyChanged}" >
                                         <ItemsControl.ItemTemplate>
@@ -407,19 +407,19 @@
                                     </ItemsControl>
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <TextBlock Text="Output: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="Output: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassOutput ,UpdateSourceTrigger=PropertyChanged}" />
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <TextBlock Text="X: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="X: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionX ,UpdateSourceTrigger=PropertyChanged}" />
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <TextBlock Text="Y: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="Y: " MinWidth="{Binding Path=ActualWidth, ElementName=tbDescriptionLabel}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodePositionY ,UpdateSourceTrigger=PropertyChanged}" />
                                 </WrapPanel>
                                 <WrapPanel>
-                                    <TextBlock Text="Description: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="tbDescriptionLabel" Text="Description: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=NodeClassDescription ,UpdateSourceTrigger=PropertyChanged}" />
                                 </WrapPanel>
                             </StackPanel>
