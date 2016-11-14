@@ -203,6 +203,7 @@
     <Compile Include="BusinessLogic\uitransactions\UITransactionDeleteNodes.cs" />
     <Compile Include="BusinessLogic\uitransactions\UITransactionAddNodes.cs" />
     <Compile Include="BusinessLogic\uitransactions\UITransactionMoveElements.cs" />
+    <Compile Include="BusinessLogic\uitransactions\UITransactionTranslateElements.cs" />
     <Compile Include="BusinessLogic\uitransactions\UITransactionUnmerge.cs" />
     <Compile Include="BusinessLogic\uitransactions\UITransactionMerge.cs" />
     <Compile Include="BusinessLogic\utils\DirCopy.cs" />

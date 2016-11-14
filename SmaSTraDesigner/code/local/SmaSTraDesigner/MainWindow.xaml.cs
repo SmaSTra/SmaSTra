@@ -487,7 +487,7 @@ namespace SmaSTraDesigner
         
         private void OrganizeNodes_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            tdTreeDesigner.OrganizeNodes();
+            tdTreeDesigner.OrganizeNodes(true);
         }
 
         private void CustomCode_CanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -1,47 +1,139 @@
-﻿
+﻿using System.Linq;
 using SmaSTraDesigner.BusinessLogic.nodes;
-using SmaSTraDesigner.Controls;
 using SmaSTraDesigner.BusinessLogic.utils;
+using SmaSTraDesigner.Controls;
 
 namespace SmaSTraDesigner.BusinessLogic.uitransactions
 {
-    public class UITransactionMoveElements : UITransaction
+    public class UiTransactionMoveElements : UITransaction
     {
 
         /// <summary>
-        /// The moved nodes.
+        /// The Old positions to save.
         /// </summary>
-        private Node[] movedNodes;
+        private readonly NodePositionSave[] _oldPos;
 
         /// <summary>
-        /// The x relatice change
+        /// The new Position to use.
         /// </summary>
-        private double relateX = 0;
+        private readonly NodePositionSave[] _newPos;
 
 
-        /// <summary>
-        /// The y relatice change
-        /// </summary>
-        private double relateY = 0;
-
-
-        public UITransactionMoveElements(Node[] nodes, double changeX, double changeY)
+        public UiTransactionMoveElements(NodePositionSave[] oldPos, NodePositionSave[] newPos)
         {
-            this.movedNodes = nodes;
-            this.relateX = changeX;
-            this.relateY = changeY;
+            this._oldPos = oldPos;
+            this._newPos = newPos;
         }
+
 
         public void Redo(UcTreeDesigner designer)
         {
-            movedNodes.ForEach(n => n.PosX += relateX);
-            movedNodes.ForEach(n => n.PosY += relateY);
+            _newPos?.ForEach(n => n.Reset());
         }
 
         public void Undo(UcTreeDesigner designer)
         {
-            movedNodes.ForEach(n => n.PosX -= relateX);
-            movedNodes.ForEach(n => n.PosY -= relateY);
+            _oldPos?.ForEach(n => n.Reset());
         }
+    }
+
+
+    public class MoveElementsBuilder
+    {
+
+        /// <summary>
+        /// The Nodes to read from.
+        /// </summary>
+        private readonly Node[] _nodes;
+
+        /// <summary>
+        /// The Old positions to use.
+        /// </summary>
+        private NodePositionSave[] _oldNodePos;
+
+        /// <summary>
+        /// The New node positions.
+        /// </summary>
+        private NodePositionSave[] _newNodePos;
+
+
+        public MoveElementsBuilder(Node[] nodes)
+        {
+            this._nodes = nodes;
+        }
+
+        /// <summary>
+        /// Saves the old states.
+        /// </summary>
+        public void SaveOld()
+        {
+            _oldNodePos = _nodes
+                .Select(n => new NodePositionSave(n))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Saves the new States.
+        /// </summary>
+        public void SaveNew()
+        {
+            _newNodePos = _nodes
+                .Select(n => new NodePositionSave(n))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Builds the Transaction to apply.
+        /// </summary>
+        /// <returns>The build transaction</returns>
+        public UiTransactionMoveElements Build()
+        {
+            return new UiTransactionMoveElements(_oldNodePos, _newNodePos);
+        }
+
+    }
+
+
+    public class NodePositionSave
+    {
+
+        /// <summary>
+        /// The old node to move.
+        /// </summary>
+        private readonly Node _node;
+
+        /// <summary>
+        /// The old position to reset.
+        /// </summary>
+        private readonly double _oldX;
+
+        /// <summary>
+        /// The old position to reset.
+        /// </summary>
+        private readonly double _oldY;
+
+        public NodePositionSave(Node node)
+        {
+            this._node = node;
+            this._oldX = node.PosX;
+            this._oldY = node.PosY;
+        }
+
+        public NodePositionSave(Node node, double oldX, double oldY)
+        {
+            this._node = node;
+            this._oldX = oldX;
+            this._oldY = oldY;
+        }
+
+        /// <summary>
+        /// Resets the position
+        /// </summary>
+        public void Reset()
+        {
+            _node.PosX = _oldX;
+            _node.PosY = _oldY;
+        }
+
     }
 }
