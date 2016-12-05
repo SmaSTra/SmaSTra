@@ -3,37 +3,38 @@ using SmaSTraDesigner.BusinessLogic.savingloading;
 
 namespace SmaSTraDesigner.Controls
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Shapes;
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Collections.Specialized;
+	using System.Linq;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using System.Windows.Input;
+	using System.Windows.Media;
+	using System.Windows.Shapes;
 
-    using Common;
-    using Common.ExtensionMethods;
-    using Common.Resources.Converters;
+	using Common;
+	using Common.ExtensionMethods;
+	using Common.Resources.Converters;
 
-    using BusinessLogic;
-    using BusinessLogic.classhandler;
-    using BusinessLogic.nodes;
-    using Support;
-    using BusinessLogic.utils;
-    using System.Windows.Threading;
-    using BusinessLogic.uitransactions;
+	using BusinessLogic;
+	using BusinessLogic.classhandler;
+	using BusinessLogic.nodes;
+	using Support;
+	using BusinessLogic.utils;
+	using System.Windows.Threading;
+	using BusinessLogic.uitransactions;
+	using System.Diagnostics;
 
-    // TODO: (PS) Comment this.
-    // TODO: (PS) Adapt for dynamic size changes for canvas.
-    /// <summary>
-    /// Interaction logic for UcTreeDesigner.xaml
-    /// Also this is the mighty ZEUS God-Class!
-    /// </summary>
-    public partial class UcTreeDesigner : UserControl
+	// TODO: (PS) Comment this.
+	// TODO: (PS) Adapt for dynamic size changes for canvas.
+	/// <summary>
+	/// Interaction logic for UcTreeDesigner.xaml
+	/// Also this is the mighty ZEUS God-Class!
+	/// </summary>
+	public partial class UcTreeDesigner : UserControl
 	{
 		#region static constructor
 
@@ -83,7 +84,7 @@ namespace SmaSTraDesigner.Controls
 		/// Registration of ConnectingIOHandle Dependency Property Key.
 		/// </summary>
 		private static readonly DependencyPropertyKey ConnectingIOHandlePropertyKey = 
-			DependencyProperty.RegisterReadOnly("ConnectingIOHandle", typeof(UcIOHandle), typeof(UcTreeDesigner), new FrameworkPropertyMetadata(null));
+			DependencyProperty.RegisterReadOnly("ConnectingIOHandle", typeof(UcIOHandle), typeof(UcTreeDesigner), new FrameworkPropertyMetadata(null, (sender, e) => { Debug.WriteLine("ConnectingIOHandle changed from {0} to {1}", e.OldValue, e.NewValue); }));
 
 		/// <summary>
 		/// Registration of SelectedNodeViewer Dependency Property.
@@ -738,7 +739,7 @@ namespace SmaSTraDesigner.Controls
 						.FirstOrDefault(c => object.Equals(c.Value.OutputNode, handle.Node));
 				}
 			}
-
+			
 			if (connection != null)
 			{
 				this.Tree.Connections.Remove(connection.Value);
@@ -1330,7 +1331,32 @@ namespace SmaSTraDesigner.Controls
 
 		private void IoHandle_CustomDrag(object sender, EventArgs e)
 		{
-			this.ConnectingIOHandle = (UcIOHandle)sender;
+			if (this.ConnectingIOHandle != null)
+			{
+				return;
+			}
+
+			UcIOHandle subject = (UcIOHandle)sender;
+			Func<Connection?, bool> filter = subject.IsInput ?
+				new Func<Connection?, bool>(c => object.Equals(c.Value.InputNode, subject.Node)) :
+				new Func<Connection?, bool>(c => object.Equals(c.Value.OutputNode, subject.Node));
+			Connection? connection = this.Tree.Connections.Cast<Connection?>().FirstOrDefault(filter);
+			if (connection != null)
+			{
+				if (subject.IsInput)
+				{
+					this.ConnectingIOHandle = this.registeredIoHandles.FirstOrDefault(handle => !handle.IsInput && object.Equals(handle.Node, connection.Value.OutputNode));
+				}
+				else
+				{
+					this.ConnectingIOHandle = this.registeredIoHandles.FirstOrDefault(handle => handle.IsInput && object.Equals(handle.Node, connection.Value.InputNode) && connection.Value.InputIndex == handle.InputIndex);
+				}
+			}
+			else
+			{
+				this.ConnectingIOHandle = subject;
+			}
+
 			this.RemoveConnection(this.ConnectingIOHandle, null);
 		}
 
