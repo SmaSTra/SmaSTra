@@ -154,6 +154,45 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             return IsCyclic(GetRootNode(), _nodes, new List<Node>());
         }
 
+        /// <summary>
+        /// Tries to sort the Nodes to merge.
+        /// </summary>
+        /// <returns>The sorted nodes or simply all normal nodes.</returns>
+        private IEnumerable<Node> TrySortNodes()
+        {
+            try
+            {
+                var traversed = new List<Node>();
+                var toSort = new Stack<Node>();
+                var root = GetRootNode();
+
+                if(root == null) throw new Exception("No root found while sorting");
+                toSort.Push(root);
+
+                while (toSort.Any())
+                {
+                    var toCheck = toSort.Pop();
+                    if (traversed.Contains(toCheck)) continue;
+
+                    traversed.Add(toCheck);
+
+                    toCheck
+                        .InputNodes
+                        .NonNull()
+                        .Where(n => _nodes.Contains(n))
+                        .ForEachNonNull((n,_) => toSort.Push(n));
+                }
+
+                return traversed;
+            }
+            catch (Exception exp)
+            {
+                Console.Out.WriteLine(exp.ToString());
+            }
+
+            return _nodes.AsEnumerable();
+        }
+
 
         /// <summary>
         /// Generates the NodeClass.
@@ -166,17 +205,20 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             var root = GetRootNode();
             if (root == null) return null;
 
+            //Try to sort the Nodes:
+            var sorted = TrySortNodes();
+
             //Generate Inputs + Sub-Hirachy.
             var inputs = new List<DataType>();
             var connections = new List<SimpleConnection>();
             var subNodes = new List<SimpleSubNode>();
 
-            var centerX = _nodes.Average(n => n.PosX);
-            var centerY = _nodes.Average(n => n.PosY);
+            var centerX = sorted.Average(n => n.PosX);
+            var centerY = sorted.Average(n => n.PosY);
 
             var input = 0;
 
-            foreach ( var node in _nodes)
+            foreach ( var node in sorted)
             {
                 var nodeClass = node.Class;
                 var nodeInputs = node.InputNodes;
@@ -233,7 +275,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 .Distinct()
                 .ForEach(c =>
                 {
-                    string nodeDir = Path.Combine(tmpSaveFolder, c.Name);
+                    var nodeDir = Path.Combine(tmpSaveFolder, c.Name);
                     Directory.CreateDirectory(nodeDir);
                     DirCopy.PlainCopy(c.NodePath, nodeDir);
                 });

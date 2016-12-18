@@ -42,12 +42,31 @@
         <SolidColorBrush x:Key="ColorBuffer" Color="DarkRed"/>
 
 
-        <ToolTip x:Key="nodeViewerToolTip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}" Visibility="{Binding Path=IsPreview, Converter={StaticResource VisibilityAsBooleanConverter}, ConverterParameter={x:Static wpfConverters:VisibilityAsBooleanConverterOptions.Negate}}" Background="Transparent">
-            <Rectangle Width="{Binding ActualWidth}" Height="{Binding ActualHeight}" >
-                <Rectangle.Fill>
-                    <VisualBrush Visual="{Binding}"/>
-                </Rectangle.Fill>
-            </Rectangle>
+        <ToolTip x:Key="nodeViewerToolTip" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+            <ToolTip.Style >
+                <Style TargetType="ToolTip">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Content">
+                    <Setter.Value>
+                        <Rectangle Width="{Binding ActualWidth}" Height="{Binding ActualHeight}" >
+                            <Rectangle.Fill>
+                                <VisualBrush Visual="{Binding}"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Setter.Value>
+                </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsPreview}" Value="True">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <TextBlock Text="{Binding Path=Node.Class.Description}" Foreground="Black"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Background" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToolTip.Style>
         </ToolTip>
 
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">

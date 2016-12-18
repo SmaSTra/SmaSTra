@@ -1315,6 +1315,39 @@ namespace SmaSTraDesigner.Controls
             return node;            
         }
 
+        /// <summary>
+        /// scrolls the ScrollViewer if the mouse is near a border while
+        /// dragging a connection or a NodeViewer
+        /// </summary>
+        private void scrollTreeDesignerOnMouseMove(MouseEventArgs e)
+        {
+            float scrollThreshold = 0.8f;
+            float scrollSpeed = 1.0f;
+            Point mousePositionInScrollViewer = e.GetPosition(scvCanvas);
+            double mouseRightPercent = mousePositionInScrollViewer.X / scvCanvas.ActualWidth;
+            double mouseLeftPercent = 1 - mousePositionInScrollViewer.X / scvCanvas.ActualWidth;
+            double mouseDownPercent = mousePositionInScrollViewer.Y / scvCanvas.ActualHeight;
+            double mouseUpPercent = 1 - mousePositionInScrollViewer.Y / scvCanvas.ActualHeight;
+
+            if (mouseRightPercent > scrollThreshold)
+            {
+                scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset + scrollSpeed * (mouseRightPercent - scrollThreshold) / (1 - scrollThreshold));
+            }
+            if (mouseLeftPercent > scrollThreshold)
+            {
+                scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset - scrollSpeed * (mouseLeftPercent - scrollThreshold) / (1 - scrollThreshold));
+            }
+            if (mouseDownPercent > scrollThreshold)
+            {
+                scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset + scrollSpeed * (mouseDownPercent - scrollThreshold) / (1 - scrollThreshold));
+            }
+            if (mouseUpPercent > scrollThreshold)
+            {
+                scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset - scrollSpeed * (mouseUpPercent - scrollThreshold) / (1 - scrollThreshold));
+            }
+
+        }
+
         #endregion methods
 
         #region event handlers
@@ -1610,7 +1643,7 @@ namespace SmaSTraDesigner.Controls
 						node.PosX += dx;
 						node.PosY += dy;
 					}
-                    scrollTreeDesigner(e);
+                    scrollTreeDesignerOnMouseMove(e);
 
                 }
 				else if (this.ConnectingIOHandle != null)
@@ -1623,7 +1656,7 @@ namespace SmaSTraDesigner.Controls
 					this.linPreviewConnection.X2 = mousePos.X;
 					this.linPreviewConnection.Y2 = mousePos.Y;
 
-                    scrollTreeDesigner(e);
+                    scrollTreeDesignerOnMouseMove(e);
 				}
                 else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0) {
                     if(lastScrollPosition == null)
@@ -1725,35 +1758,6 @@ namespace SmaSTraDesigner.Controls
         #endregion event handlers
 
         #region test area / not sorted yet
-
-        private void scrollTreeDesigner(MouseEventArgs e)
-        {
-            float scrollThreshold = 0.8f;
-            float scrollSpeed = 1.0f;
-            Point mousePositionInScrollViewer = e.GetPosition(scvCanvas);
-            double mouseRightPercent = mousePositionInScrollViewer.X / scvCanvas.ActualWidth;
-            double mouseLeftPercent = 1 - mousePositionInScrollViewer.X / scvCanvas.ActualWidth;
-            double mouseDownPercent = mousePositionInScrollViewer.Y / scvCanvas.ActualHeight;
-            double mouseUpPercent = 1 - mousePositionInScrollViewer.Y / scvCanvas.ActualHeight;
-            
-            if (mouseRightPercent > scrollThreshold)
-            {
-                scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset + scrollSpeed * (mouseRightPercent - scrollThreshold) / (1 - scrollThreshold));
-            }
-            if (mouseLeftPercent > scrollThreshold)
-            {
-                scvCanvas.ScrollToHorizontalOffset(scvCanvas.HorizontalOffset - scrollSpeed * (mouseLeftPercent - scrollThreshold) / (1 - scrollThreshold));
-            }
-            if (mouseDownPercent > scrollThreshold)
-            {
-                scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset + scrollSpeed * (mouseDownPercent - scrollThreshold) / (1 - scrollThreshold));
-            }
-            if (mouseUpPercent > scrollThreshold)
-            {
-                scvCanvas.ScrollToVerticalOffset(scvCanvas.VerticalOffset - scrollSpeed * (mouseUpPercent - scrollThreshold) / (1 - scrollThreshold));
-            }
-
-        }
 
         #endregion test area / not sorted yet
     }
