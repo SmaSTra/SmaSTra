@@ -158,7 +158,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
         /// Tries to sort the Nodes to merge.
         /// </summary>
         /// <returns>The sorted nodes or simply all normal nodes.</returns>
-        private IEnumerable<Node> TrySortNodes()
+        private List<Node> TrySortNodes()
         {
             try
             {
@@ -190,7 +190,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
                 Console.Out.WriteLine(exp.ToString());
             }
 
-            return _nodes.AsEnumerable();
+            return _nodes;
         }
 
 
@@ -206,7 +206,7 @@ namespace SmaSTraDesigner.BusinessLogic.classhandler
             if (root == null) return null;
 
             //Try to sort the Nodes:
-            var sorted = TrySortNodes();
+            List<Node> sorted = TrySortNodes();
 
             //Generate Inputs + Sub-Hirachy.
             var inputs = new List<DataType>();
