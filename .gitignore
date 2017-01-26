@@ -352,5 +352,16 @@ local.properties
 # Code Recommenders
 .recommenders/
 
+# Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.synctex
+*.tps
+
 ############# Add Web-server context:
 Servers/*
